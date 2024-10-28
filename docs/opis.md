@@ -52,7 +52,7 @@ W aplikacji planowane jest zrealizowanie również operacji wspomagających ten 
 	- pojemność  
 	- zakres temperatury (inny dla dolnej i górnej fermentacji)  
 	- przeznaczony do piw kwaśnych (tak/ nie)  
-	- możliwość sztucznej karbonizacji (nwm czy na tym etapie też)  
+	- możliwość sztucznej karbonizacji
 - Urządzenia do rozlewania:  
 	- obsługiwane pojemniki (butelki, puszki, kegi)  
 	- przeznaczony do piw kwaśnych (tak/ nie)  
