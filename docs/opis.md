@@ -44,19 +44,23 @@ W aplikacji planowane jest zrealizowanie również operacji wspomagających ten 
 	- pojemność  
 	- zakres temperatur  
 	- przeznaczony do piw kwaśnych (tak/ nie)  
+	- cena wynajmu  
 - Pojemniki fermentacyjne:  
 	- pojemność  
 	- zakres temperatury (inny dla dolnej i górnej fermentacji)  
 	- przeznaczony do piw kwaśnych (tak/ nie)  
+	- cena wynajmu
 - Kotły do leżakowania:  
-	- pojemność  
+- pojemność  
 	- zakres temperatury (inny dla dolnej i górnej fermentacji)  
 	- przeznaczony do piw kwaśnych (tak/ nie)  
-	- możliwość sztucznej karbonizacji
+	- możliwość sztucznego nagazowania (CO2, N2, mieszanka CO2/N2, nie)  
+	- cena wynajmu  
 - Urządzenia do rozlewania:  
 	- obsługiwane pojemniki (butelki, puszki, kegi)  
 	- przeznaczony do piw kwaśnych (tak/ nie)  
-	- możliwość sztucznej karbonizacji
+	- możliwość sztucznego nagazowania (CO2, N2, mieszanka CO2/N2, nie)  
+	- cena wynajmu
 
 ### Statusy okien czasowych na urządzenia
 
@@ -90,11 +94,14 @@ W aplikacji planowane jest zrealizowanie również operacji wspomagających ten 
 - logowanie, wylogowywanie z konta  
 - wyświetlanie listy browarów komercyjnych   
 - wyświetlanie okien czasowych na dane urządzenia dla konkretnego browaru komercyjnego\*\*\*  
-- wyświetlanie szczegółów wybranego browaru komercyjnego  
+- wyświetlanie szczegółów (nazwa browaru, właściciel/ osoba kontaktowa, adres, nip, kontakt: tel, email, opis, statystyki) wybranego browaru komercyjnego  
 - modyfikowanie (dodawanie, usuwanie) zawartości "koszyka" (okien czasowych na urządzenia)\*  
 - utworzenie zlecenia na podstawie wybranych okien czasowych  
 - przeglądanie listy swoich zleceń nowych\*\*, aktualnych\*\*, przeszłych\*\*, odrzuconych \*\*  
-- przeglądanie szczegółów konkretnego zlecenia z listy (wszystkich elementów zlecenia)
+- przeglądanie szczegółów konkretnego zlecenia z listy (receptur: składniki, ilość, kolejność dodawania, potrzebne urządzenia i czas ich użycia, dodatkowe wymagania, typ piwa, docelowa ilość piwa, ocena (w skali 1-5))  
+- dodawanie receptur: składniki, ilość, kolejność, urządzenia i czas użycia, dodatkowe wymagania/komentarze, typ piwa, wynikowa ilość produktu, dodatkowe komentarze  
+- ocenianie zlecenia  
+- wyświetlanie statystyk (typy/ gatunki produkowanych piw, ilość wyprodukowanego piwa danego typu, ilość wyprodukowanego piwa ogólnie \- histogramy z różną rozdzielczością czasową, liczba udanych/ nieudanych warek)
 
 \* \- w koszyku mogą znajdować się urządzenia jedynie od tego samego browaru komercyjnego
 
@@ -109,8 +116,8 @@ W aplikacji planowane jest zrealizowanie również operacji wspomagających ten 
 - dodawanie, przeglądanie, usuwanie\* swoich urządzeń (zgodnie z podanymi typami urządzeń) wraz z odpowiednimi parametrami  
 - dodawanie, przeglądanie, usuwanie\* dostępnych okien czasowych na swoje urządzenia  
 - przeglądanie nowych\*\*, aktualnych\*\*, przeszłych\*\*, odrzuconych \*\* zleceń związanych ze swoimi urządzeniami  
-- przeglądanie szczegółów konkretnego zlecenia z listy (statusu; urządzeń, które były w nim wykorzystywane; danych dotyczących stron)  
-- wyświetlanie szczegółów danego browaru kontraktowego  
+- przeglądanie szczegółów konkretnego zlecenia z listy (statusu; urządzeń, które były w nim wykorzystywane; danych dotyczących stron, typu piwa, docelowej ilości piwa, oceny w skali 1-5)  
+- wyświetlanie szczegółów (nazwa browaru, osoba kontaktowa, kontakt: tel, email, opis) danego browaru kontraktowego  
 - zmiana statusu zlecenia na aktualne\*\*, odrzucone \*\*  
 - wyświetlanie listy zajętych okien czasowych na urządzenia wraz z tymi urządzeniami\*\*\*
 
@@ -126,8 +133,9 @@ W aplikacji planowane jest zrealizowanie również operacji wspomagających ten 
 - wyświetlanie okien czasowych na dane urządzenia dla konkretnego browaru komercyjnego\*  
 - wyświetlanie listy zleceń dla danego browaru komercyjnego  
 - wyświetlanie listy zleceń dla danego browaru kontraktowego  
-- wyświetlanie szczegółów wybranego browaru komercyjnego  
-- wyświetlanie szczegółów danego browaru kontraktowego
+- wyświetlanie szczegółów wybranego browaru komercyjnego (nazwa browaru, właściciel/ osoba kontaktowa, adres, nip, kontakt: tel, email, opis, statystyki)  
+- wyświetlanie szczegółów danego browaru kontraktowego (nazwa browaru, osoba kontaktowa, kontakt: tel, email, opis, statystyki)  
+- wyświetlanie statystyk (typy/ gatunki produkowanych piw, ilość wyprodukowanego piwa danego typu, ilość wyprodukowanego piwa ogólnie \- histogramy z różną rozdzielczością czasową, liczba udanych/ nieudanych warek \- na podstawie ocen dla zleceń, histogramy przychodów z podziałem na kontraktowe/ komercyjne)
 
 \* \- okna czasowe są oznaczone w wyraźny sposób jako wolne / zarezerwowane / zajęte / niedostępne (zgodnie z możliwymi stanami)
 
