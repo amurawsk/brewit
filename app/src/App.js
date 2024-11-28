@@ -1,11 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import WelcomePage from './components/WelcomePage';
-import Register from './components/Register';
+import RegisterBrewery from './components/RegisterBrewery';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Statistics from './components/Statistics';
 import Users from './components/Users';
+import RegisterUser from './components/RegisterUser';
 import ContractBrewery from './components/ContractBrewery';
 import Cart from './components/Cart';
 import Contracts from './components/Contracts';
@@ -23,11 +24,12 @@ function App() {
     <Router>
       <Routes>
 	  	<Route path="/" element={<WelcomePage />} />
-		<Route path="/register" element={<Register />} />
+		<Route path="/register_brewery" element={<RegisterBrewery />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/users" element={<Users />} />
+		<Route path="/register_user" element={<RegisterUser />} />
         <Route path="/contract_brewery" element={<ContractBrewery />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contracts" element={<Contracts />} />

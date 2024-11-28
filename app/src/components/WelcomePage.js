@@ -5,15 +5,15 @@ const WelcomePage = () => {
 	const navigate = useNavigate();
 
 	const goToLogin = () => navigate('/login');
-	const goToRegister = () => navigate('/register');
+	const goToRegisterBrewery = () => navigate('/register_brewery');
 
 	return (
     	<div className="welcome_page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-			<h1>Welcome to the WelcomePage!</h1>
-				<p>Description</p>
+			<h1>Witaj w brewIT!</h1>
+				<p>Opis</p>
 				<div>
-					<button onClick={goToLogin} >goToLogin</button>
-					<button onClick={goToRegister}>goToRegister</button>
+					<button onClick={goToLogin} >Przejdź do logowania</button>
+					<button onClick={goToRegisterBrewery}>Przejdź do rejestracji</button>
 				</div>
 		</div>
 	);
