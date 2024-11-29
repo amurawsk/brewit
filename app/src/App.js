@@ -18,6 +18,9 @@ import CommercialBrewery from './components/CommercialBrewery';
 import Equipment from './components/Equipment';
 import TimeSlots from './components/TimeSlots';
 import InUse from './components/InUse';
+import PieceOfEquipment from './components/PieceOfEquipment';
+import AddEquipment from './components/AddEquipment';
+import AddRecipe from './components/AddRecipe';
 
 function App() {
   return (
@@ -41,6 +44,9 @@ function App() {
         <Route path="/equipment" element={<Equipment />} />
         <Route path="/time_slots" element={<TimeSlots />} />
         <Route path="/in_use" element={<InUse />} />
+        <Route path="/piece_of_equipment" element={<PieceOfEquipment />} />
+        <Route path="/add_equipment" element={<AddEquipment />} />
+        <Route path="/add_recipe" element={<AddRecipe />} />
       </Routes>
     </Router>
   );

@@ -1,15 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
 const Recipe = () => {
 	const navigate = useNavigate();
 	
 	const Logout = () => navigate('/');
 
-	const recipe = [ //tu powinny byc raczej etapy
+	const recipe = [
 		{ parameter: 'Nazwa piwa', value: 'Piastowski Dzban'},
 		{ parameter: 'Czas produkcji', value: '1 miesiąc'},
-		{ parameter: 'Produkowana objętość', value: '100L'}
+		{ parameter: 'Produkowana objętość', value: '100L'},
+		{ parameter: 'Etap 1', value: 'nazwa: warzenie, urządzenie: Tank warzelny, czas: 4h, opis: warzenie...'},
+		{ parameter: 'Etap 2', value: 'nazwa: fermentowanie, urządzenie: Pojemnik fermentacyjny, czas: 2 tygodnie, opis: fermentowanie...'},
+		{ parameter: 'Etap 3', value: 'nazwa: leżakowanie, urządzenie: Kocioł do leżakowania, czas: 1 miesiąc, opis: leżakowanie z nagazowywaniem...'},
+		{ parameter: 'Etap 4', value: 'nazwa: rozlewanie, urządzenie: Urządzenie do rozlewania, czas: 2h, opis: rozlewanie do butelek...'}
 	];
 
 	const handleLogout = () => {

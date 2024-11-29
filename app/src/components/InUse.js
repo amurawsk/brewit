@@ -34,7 +34,7 @@ const InUse = () => {
 						<th>Pojemność</th>
 						<th>Zakres temperatur</th>
 						<th>Możliwość nagazowania</th>
-						<th>Wspierane pojemniki</th>
+						<th>Obsługiwane pojemniki</th>
 						<th>Cena wynajmu</th>
 					</tr>
 					</thead>

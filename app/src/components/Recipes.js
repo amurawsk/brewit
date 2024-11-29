@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 const Recipes = () => {
 	const navigate = useNavigate();
+
 	const Logout = () => navigate('/');
+	const goToAddRecipe = () => navigate('/add_recipe');
 	const goToRecipe = () => navigate('/recipe');
 
 	const recipes = [
-		{ name: 'Piastowski Dzban', full_time: '1 miesiąc', full_volume: '100L'} //a ocena :oo trzeba bedzie w zleceniach suzkac :((
+		{ name: 'Piastowski Dzban', full_time: '1 miesiąc', full_volume: '100L'} //a ocena :oo trzeba bedzie w zleceniach szukac :((
 	];
 
 	const handleLogout = () => {
@@ -21,6 +23,8 @@ const Recipes = () => {
 		<h1>Witaj w Przepisach!</h1>
 			<p>Opis</p>
 			<h2>Przepisy</h2>
+			<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px' }}>
+			<button onClick={goToAddRecipe} style={{ alignSelf: 'flex-end'}}>Dodaj przepis</button>
 			<table border="1" cellPadding="10">
 				<thead>
 				<tr>
@@ -39,6 +43,7 @@ const Recipes = () => {
 				))}
 				</tbody>
 			</table>
+			</div>
 	</div>
 );
 };

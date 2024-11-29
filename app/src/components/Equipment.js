@@ -7,9 +7,8 @@ const Equipment = () => {
 	const navigate = useNavigate();
 
 	const Logout = () => navigate('/');
-	const goToTimeSlots = () => navigate('/time_slots');
-
-	const userType = localStorage.getItem('userType');
+	const goToAddEquipment = () => navigate('/add_equipment');
+	const goToPieceOfEquipment = () => navigate('/piece_of_equipment');
 
 	const equipment = [
 		{ name: 'Tank warzelny #1', type: 'Tank warzelny', serial_number: '123456', capacity: '100L', temperature_range: '80C-120C', sour_beers: 'tak', price: '300zł/h', carbonation: '-', supported_containers: '-'},
@@ -17,6 +16,8 @@ const Equipment = () => {
 		{ name: 'Kocioł do leżakowania #1', type: 'Kocioł do leżakowania', serial_number: '345678', capacity: '100L', temperature_range: '-5C-20C', sour_beers: 'nie', price: '300zł/h', carbonation: 'mieszanka CO2/N2', supported_containers: '-'},
 		{ name: 'Urządzenie do rozlewania #1', type: 'Urządzenie do rozlewania', serial_number: '456789', capacity: '100L', temperature_range: '-', sour_beers: 'tak', price: '300zł/h', carbonation: 'nie', supported_containers: 'butelki'}
 	];
+
+	const userType = localStorage.getItem('userType');
 
 	const handleLogout = () => {
 		localStorage.removeItem('userType');
@@ -31,6 +32,10 @@ const Equipment = () => {
 				{userType === 'commercial' && (
 					<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px'}}>
 						<h2>Urządzenia</h2>
+						<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px' }}>
+						{userType === 'commercial' && (
+							<button onClick={goToAddEquipment} style={{ alignSelf: 'flex-end'}}>Dodaj urządzenie</button>
+						)}
 							<table border="1" cellPadding="10">
 								<thead>
 								<tr>
@@ -41,13 +46,13 @@ const Equipment = () => {
 									<th>Pojemność</th>
 									<th>Zakres temperatur</th>
 									<th>Możliwość nagazowania</th>
-									<th>Wspierane pojemniki</th>
+									<th>Obsługiwane pojemniki</th>
 									<th>Cena wynajmu</th>
 								</tr>
 								</thead>
 								<tbody>
 								{equipment.map((equipment, index) => (
-									<tr key={index} onClick={() => goToTimeSlots()} style={{ cursor: 'pointer' }}>
+									<tr key={index} onClick={() => goToPieceOfEquipment()} style={{ cursor: 'pointer' }}>
 									<td>{equipment.serial_number}</td>
 									<td>{equipment.name}</td>
 									<td>{equipment.type}</td>
@@ -61,6 +66,7 @@ const Equipment = () => {
 								))}
 								</tbody>
 							</table>
+						</div>
 					</div>
 				)}
 				{(userType === 'contract' || userType === 'admin') && (
@@ -75,13 +81,13 @@ const Equipment = () => {
 								<th>Pojemność</th>
 								<th>Zakres temperatur</th>
 								<th>Możliwość nagazowania</th>
-								<th>Wspierane pojemniki</th>
+								<th>Obsługiwane pojemniki</th>
 								<th>Cena wynajmu</th>
 							</tr>
 							</thead>
 							<tbody>
 							{equipment.map((equipment, index) => (
-								<tr key={index} onClick={() => goToTimeSlots()} style={{ cursor: 'pointer' }}>
+								<tr key={index} onClick={() => goToPieceOfEquipment()} style={{ cursor: 'pointer' }}>
 								<td>{equipment.name}</td>
 								<td>{equipment.type}</td>
 								<td>{equipment.sour_beers}</td>

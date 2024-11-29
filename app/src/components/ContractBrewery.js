@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+//jeszcze przejscie do zlecen
+
 const ContractBrewery = () => {
 	const navigate = useNavigate();
 
@@ -35,7 +37,7 @@ const ContractBrewery = () => {
 				</thead>
 				<tbody>
 				{contract_brewery.map((contract_brewery, index) => (
-					<tr key={index}  onClick={() => goToEquipment()} style={{ cursor: 'pointer' }}>
+					<tr key={index}>
 					<td>{contract_brewery.parameter}</td>
 					<td>{contract_brewery.value}</td>
 					</tr>
