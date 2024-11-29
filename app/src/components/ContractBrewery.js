@@ -1,8 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-//jeszcze przejscie do zlecen
-
 const ContractBrewery = () => {
 	const navigate = useNavigate();
 
