@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
+from django.db.models import Q
 
 
 class Brewery(models.Model):
@@ -35,13 +36,26 @@ class Profile(models.Model):
     contract_brewery = models.ForeignKey(
         ContractBrewery,
         on_delete=models.CASCADE,
-        null=True
+        null=True,
+        blank=True
     )
     commercial_brewery = models.ForeignKey(
         CommercialBrewery,
         on_delete=models.CASCADE,
-        null=True
+        null=True,
+        blank=True
     )
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=~Q(
+                    contract_brewery__isnull=False,
+                    commercial_brewery__isnull=False
+                ),
+                name="brewery_arc"
+            )
+        ]
 
 
 class DeviceType(models.TextChoices):
