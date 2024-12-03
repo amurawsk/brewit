@@ -1,17 +1,22 @@
+from typing import Collection
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 
 
 class Brewery(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     contract_phone_number = models.CharField(max_length=30)
     contract_email = models.EmailField(max_length=100)
     description = models.CharField(max_length=255, blank=True)
 
     class Meta:
         abstract = True
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class CommercialBrewery(Brewery):
@@ -22,13 +27,28 @@ class CommercialBrewery(Brewery):
                 regex=r'^\d{10}$',
                 message="NIP number must be a string of 10 digits."
             )
-        ]
+        ],
+        unique=True
     )
     address = models.CharField(max_length=255)
+
+    def validate_unique(self, exclude: Collection[str] | None = ...) -> None:
+        if ContractBrewery.objects.filter(name=self.name).exists():
+            raise ValidationError(
+                "Contract brewery with this Name already exists."
+            )
+        return super().validate_unique(exclude)
 
 
 class ContractBrewery(Brewery):
     owner_name = models.CharField(max_length=255)
+
+    def validate_unique(self, exclude: Collection[str] | None = ...) -> None:
+        if CommercialBrewery.objects.filter(name=self.name).exists():
+            raise ValidationError(
+                "Commercial brewery with this Name already exists."
+            )
+        return super().validate_unique(exclude)
 
 
 class Profile(models.Model):
