@@ -2,7 +2,7 @@ from typing import Collection
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from django.db.models import Q
+from django.db.models import Q, F
 from django.core.exceptions import ValidationError
 
 
@@ -159,7 +159,20 @@ class TimeSlot(models.Model):
     start_timestamp = models.DateTimeField()
     end_timestamp = models.DateTimeField()
     device = models.ForeignKey(Device, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(start_timestamp__lte=F('end_timestamp')),
+                name="timeslots_timestamps_direction"
+            )
+        ]
 
 
 class Stage(models.Model):
