@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db.models import Q, F
 from django.core.exceptions import ValidationError
+from django_measurement.models import MeasurementField
+from measurement.measures import (
+    Volume,
+    Temperature,
+    Time
+)
 
 
 class Brewery(models.Model):
@@ -91,17 +97,21 @@ class Device(models.Model):
         max_length=50,
         choices=DeviceType
     )
-    serial_number = models.CharField(max_length=255, null=True, blank=True)
-    capacity = models.IntegerField(null=True)
-    temperature_min = models.IntegerField(null=True)
-    temperature_max = models.IntegerField(null=True)
-    sour_beers = models.BooleanField()
-    carbonation = models.CharField(max_length=100)
-    supported_containers = models.CharField(
-        max_length=255,
+    serial_number = models.CharField(max_length=255, blank=True)
+    capacity = MeasurementField(measurement=Volume, blank=True)
+    temperature_min = MeasurementField(
+        measurement=Temperature,
         blank=True,
         null=True
     )
+    temperature_max = MeasurementField(
+        measurement=Temperature,
+        blank=True,
+        null=True
+    )
+    sour_beers = models.BooleanField(default=False)
+    carbonation = models.CharField(max_length=100, blank=True)
+    supported_containers = models.CharField(max_length=255, blank=True)
     commercial_brewery = models.ForeignKey(
         CommercialBrewery,
         on_delete=models.CASCADE
@@ -110,8 +120,8 @@ class Device(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(max_length=100)
-    full_time = models.IntegerField(null=True)  # brak jednostki??
-    full_volume = models.IntegerField(null=True)
+    full_time = MeasurementField(measurement=Time, default=0)
+    full_volume = MeasurementField(measurement=Volume, blank=True, null=True)
     contract_brewery = models.ForeignKey(
         ContractBrewery,
         on_delete=models.CASCADE
@@ -130,11 +140,11 @@ class Order(models.Model):
         choices=Status,
         default=Status.NEW
     )
-    beer_type = models.CharField(max_length=100)  # choices czy dowolność??
-    beer_volume = models.IntegerField()
+    beer_type = models.CharField(max_length=100)
+    beer_volume = MeasurementField(measurement=Volume)
     description = models.CharField(max_length=255, blank=True)
-    rate = models.CharField(max_length=1, blank=True, null=True)
-    ended_at = models.DateTimeField(null=True)
+    rate = models.BooleanField(blank=True, null=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
     contract_brewery = models.ForeignKey(
         ContractBrewery,
         on_delete=models.CASCADE
@@ -149,12 +159,16 @@ class TimeSlot(models.Model):
         HIRED = "H", "Zajęte"
         UNAVAILABLE = "U", "Niedostępne"
 
+    class SlotType(models.TextChoices):
+        DAY = "D", "Dzień"
+        HOUR = "H", "Godzina"
+
     status = models.CharField(
         max_length=50,
         choices=Status,
         default=Status.FREE
     )
-    slot_type = models.CharField(max_length=50)  # choices??
+    slot_type = models.CharField(max_length=50, choices=SlotType)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     start_timestamp = models.DateTimeField()
     end_timestamp = models.DateTimeField()
@@ -178,7 +192,7 @@ class TimeSlot(models.Model):
 class Stage(models.Model):
     name = models.CharField(max_length=100)
     device_type = models.CharField(max_length=50, choices=DeviceType)
-    time = models.IntegerField(null=True)  # brak jednostki??
+    time = MeasurementField(measurement=Time)
     description = models.CharField(max_length=255, blank=True)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 

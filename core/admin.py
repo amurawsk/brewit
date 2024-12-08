@@ -5,7 +5,8 @@ from .models import (
     Profile,
     TimeSlot,
     Device,
-    Order
+    Order,
+    Recipe
 )
 
 # Register your models here.
@@ -15,3 +16,4 @@ admin.site.register(Profile)
 admin.site.register(TimeSlot)
 admin.site.register(Device)
 admin.site.register(Order)
+admin.site.register(Recipe)
