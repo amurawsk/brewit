@@ -2,7 +2,7 @@ from typing import Collection
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-from django.db.models import Q, F
+from django.db.models import Q, F, Sum
 from django.core.exceptions import ValidationError
 from django_measurement.models import MeasurementField
 from measurement.measures import (
@@ -120,12 +120,18 @@ class Device(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(max_length=100)
-    full_time = MeasurementField(measurement=Time, default=0)
     full_volume = MeasurementField(measurement=Volume, blank=True, null=True)
     contract_brewery = models.ForeignKey(
         ContractBrewery,
         on_delete=models.CASCADE
     )
+
+    @property
+    def full_time(self):
+        return self.stage_set.aggregate(sum=Sum("time"))['sum'] or Time(s=0)
+
+    def __str__(self) -> str:
+        return f"Przepis na {self.name} autorstwa {self.contract_brewery}"
 
 
 class Order(models.Model):
@@ -195,6 +201,9 @@ class Stage(models.Model):
     time = MeasurementField(measurement=Time)
     description = models.CharField(max_length=255, blank=True)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"Etap {self.name} w przepisie {self.recipe.name}"
 
 
 class Ingredient(models.Model):
