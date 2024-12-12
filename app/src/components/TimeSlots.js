@@ -55,7 +55,7 @@ const TimeSlots = () => {
 					<button onClick={() => goToEquipment}>Dodaj do koszyka</button>
 				)}
 				{userType === 'commercial' && (
-					<button onClick={() => setTakenDates}>Zmień status</button>
+					<button onClick={() => goToEquipment}>Zmień status</button>
 				)}
 				<style>
 					{`

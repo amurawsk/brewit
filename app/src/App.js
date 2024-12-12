@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import WelcomePage from './components/WelcomePage';
-import RegisterBrewery from './components/RegisterBrewery';
-import Login from './components/Login';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import AboutUs from './components/views/AboutUs';
+import Manual from './components/views/Manual';
+import Register from './components/views/Register';
+import Login from './components/views/Login';
 import Dashboard from './components/Dashboard';
 import Statistics from './components/Statistics';
 import Users from './components/Users';
@@ -21,13 +22,16 @@ import InUse from './components/InUse';
 import PieceOfEquipment from './components/PieceOfEquipment';
 import AddEquipment from './components/AddEquipment';
 import AddRecipe from './components/AddRecipe';
+import './App.css';
 
 function App() {
   return (
     <Router>
       <Routes>
-	  	<Route path="/" element={<WelcomePage />} />
-		<Route path="/register_brewery" element={<RegisterBrewery />} />
+		<Route path="/" element={<Navigate to="/about_us" />} />
+		<Route path="/about_us" element={<AboutUs />} />
+	  	<Route path="/manual" element={<Manual />} />
+	  	<Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/statistics" element={<Statistics />} />

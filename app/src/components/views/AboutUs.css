@@ -1,0 +1,10 @@
+.homepage-flex {
+	display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.aboutus-image {
+    width: 15rem;
+    height: auto;
+}
