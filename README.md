@@ -22,6 +22,10 @@ npm start
 ## Django
 Prerequisities: `python3` must be installed.
 ### Running Django project (WIP)
+1. Enter django backend directory
+```bash
+cd backend
+```
 1. Create a virtual environment and activate it
 ```bash
 python -m venv .venv
