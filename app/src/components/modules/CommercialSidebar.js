@@ -6,7 +6,7 @@ import { FaBeer, FaTools, FaClock, FaClipboard, FaUsers, FaChartLine } from "rea
 const CommercialSidebar = () => {
     const navigate = useNavigate();
 
-    const goToDevices = () => navigate('/equipment')
+    const goToDevices = () => navigate('/device')
 
     return (
     <div className="sidebar">

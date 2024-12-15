@@ -16,7 +16,7 @@ import Recipes from './components/Recipes';
 import Recipe from './components/Recipe';
 import CommercialBreweries from './components/CommercialBreweries';
 import CommercialBrewery from './components/CommercialBrewery';
-import Equipment from './components/Equipment';
+import Device from './components/Device';
 import TimeSlots from './components/TimeSlots';
 import InUse from './components/InUse';
 import PieceOfEquipment from './components/PieceOfEquipment';
@@ -45,7 +45,7 @@ function App() {
         <Route path="/recipe" element={<Recipe />} />
         <Route path="/commercial_breweries" element={<CommercialBreweries />} />
         <Route path="/commercial_brewery" element={<CommercialBrewery />} />
-        <Route path="/equipment" element={<Equipment />} />
+        <Route path="/device" element={<Device />} />
         <Route path="/time_slots" element={<TimeSlots />} />
         <Route path="/in_use" element={<InUse />} />
         <Route path="/piece_of_equipment" element={<PieceOfEquipment />} />
