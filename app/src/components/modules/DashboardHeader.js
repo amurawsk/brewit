@@ -6,14 +6,20 @@ const DashboardHeader = () => {
 	const navigate = useNavigate();
 
     const logOut = () => navigate('/login')
+    const dashboard = () => navigate('/dashboard')
+
+    const handleLogout = () => {
+		localStorage.removeItem('userType');
+		logOut();
+	};
 
     return (
         <nav className="dashboardheader">
-            <div className="logo">Panel Główny</div>
+            <div onClick={dashboard} className="logo">Panel Główny</div>
             <div className="rest">
                 <div className="button-group">
                     <button className="smalllight-button">Moje Konto</button>
-                    <button onClick={logOut} className="smalldark-button">Wyloguj się</button>
+                    <button onClick={handleLogout} className="smalldark-button">Wyloguj się</button>
                 </div>
             </div>
         </nav>
