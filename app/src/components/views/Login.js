@@ -11,7 +11,8 @@ const Login = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	
-	const handleLogin = () => {
+	const handleLogin = (event) => {
+		event.preventDefault();
 		let userType = '';
 		if (username === 'spółka') {
 			userType = 'admin';
