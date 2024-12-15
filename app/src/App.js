@@ -20,7 +20,7 @@ import Device from './components/Device';
 import TimeSlots from './components/TimeSlots';
 import InUse from './components/InUse';
 import PieceOfEquipment from './components/PieceOfEquipment';
-import AddEquipment from './components/AddEquipment';
+import AddDevice from './components/AddDevice';
 import AddRecipe from './components/AddRecipe';
 import './App.css';
 
@@ -49,7 +49,7 @@ function App() {
         <Route path="/time_slots" element={<TimeSlots />} />
         <Route path="/in_use" element={<InUse />} />
         <Route path="/piece_of_equipment" element={<PieceOfEquipment />} />
-        <Route path="/add_equipment" element={<AddEquipment />} />
+        <Route path="/add_device" element={<AddDevice />} />
         <Route path="/add_recipe" element={<AddRecipe />} />
       </Routes>
     </Router>
