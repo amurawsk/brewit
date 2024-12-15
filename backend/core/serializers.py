@@ -91,7 +91,20 @@ class LoginSerializer(serializers.Serializer):
         if not user:
             raise serializers.ValidationError("Invalid credentials")
 
-        return {"user": user}
+        try:
+            profile = Profile.objects.get(user=user)
+        except Profile.DoesNotExist:
+            raise serializers.ValidationError("User profile not found.")
+        user_type = None
+        if profile.commercial_brewery:
+            user_type = "commercial_brewery"
+        elif profile.contract_brewery:
+            user_type = "contract_brewery"
+
+        return {
+            "user": user,
+            "user_type": user_type
+        }
 
 
 class CheckUsernameUniqueSerializer(serializers.Serializer):

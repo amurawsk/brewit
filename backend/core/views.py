@@ -78,20 +78,15 @@ class LoginView(APIView):
 
         if serializer.is_valid():
             user = serializer.validated_data['user']
+            user_type = serializer.validated_data['user_type']
             refresh = RefreshToken.for_user(user)
-            if hasattr(user.profile, 'commercial_brewery'):
-                user_type = 'commercial_brewery'
-            elif hasattr(user.profile, 'contract_brewery'):
-                user_type = 'contract_brewery'
-            else:
-                user_type = 'unknown'
 
             return Response(
                 {
                     "refresh": str(refresh),
                     "access": str(refresh.access_token),
                     "message": "Login successful!",
-                    "user_type": user_type,  # Include user type in response
+                    "user_type": user_type,
                 },
                 status=status.HTTP_200_OK,
             )
