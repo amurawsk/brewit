@@ -7,7 +7,7 @@ import './Device.css';
 const Device = () => {
     const navigate = useNavigate();
 
-	const addDevice = () => navigate('/add-device')
+	const addDevice = () => navigate('/add_device')
 
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [deviceFields, setDeviceFields] = useState({});

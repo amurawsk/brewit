@@ -1,3 +1,7 @@
+.app-container {
+    display: flex
+}
+
 .tittle-button {
     display: flex;
     flex-direction: row;
@@ -77,7 +81,7 @@
 }
 
 .device-text-title {
-    font-weight: bold;
+    font-weight: normal;
     font-size: 24px;
     margin-bottom: 5px;
 }
