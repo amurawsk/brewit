@@ -4,7 +4,7 @@ import AboutUs from './components/views/AboutUs';
 import Manual from './components/views/Manual';
 import Register from './components/views/Register';
 import Login from './components/views/Login';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/CommercialDashboard';
 import Statistics from './components/Statistics';
 import Users from './components/Users';
 import RegisterUser from './components/RegisterUser';
