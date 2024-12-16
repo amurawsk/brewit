@@ -46,7 +46,7 @@ function Register() {
 			}
 		}
 		catch (error) {
-			return error.response ? error.response.data : error.message;
+			return error.response;
 		}
 	};
 
