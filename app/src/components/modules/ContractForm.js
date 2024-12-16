@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import BasicRegistrationForm from './BasicRegistrationForm.js';
 import api from '../../api.js';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 function ContractForm({ formData, updateFormData, setActiveSection, handleRegister }) {
     const contractFormRef = useRef(null);
@@ -26,6 +27,8 @@ function ContractForm({ formData, updateFormData, setActiveSection, handleRegist
 
                 const response = await api.post('register/contract/', payload);
                 if (response.status === 201) {
+                    localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                    localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
                     handleRegister();
                 }
                 else {

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import BasicRegistrationForm from './BasicRegistrationForm.js';
 import api from '../../api.js';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants.js';
 
 function CommercialForm({ formData, updateFormData, setActiveSection, handleRegister }) {
     const commercialFormRef = useRef(null);
@@ -27,6 +28,8 @@ function CommercialForm({ formData, updateFormData, setActiveSection, handleRegi
 
                 const response = await api.post('register/commercial/', payload);
                 if (response.status === 201) {
+                    localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                    localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
                     handleRegister();
                 }
                 else {
