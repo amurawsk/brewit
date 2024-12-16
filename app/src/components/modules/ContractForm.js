@@ -29,6 +29,7 @@ function ContractForm({ formData, updateFormData, setActiveSection, handleRegist
                 if (response.status === 201) {
                     localStorage.setItem(ACCESS_TOKEN, response.data.access);
                     localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+                    localStorage.setItem('userType', response.data.user_type);
                     handleRegister();
                 }
                 else {
