@@ -59,7 +59,7 @@ const Device = () => {
     return (
         <div>
             <DashboardHeader />
-            <div className='app-container'>
+            <div className={styles.appContainer}>
                 <CommercialSidebar />
                 <div className={styles.content}>
 					<div className={styles.tittleButton}>
