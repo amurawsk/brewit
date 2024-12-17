@@ -17,11 +17,12 @@ import Recipe from './components/Recipe';
 import CommercialBreweries from './components/CommercialBreweries';
 import CommercialBrewery from './components/CommercialBrewery';
 import Device from './components/pages/commercial/Device';
-import TimeSlots from './components/TimeSlots';
+import TimeSlot from './components/pages/commercial/TimeSlot'
 import InUse from './components/InUse';
 import PieceOfEquipment from './components/PieceOfEquipment';
 import AddDevice from './components/pages/commercial/AddDevice';
 import AddRecipe from './components/AddRecipe';
+import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
 import './App.css';
 
 function App() {
@@ -46,11 +47,12 @@ function App() {
         <Route path="/commercial_breweries" element={<CommercialBreweries />} />
         <Route path="/commercial_brewery" element={<CommercialBrewery />} />
         <Route path="/device" element={<Device />} />
-        <Route path="/time_slots" element={<TimeSlots />} />
+        {/* <Route path="/time_slots" element={<TimeSlot />} /> */}
         <Route path="/in_use" element={<InUse />} />
         <Route path="/piece_of_equipment" element={<PieceOfEquipment />} />
         <Route path="/add_device" element={<AddDevice />} />
         <Route path="/add_recipe" element={<AddRecipe />} />
+        <Route path="/add_time_slot" element={<AddTimeSlot />} />0
       </Routes>
     </Router>
   );
