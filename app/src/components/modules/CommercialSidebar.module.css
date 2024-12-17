@@ -9,7 +9,7 @@
     margin-left: 5px;
 }
 
-.sidebar-header {
+.sidebarHeader {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
@@ -19,23 +19,23 @@
     font-size: 16px;
 }
 
-.sidebar-header-small {
+.sidebarHeaderSmall {
     font-size: 12px;
     color: gray;
 }
 
-.sidebar-header-large {
+.sidebarHeaderLarge {
     font-size: 18px;
     font-weight: bold;
     color: black;
 }
 
-.sidebar-menu {
+.sidebarMenu {
     flex-grow: 1;
     padding: 10px 0;
 }
 
-.sidebar-item {
+.sidebarItem {
     display: flex;
     align-items: flex-start;
     padding: 12px 20px;
@@ -47,7 +47,7 @@
     margin-right: 5px;
 }
 
-.sidebar-item:hover {
+.sidebarItem:hover {
     background-color: black;
     color: white;
 }
@@ -57,13 +57,13 @@
     font-size: 18px;
 }
 
-.sidebar-text {
+.sidebarText {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.sidebar-description {
+.sidebarDescription {
     font-size: 12px;
     color: gray;
     margin-top: 4px;

@@ -1,5 +1,6 @@
 import React from "react";
-import "./CommercialSidebar.css";
+// import "./CommercialSidebar.css";
+import styles from './CommercialSidebar.module.css'
 import { useNavigate } from 'react-router-dom';
 import { FaBeer, FaTools, FaClock, FaClipboard, FaUsers, FaChartLine } from "react-icons/fa";
 
@@ -9,55 +10,55 @@ const CommercialSidebar = () => {
     const goToDevices = () => navigate('/device')
 
     return (
-    <div className="sidebar">
-        <div className="sidebar-header">
-            <span className="sidebar-header-small">Panel boczny</span>
-            <span className="sidebar-header-large">Wybierz zakładkę</span>
+    <div className={styles.sidebar}>
+        <div className={styles.sidebarHeader}>
+            <span className={styles.sidebarHeaderSmall}>Panel boczny</span>
+            <span className={styles.sidebarHeaderLarge}>Wybierz zakładkę</span>
         </div>
-        <div className="sidebar-menu">
-            <hr className="separator"></hr>
-            <div className="sidebar-item">
-                <FaBeer className="icon" />
-                <div className="sidebar-text">
+        <div className={styles.sidebarMenu}>
+            <hr className={styles.separator}></hr>
+            <div className={styles.sidebarItem}>
+                <FaBeer className={styles.icon} />
+                <div className={styles.sidebarText}>
                     <span>Mój browar</span>
-                    <span className="sidebar-description">Przejdź do widoku browaru</span>
+                    <span className={styles.sidebarDescription}>Przejdź do widoku browaru</span>
                 </div>
             </div>
-            <div onClick={goToDevices} className="sidebar-item">
-                <FaTools className="icon" />
-                <div className="sidebar-text">
+            <div onClick={goToDevices} className={styles.sidebarItem}>
+                <FaTools className={styles.icon} />
+                <div className={styles.sidebarText}>
                     <span>Urządzenia</span>
-                    <span className="sidebar-description">Przejdź do widoku urządzeń</span>
+                    <span className={styles.sidebarDescription}>Przejdź do widoku urządzeń</span>
                 </div>
             </div>
-            <div className="sidebar-item">
-                <FaClock className="icon" />
-                <div className="sidebar-text">
+            <div className={styles.sidebarItem}>
+                <FaClock className={styles.icon} />
+                <div className={styles.sidebarText}>
                     <span>Okna Czasowe</span>
-                    <span className="sidebar-description">Przejdź do widoku okien czasowych</span>
+                    <span className={styles.sidebarDescription}>Przejdź do widoku okien czasowych</span>
                 </div>
             </div>
-            <hr className="separator"></hr>
-            <div className="sidebar-item">
-                <FaClipboard className="icon" />
-                <div className="sidebar-text">
+            <hr className={styles.separator}></hr>
+            <div className={styles.sidebarItem}>
+                <FaClipboard className={styles.icon} />
+                <div className={styles.sidebarText}>
                     <span>Zlecenia</span>
-                    <span className="sidebar-description">Przejdź do widoku zleceń</span>
+                    <span className={styles.sidebarDescription}>Przejdź do widoku zleceń</span>
                 </div>
             </div>
-            <div className="sidebar-item">
-                <FaUsers className="icon" />
-                <div className="sidebar-text">
+            <div className={styles.sidebarItem}>
+                <FaUsers className={styles.icon} />
+                <div className={styles.sidebarText}>
                     <span>Współpracownicy</span>
-                    <span className="sidebar-description">Przejdź do widoku współpracowników</span>
+                    <span className={styles.sidebarDescription}>Przejdź do widoku współpracowników</span>
                 </div>
             </div>
-            <hr className="separator"></hr>
-            <div className="sidebar-item">
-                <FaChartLine className="icon" />
-                <div className="sidebar-text">
+            <hr className={styles.separator}></hr>
+            <div className={styles.sidebarItem}>
+                <FaChartLine className={styles.icon} />
+                <div className={styles.sidebarText}>
                     <span>Statystyki</span>
-                    <span className="sidebar-description">Wyświetl statystyki</span>
+                    <span className={styles.sidebarDescription}>Wyświetl statystyki</span>
                 </div>
             </div>
         </div>
