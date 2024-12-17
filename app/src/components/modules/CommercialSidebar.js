@@ -1,5 +1,4 @@
 import React from "react";
-// import "./CommercialSidebar.css";
 import styles from './CommercialSidebar.module.css'
 import { useNavigate } from 'react-router-dom';
 import { FaBeer, FaTools, FaClock, FaClipboard, FaUsers, FaChartLine } from "react-icons/fa";
