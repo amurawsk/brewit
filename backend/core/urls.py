@@ -12,4 +12,8 @@ urlpatterns = [
     path("api/register/commercial/", RegisterCommercialView.as_view(), name="register_commercial"),
     path("api/register/contract/", views.RegisterContractBreweryView.as_view(), name="register_contract"),
     path("api/login/", LoginView.as_view(), name="login"),
+    
+    path("api/devices/add/", views.DeviceCreateView.as_view(), name="device_create"),
+    path("api/devices/brewery/<int:brewery_id>/", views.DeviceListForBreweryView.as_view(), name="device_list_brewery"),
+    path("api/devices/all/", views.DeviceListAllView.as_view(), name="device_list_all"),
 ]

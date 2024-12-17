@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Device, Profile
 from .serializers import (
     CheckUsernameUniqueSerializer,
+    DeviceSerializer,
     LoginSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
@@ -115,3 +117,84 @@ class CheckUsernameUniqueView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
+
+class DeviceCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+
+        try:
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery is None:
+                return Response(
+                    {"error": "Unauthorized to add devices for this brewery."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        commercial_brewery = profile.commercial_brewery
+        request.data['commercial_brewery'] = commercial_brewery.id
+
+        serializer = DeviceSerializer(data=request.data)
+        if serializer.is_valid():
+            device = serializer.save(commercial_brewery=commercial_brewery)
+            return Response({"message": "Device successfully created.", "id": device.id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeviceListForBreweryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, brewery_id):
+        user = request.user
+
+        try:
+            profile = Profile.objects.get(user=user)
+            if (
+                profile.contract_brewery or
+                (profile.commercial_brewery and profile.commercial_brewery.id == int(brewery_id))
+            ):
+                devices = Device.objects.filter(commercial_brewery_id=brewery_id)
+            else:
+                return Response(
+                    {"error": "Unauthorized to view devices for this brewery."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = DeviceSerializer(devices, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DeviceListAllView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        try:
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery is None:
+                return Response(
+                    {"error": "Unauthorized to view all devices."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        devices = Device.objects.all()
+        serializer = DeviceSerializer(devices, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

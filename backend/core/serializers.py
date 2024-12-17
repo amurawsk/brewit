@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Profile
+from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile
 
 
 class CommercialBrewerySerializer(serializers.ModelSerializer):
@@ -114,3 +114,17 @@ class CheckUsernameUniqueSerializer(serializers.Serializer):
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("This username is already taken.")
         return value
+
+
+class DeviceSerializer(serializers.ModelSerializer):
+    capacity = serializers.FloatField(source='capacity.value')
+    temperature_min = serializers.FloatField(source='temperature_min.value', required=False)
+    temperature_max = serializers.FloatField(source='temperature_max.value', required=False)
+
+    class Meta:
+        model = Device
+        fields = [
+            'name', 'device_type', 'serial_number', 'capacity',
+            'temperature_min', 'temperature_max', 'sour_beers',
+            'carbonation', 'supported_containers', 'commercial_brewery'
+        ]
