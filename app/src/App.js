@@ -36,7 +36,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/users" element={<Users />} />
-		<Route path="/register_user" element={<RegisterUser />} />
+		    <Route path="/register_user" element={<RegisterUser />} />
         <Route path="/contract_brewery" element={<ContractBrewery />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contracts" element={<Contracts />} />

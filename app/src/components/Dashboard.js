@@ -33,7 +33,7 @@ const Dashboard = () => {
 						<button onClick={goToStatistics}>Statystyki</button>
 					</div>
 				)}
-				{userType === 'commercial' && (
+				{userType === 'commercial_brewery' && (
 					<div style={{ padding: '10px' }}>
 						<button onClick={goToRegisterUser}>Zarejestruj użytkownika</button>
 						<button onClick={goToEquipment}>Urządzenia</button>
@@ -42,7 +42,7 @@ const Dashboard = () => {
 						<button onClick={goToStatistics}>Statystyki</button>
 					</div>
 				)}
-				{userType === 'contract' && (
+				{userType === 'contract_brewery' && (
 					<div style={{ padding: '10px' }}>
 						<button onClick={goToRegisterUser}>Zarejestruj użytkownika</button>
 						<button onClick={goToCommercialBreweries}>Browary Komercyjne</button>
