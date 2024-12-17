@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from './modules/DashboardHeader.js';
 import CommercialSidebar from './modules/CommercialSidebar.js';
-import './Device.css';
+// import './Device.css';
+import styles from './Device.module.css'
+
 
 const Device = () => {
     const navigate = useNavigate();
@@ -60,27 +62,27 @@ const Device = () => {
             <DashboardHeader />
             <div className='app-container'>
                 <CommercialSidebar />
-                <div className="content">
-					<div className="tittle-button">
-						<h1 className="tittle">Moje urządzenia</h1>
-						<button className="add-device-button" onClick={addDevice}>Dodaj nowe urządzenie</button>
+                <div className={styles.content}>
+					<div className={styles.tittleButton}>
+						<h1 className={styles.tittle}>Moje urządzenia</h1>
+						<button className={styles.addDeviceButton} onClick={addDevice}>Dodaj nowe urządzenie</button>
 					</div>
                     
-                    <div className="all-devices">
+                    <div className={styles.allDevices}>
                         {equipment.map((device, index) => (
-                            <div className="device" key={index} onClick={() => openPanel(device)}>
-                                <div className="device-text">
-                                    <span className="device-text-title">{device.name}</span>
-                                    <span className="device-description">typ urządzenia:
-                                        <span className="device-description-value"> {device.type}</span>
+                            <div className={styles.device} key={index} onClick={() => openPanel(device)}>
+                                <div className={styles.deviceText}>
+                                    <span className={styles.deviceTextTitle}>{device.name}</span>
+                                    <span className={styles.deviceDescription}>typ urządzenia:
+                                        <span className={styles.deviceDescriptionValue}> {device.type}</span>
                                     </span>
-                                    <span className="device-description">nr seryjny:
-                                        <span className="device-description-value"> {device.serial_number}</span>
+                                    <span className={styles.deviceDescription}>nr seryjny:
+                                        <span className={styles.deviceDescriptionValue}> {device.serial_number}</span>
                                     </span>
                                 </div>
-                                <div className="device-price">
-                                    <span className="device-description">Cena:
-                                        <span className="device-description-value"> {device.price} zł</span>
+                                <div className={styles.devicePrice}>
+                                    <span className={styles.deviceDescription}>Cena:
+                                        <span className={styles.deviceDescriptionValue}> {device.price} zł</span>
                                     </span>
                                 </div>
                             </div>
@@ -89,27 +91,28 @@ const Device = () => {
                 </div>
             </div>
 
-            <div className={`side-panel ${isPanelOpen ? 'open' : ''}`}>
-                <button className="close-panel" onClick={closePanel}>×</button>
+            <div className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
+                <button className={styles.closePanel} onClick={closePanel}>×</button>
                 {selectedDevice && (
-                    <div className="panel-content">
-                        <div className="details-header">
-							<span className="details-header-large">Szczegóły urządzenia</span>	
-							<span className="details-header-small">W tym panelu możesz również edytować swoje urządzenie</span>
+                    <div className={styles.panelContent}>
+                        <div className={styles.detailsHeader}>
+							<span className={styles.detailsHeaderLarge}>Szczegóły urządzenia</span>	
+							<span className={styles.detailsHeaderSmall}>W tym panelu możesz również edytować swoje urządzenie</span>
 						</div>
-                        <label>Nazwa:</label>
-                        <input type="text" value={deviceFields.name} onChange={(e) => handleFieldChange('name', e.target.value)} />
-                        <label>Typ:</label>
-                        <input type="text" value={deviceFields.type} readOnly />
-                        <label>Pojemność (L):</label>
-                        <input type="number" min="0" step="0.1" value={deviceFields.capacity} onChange={(e) => handleFieldChange('capacity', e.target.value)} />
-                        <label>Zakres temperatur:</label>
-                        <input type="text" value={deviceFields.temperature_range} onChange={(e) => handleFieldChange('temperature_range', e.target.value)} />
-                        <label>Kwaśne piwa:</label>
-                        <input type="checkbox" value="Zaznacz, jeśli obsługuje" checked={deviceFields.sour_beers} onChange={(e) => handleFieldChange('sour_beers', e.target.checked)} />
-                        <label>Karbonizacja:</label>
+                        <label className={styles.panelContentLabel}>Nazwa:</label>
+                        <input className={styles.panelContentInput} type="text" value={deviceFields.name} onChange={(e) => handleFieldChange('name', e.target.value)} />
+                        <label className={styles.panelContentLabel}>Typ:</label>
+                        <input className={styles.panelContentInput} type="text" value={deviceFields.type} readOnly />
+                        <label className={styles.panelContentLabel}>Pojemność (L):</label>
+                        <input className={styles.panelContentInput} type="number" min="0" step="0.1" value={deviceFields.capacity} onChange={(e) => handleFieldChange('capacity', e.target.value)} />
+                        <label className={styles.panelContentLabel}>Zakres temperatur:</label>
+                        <input className={styles.panelContentInput} type="text" value={deviceFields.temperature_range} onChange={(e) => handleFieldChange('temperature_range', e.target.value)} />
+                        <label className={styles.panelContentLabel}>Kwaśne piwa:</label>
+                        <input className={styles.checkboxInput} type="checkbox" value="Zaznacz, jeśli obsługuje" checked={deviceFields.sour_beers} onChange={(e) => handleFieldChange('sour_beers', e.target.checked)} />
+                        <label className={styles.panelContentLabel}>Karbonizacja:</label>
 						<div>
 							<input
+								className={styles.checkboxInput}
 								type="checkbox"
 								id="CO2"
 								name="carbonation"
@@ -117,9 +120,10 @@ const Device = () => {
 								checked={deviceFields.carbonation.includes("CO2")}
 								onChange={(e) => handleFieldChange('carbonation', e.target.value, e.target.checked)}
 							/>
-							<label htmlFor="CO2">CO2</label>
+							<label className={styles.panelContentLabel} htmlFor="CO2">CO2</label>
 
 							<input
+								className={styles.checkboxInput}
 								type="checkbox"
 								id="N2"
 								name="carbonation"
@@ -127,9 +131,10 @@ const Device = () => {
 								checked={deviceFields.carbonation.includes("N2")}
 								onChange={(e) => handleFieldChange('carbonation', e.target.value, e.target.checked)}
 							/>
-							<label htmlFor="N2">N2</label>
+							<label className={styles.panelContentLabel} htmlFor="N2">N2</label>
 
 							<input
+								className={styles.checkboxInput}
 								type="checkbox"
 								id="CO2-N2"
 								name="carbonation"
@@ -137,16 +142,16 @@ const Device = () => {
 								checked={deviceFields.carbonation.includes("mieszanka")}
 								onChange={(e) => handleFieldChange('carbonation', e.target.value, e.target.checked)}
 							/>
-							<label htmlFor="CO2-N2">mieszanka</label>
+							<label className={styles.panelContentLabel} htmlFor="CO2-N2">mieszanka</label>
 						</div>
-                        <label>Obsługiwane pojemniki:</label>
-                        <input type="text" value={deviceFields.supported_containers} onChange={(e) => handleFieldChange('supported_containers', e.target.value)} />
-                        <label>Cena (zł):</label>
-                        <input type="number" min="0" step="0.1" value={deviceFields.price} onChange={(e) => handleFieldChange('price', e.target.value)} />
+                        <label className={styles.panelContentLabel}>Obsługiwane pojemniki:</label>
+                        <input className={styles.panelContentInput} type="text" value={deviceFields.supported_containers} onChange={(e) => handleFieldChange('supported_containers', e.target.value)} />
+                        <label className={styles.panelContentLabel}>Cena (zł):</label>
+                        <input className={styles.panelContentInput} type="number" min="0" step="0.1" value={deviceFields.price} onChange={(e) => handleFieldChange('price', e.target.value)} />
 					
-						<div className="panel-buttons">
-							<button className="cancel-button" onClick={closePanel}>Anuluj</button>
-							<button className="apply-button" onClick={() => { changeDevice(deviceFields); setIsPanelOpen(false); }}>Zastosuj zmiany</button>
+						<div className={styles.panelButtons}>
+							<button className={styles.cancelButton} onClick={closePanel}>Anuluj</button>
+							<button className={styles.applyButton} onClick={() => { changeDevice(deviceFields); setIsPanelOpen(false); }}>Zastosuj zmiany</button>
 						</div>
 					</div>
                 )}

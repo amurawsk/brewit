@@ -1,8 +1,8 @@
-.app-container {
+.appContainer {
     display: flex
 }
 
-.tittle-button {
+.tittleButton {
     display: flex;
     flex-direction: row;
 }
@@ -14,7 +14,7 @@
     margin-left: 5px;
 }
 
-.add-device-button {
+.addDeviceButton {
     background-color: #333;
     color: #fff;
     border: none;
@@ -28,7 +28,7 @@
     font-size: 12px;
 }
 
-.add-device-button:hover {
+.addDeviceButton:hover {
     background-color: #555;
 }
 
@@ -39,7 +39,7 @@
     box-sizing: border-box;
 }
 
-.all-devices {
+.allDevices {
     background-color: #f8f9fa;
     display: flex;
     flex-direction: column;
@@ -66,13 +66,13 @@
     background-color: #f0eeeb; /* change */
 }
 
-.device-text {
+.deviceText {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.device-price {
+.devicePrice {
     display: flex;
     align-items: center;
     font-weight: bold;
@@ -80,25 +80,25 @@
     margin-left: auto;
 }
 
-.device-text-title {
+.deviceTextTitle {
     font-weight: normal;
     font-size: 24px;
     margin-bottom: 5px;
 }
 
-.device-description {
+.deviceDescription {
     font-size: 12px;
     color: gray;
     margin-top: 4px;
 }
 
-.device-description-value {
+.deviceDescriptionValue {
     color: black;
 }
 
 
 
-.details-header {
+.detailsHeader {
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
@@ -108,18 +108,18 @@
     font-size: 16px;
 }
 
-.details-header-small {
+.detailsHeaderSmall {
     font-size: 12px;
     color: gray;
 }
 
-.details-header-large {
+.detailsHeaderLarge {
     font-size: 24px;
     font-weight: bold;
     color: black;
 }
 
-.side-panel {
+.sidePanel {
     position: fixed;
     top: 0;
     right: -400px;
@@ -133,11 +133,11 @@
     box-sizing: border-box;
 }
 
-.side-panel.open {
+.sidePanelOpen {
     right: 0;
 }
 
-.close-panel {
+.closePanel {
     font-size: 24px;
     border: none;
     background: none;
@@ -146,18 +146,18 @@
     margin-bottom: 10px;
 }
 
-.panel-content {
+.panelContent {
     display: flex;
     flex-direction: column;
 }
 
-.panel-content label {
+.panelContentLabel {
     margin-top: 10px;
     font-size: 14px;
     color: #333;
 }
 
-.panel-content input {
+.panelContentInput {
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ccc;
@@ -165,21 +165,18 @@
     margin-top: 5px;
 }
 
-input[type="checkbox"] {
+.checkboxInput {
     width: 20px;
     height: 20px;
     margin-left: 20px;
 }
 
-.panel-buttons button {
+.cancelButton {
     margin-top: 10px;
     padding: 0.4rem 1.2rem;
     font-size: 12px;
     width: 50%;
     cursor: pointer;
-}
-
-.cancel-button {
     background-color: #f8f9fa;
     border: 1px solid #ccc;
     color: #333;
@@ -187,11 +184,16 @@ input[type="checkbox"] {
     transition: background-color 0.3s;
 }
 
-.cancel-button:hover {
+.cancelButton:hover {
     background-color: #e2e6ea;
 }
 
-.apply-button {
+.applyButton {
+    margin-top: 10px;
+    padding: 0.4rem 1.2rem;
+    font-size: 12px;
+    width: 50%;
+    cursor: pointer;
     background-color: #333;
     color: #fff;
     border: none;
@@ -199,6 +201,6 @@ input[type="checkbox"] {
     transition: background-color 0.3s;
 }
 
-.apply-button:hover {
+.applyButton:hover {
     background-color: #555;
 }
