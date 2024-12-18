@@ -47,12 +47,12 @@ function App() {
         <Route path="/commercial_breweries" element={<CommercialBreweries />} />
         <Route path="/commercial_brewery" element={<CommercialBrewery />} />
         <Route path="/device" element={<Device />} />
-        {/* <Route path="/time_slots" element={<TimeSlot />} /> */}
+        <Route path="/time_slots" element={<TimeSlot />} />
         <Route path="/in_use" element={<InUse />} />
         <Route path="/piece_of_equipment" element={<PieceOfEquipment />} />
         <Route path="/add_device" element={<AddDevice />} />
         <Route path="/add_recipe" element={<AddRecipe />} />
-        <Route path="/add_time_slot" element={<AddTimeSlot />} />0
+        <Route path="/add_time_slot" element={<AddTimeSlot />} />
       </Routes>
     </Router>
   );

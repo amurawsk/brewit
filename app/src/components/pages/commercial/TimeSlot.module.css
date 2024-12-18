@@ -6,7 +6,8 @@
 }
 
 .content {
-    margin-left: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
     flex-grow: 1;
     overflow-x: auto;
 }
@@ -24,7 +25,7 @@
     margin-left: 5px;
 }
 
-.addDeviceButton {
+.addTimeSlotButton {
     background-color: #333;
     color: #fff;
     border: none;
@@ -38,7 +39,7 @@
     font-size: 12px;
 }
 
-.addDeviceButton:hover {
+.addTimeSlotButton:hover {
     background-color: #555;
 }
 
@@ -47,31 +48,78 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 5px
 }
 
 .selectedDate {
     font-weight: bold;
 }
 
-.button {
-    padding: 5px 10px;
-    background-color: #f0f0f0;
+.arrowButton {
+    padding: 10px;
+    background-color: white;
     border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+    font-size: 16px;
+    font-weight: normal;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.button:hover {
-    background-color: #e0e0e0;
+.arrowButton:hover {
+    background-color: black;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.span {
+.arrowButton:active {
+    transform: scale(0.95);
+}
+
+.hourSelector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.hourSelectorLabel {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.hourSelectorSelect {
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 3px;
+}
+
+.navigatorSpan {
     cursor: pointer;
     padding: 5px 10px;
+}
+
+.notActive {
+    padding: 5px 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    color: black;
 }
 
 .active {
-    font-weight: bold;
-    color: black;
+    padding: 5px 10px;
+    background-color: black;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
 }
 
 .span:not(.active) {
@@ -98,20 +146,20 @@
 }
 
 .table {
-    /* border-collapse: collapse; */
+    margin-top: 5px;
+    border-collapse: collapse;
     width: 100%;
     table-layout: fixed;
 }
 
 .tableTh {
     text-align: center;
-    background-color: black;
+    background-color: #333;
     color: white;
 }
 
 .defaultSlot {
     height: 60px;
-    /* width: 1fr; */
     border-radius: 5px;
 }
 
@@ -119,14 +167,13 @@
     height: 80px;
     text-align: center;
     word-wrap: break-word;
-    background-color: black;
-    color: white;
+    background-color: #f8f9fa;
+    color: black;
 }
 
 .activeAvailableSlot {
     cursor: pointer;
     height: 60px;
-    /* width: 1fr; */
     border-radius: 5px;
     background-color: green;
 }
@@ -134,7 +181,6 @@
 .activeReservedSlot {
     cursor: pointer;
     height: 60px;
-    /* width: 1fr; */
     border-radius: 5px;
     background-color: orange;
 }
@@ -142,7 +188,6 @@
 .activeTakenSlot {
     cursor: pointer;
     height: 60px;
-    /* width: 1fr; */
     border-radius: 5px;
     background-color: red;
 }

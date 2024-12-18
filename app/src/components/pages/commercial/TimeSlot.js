@@ -2,40 +2,68 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.js';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
-import styles from './TimeSlot.module.css'
+import styles from './TimeSlot.module.css';
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+
 
 const CommercialDashboard = () => {
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    const addTimeSlot = () => navigate('/add_time_slot')
+    const addTimeSlot = () => navigate('/add_time_slot');
 
     const timetableData = [
         {
+            device_id: 1,
             device: 'Tank warzelny #1',
+            device_type: 'BT',
             timeSlots: [
-                { id: 1, start: 8, end: 9, status: 'taken' },
-                { id: 2, start: 12, end: 13, status: 'available'},
+                { id: 1, start_timestamp: '2024-12-18T08:00:00+01:00', end_timestamp: '2024-12-18T09:00:00+01:00', status: 'H' },
+                { id: 2, start_timestamp: '2024-12-19T12:00:00+01:00', end_timestamp: '2024-12-19T13:00:00+01:00', status: 'F' },
             ],
         },
         {
+            device_id: 2,
             device: 'Urządzenie do rozlewania #1',
+            device_type: 'BE',
             timeSlots: [
-                { id: 3, start: 10, end: 11, status: 'available' },
-                { id: 4, start: 11, end: 12, status: 'available' },
-                { id: 5, start: 14, end: 15, status: 'reserved' },
-                { id: 6, start: 15, end: 16, status: 'taken' },
+                { id: 3, start_timestamp: '2024-12-18T10:00:00+01:00', end_timestamp: '2024-12-18T11:00:00+01:00', status: 'F' },
+                { id: 4, start_timestamp: '2024-12-18T11:00:00+01:00', end_timestamp: '2024-12-18T12:00:00+01:00', status: 'F' },
+                { id: 5, start_timestamp: '2024-12-18T14:00:00+01:00', end_timestamp: '2024-12-18T15:00:00+01:00', status: 'R' },
+                { id: 6, start_timestamp: '2024-12-18T15:00:00+01:00', end_timestamp: '2024-12-18T16:00:00+01:00', status: 'H' },
+            ],
+        },
+        {
+            device_id: 3,
+            device: 'Fermentor #1',
+            device_type: 'FT',
+            timeSlots: [
+                { id: 7, start_timestamp: '2024-12-20T00:00:00+01:00', end_timestamp: '2024-12-20T23:59:59+01:00', status: 'F' },
             ],
         },
     ];
 
-    const startHour = 8;
-    const endHour = 20;
+    const [startHour, setStartHour] = useState(8);
+    const [endHour, setEndHour] = useState(16);
+
 
     const hours = Array.from({ length: endHour - startHour }, (_, i) => i + startHour);
-    
+
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [view, setView] = useState('daily');
-    console.log(selectedDate);
+
+    const handleStartHourChange = (event) => {
+        const newStartHour = parseInt(event.target.value, 10);
+        if (newStartHour < endHour) {
+            setStartHour(newStartHour);
+        }
+    };
+    
+    const handleEndHourChange = (event) => {
+        const newEndHour = parseInt(event.target.value, 10);
+        if (newEndHour > startHour) {
+            setEndHour(newEndHour);
+        }
+    }; 
 
     const startOfWeek = (date) => {
         const day = date.getDay(),
@@ -47,6 +75,19 @@ const CommercialDashboard = () => {
         const endDate = new Date(startDate);
         endDate.setDate(startDate.getDate() + 6);
         return endDate;
+    };
+
+    const isTodayActive = () => {
+        const today = new Date();
+        if (view === 'daily') {
+            return selectedDate.toDateString() === today.toDateString();
+        }
+        if (view === 'weekly') {
+            const start = startOfWeek(selectedDate);
+            const end = endOfWeek(start);
+            return today >= start && today <= end;
+        }
+        return false;
     };
 
     const handlePrevDate = () => {
@@ -89,92 +130,178 @@ const CommercialDashboard = () => {
         return `${formatDate(startDate)} - ${formatDate(endDate)}`;
     };
 
-	return (
+    const renderTimeSlots = (timeSlots, hour, currentDay) => {
+        if (view === 'daily') {
+            return timeSlots.find((slot) => {
+                const slotStart = new Date(slot.start_timestamp);
+                const slotEnd = new Date(slot.end_timestamp);
+                const selectedDay = currentDay.toDateString();
+                const slotDay = slotStart.toDateString();
+                return (
+                    slotStart.getHours() <= hour &&
+                    slotEnd.getHours() > hour &&
+                    selectedDay === slotDay
+                );
+            });
+        }
+
+        if (view === 'weekly') {
+            return timeSlots.find((slot) => {
+                const slotStart = new Date(slot.start_timestamp);
+                // const slotEnd = new Date(slot.end_timestamp);
+                const selectedDay = currentDay.toDateString();
+                const slotDay = slotStart.toDateString();
+    
+                return selectedDay === slotDay;
+            });
+        }
+
+        return null;
+    };
+
+    const filteredTimetableData = timetableData.filter((device) => {
+        if (view === 'daily') {
+            return device.device_type === 'BT' || device.device_type === 'BE';
+        }
+        if (view === 'weekly') {
+            return device.device_type === 'FT' || device.device_type === 'AC';
+        }
+        return false;
+    });
+
+    const tableHeaders = () => {
+        if (view === 'daily') {
+            return hours.map((hour) => <th key={hour} className={styles.tableTh}>{hour}:00</th>);
+        }
+        if (view === 'weekly') {
+            const startDate = startOfWeek(selectedDate);
+            return Array.from({ length: 7 }, (_, i) => {
+                const day = new Date(startDate);
+                day.setDate(startDate.getDate() + i);
+                return <th key={i} className={styles.tableTh}>{formatDate(day)}</th>;
+            });
+        }
+    };
+
+    return (
         <div>
             <DashboardHeader />
-			<div className={styles.appContainer}>
-				<CommercialSidebar />
-				<div className={styles.content}>
+            <div className={styles.appContainer}>
+                <CommercialSidebar />
+                <div className={styles.content}>
                     <div className={styles.tittleButton}>
                         <h1 className={styles.tittle}>Okna czasowe</h1>
-                        <button className={styles.addDeviceButton} onClick={addTimeSlot}>Dodaj nowe okno czasowe</button>
+                        <button className={styles.addTimeSlotButton} onClick={addTimeSlot}>Dodaj nowe okno czasowe</button>
                     </div>
-                        <div className={styles.dateNavigator}>
-                            <button onClick={handlePrevDate}>&lt;</button>
-                            <span className={styles.selectedDate}>
-                                {view === 'daily' ? formatDate(selectedDate) : formatWeekRange(selectedDate)}
-                            </span>
-                            <button onClick={handleNextDate}>&gt;</button>
-                
-                            <div className={styles.spacer}></div>
-                
-                            <span
-                                onClick={handleToday}
-                                className={selectedDate.toDateString() === new Date().toDateString() ? styles.active : ''}
-                            >
-                                Dziś
-                            </span>
-                
-                            <div className={styles.separator}></div>
-                
-                            <span
-                                onClick={handleDailyView}
-                                className={view === 'daily' ? styles.active : ''}
-                            >
-                                Widok dzienny
-                            </span>
-                            <span
-                                onClick={handleWeeklyView}
-                                className={view === 'weekly' ? styles.active : ''}
-                            >
-                                Widok tygodniowy
-                            </span>
+                    <div className={styles.dateNavigator}>
+                        <button className={styles.arrowButton} onClick={handlePrevDate}>
+                            <AiOutlineLeft />
+                        </button>
+                        <span className={styles.selectedDate}>
+                            {view === 'daily' ? formatDate(selectedDate) : formatWeekRange(selectedDate)}
+                        </span>
+                        <button className={styles.arrowButton} onClick={handleNextDate}>
+                            <AiOutlineRight />
+                        </button>
+                        {view === 'daily' && (
+                            <div className={styles.hourSelector}>
+                                <label className={styles.hourSelectorLabel}>
+                                    Od:
+                                    <select className={styles.hourSelectorSelect} value={startHour} onChange={handleStartHourChange}>
+                                        {Array.from({ length: 24 }, (_, i) => (
+                                            <option key={i} value={i}>
+                                                {i}:00
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <label className={styles.hourSelectorLabel}>
+                                    Do:
+                                    <select className={styles.hourSelectorSelect} value={endHour} onChange={handleEndHourChange}>
+                                        {Array.from({ length: 24 }, (_, i) => (
+                                            <option key={i} value={i}>
+                                                {i}:00
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                            </div>
+                        )}
+                        
+                        <div className={styles.spacer}></div>
+                        <span
+                            onClick={handleToday}
+                            className={isTodayActive() ? styles.active : styles.notActive}
+                        >
+                            Dziś
+                        </span>
+                        <div className={styles.separator}></div>
+                        <span
+                            onClick={handleDailyView}
+                            className={view === 'daily' ? styles.active : styles.notActive}
+                        >
+                            Widok dzienny
+                        </span>
+                        <span
+                            onClick={handleWeeklyView}
+                            className={view === 'weekly' ? styles.active : styles.notActive}
+                        >
+                            Widok tygodniowy
+                        </span>
                     </div>
                     <div className={styles.tableContainer}>
                         <table border="1" className={styles.table}>
                             <thead>
                                 <tr>
                                     <th className={styles.tableTh}>Urządzenie</th>
-                                    {hours.map((hour) => (
-                                        <th key={hour} className={styles.tableTh}>
-                                            {hour}:00
-                                        </th>
-                                    ))}
+                                    {tableHeaders()}
                                 </tr>
                             </thead>
                             <tbody>
-                                {timetableData.map((row, rowIndex) => (
+                                {filteredTimetableData.map((row, rowIndex) => (
                                     <tr key={rowIndex}>
                                         <td className={styles.deviceTableTd}>{row.device}</td>
-                                        {hours.map((hour) => {
-                                            const timeSlot = row.timeSlots.find(
-                                                (slot) =>
-                                                    slot.start <= hour &&
-                                                    slot.end > hour
-                                            );
+                                        {view === 'daily' ? (
+                                            hours
+                                                .filter((hour) => hour >= startHour && hour < endHour)
+                                                .map((hour) => {
+                                                const timeSlot = renderTimeSlots(row.timeSlots, hour, selectedDate);
+                                                const cellClass =
+                                                    timeSlot?.status === 'F'
+                                                        ? styles.activeAvailableSlot
+                                                        : timeSlot?.status === 'R'
+                                                        ? styles.activeReservedSlot
+                                                        : timeSlot?.status === 'H'
+                                                        ? styles.activeTakenSlot
+                                                        : styles.defaultSlot;
 
-                                            const cellClass =
-                                                timeSlot?.status === 'available'
-                                                    ? styles.activeAvailableSlot
-                                                    : timeSlot?.status === 'reserved'
-                                                    ? styles.activeReservedSlot
-                                                    : timeSlot?.status === 'taken'
-                                                    ? styles.activeTakenSlot
-                                                    : styles.defaultSlot;
+                                                return <td key={hour} className={cellClass}></td>;
+                                            })
+                                        ) : (
+                                            Array.from({ length: 7 }, (_, i) => {
+                                                const day = new Date(startOfWeek(selectedDate));
+                                                day.setDate(day.getDate() + i);
+                                                const timeSlot = renderTimeSlots(row.timeSlots, null, day);
+                                                const cellClass =
+                                                    timeSlot?.status === 'F'
+                                                        ? styles.activeAvailableSlot
+                                                        : timeSlot?.status === 'R'
+                                                        ? styles.activeReservedSlot
+                                                        : timeSlot?.status === 'H'
+                                                        ? styles.activeTakenSlot
+                                                        : styles.defaultSlot;
 
-                                            return (
-                                                <td key={hour} className={cellClass}>
-                                                </td>
-                                            );
-                                        })}
+                                                return <td key={i} className={cellClass}></td>;
+                                            })
+                                        )}
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
     );
 };
 
