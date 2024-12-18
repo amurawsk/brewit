@@ -7,6 +7,7 @@ const CommercialSidebar = () => {
     const navigate = useNavigate();
 
     const goToDevices = () => navigate('/device')
+    const goToTimeSlots = () => navigate('/time_slots')
 
     return (
     <div className={styles.sidebar}>
@@ -30,7 +31,7 @@ const CommercialSidebar = () => {
                     <span className={styles.sidebarDescription}>Przejdź do widoku urządzeń</span>
                 </div>
             </div>
-            <div className={styles.sidebarItem}>
+            <div onClick={goToTimeSlots} className={styles.sidebarItem}>
                 <FaClock className={styles.icon} />
                 <div className={styles.sidebarText}>
                     <span>Okna Czasowe</span>
