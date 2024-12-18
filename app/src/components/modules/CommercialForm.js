@@ -1,16 +1,46 @@
 import React, { useRef } from 'react';
 import BasicRegistrationForm from './BasicRegistrationForm.js';
+import api from '../../api.js';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants.js';
 
 function CommercialForm({ formData, updateFormData, setActiveSection, handleRegister }) {
     const commercialFormRef = useRef(null);
     const basicFormRef = useRef(null);
 
-    const handleSubmission = () => {
+    const handleSubmission = async () => {
         const isBasicFormValid = basicFormRef.current.reportValidity();
         const isCommercialFormValid = commercialFormRef.current.reportValidity();
 
         if (isBasicFormValid && isCommercialFormValid) {
-            handleRegister();
+            try {
+                const payload = {
+                    username: formData.username,
+                    password: formData.password,
+                    commercial_brewery: {
+                        name: formData.breweryName,
+                        contract_phone_number: formData.phone,
+                        contract_email: formData.email,
+                        description: formData.description,
+                        nip: formData.nip,
+                        address: formData.address,
+                    },
+                };
+
+                const response = await api.post('register/commercial/', payload);
+                if (response.status === 201) {
+                    localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                    localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+                    localStorage.setItem('userType', response.data.user_type);
+                    handleRegister();
+                }
+                else {
+                    console.log(response);
+                    // TODO: Handle registration error
+                }
+            }
+            catch (error) {
+                return error.response;
+            }
         }
     };
 

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NavigationBar from '../modules/NavigationBar.js';
+import api from '../../api.js';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -11,18 +12,29 @@ const Login = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	
-	const handleLogin = () => {
-		let userType = '';
-		if (username === 'spółka') {
-			userType = 'admin';
-		} else if (username === 'komercyjny') {
-			userType = 'commercial';
-		} else {
-			userType = 'contract';
-		}
-		localStorage.setItem('userType', userType);
-		goToDashboard();
-	}
+	const handleLogin = async (event) => {
+		event.preventDefault();
+
+		try {
+            const response = await api.post("login/", { username, password });
+
+            if (response.status === 200) {
+                const { refresh, access, user_type } = response.data;
+				
+				localStorage.setItem("ACCESS_TOKEN", access);
+                localStorage.setItem("REFRESH_TOKEN", refresh);
+                localStorage.setItem("userType", user_type);
+
+                goToDashboard();
+            }
+			else {
+				console.log(response);
+				// TODO: Handle login error
+			}
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 	return (
         <div>

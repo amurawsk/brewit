@@ -4,6 +4,7 @@ import './Register.css';
 import NavigationBar from '../modules/NavigationBar.js';
 import ContractForm from '../modules/ContractForm.js';
 import CommercialForm from '../modules/CommercialForm.js';
+import api from '../../api.js';
 
 function Register() {
 	const navigate = useNavigate();
@@ -33,6 +34,23 @@ function Register() {
         setFormData(prevState => ({ ...prevState, [field]: value }));
     };
 
+	const submitNamePassword = async (event) => {
+		event.preventDefault();
+		const username = formData.username;
+		try {
+			const response = await api.post('check-username-unique/', { username })
+			if (response.data.unique) {
+				setActiveSection('ChooseType');
+			}
+			else {
+				// TODO: Handle non-unique username
+			}
+		}
+		catch (error) {
+			return error.response;
+		}
+	};
+
     return (
         <div className="register-page">
             <NavigationBar />
@@ -42,7 +60,7 @@ function Register() {
 					<h4>Zarejestruj się</h4>
 					<hr className="divider" />
 					<div className='myform-form'>
-						<form className='myform' onSubmit={(e) => { setActiveSection('ChooseType'); }}>
+						<form className='myform' onSubmit={submitNamePassword}>
     						<div>
         						<label htmlFor="username"><b>Nazwa użytkownika: </b></label>
         						<input type="text" placeholder="Wpisz nazwę użytkownika" name="name" value={formData.username} onChange={(e) => updateFormData('username', e.target.value)} required/>
