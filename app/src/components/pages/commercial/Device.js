@@ -63,7 +63,7 @@ const Device = () => {
                 <CommercialSidebar />
                 <div className={styles.content}>
 					<div className={styles.tittleButton}>
-						<h1 className={styles.tittle}>Moje urządzenia</h1>
+						<h1 className={styles.tittle}>Urządzenia</h1>
 						<button className={styles.addDeviceButton} onClick={addDevice}>Dodaj nowe urządzenie</button>
 					</div>
                     
