@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile
+from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile, TimeSlot
 
 
 class CommercialBrewerySerializer(serializers.ModelSerializer):
@@ -124,7 +124,18 @@ class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
         fields = [
-            'name', 'device_type', 'serial_number', 'capacity',
+            'id', 'name', 'device_type', 'serial_number', 'capacity',
             'temperature_min', 'temperature_max', 'sour_beers',
             'carbonation', 'supported_containers', 'commercial_brewery'
         ]
+
+
+class TimeSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = ['id', 'status', 'slot_type', 'price', 'start_timestamp', 'end_timestamp', 'device', 'order']
+
+    def validate(self, data):
+        if data['start_timestamp'] >= data['end_timestamp']:
+            raise serializers.ValidationError("Start time must be before end time.")
+        return data

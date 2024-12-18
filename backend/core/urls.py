@@ -16,4 +16,6 @@ urlpatterns = [
     path("api/devices/add/", views.DeviceCreateView.as_view(), name="device_create"),
     path("api/devices/brewery/<int:brewery_id>/", views.DeviceListForBreweryView.as_view(), name="device_list_brewery"),
     path("api/devices/all/", views.DeviceListAllView.as_view(), name="device_list_all"),
+    path("api/devices/<int:device_id>/time-slots/all/", views.TimeSlotListView.as_view(), name="time_slot_list_all"),
+    path("api/devices/<int:device_id>/time-slots/add/", views.TimeSlotCreateView.as_view(), name="time_slot_create"),
 ]

@@ -5,13 +5,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Profile
+from .models import Device, Profile, TimeSlot
 from .serializers import (
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
     LoginSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
+    TimeSlotSerializer,
 )
 
 
@@ -197,4 +198,61 @@ class DeviceListAllView(APIView):
 
         devices = Device.objects.all()
         serializer = DeviceSerializer(devices, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TimeSlotCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, device_id):
+        user = request.user
+
+        try:
+            device = Device.objects.get(id=device_id)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery is not None:
+                return Response(
+                    {"error": "Unauthorized to add time slots for this user."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+            if profile.commercial_brewery != device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to add time slots for this device."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Device.DoesNotExist:
+            return Response(
+                {"error": "Device not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = TimeSlotSerializer(data=request.data)
+        if serializer.is_valid():
+            time_slot = serializer.save(device=device)
+            return Response({"message": "Time slot successfully created.", "id": time_slot.id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TimeSlotListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, device_id):
+        user = request.user
+        try:
+            device = Device.objects.get(id=device_id)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
+                return Response({"error": "Unauthorized to view time slots for this device."}, status=status.HTTP_403_FORBIDDEN)
+        except Device.DoesNotExist:
+            return Response({"error": "Device not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        time_slots = TimeSlot.objects.filter(device=device)
+        serializer = TimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
