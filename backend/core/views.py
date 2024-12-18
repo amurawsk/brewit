@@ -9,6 +9,7 @@ from .models import Device, Profile, TimeSlot
 from .serializers import (
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
+    DeviceWithTimeSlotsSerializer,
     LoginSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
@@ -256,3 +257,28 @@ class TimeSlotListView(APIView):
         time_slots = TimeSlot.objects.filter(device=device)
         serializer = TimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DevicesWithTimeSlotsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, brewery_id):
+        user = request.user
+
+        try:
+            profile = user.profile
+            commercial_brewery = profile.commercial_brewery
+            if not commercial_brewery or commercial_brewery.id != brewery_id:
+                return Response(
+                    {"error": "Unauthorized to view devices with time slots for this brewery."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        devices = Device.objects.filter(commercial_brewery_id=brewery_id)
+        serializer = DeviceWithTimeSlotsSerializer(devices, many=True)
+        return Response(serializer.data, status=200)

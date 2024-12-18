@@ -139,3 +139,11 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         if data['start_timestamp'] >= data['end_timestamp']:
             raise serializers.ValidationError("Start time must be before end time.")
         return data
+
+
+class DeviceWithTimeSlotsSerializer(serializers.ModelSerializer):
+    timeSlots = TimeSlotSerializer(source='timeslot_set', many=True)
+
+    class Meta:
+        model = Device
+        fields = ['id', 'name', 'device_type', 'timeSlots']
