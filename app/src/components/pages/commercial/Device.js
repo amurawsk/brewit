@@ -61,8 +61,6 @@ const Device = () => {
 			setDeviceFields({ ...deviceFields, [field]: updatedValue });
 		}
 	};
-	
-	
 
 	const changeDevice = (deviceFields) => {
 		// TODO

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import pl from 'date-fns/locale/pl';
@@ -6,12 +6,12 @@ import DashboardHeader from '../../modules/DashboardHeader.js';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
 import styles from './AddTimeSlot.module.css'
 import { setHours, setMinutes, isToday } from 'date-fns';
+import api from '../../../api.js';
 
 registerLocale('pl', pl);
 
 const AddTimeWindowForm = () => {
     const [selectedDevice, setSelectedDevice] = useState(null);
-    // const [price, setPrice] = useState('');
 
     const [formState, setFormState] = useState({
         device: '',
@@ -20,6 +20,26 @@ const AddTimeWindowForm = () => {
         timeRange: [null, null],
         specificDate: null,
     });
+
+    const [devices, setDevices] = useState([]);
+
+    const getData = async () => {
+        try {
+            const breweryId = 3;
+            const response = await api.get(`devices/brewery/${breweryId}/`);
+            if (response.status === 200) {
+                setDevices(response.data);
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.log('Error fetching devices:', error);
+        }
+    };
+
+	useEffect(() => {
+        getData();
+    }, []);
 
     const getMinDate = () => {
         return new Date();
@@ -42,7 +62,7 @@ const AddTimeWindowForm = () => {
 
     const handleInputChange = (e) => {
         const id = e.target.value;
-        const device = equipment.find((item) => item.id === id);
+        const device = devices.find((item) => item.id.toString() === id.toString());
         setSelectedDevice(device);
         setFormState((prevState) => ({
             ...prevState,
@@ -72,9 +92,16 @@ const AddTimeWindowForm = () => {
         }));
     };
 
+    
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+
+
         console.log('Submitted data:', formState);
+
+
     };
 
     const handlePriceChange = (e) => {
@@ -86,8 +113,8 @@ const AddTimeWindowForm = () => {
 
     const getPriceLabel = () => {
         if (!selectedDevice) return 'Podaj cenę';
-        const { type } = selectedDevice;
-        return type === 'Kocioł do leżakowania' || type === 'Pojemnik fermentacyjny'
+        const { device_type } = selectedDevice;
+        return device_type === 'AC' || device_type === 'FT'
             ? 'Podaj cenę (za dzień)'
             : 'Podaj cenę (za godzinę)';
     };
@@ -121,9 +148,9 @@ const AddTimeWindowForm = () => {
     const renderPicker = () => {
         if (!selectedDevice) return null;
     
-        const { type } = selectedDevice;
+        const { device_type } = selectedDevice;
     
-        if (type === 'FT' || type === 'AC') {
+        if (device_type === 'FT' || device_type === 'AC') {
             return (
                 <div className={styles.addTimeSlotForm}>
                     <label className={styles.formLabel}><b>Wybierz daty dostępności</b></label>
@@ -142,7 +169,7 @@ const AddTimeWindowForm = () => {
                 </div>
                 
             );
-        } else if (type === 'BT' || type === 'BE') {
+        } else if (device_type === 'BT' || device_type === 'BE') {
             return (
                 <div className={styles.addTimeSlotForm}>
                     <label className={styles.formLabel}><b>Wybierz godziny dostępności</b></label>
@@ -194,12 +221,12 @@ const AddTimeWindowForm = () => {
     };
     
 
-    const equipment = [
-		{ id: "1", name: 'Tank warzelny #1', type: 'BT', serial_number: '123456'},
-		{ id: "2", name: 'Pojemnik fermentacyjny #1', type: 'FT', serial_number: '234567'},
-		{ id: "3", name: 'Kocioł do leżakowania #1', type: 'AC', serial_number: '345678'},
-		{ id: "4", name: 'Urządzenie do rozlewania #1', type: 'BE', serial_number: '456789'}
-	];
+    // const equipment = [
+	// 	{ id: "1", name: 'Tank warzelny #1', type: 'BT', serial_number: '123456'},
+	// 	{ id: "2", name: 'Pojemnik fermentacyjny #1', type: 'FT', serial_number: '234567'},
+	// 	{ id: "3", name: 'Kocioł do leżakowania #1', type: 'AC', serial_number: '345678'},
+	// 	{ id: "4", name: 'Urządzenie do rozlewania #1', type: 'BE', serial_number: '456789'}
+	// ];
 
     return (
         <div>
@@ -213,7 +240,7 @@ const AddTimeWindowForm = () => {
                         <label className={styles.formLabel}><b>Wybierz urządzenie</b></label>
                         <select className={styles.dropboxInput} value={formState.device} onChange={handleInputChange}>
                             <option value="" disabled>Wybierz urządzenie</option>
-                            {equipment.map((device) => (
+                            {devices.map((device) => (
                                 <option key={device.id} value={device.id}> {device.name + ' - ' + device.serial_number} </option>
                             ))}
                         </select>
@@ -235,7 +262,7 @@ const AddTimeWindowForm = () => {
 
                         {renderPicker()}
 
-                        <button className={styles.insertTimeSlotButton} onClick={handleSubmit} type="submit">Dodaj okno czasowe</button>
+                        <button className={styles.insertTimeSlotButton} type="submit">Dodaj okno czasowe</button>
                     </form>
                 </div>
             </div>
