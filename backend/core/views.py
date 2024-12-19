@@ -83,6 +83,7 @@ class LoginView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             user_type = serializer.validated_data['user_type']
+            user_id = serializer.validated_data['user_id']
             refresh = RefreshToken.for_user(user)
 
             return Response(
@@ -91,6 +92,7 @@ class LoginView(APIView):
                     "access": str(refresh.access_token),
                     "message": "Login successful!",
                     "user_type": user_type,
+                    "user_id": user_id,
                 },
                 status=status.HTTP_200_OK,
             )

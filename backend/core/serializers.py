@@ -106,12 +106,15 @@ class LoginSerializer(serializers.Serializer):
         user_type = None
         if profile.commercial_brewery:
             user_type = "commercial_brewery"
+            user_id = profile.commercial_brewery.id
         elif profile.contract_brewery:
             user_type = "contract_brewery"
+            user_id = profile.contract_brewery.id
 
         return {
             "user": user,
-            "user_type": user_type
+            "user_type": user_type,
+            "user_id": user_id
         }
 
 
