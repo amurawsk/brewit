@@ -1,25 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.js';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
 import styles from './Device.module.css'
+import api from '../../../api.js';
 
 
 const Device = () => {
     const navigate = useNavigate();
 
 	const addDevice = () => navigate('/add_device')
-
+	const [devices, setDevices] = useState([]);
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [deviceFields, setDeviceFields] = useState({});
     const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-	const equipment = [
-		{ name: 'Tank warzelny #1', type: 'Tank warzelny', serial_number: '123456', capacity: 100, temperature_range: '80C-120C', sour_beers: true, price: 300, carbonation: ['CO2', 'mieszanka'], supported_containers: '-' },
-		{ name: 'Pojemnik fermentacyjny #1', type: 'Pojemnik fermentacyjny', serial_number: '234567', capacity: 100, temperature_range: '10C-30C', sour_beers: false, price: 250, carbonation: [], supported_containers: '-' },
-		{ name: 'Kocioł do leżakowania #1', type: 'Kocioł do leżakowania', serial_number: '345678', capacity: 100, temperature_range: '-5C-20C', sour_beers: true, price: 300, carbonation: ['mieszanka', 'N2'], supported_containers: '-' },
-		{ name: 'Urządzenie do rozlewania #1', type: 'Urządzenie do rozlewania', serial_number: '456789', capacity: 100, temperature_range: '-', sour_beers: false, price: 250, carbonation: [], supported_containers: 'butelki' }
-	];
+	const getData = async () => {
+        try {
+            const breweryId = 3;
+            const response = await api.get(`devices/brewery/${breweryId}/`);
+            if (response.status === 200) {
+                setDevices(response.data);
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.log('Error fetching devices:', error);
+        }
+    };
+
+	useEffect(() => {
+        getData();
+    }, []);
 
     const openPanel = (device) => {
         setSelectedDevice(device);
@@ -68,20 +80,15 @@ const Device = () => {
 					</div>
                     
                     <div className={styles.allDevices}>
-                        {equipment.map((device, index) => (
+                        {devices.map((device, index) => (
                             <div className={styles.device} key={index} onClick={() => openPanel(device)}>
                                 <div className={styles.deviceText}>
                                     <span className={styles.deviceTextTitle}>{device.name}</span>
                                     <span className={styles.deviceDescription}>typ urządzenia:
-                                        <span className={styles.deviceDescriptionValue}> {device.type}</span>
+                                        <span className={styles.deviceDescriptionValue}> {device.device_type}</span>
                                     </span>
                                     <span className={styles.deviceDescription}>nr seryjny:
                                         <span className={styles.deviceDescriptionValue}> {device.serial_number}</span>
-                                    </span>
-                                </div>
-                                <div className={styles.devicePrice}>
-                                    <span className={styles.deviceDescription}>Cena:
-                                        <span className={styles.deviceDescriptionValue}> {device.price} zł</span>
                                     </span>
                                 </div>
                             </div>
@@ -105,7 +112,7 @@ const Device = () => {
                         <label className={styles.panelContentLabel}>Pojemność (L):</label>
                         <input className={styles.panelContentInput} type="number" min="0" step="0.1" value={deviceFields.capacity} onChange={(e) => handleFieldChange('capacity', e.target.value)} />
                         <label className={styles.panelContentLabel}>Zakres temperatur:</label>
-                        <input className={styles.panelContentInput} type="text" value={deviceFields.temperature_range} onChange={(e) => handleFieldChange('temperature_range', e.target.value)} />
+                        <input className={styles.panelContentInput} type="text" value={deviceFields.temperature_min} onChange={(e) => handleFieldChange('temperature_min', e.target.value)} />
                         <label className={styles.panelContentLabel}>Kwaśne piwa:</label>
                         <input className={styles.checkboxInput} type="checkbox" value="Zaznacz, jeśli obsługuje" checked={deviceFields.sour_beers} onChange={(e) => handleFieldChange('sour_beers', e.target.checked)} />
                         <label className={styles.panelContentLabel}>Karbonizacja:</label>

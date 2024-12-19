@@ -1,46 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.js';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
 import styles from './TimeSlot.module.css';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import api from '../../../api.js';
 
 
 const CommercialDashboard = () => {
     const navigate = useNavigate();
 
     const addTimeSlot = () => navigate('/add_time_slot');
+    const [timetableData, setTimetableData] = useState([]);
 
-    const timetableData = [
-        {
-            device_id: 1,
-            device: 'Tank warzelny #1',
-            device_type: 'BT',
-            timeSlots: [
-                { id: 1, start_timestamp: '2024-12-18T08:00:00+01:00', end_timestamp: '2024-12-18T09:00:00+01:00', status: 'H' },
-                { id: 2, start_timestamp: '2024-12-19T12:00:00+01:00', end_timestamp: '2024-12-19T13:00:00+01:00', status: 'F' },
-            ],
-        },
-        {
-            device_id: 2,
-            device: 'Urządzenie do rozlewania #1',
-            device_type: 'BE',
-            timeSlots: [
-                { id: 3, start_timestamp: '2024-12-18T10:00:00+01:00', end_timestamp: '2024-12-18T11:00:00+01:00', status: 'F' },
-                { id: 4, start_timestamp: '2024-12-18T11:00:00+01:00', end_timestamp: '2024-12-18T12:00:00+01:00', status: 'F' },
-                { id: 5, start_timestamp: '2024-12-18T14:00:00+01:00', end_timestamp: '2024-12-18T15:00:00+01:00', status: 'R' },
-                { id: 6, start_timestamp: '2024-12-18T15:00:00+01:00', end_timestamp: '2024-12-18T16:00:00+01:00', status: 'H' },
-            ],
-        },
-        {
-            device_id: 3,
-            device: 'Fermentor #1',
-            device_type: 'FT',
-            timeSlots: [
-                { id: 7, start_timestamp: '2024-12-20T00:00:00+01:00', end_timestamp: '2024-12-20T23:59:59+01:00', status: 'F' },
-            ],
-        },
-    ];
+    const getData = async () => {
+        try {
+            const breweryId = 3;
+            const response = await api.get(`devices/brewery/${breweryId}/with-time-slots/`);
+            if (response.status === 200) {
+                setTimetableData(response.data);
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.log('Error fetching devices:', error);
+        }
+    };
+
+	useEffect(() => {
+        getData();
+    }, []);
 
     const [startHour, setStartHour] = useState(8);
     const [endHour, setEndHour] = useState(16);
@@ -260,7 +249,7 @@ const CommercialDashboard = () => {
                             <tbody>
                                 {filteredTimetableData.map((row, rowIndex) => (
                                     <tr key={rowIndex}>
-                                        <td className={styles.deviceTableTd}>{row.device}</td>
+                                        <td className={styles.deviceTableTd}>{row.name}</td>
                                         {view === 'daily' ? (
                                             hours
                                                 .filter((hour) => hour >= startHour && hour < endHour)
