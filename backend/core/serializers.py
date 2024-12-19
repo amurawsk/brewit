@@ -4,6 +4,14 @@ from rest_framework import serializers
 from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile, TimeSlot
 
 
+class MeasurementField(serializers.Field):
+    def to_representation(self, obj):
+        return obj.value if obj else None
+
+    def to_internal_value(self, data):
+        return data
+
+
 class CommercialBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = CommercialBrewery
@@ -117,9 +125,9 @@ class CheckUsernameUniqueSerializer(serializers.Serializer):
 
 
 class DeviceSerializer(serializers.ModelSerializer):
-    capacity = serializers.FloatField(source='capacity.value')
-    temperature_min = serializers.FloatField(source='temperature_min.value', required=False)
-    temperature_max = serializers.FloatField(source='temperature_max.value', required=False)
+    capacity = MeasurementField()
+    temperature_min = MeasurementField()
+    temperature_max = MeasurementField()
 
     class Meta:
         model = Device
