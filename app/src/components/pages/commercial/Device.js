@@ -17,7 +17,7 @@ const Device = () => {
 
 	const getData = async () => {
         try {
-            const breweryId = 3;
+            const breweryId = 1;
             const response = await api.get(`devices/brewery/${breweryId}/`);
             if (response.status === 200) {
                 setDevices(response.data);

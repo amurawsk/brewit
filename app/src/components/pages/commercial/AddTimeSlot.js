@@ -7,10 +7,14 @@ import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
 import styles from './AddTimeSlot.module.css'
 import { setHours, setMinutes, isToday } from 'date-fns';
 import api from '../../../api.js';
+import { useNavigate } from 'react-router-dom';
 
 registerLocale('pl', pl);
 
 const AddTimeWindowForm = () => {
+    const navigate = useNavigate();
+    const timeSlots = () => navigate('/time_slots')
+
     const [selectedDevice, setSelectedDevice] = useState(null);
 
     const [formState, setFormState] = useState({
@@ -25,7 +29,7 @@ const AddTimeWindowForm = () => {
 
     const getData = async () => {
         try {
-            const breweryId = 3;
+            const breweryId = 1;
             const response = await api.get(`devices/brewery/${breweryId}/`);
             if (response.status === 200) {
                 setDevices(response.data);
@@ -92,16 +96,48 @@ const AddTimeWindowForm = () => {
         }));
     };
 
-    
+    const postData = async () => {
+		try {
+            let response;
+            const id = selectedDevice.id;
+
+            if (formState.dateRange && formState.dateRange[0] !== null && formState.dateRange[1] !== null) {
+                formState.dateRange[1].setHours(23, 59, 59);
+                response = await api.post(`devices/${id}/time-slots/add/`, {
+                    "status": "F",
+                    "slot_type": "D",
+                    "price": formState.price,
+                    "start_timestamp": formState.dateRange[0],
+                    "end_timestamp": formState.dateRange[1],
+                    "device": parseInt(id)
+                });
+            } else if (formState.timeRange && formState.timeRange[0] !== null && formState.timeRange[1] !== null) {
+                response = await api.post(`devices/${id}/time-slots/add/`, {
+                    "status": "F",
+                    "slot_type": "H",
+                    "price": formState.price,
+                    "start_timestamp": formState.timeRange[0],
+                    "end_timestamp": formState.timeRange[1],
+                    "device": parseInt(id)
+                });
+            } else {
+                console.log('Both dateRange and timeRange are null');
+            }
+			console.log(response);
+			if (response.status === 201) {
+				timeSlots();
+			} else {
+				console.log(response);
+				// TODO: Handle error
+			}
+		} catch (error) {
+			console.log('Error fetching devices:', error);
+		}
+	};
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-
-
-        console.log('Submitted data:', formState);
-
-
+        postData()
     };
 
     const handlePriceChange = (e) => {
@@ -219,14 +255,6 @@ const AddTimeWindowForm = () => {
     
         return null;
     };
-    
-
-    // const equipment = [
-	// 	{ id: "1", name: 'Tank warzelny #1', type: 'BT', serial_number: '123456'},
-	// 	{ id: "2", name: 'Pojemnik fermentacyjny #1', type: 'FT', serial_number: '234567'},
-	// 	{ id: "3", name: 'Kocioł do leżakowania #1', type: 'AC', serial_number: '345678'},
-	// 	{ id: "4", name: 'Urządzenie do rozlewania #1', type: 'BE', serial_number: '456789'}
-	// ];
 
     return (
         <div>
