@@ -2,7 +2,13 @@ import React from 'react';
 
 import styles from './TimeSlotsTable.module.css';
 
-const TimeSlotsTable = ({ timetableData, view, selectedDate, startHour, endHour }) => {
+const TimeSlotsTable = ({
+    timetableData,
+    view,
+    selectedDate,
+    startHour,
+    endHour,
+}) => {
     const hours = Array.from(
         { length: endHour - startHour },
         (_, i) => i + startHour
@@ -18,7 +24,6 @@ const TimeSlotsTable = ({ timetableData, view, selectedDate, startHour, endHour 
         return new Date(date.setDate(diff));
     };
 
-    
     const tableHeaders = () => {
         if (view === 'daily') {
             return hours.map((hour) => (
@@ -80,96 +85,72 @@ const TimeSlotsTable = ({ timetableData, view, selectedDate, startHour, endHour 
         return false;
     });
 
-
     return (
         <div className={styles.tableContainer}>
             <table border="1" className={styles.table}>
                 <thead>
                     <tr>
-                        <th className={styles.tableTh}>
-                            Urządzenie
-                        </th>
+                        <th className={styles.tableTh}>Urządzenie</th>
                         {tableHeaders()}
                     </tr>
                 </thead>
                 <tbody>
                     {filteredTimetableData.map((row, rowIndex) => (
                         <tr key={rowIndex}>
-                            <td className={styles.deviceTableTd}>
-                                {row.name}
-                            </td>
+                            <td className={styles.deviceTableTd}>{row.name}</td>
                             {view === 'daily'
                                 ? hours
-                                        .filter(
-                                            (hour) =>
-                                                hour >= startHour &&
-                                                hour < endHour
-                                        )
-                                        .map((hour) => {
-                                            const timeSlot =
-                                                renderTimeSlots(
-                                                    row.timeSlots,
-                                                    hour,
-                                                    selectedDate
-                                                );
-                                            const cellClass =
-                                                timeSlot?.status ===
-                                                'F'
-                                                    ? styles.activeAvailableSlot
-                                                    : timeSlot?.status ===
-                                                        'R'
+                                      .filter(
+                                          (hour) =>
+                                              hour >= startHour &&
+                                              hour < endHour
+                                      )
+                                      .map((hour) => {
+                                          const timeSlot = renderTimeSlots(
+                                              row.timeSlots,
+                                              hour,
+                                              selectedDate
+                                          );
+                                          const cellClass =
+                                              timeSlot?.status === 'F'
+                                                  ? styles.activeAvailableSlot
+                                                  : timeSlot?.status === 'R'
                                                     ? styles.activeReservedSlot
-                                                    : timeSlot?.status ===
-                                                        'H'
-                                                        ? styles.activeTakenSlot
-                                                        : styles.defaultSlot;
+                                                    : timeSlot?.status === 'H'
+                                                      ? styles.activeTakenSlot
+                                                      : styles.defaultSlot;
 
-                                            return (
-                                                <td
-                                                    key={hour}
-                                                    className={
-                                                        cellClass
-                                                    }></td>
-                                            );
-                                        })
-                                : Array.from(
-                                        { length: 7 },
-                                        (_, i) => {
-                                            const day = new Date(
-                                                startOfWeek(
-                                                    selectedDate
-                                                )
-                                            );
-                                            day.setDate(
-                                                day.getDate() + i
-                                            );
-                                            const timeSlot =
-                                                renderTimeSlots(
-                                                    row.timeSlots,
-                                                    null,
-                                                    day
-                                                );
-                                            const cellClass =
-                                                timeSlot?.status ===
-                                                'F'
-                                                    ? styles.activeAvailableSlot
-                                                    : timeSlot?.status ===
-                                                        'R'
-                                                    ? styles.activeReservedSlot
-                                                    : timeSlot?.status ===
-                                                        'H'
-                                                        ? styles.activeTakenSlot
-                                                        : styles.defaultSlot;
+                                          return (
+                                              <td
+                                                  key={hour}
+                                                  className={cellClass}></td>
+                                          );
+                                      })
+                                : Array.from({ length: 7 }, (_, i) => {
+                                      const day = new Date(
+                                          startOfWeek(selectedDate)
+                                      );
+                                      day.setDate(day.getDate() + i);
+                                      const timeSlot = renderTimeSlots(
+                                          row.timeSlots,
+                                          null,
+                                          day
+                                      );
+                                      const cellClass =
+                                          timeSlot?.status === 'F'
+                                              ? styles.activeAvailableSlot
+                                              : timeSlot?.status === 'R'
+                                                ? styles.activeReservedSlot
+                                                : timeSlot?.status === 'H'
+                                                  ? styles.activeTakenSlot
+                                                  : styles.defaultSlot;
 
-                                            return (
-                                                <td
-                                                    key={i}
-                                                    className={
-                                                        cellClass
-                                                    }></td>
-                                            );
-                                        }
-                                    )}
+                                      return (
+                                          <td
+                                              key={i}
+                                              className={cellClass}></td>
+                                      );
+                                  })}
                         </tr>
                     ))}
                 </tbody>

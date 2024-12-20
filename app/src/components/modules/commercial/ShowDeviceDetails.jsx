@@ -2,8 +2,13 @@ import React from 'react';
 
 import styles from './ShowDeviceDetails.module.css';
 
-const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, selectedDevice, setDeviceFields }) => {
-
+const ShowDeviceDetails = ({
+    isPanelOpen,
+    setIsPanelOpen,
+    deviceFields,
+    selectedDevice,
+    setDeviceFields,
+}) => {
     const handleFieldChange = (field, value, checked) => {
         if (field === 'carbonation') {
             setDeviceFields((prevFields) => {
@@ -34,7 +39,9 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, selected
     return (
         <div
             className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
-            <button className={styles.closePanel} onClick={() => setIsPanelOpen(false)}>
+            <button
+                className={styles.closePanel}
+                onClick={() => setIsPanelOpen(false)}>
                 ×
             </button>
             {selectedDevice && (
@@ -48,9 +55,7 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, selected
                             urządzenie
                         </span>
                     </div>
-                    <label className={styles.panelContentLabel}>
-                        Nazwa:
-                    </label>
+                    <label className={styles.panelContentLabel}>Nazwa:</label>
                     <input
                         className={styles.panelContentInput}
                         type="text"
@@ -87,10 +92,7 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, selected
                         type="text"
                         value={deviceFields.temperature_min}
                         onChange={(e) =>
-                            handleFieldChange(
-                                'temperature_min',
-                                e.target.value
-                            )
+                            handleFieldChange('temperature_min', e.target.value)
                         }
                     />
                     <label className={styles.panelContentLabel}>
@@ -102,10 +104,7 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, selected
                         value="Zaznacz, jeśli obsługuje"
                         checked={deviceFields.sour_beers}
                         onChange={(e) =>
-                            handleFieldChange(
-                                'sour_beers',
-                                e.target.checked
-                            )
+                            handleFieldChange('sour_beers', e.target.checked)
                         }
                     />
                     <label className={styles.panelContentLabel}>
@@ -118,9 +117,7 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, selected
                             id="CO2"
                             name="carbonation"
                             value="CO2"
-                            checked={deviceFields.carbonation.includes(
-                                'CO2'
-                            )}
+                            checked={deviceFields.carbonation.includes('CO2')}
                             onChange={(e) =>
                                 handleFieldChange(
                                     'carbonation',
@@ -141,9 +138,7 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, selected
                             id="N2"
                             name="carbonation"
                             value="N2"
-                            checked={deviceFields.carbonation.includes(
-                                'N2'
-                            )}
+                            checked={deviceFields.carbonation.includes('N2')}
                             onChange={(e) =>
                                 handleFieldChange(
                                     'carbonation',

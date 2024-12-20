@@ -3,8 +3,16 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
 import styles from './TimeSlotsDateNavigator.module.css';
 
-const TimeSlotsDateNavigator = ({ view, setView, selectedDate, setSelectedDate, startHour, endHour, setStartHour, setEndHour,  }) => {
-
+const TimeSlotsDateNavigator = ({
+    view,
+    setView,
+    selectedDate,
+    setSelectedDate,
+    startHour,
+    endHour,
+    setStartHour,
+    setEndHour,
+}) => {
     const formatDate = (date) => {
         return date.toLocaleDateString('pl-PL');
     };
@@ -65,7 +73,7 @@ const TimeSlotsDateNavigator = ({ view, setView, selectedDate, setSelectedDate, 
         }
         return false;
     };
-    
+
     const handlePrevDate = () => {
         if (view === 'daily') {
             setSelectedDate(
@@ -94,9 +102,7 @@ const TimeSlotsDateNavigator = ({ view, setView, selectedDate, setSelectedDate, 
 
     return (
         <div className={styles.dateNavigator}>
-            <button
-                className={styles.arrowButton}
-                onClick={handlePrevDate}>
+            <button className={styles.arrowButton} onClick={handlePrevDate}>
                 <AiOutlineLeft />
             </button>
             <span className={styles.selectedDate}>
@@ -104,9 +110,7 @@ const TimeSlotsDateNavigator = ({ view, setView, selectedDate, setSelectedDate, 
                     ? formatDate(selectedDate)
                     : formatWeekRange(selectedDate)}
             </span>
-            <button
-                className={styles.arrowButton}
-                onClick={handleNextDate}>
+            <button className={styles.arrowButton} onClick={handleNextDate}>
                 <AiOutlineRight />
             </button>
             {view === 'daily' && (
@@ -143,29 +147,19 @@ const TimeSlotsDateNavigator = ({ view, setView, selectedDate, setSelectedDate, 
             <div className={styles.spacer}></div>
             <span
                 onClick={handleToday}
-                className={
-                    isTodayActive()
-                        ? styles.active
-                        : styles.notActive
-                }>
+                className={isTodayActive() ? styles.active : styles.notActive}>
                 Dziś
             </span>
             <div className={styles.separator}></div>
             <span
                 onClick={handleDailyView}
-                className={
-                    view === 'daily'
-                        ? styles.active
-                        : styles.notActive
-                }>
+                className={view === 'daily' ? styles.active : styles.notActive}>
                 Widok dzienny
             </span>
             <span
                 onClick={handleWeeklyView}
                 className={
-                    view === 'weekly'
-                        ? styles.active
-                        : styles.notActive
+                    view === 'weekly' ? styles.active : styles.notActive
                 }>
                 Widok tygodniowy
             </span>

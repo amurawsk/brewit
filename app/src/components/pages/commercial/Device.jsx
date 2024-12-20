@@ -53,14 +53,11 @@ const Device = () => {
                         buttonFunction={addDevice}
                     />
 
-                    <ShowDevices 
-                        devices={devices}
-                        openPanel={openPanel}
-                    />
+                    <ShowDevices devices={devices} openPanel={openPanel} />
                 </div>
             </div>
 
-            <ShowDeviceDetails 
+            <ShowDeviceDetails
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}
                 deviceFields={deviceFields}

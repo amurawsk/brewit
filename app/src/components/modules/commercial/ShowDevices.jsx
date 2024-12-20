@@ -16,20 +16,14 @@ const ShowDevices = ({ devices, openPanel }) => {
                         </span>
                         <span className={styles.deviceDescription}>
                             typ urządzenia:
-                            <span
-                                className={
-                                    styles.deviceDescriptionValue
-                                }>
+                            <span className={styles.deviceDescriptionValue}>
                                 {' '}
                                 {device.device_type}
                             </span>
                         </span>
                         <span className={styles.deviceDescription}>
                             nr seryjny:
-                            <span
-                                className={
-                                    styles.deviceDescriptionValue
-                                }>
+                            <span className={styles.deviceDescriptionValue}>
                                 {' '}
                                 {device.serial_number}
                             </span>

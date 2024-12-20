@@ -13,7 +13,7 @@ import api from '../../../api.js';
 const CommercialDashboard = () => {
     const navigate = useNavigate();
     const addTimeSlot = () => navigate('/add_time_slot');
-    
+
     const [timetableData, setTimetableData] = useState([]);
     const [startHour, setStartHour] = useState(8);
     const [endHour, setEndHour] = useState(16);
@@ -40,7 +40,6 @@ const CommercialDashboard = () => {
         getData();
     }, []);
 
-
     return (
         <div>
             <DashboardHeader />
@@ -53,7 +52,7 @@ const CommercialDashboard = () => {
                         buttonFunction={addTimeSlot}
                     />
 
-                    <TimeSlotsDateNavigator 
+                    <TimeSlotsDateNavigator
                         view={view}
                         setView={setView}
                         selectedDate={selectedDate}
@@ -63,15 +62,14 @@ const CommercialDashboard = () => {
                         setStartHour={setStartHour}
                         setEndHour={setEndHour}
                     />
-                    
-                    <TimeSlotsTable 
+
+                    <TimeSlotsTable
                         timetableData={timetableData}
                         view={view}
                         selectedDate={selectedDate}
                         startHour={startHour}
-                        endHour={endHour}                    
+                        endHour={endHour}
                     />
-
                 </div>
             </div>
         </div>
