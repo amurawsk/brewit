@@ -1,6 +1,6 @@
 import React from 'react';
 // import { useNavigate } from 'react-router-dom';
-import DashboardHeader from '../../modules/DashboardHeader.js';
+import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import styles from './CommercialDashboard.module.css';
 

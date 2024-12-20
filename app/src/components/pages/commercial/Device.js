@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DashboardHeader from '../../modules/DashboardHeader.js';
+import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import styles from './Device.module.css';
 import api from '../../../api.js';
