@@ -1,12 +1,11 @@
 .appContainer {
-    display: flex
+    display: flex;
 }
 
 .tittleButton {
     display: flex;
     flex-direction: row;
 }
-
 
 .tittle {
     font-size: 28px;
@@ -95,8 +94,6 @@
 .deviceDescriptionValue {
     color: black;
 }
-
-
 
 .detailsHeader {
     margin-bottom: 20px;

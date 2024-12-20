@@ -1,4 +1,3 @@
-
 .deviceTypeDropbox {
     display: flex;
     flex-direction: column;
@@ -11,7 +10,7 @@
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
-	margin-top: 0.5rem;
+    margin-top: 0.5rem;
     margin-bottom: 10px;
 }
 
@@ -42,7 +41,7 @@
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
-	margin-top: 0.5rem;
+    margin-top: 0.5rem;
     margin-bottom: 10px;
 }
 
