@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import styles from './Device.module.css';
 import api from '../../../api.js';
 
@@ -75,14 +76,11 @@ const Device = () => {
             <div className={styles.appContainer}>
                 <CommercialSidebar />
                 <div className={styles.content}>
-                    <div className={styles.tittleButton}>
-                        <h1 className={styles.tittle}>Urządzenia</h1>
-                        <button
-                            className={styles.addDeviceButton}
-                            onClick={addDevice}>
-                            Dodaj nowe urządzenie
-                        </button>
-                    </div>
+                    <PageTittleWithButton
+                        text="Urządzenia"
+                        buttonText="Dodaj nowe urządzenie"
+                        buttonFunction={addDevice}
+                    />
 
                     <div className={styles.allDevices}>
                         {devices.map((device, index) => (

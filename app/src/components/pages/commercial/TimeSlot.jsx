@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import styles from './TimeSlot.module.css';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import api from '../../../api.js';
@@ -197,14 +198,11 @@ const CommercialDashboard = () => {
             <div className={styles.appContainer}>
                 <CommercialSidebar />
                 <div className={styles.content}>
-                    <div className={styles.tittleButton}>
-                        <h1 className={styles.tittle}>Okna czasowe</h1>
-                        <button
-                            className={styles.addTimeSlotButton}
-                            onClick={addTimeSlot}>
-                            Dodaj nowe okno czasowe
-                        </button>
-                    </div>
+                    <PageTittleWithButton
+                        text="Okna czasowe"
+                        buttonText="Dodaj nowe okno czasowe"
+                        buttonFunction={addTimeSlot}
+                    />
                     <div className={styles.dateNavigator}>
                         <button
                             className={styles.arrowButton}
