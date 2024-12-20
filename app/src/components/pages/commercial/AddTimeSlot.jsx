@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DashboardHeader from '../../modules/DashboardHeader.js';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
 import AddTimeSlotForm from '../../modules/commercial/AddTimeSlotForm.jsx';
+import PageTittle from '../../modules/PageTittle.jsx';
 
 import styles from './AddTimeSlot.module.css';
 
@@ -14,9 +15,7 @@ const AddTimeWindowForm = () => {
             <div className={styles.container}>
                 <CommercialSidebar />
                 <div className={styles.content}>
-                    <h1 className={styles.addTimeSlotTittle}>
-                        Dodaj okno czasowe
-                    </h1>
+                    <PageTittle text="Dodaj okno czasowe" />
                     <AddTimeSlotForm />
                 </div>
             </div>

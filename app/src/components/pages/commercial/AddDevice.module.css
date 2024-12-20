@@ -2,11 +2,6 @@
     display: flex;
 }
 
-.addDeviceTittle {
-    font-size: 28px;
-    color: black;
-}
-
 .addEquipment {
     width: 100%;
     margin: 0;
