@@ -12,36 +12,6 @@
     overflow-x: auto;
 }
 
-/* header */
-.tittleButton {
-    display: flex;
-    flex-direction: row;
-}
-
-.tittle {
-    font-size: 28px;
-    color: black;
-    margin-left: 5px;
-}
-
-.addTimeSlotButton {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-    margin-left: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    padding: 0.4rem 1.2rem;
-    font-size: 12px;
-}
-
-.addTimeSlotButton:hover {
-    background-color: #555;
-}
-
 /* date picker */
 .dateNavigator {
     display: flex;
@@ -96,11 +66,6 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-left: 3px;
-}
-
-.navigatorSpan {
-    cursor: pointer;
-    padding: 5px 10px;
 }
 
 .notActive {

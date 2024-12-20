@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
+import ShowDevices from '../../modules/commercial/ShowDevices.jsx';
 import styles from './Device.module.css';
 import api from '../../../api.js';
 
@@ -82,40 +83,10 @@ const Device = () => {
                         buttonFunction={addDevice}
                     />
 
-                    <div className={styles.allDevices}>
-                        {devices.map((device, index) => (
-                            <div
-                                className={styles.device}
-                                key={index}
-                                onClick={() => openPanel(device)}>
-                                <div className={styles.deviceText}>
-                                    <span className={styles.deviceTextTitle}>
-                                        {device.name}
-                                    </span>
-                                    <span className={styles.deviceDescription}>
-                                        typ urządzenia:
-                                        <span
-                                            className={
-                                                styles.deviceDescriptionValue
-                                            }>
-                                            {' '}
-                                            {device.device_type}
-                                        </span>
-                                    </span>
-                                    <span className={styles.deviceDescription}>
-                                        nr seryjny:
-                                        <span
-                                            className={
-                                                styles.deviceDescriptionValue
-                                            }>
-                                            {' '}
-                                            {device.serial_number}
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <ShowDevices 
+                        devices={devices}
+                        openPanel={openPanel}
+                    />
                 </div>
             </div>
 
