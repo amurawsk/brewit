@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import AddTimeSlotForm from '../../modules/commercial/AddTimeSlotForm.jsx';
-import PageTittle from '../../modules/PageTittle.jsx';
+import PageTittle from '../../utils/PageTittle.jsx';
 
 import styles from './AddTimeSlot.module.css';
 
