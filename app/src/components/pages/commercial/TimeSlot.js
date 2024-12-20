@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.js';
-import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
+import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import styles from './TimeSlot.module.css';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import api from '../../../api.js';

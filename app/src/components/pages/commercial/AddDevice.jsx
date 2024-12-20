@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './AddDevice.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.js';
-import CommercialSidebar from '../../modules/commercial/CommercialSidebar.js';
+import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import AddDeviceForm from '../../modules/commercial/AddDeviceForm.jsx';
 import PageTittle from '../../modules/PageTittle.jsx';
 
