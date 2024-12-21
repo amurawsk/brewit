@@ -1,0 +1,40 @@
+.device {
+    display: flex;
+    border: 1px solid black;
+    border-radius: 8px;
+    align-items: flex-start;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.device:hover {
+    background-color: #f0eeeb; /* change */
+}
+
+.deviceText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.deviceTextTitle {
+    font-weight: normal;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.deviceDescription {
+    font-size: 12px;
+    color: gray;
+    margin-top: 4px;
+}
+
+.deviceDescriptionValue {
+    color: black;
+}

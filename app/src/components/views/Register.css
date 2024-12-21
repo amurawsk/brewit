@@ -12,16 +12,16 @@
     gap: 0.5rem;
 }
 
-.chechbox-place input[type="checkbox"] {
+.chechbox-place input[type='checkbox'] {
     width: 0.9rem;
     height: 0.9rem;
     cursor: pointer;
-	margin: 0.1rem;
+    margin: 0.1rem;
     accent-color: black;
 }
 
 .chechbox-text {
-	margin: 0px;
+    margin: 0px;
     display: flex;
     flex-direction: column;
 }
@@ -33,5 +33,5 @@
 
 .comment {
     color: #555;
-	margin: 0px;
+    margin: 0px;
 }

@@ -13,16 +13,16 @@ body {
 .page-wrapper {
     display: flex;
     justify-content: center;
-	height: 85vh;
+    height: 85vh;
 }
 
 .homepage {
-	display: flex;
-	flex-direction: column;
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     padding: 2rem;
-	height: 55vh;
+    height: 55vh;
     color: #555;
 }
 
@@ -37,44 +37,49 @@ body {
     gap: 1rem;
 }
 
-.smalllight-button, .smalldark-button {
+.smalllight-button,
+.smalldark-button {
     font-size: 0.9rem;
     padding: 0.3rem 1rem;
     cursor: pointer;
     border-radius: 0.3rem;
 }
 
-.biglight-button, .bigdark-button {
-	padding: 1rem;
+.biglight-button,
+.bigdark-button {
+    padding: 1rem;
     font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
 }
 
-.smalllight-button, .biglight-button {
+.smalllight-button,
+.biglight-button {
     background: #ddd;
     border: 1px solid #444;
     color: #444;
 }
 
-.smalldark-button, .bigdark-button {
+.smalldark-button,
+.bigdark-button {
     background: #222;
     border: 1px solid #222;
     color: #ddd;
 }
 
-.smalllight-button:hover, .biglight-button:hover {
+.smalllight-button:hover,
+.biglight-button:hover {
     background: #ccc;
 }
 
-.smalldark-button:hover, .bigdark-button:hover {
+.smalldark-button:hover,
+.bigdark-button:hover {
     background: #000;
 }
 
-
 .myform-place {
-	display: flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
 }
@@ -118,7 +123,7 @@ body {
     border-radius: 5px;
     width: 100%;
     box-sizing: border-box;
-	margin-top: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .myform input:focus {
@@ -143,7 +148,7 @@ body {
     display: flex;
     justify-content: center;
     gap: 10rem;
-	height: 74vh;
+    height: 74vh;
 }
 
 .myform-toppart {
@@ -155,6 +160,6 @@ body {
 
 .myform-footer {
     margin: 1rem auto;
-	align-items: bottom;
+    align-items: bottom;
     text-align: left;
 }
