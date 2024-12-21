@@ -56,15 +56,15 @@ function App() {
                     path="/commercial_brewery"
                     element={<CommercialBrewery />}
                 />
-                <Route path="/device" element={<Device />} />
+                <Route path="/devices" element={<Device />} />
+                <Route path="/devices/add" element={<AddDevice />} />
                 <Route path="/time_slots" element={<TimeSlot />} />
+                <Route path="/time_slots/add" element={<AddTimeSlot />} />
                 <Route
                     path="/piece_of_equipment"
                     element={<PieceOfEquipment />}
                 />
-                <Route path="/add_device" element={<AddDevice />} />
                 <Route path="/add_recipe" element={<AddRecipe />} />
-                <Route path="/add_time_slot" element={<AddTimeSlot />} />
             </Routes>
         </Router>
     );

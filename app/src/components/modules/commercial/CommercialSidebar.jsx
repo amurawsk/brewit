@@ -13,7 +13,7 @@ import {
 const CommercialSidebar = () => {
     const navigate = useNavigate();
 
-    const goToDevices = () => navigate('/device');
+    const goToDevices = () => navigate('/devices');
     const goToTimeSlots = () => navigate('/time_slots');
 
     return (

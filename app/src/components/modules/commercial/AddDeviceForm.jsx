@@ -15,7 +15,7 @@ const AddDeviceForm = () => {
     const [supported_containers, setSupportedContainers] = useState('');
 
     // const navigate = useNavigate();
-    // const devices = () => navigate('/device');
+    // const devices = () => navigate('/devices');
 
     const postData = async () => {
         try {
@@ -54,9 +54,10 @@ const AddDeviceForm = () => {
                     onChange={(e) => {
                         console.log(e.target.value);
                         setDeviceType(e.target.value);
-                    }}>
+                    }}
+                    value={device_type}>
                     <option value="" disabled>
-                        Wybierz urządzenie
+                        Wybierz typ
                     </option>
                     <option value="BT">Tank Warzelny</option>
                     <option value="FT">Pojemnik fermentacyjny</option>
