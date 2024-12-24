@@ -252,6 +252,7 @@ const AddTimeSlotForm = () => {
                         showTimeSelect
                         showTimeSelectOnly
                         timeIntervals={60}
+                        injectTimes={[setHours(setMinutes(new Date(), 59), 23),]}
                         timeCaption="Koniec"
                         dateFormat="HH:mm"
                         placeholderText="Wybierz godzinę końcową"
@@ -260,7 +261,7 @@ const AddTimeSlotForm = () => {
                             formState.timeRange[0]
                                 ? new Date(
                                       formState.timeRange[0].getTime() +
-                                          60 * 60 * 1000
+                                          60 * 1000
                                   )
                                 : getMinTime()
                         }
