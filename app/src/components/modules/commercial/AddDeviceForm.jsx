@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './AddDeviceForm.module.css';
 import api from '../../../api.js';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AddDeviceForm = () => {
     const [name, setName] = useState('');
@@ -14,8 +14,8 @@ const AddDeviceForm = () => {
     const [carbonation, setCarbonation] = useState('');
     const [supported_containers, setSupportedContainers] = useState('');
 
-    // const navigate = useNavigate();
-    // const devices = () => navigate('/devices');
+    const navigate = useNavigate();
+    const devices = () => navigate('/devices');
 
     const postData = async () => {
         try {
@@ -30,7 +30,6 @@ const AddDeviceForm = () => {
                 carbonation: carbonation,
                 supported_containers: supported_containers,
             });
-            // devices();
             if (response.status === 201) {
             } else {
                 console.log(response);
@@ -70,6 +69,7 @@ const AddDeviceForm = () => {
                 onSubmit={(e) => {
                     e.preventDefault();
                     postData();
+                    devices();
                 }}>
                 {device_type !== '' && (
                     <div>
