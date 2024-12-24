@@ -31,6 +31,7 @@ const AddDeviceForm = () => {
                 supported_containers: supported_containers,
             });
             if (response.status === 201) {
+                devices();
             } else {
                 console.log(response);
                 // TODO: Handle error
@@ -69,7 +70,6 @@ const AddDeviceForm = () => {
                 onSubmit={(e) => {
                     e.preventDefault();
                     postData();
-                    devices();
                 }}>
                 {device_type !== '' && (
                     <div>
