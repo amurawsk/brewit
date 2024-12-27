@@ -174,8 +174,14 @@ const AddTimeSlotForm = () => {
 
             if (prevState.specificDate) {
                 const combinedDateTime = new Date(prevState.specificDate);
-                combinedDateTime.setHours(time.getHours());
-                combinedDateTime.setMinutes(time.getMinutes());
+                const minutes = time.getMinutes();
+                if (minutes === 59) {
+                    combinedDateTime.setHours(time.getHours() + 1)
+                    combinedDateTime.setMinutes(0);
+                } else {
+                    combinedDateTime.setHours(time.getHours());
+                    combinedDateTime.setMinutes(minutes);
+                }                
                 updatedTimeRange[index] = combinedDateTime;
             }
 

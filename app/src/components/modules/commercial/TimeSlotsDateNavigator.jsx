@@ -139,6 +139,9 @@ const TimeSlotsDateNavigator = ({
                                     {i}:00
                                 </option>
                             ))}
+                            <option key={'24:00'} value={'24:00'}>
+                                    23:59
+                            </option> 
                         </select>
                     </label>
                 </div>

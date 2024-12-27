@@ -50,12 +50,10 @@ const TimeSlotsTable = ({
         if (view === 'daily') {
             return timeSlots.find((slot) => {
                 const slotStart = new Date(slot.start_timestamp);
-                const slotEnd = new Date(slot.end_timestamp);
                 const selectedDay = currentDay.toDateString();
                 const slotDay = slotStart.toDateString();
                 return (
-                    slotStart.getHours() <= hour &&
-                    slotEnd.getHours() > hour &&
+                    slotStart.getHours() === hour &&
                     selectedDay === slotDay
                 );
             });
@@ -64,7 +62,6 @@ const TimeSlotsTable = ({
         if (view === 'weekly') {
             return timeSlots.find((slot) => {
                 const slotStart = new Date(slot.start_timestamp);
-                // const slotEnd = new Date(slot.end_timestamp);
                 const selectedDay = currentDay.toDateString();
                 const slotDay = slotStart.toDateString();
 
