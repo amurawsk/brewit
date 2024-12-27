@@ -20,6 +20,10 @@ const TimeSlotDetails = ({ isPanelOpen, setIsPanelOpen, selectedSlot }) => {
                                     {selectedSlot.status}
                                 </p>
                                 <p>
+                                    <strong>Price:</strong>{' '}
+                                    {selectedSlot.price}
+                                </p>
+                                <p>
                                     <strong>Start:</strong>{' '}
                                     {new Date(
                                         selectedSlot.start_timestamp
