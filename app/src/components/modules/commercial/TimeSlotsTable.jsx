@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import TimeSlotDetails from './TimeSlotDetails';
 
 import styles from './TimeSlotsTable.module.css';
 
@@ -9,6 +10,8 @@ const TimeSlotsTable = ({
     startHour,
     endHour,
 }) => {
+    const [selectedSlot, setSelectedSlot] = useState(null);
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
     const hours = Array.from(
         { length: endHour - startHour },
         (_, i) => i + startHour
@@ -72,6 +75,13 @@ const TimeSlotsTable = ({
         return null;
     };
 
+    const handleSlotClick = (slot) => {
+        if (slot) {
+            setSelectedSlot(slot);
+            setIsPanelOpen(true);
+        }
+    };
+
     const filteredTimetableData = timetableData.filter((device) => {
         if (view === 'daily') {
             return device.device_type === 'BT' || device.device_type === 'BE';
@@ -120,7 +130,12 @@ const TimeSlotsTable = ({
                                           return (
                                               <td
                                                   key={hour}
-                                                  className={cellClass}></td>
+                                                  className={cellClass}
+                                                  onClick={() =>
+                                                      handleSlotClick(
+                                                          timeSlot
+                                                      )
+                                                  }></td>
                                           );
                                       })
                                 : Array.from({ length: 7 }, (_, i) => {
@@ -145,13 +160,23 @@ const TimeSlotsTable = ({
                                       return (
                                           <td
                                               key={i}
-                                              className={cellClass}></td>
+                                              className={cellClass}
+                                              onClick={() =>
+                                                  handleSlotClick(timeSlot)
+                                              }></td>
                                       );
                                   })}
                         </tr>
                     ))}
                 </tbody>
             </table>
+            
+            <TimeSlotDetails 
+                isPanelOpen={isPanelOpen}
+                setIsPanelOpen={setIsPanelOpen}
+                selectedSlot={selectedSlot}
+            />
+            
         </div>
     );
 };
