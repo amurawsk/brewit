@@ -4,57 +4,72 @@ import api from '../../../api.js';
 import { useNavigate } from 'react-router-dom';
 
 const AddDeviceForm = () => {
-    const [name, setName] = useState('');
-    const [device_type, setDeviceType] = useState('');
-    const [serial_number, setSerialNumber] = useState('');
-    const [capacity, setCapacity] = useState();
-    const [temperature_min, setTemperatureMin] = useState(0);
-    const [temperature_max, setTemperatureMax] = useState(0);
-    const [sour_beers, setSourBeers] = useState(false);
-    const [carbonation, setCarbonation] = useState('');
-    const [supported_containers, setSupportedContainers] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        device_type: '',
+        serial_number: '',
+        capacity: '',
+        temperature_min: 0,
+        temperature_max: 0,
+        sour_beers: false,
+        carbonation: [],
+        supported_containers: '',
+    });
 
     const navigate = useNavigate();
-    const devices = () => navigate('/devices');
 
-    const postData = async () => {
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
+    };
+
+    const handleCarbonationChange = (value, checked) => {
+        setFormData((prevData) => {
+            const updatedCarbonation = checked
+                ? [...prevData.carbonation, value]
+                : prevData.carbonation.filter((item) => item !== value);
+
+            return { ...prevData, carbonation: updatedCarbonation };
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         try {
             const response = await api.post(`devices/add/`, {
-                name: name,
-                device_type: device_type,
-                serial_number: serial_number,
-                capacity: parseFloat(capacity),
-                temperature_min: parseFloat(temperature_min),
-                temperature_max: parseFloat(temperature_max),
-                sour_beers: sour_beers,
-                carbonation: carbonation,
-                supported_containers: supported_containers,
+                ...formData,
+                capacity: parseFloat(formData.capacity),
+                temperature_min: parseFloat(formData.temperature_min),
+                temperature_max: parseFloat(formData.temperature_max),
+                carbonation: formData.carbonation.join(','),
             });
             if (response.status === 201) {
-                devices();
+                navigate('/devices');
             } else {
-                console.log(response);
-                // TODO: Handle error
+                console.error('Error:', response);
+                alert('Błąd podczas dodawania urządzenia!');
             }
         } catch (error) {
-            console.log('Error fetching devices:', error);
+            console.error('Error fetching devices:', error);
+            alert('Błąd sieci! Spróbuj ponownie później.');
         }
     };
+
+    const { device_type, carbonation } = formData;
 
     return (
         <div>
             <div className={styles.deviceTypeDropbox}>
-                <label
-                    className={styles.addEquipmentLabel}
-                    htmlFor="device_type">
+                <label className={styles.addEquipmentLabel} htmlFor="device_type">
                     <b>Wybierz typ urządzenia: </b>
                 </label>
                 <select
                     className={styles.dropboxInput}
-                    onChange={(e) => {
-                        console.log(e.target.value);
-                        setDeviceType(e.target.value);
-                    }}
+                    name="device_type"
+                    onChange={handleChange}
                     value={device_type}>
                     <option value="" disabled>
                         Wybierz typ
@@ -65,133 +80,123 @@ const AddDeviceForm = () => {
                     <option value="BE">Urządzenie do rozlewania</option>
                 </select>
             </div>
-            <form
-                className={styles.addDeviceForm}
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    postData();
-                }}>
-                {device_type !== '' && (
-                    <div>
+            <form className={styles.addDeviceForm} onSubmit={handleSubmit}>
+                {device_type && (
+                    <>
                         <div>
-                            <label
-                                className={styles.addEquipmentLabel}
-                                htmlFor="name">
+                            <label className={styles.addEquipmentLabel} htmlFor="name">
                                 <b>Nazwa urządzenia: </b>
                             </label>
                             <input
                                 className={styles.addEquipmentInput}
                                 type="text"
-                                placeholder="Wpisz nazwę urządzenia"
-                                onChange={(e) => setName(e.target.value)}
                                 name="name"
+                                placeholder="Wpisz nazwę urządzenia"
+                                onChange={handleChange}
                                 required
                             />
                         </div>
                         <div>
-                            <label
-                                className={styles.addEquipmentLabel}
-                                htmlFor="serial_number">
+                            <label className={styles.addEquipmentLabel} htmlFor="serial_number">
                                 <b>Numer seryjny: </b>
                             </label>
                             <input
                                 className={styles.addEquipmentInput}
                                 type="text"
-                                placeholder="Wpisz numer seryjny"
-                                onChange={(e) =>
-                                    setSerialNumber(e.target.value)
-                                }
                                 name="serial_number"
+                                placeholder="Wpisz numer seryjny"
+                                onChange={handleChange}
                                 required
                             />
                         </div>
                         <div>
-                            <label
-                                className={styles.addEquipmentLabel}
-                                htmlFor="capacity">
-                                <b>Pojemność: </b>
+                            <label className={styles.addEquipmentLabel} htmlFor="capacity">
+                                <b>Pojemność (L): </b>
                             </label>
                             <input
                                 className={styles.addEquipmentInput}
-                                type="text"
-                                placeholder="Wpisz pojemność"
-                                onChange={(e) => setCapacity(e.target.value)}
+                                type="number"
                                 name="capacity"
+                                min="0"
+                                step="0.1"
+                                placeholder="Wpisz pojemność"
+                                onChange={handleChange}
                                 required
                             />
                         </div>
-                    </div>
+                    </>
                 )}
-                {device_type !== 'BE' && device_type !== '' && (
-                    <div>
+                {device_type !== 'BE' && device_type && (
+                    <>
                         <div>
-                            <label
-                                className={styles.addEquipmentLabel}
-                                htmlFor="temperature_min">
-                                <b>Temperatura minimalna: </b>
+                            <label className={styles.addEquipmentLabel} htmlFor="temperature_min">
+                                <b>Temperatura minimalna (℃): </b>
                             </label>
                             <input
                                 className={styles.addEquipmentInput}
-                                type="text"
-                                placeholder="Wpisz temperaturę minimlalną"
-                                onChange={(e) =>
-                                    setTemperatureMin(e.target.value)
-                                }
+                                type="number"
                                 name="temperature_min"
+                                step="0.5"
+                                placeholder="Wpisz temperaturę minimalną"
+                                onChange={handleChange}
                                 required
                             />
                         </div>
                         <div>
-                            <label
-                                className={styles.addEquipmentLabel}
-                                htmlFor="temperature_max">
-                                <b>Temperatura maksymalna: </b>
+                            <label className={styles.addEquipmentLabel} htmlFor="temperature_max">
+                                <b>Temperatura maksymalna (℃): </b>
                             </label>
                             <input
                                 className={styles.addEquipmentInput}
-                                type="text"
-                                placeholder="Wpisz temperaturę maksymalną"
-                                onChange={(e) =>
-                                    setTemperatureMax(e.target.value)
-                                }
+                                type="number"
                                 name="temperature_max"
+                                step="0.5"
+                                placeholder="Wpisz temperaturę maksymalną"
+                                onChange={handleChange}
                                 required
                             />
                         </div>
-                    </div>
+                    </>
                 )}
-                {device_type !== '' && (
+                {device_type && (
                     <div className={styles.sourBeerCheckbox}>
-                        <label
-                            className={styles.addEquipmentLabel}
-                            htmlFor="sour_beers">
+                        <label className={styles.addEquipmentLabel} htmlFor="sour_beers">
                             <b>Do produkcji kwaśnych piw: </b>
                         </label>
                         <input
                             className={styles.addEquipmentInputCheckbox}
                             type="checkbox"
-                            onChange={(e) =>
-                                setSourBeers(e.target.checked)
-                            }></input>
+                            name="sour_beers"
+                            onChange={handleChange}
+                        />
                     </div>
                 )}
                 {(device_type === 'BT' || device_type === 'BE') && (
-                    <div>
-                        <label
-                            className={styles.addEquipmentLabel}
-                            htmlFor="carbonation">
+                    <div className={styles.sourBeerCheckbox}>
+                        <label className={styles.addEquipmentLabel} htmlFor="carbonation">
                             <b>Nagazowanie: </b>
                         </label>
-                        <select
-                            className={styles.dropboxInput}
-                            onChange={(e) => setCarbonation(e.target.value)}>
-                            <option value="CO2">CO2</option>
-                            <option value="NO2">NO2</option>
-                            <option value="mieszanka CO2/NO2">
-                                Mieszanka CO2/NO2
-                            </option>
-                            <option value="nie">Nie</option>
-                        </select>
+                        <div>
+                            {['CO2', 'N2', 'mieszanka'].map((option) => (
+                                <React.Fragment key={option}>
+                                    <input
+                                        className={styles.addEquipmentInputCheckbox}
+                                        type="checkbox"
+                                        id={option}
+                                        value={option}
+                                        checked={carbonation.includes(option)}
+                                        onChange={(e) =>
+                                            handleCarbonationChange(e.target.value, e.target.checked)
+                                        }
+                                    />
+                                    <label
+                                        className={styles.panelContentLabel}
+                                        htmlFor={option}>
+                                        {option}
+                                    </label>
+                                </React.Fragment>
+                            ))}
+                        </div>
                     </div>
                 )}
                 {device_type === 'BE' && (
@@ -201,15 +206,13 @@ const AddDeviceForm = () => {
                             htmlFor="supported_containers">
                             <b>Obsługiwane pojemniki: </b>
                         </label>
-                        <select
-                            className={styles.dropboxInput}
-                            onChange={(e) =>
-                                setSupportedContainers(e.target.value)
-                            }>
-                            <option value="butelka">Butelki</option>
-                            <option value="puszka">Puszki</option>
-                            <option value="keg">Kegi</option>
-                        </select>
+                        <input
+                            className={styles.addEquipmentInput}
+                            type="text"
+                            name="supported_containers"
+                            placeholder="Np. butelki, puszki, kegi..."
+                            onChange={handleChange}
+                        />
                     </div>
                 )}
                 <button className={styles.insertDeviceButton} type="submit">
