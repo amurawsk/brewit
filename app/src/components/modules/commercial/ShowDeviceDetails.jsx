@@ -59,7 +59,7 @@ const ShowDeviceDetails = ({
                     <input
                         className={styles.panelContentInput}
                         type="text"
-                        placeholder='Wpisz nazwę'
+                        placeholder="Wpisz nazwę"
                         value={deviceFields.name}
                         onChange={(e) =>
                             handleFieldChange('name', e.target.value)
@@ -80,43 +80,49 @@ const ShowDeviceDetails = ({
                         type="number"
                         min="0"
                         step="0.1"
-                        placeholder='Wpisz pojemność'
+                        placeholder="Wpisz pojemność"
                         value={deviceFields.capacity}
                         onChange={(e) =>
                             handleFieldChange('capacity', e.target.value)
                         }
                     />
-                    {deviceFields.device_type !== 'BE' && deviceFields.device_type && (
-                        <div className={styles.panelContent}>
-                            <label className={styles.panelContentLabel}>
-                                Temperatura minimalna (℃):
-                            </label>
-                            <input
-                                className={styles.panelContentInput}
-                                type="number"
-                                step='0.5'
-                                placeholder='Wpisz temperaturę minimalną'
-                                value={deviceFields.temperature_min}
-                                onChange={(e) =>
-                                    handleFieldChange('temperature_min', e.target.value)
-                                }
-                            />
-                            <label className={styles.panelContentLabel}>
-                                Temperatura maksymalna (℃):
-                            </label>
-                            <input
-                                className={styles.panelContentInput}
-                                type="number"
-                                step='0.5'
-                                placeholder='Wpisz temperaturę maksymalną'
-                                value={deviceFields.temperature_max}
-                                onChange={(e) =>
-                                    handleFieldChange('temperature_max', e.target.value)
-                                }
-                            />
-                        </div>
-                        
-                    )}
+                    {deviceFields.device_type !== 'BE' &&
+                        deviceFields.device_type && (
+                            <div className={styles.panelContent}>
+                                <label className={styles.panelContentLabel}>
+                                    Temperatura minimalna (℃):
+                                </label>
+                                <input
+                                    className={styles.panelContentInput}
+                                    type="number"
+                                    step="0.5"
+                                    placeholder="Wpisz temperaturę minimalną"
+                                    value={deviceFields.temperature_min}
+                                    onChange={(e) =>
+                                        handleFieldChange(
+                                            'temperature_min',
+                                            e.target.value
+                                        )
+                                    }
+                                />
+                                <label className={styles.panelContentLabel}>
+                                    Temperatura maksymalna (℃):
+                                </label>
+                                <input
+                                    className={styles.panelContentInput}
+                                    type="number"
+                                    step="0.5"
+                                    placeholder="Wpisz temperaturę maksymalną"
+                                    value={deviceFields.temperature_max}
+                                    onChange={(e) =>
+                                        handleFieldChange(
+                                            'temperature_max',
+                                            e.target.value
+                                        )
+                                    }
+                                />
+                            </div>
+                        )}
                     <label className={styles.panelContentLabel}>
                         Kwaśne piwa:
                     </label>
@@ -129,7 +135,8 @@ const ShowDeviceDetails = ({
                             handleFieldChange('sour_beers', e.target.checked)
                         }
                     />
-                    {(deviceFields.device_type === 'BT' || deviceFields.device_type === 'BE') && (
+                    {(deviceFields.device_type === 'BT' ||
+                        deviceFields.device_type === 'BE') && (
                         <div className={styles.panelContent}>
                             <label className={styles.panelContentLabel}>
                                 Nagazowanie:
@@ -141,7 +148,9 @@ const ShowDeviceDetails = ({
                                     id="CO2"
                                     name="carbonation"
                                     value="CO2"
-                                    checked={deviceFields.carbonation.includes('CO2')}
+                                    checked={deviceFields.carbonation.includes(
+                                        'CO2'
+                                    )}
                                     onChange={(e) =>
                                         handleFieldChange(
                                             'carbonation',
@@ -162,7 +171,9 @@ const ShowDeviceDetails = ({
                                     id="N2"
                                     name="carbonation"
                                     value="N2"
-                                    checked={deviceFields.carbonation.includes('N2')}
+                                    checked={deviceFields.carbonation.includes(
+                                        'N2'
+                                    )}
                                     onChange={(e) =>
                                         handleFieldChange(
                                             'carbonation',
@@ -203,7 +214,7 @@ const ShowDeviceDetails = ({
                         </div>
                     )}
 
-                    {deviceFields.device_type === 'BE' && ( 
+                    {deviceFields.device_type === 'BE' && (
                         <div className={styles.panelContent}>
                             <label className={styles.panelContentLabel}>
                                 Obsługiwane pojemniki:
@@ -211,7 +222,7 @@ const ShowDeviceDetails = ({
                             <input
                                 className={styles.panelContentInput}
                                 type="text"
-                                placeholder='Np. butelki, puszki, kegi...'
+                                placeholder="Np. butelki, puszki, kegi..."
                                 value={deviceFields.supported_containers}
                                 onChange={(e) =>
                                     handleFieldChange(

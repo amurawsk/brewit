@@ -176,12 +176,12 @@ const AddTimeSlotForm = () => {
                 const combinedDateTime = new Date(prevState.specificDate);
                 const minutes = time.getMinutes();
                 if (minutes === 59) {
-                    combinedDateTime.setHours(time.getHours() + 1)
+                    combinedDateTime.setHours(time.getHours() + 1);
                     combinedDateTime.setMinutes(0);
                 } else {
                     combinedDateTime.setHours(time.getHours());
                     combinedDateTime.setMinutes(minutes);
-                }                
+                }
                 updatedTimeRange[index] = combinedDateTime;
             }
 
@@ -258,7 +258,7 @@ const AddTimeSlotForm = () => {
                         showTimeSelect
                         showTimeSelectOnly
                         timeIntervals={60}
-                        injectTimes={[setHours(setMinutes(new Date(), 59), 23),]}
+                        injectTimes={[setHours(setMinutes(new Date(), 59), 23)]}
                         timeCaption="Koniec"
                         dateFormat="HH:mm"
                         placeholderText="Wybierz godzinę końcową"

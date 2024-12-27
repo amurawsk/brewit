@@ -63,7 +63,9 @@ const AddDeviceForm = () => {
     return (
         <div>
             <div className={styles.deviceTypeDropbox}>
-                <label className={styles.addEquipmentLabel} htmlFor="device_type">
+                <label
+                    className={styles.addEquipmentLabel}
+                    htmlFor="device_type">
                     <b>Wybierz typ urządzenia: </b>
                 </label>
                 <select
@@ -84,7 +86,9 @@ const AddDeviceForm = () => {
                 {device_type && (
                     <>
                         <div>
-                            <label className={styles.addEquipmentLabel} htmlFor="name">
+                            <label
+                                className={styles.addEquipmentLabel}
+                                htmlFor="name">
                                 <b>Nazwa urządzenia: </b>
                             </label>
                             <input
@@ -97,7 +101,9 @@ const AddDeviceForm = () => {
                             />
                         </div>
                         <div>
-                            <label className={styles.addEquipmentLabel} htmlFor="serial_number">
+                            <label
+                                className={styles.addEquipmentLabel}
+                                htmlFor="serial_number">
                                 <b>Numer seryjny: </b>
                             </label>
                             <input
@@ -110,7 +116,9 @@ const AddDeviceForm = () => {
                             />
                         </div>
                         <div>
-                            <label className={styles.addEquipmentLabel} htmlFor="capacity">
+                            <label
+                                className={styles.addEquipmentLabel}
+                                htmlFor="capacity">
                                 <b>Pojemność (L): </b>
                             </label>
                             <input
@@ -129,7 +137,9 @@ const AddDeviceForm = () => {
                 {device_type !== 'BE' && device_type && (
                     <>
                         <div>
-                            <label className={styles.addEquipmentLabel} htmlFor="temperature_min">
+                            <label
+                                className={styles.addEquipmentLabel}
+                                htmlFor="temperature_min">
                                 <b>Temperatura minimalna (℃): </b>
                             </label>
                             <input
@@ -143,7 +153,9 @@ const AddDeviceForm = () => {
                             />
                         </div>
                         <div>
-                            <label className={styles.addEquipmentLabel} htmlFor="temperature_max">
+                            <label
+                                className={styles.addEquipmentLabel}
+                                htmlFor="temperature_max">
                                 <b>Temperatura maksymalna (℃): </b>
                             </label>
                             <input
@@ -160,7 +172,9 @@ const AddDeviceForm = () => {
                 )}
                 {device_type && (
                     <div className={styles.sourBeerCheckbox}>
-                        <label className={styles.addEquipmentLabel} htmlFor="sour_beers">
+                        <label
+                            className={styles.addEquipmentLabel}
+                            htmlFor="sour_beers">
                             <b>Do produkcji kwaśnych piw: </b>
                         </label>
                         <input
@@ -173,20 +187,27 @@ const AddDeviceForm = () => {
                 )}
                 {(device_type === 'BT' || device_type === 'BE') && (
                     <div className={styles.sourBeerCheckbox}>
-                        <label className={styles.addEquipmentLabel} htmlFor="carbonation">
+                        <label
+                            className={styles.addEquipmentLabel}
+                            htmlFor="carbonation">
                             <b>Nagazowanie: </b>
                         </label>
                         <div>
                             {['CO2', 'N2', 'mieszanka'].map((option) => (
                                 <React.Fragment key={option}>
                                     <input
-                                        className={styles.addEquipmentInputCheckbox}
+                                        className={
+                                            styles.addEquipmentInputCheckbox
+                                        }
                                         type="checkbox"
                                         id={option}
                                         value={option}
                                         checked={carbonation.includes(option)}
                                         onChange={(e) =>
-                                            handleCarbonationChange(e.target.value, e.target.checked)
+                                            handleCarbonationChange(
+                                                e.target.value,
+                                                e.target.checked
+                                            )
                                         }
                                     />
                                     <label

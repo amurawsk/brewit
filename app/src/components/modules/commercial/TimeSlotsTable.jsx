@@ -55,10 +55,7 @@ const TimeSlotsTable = ({
                 const slotStart = new Date(slot.start_timestamp);
                 const selectedDay = currentDay.toDateString();
                 const slotDay = slotStart.toDateString();
-                return (
-                    slotStart.getHours() === hour &&
-                    selectedDay === slotDay
-                );
+                return slotStart.getHours() === hour && selectedDay === slotDay;
             });
         }
 
@@ -132,9 +129,7 @@ const TimeSlotsTable = ({
                                                   key={hour}
                                                   className={cellClass}
                                                   onClick={() =>
-                                                      handleSlotClick(
-                                                          timeSlot
-                                                      )
+                                                      handleSlotClick(timeSlot)
                                                   }></td>
                                           );
                                       })
@@ -170,13 +165,12 @@ const TimeSlotsTable = ({
                     ))}
                 </tbody>
             </table>
-            
-            <TimeSlotDetails 
+
+            <TimeSlotDetails
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}
                 selectedSlot={selectedSlot}
             />
-            
         </div>
     );
 };
