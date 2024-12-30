@@ -6,11 +6,11 @@ import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import TimeSlotsDateNavigator from '../../modules/commercial/TimeSlotsDateNavigator.jsx';
 import TimeSlotsTable from '../../modules/commercial/TimeSlotsTable.jsx';
 
-import styles from './TimeSlot.module.css';
+import styles from './TimeSlots.module.css';
 
 import api from '../../../api.js';
 
-const CommercialDashboard = () => {
+const TimeSlots = () => {
     const navigate = useNavigate();
     const addTimeSlot = () => navigate('/commercial/time_slots/add');
 
@@ -76,4 +76,4 @@ const CommercialDashboard = () => {
     );
 };
 
-export default CommercialDashboard;
+export default TimeSlots;

@@ -5,10 +5,10 @@ import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import ShowDevices from '../../modules/commercial/ShowDevices.jsx';
 import ShowDeviceDetails from '../../modules/commercial/ShowDeviceDetails.jsx';
-import styles from './Device.module.css';
+import styles from './Devices.module.css';
 import api from '../../../api.js';
 
-const Device = () => {
+const Devices = () => {
     const navigate = useNavigate();
 
     const addDevice = () => navigate('/commercial/devices/add');
@@ -68,4 +68,4 @@ const Device = () => {
     );
 };
 
-export default Device;
+export default Devices;

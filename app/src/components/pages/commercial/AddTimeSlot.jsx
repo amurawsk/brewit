@@ -8,7 +8,7 @@ import PageTittle from '../../utils/PageTittle.jsx';
 
 import styles from './AddTimeSlot.module.css';
 
-const AddTimeWindowForm = () => {
+const AddTimeSlot = () => {
     return (
         <div>
             <DashboardHeader />
@@ -23,4 +23,4 @@ const AddTimeWindowForm = () => {
     );
 };
 
-export default AddTimeWindowForm;
+export default AddTimeSlot;

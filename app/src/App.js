@@ -22,8 +22,8 @@ import Recipes from './components/Recipes';
 import Recipe from './components/Recipe';
 import CommercialBreweries from './components/CommercialBreweries';
 import CommercialBrewery from './components/CommercialBrewery';
-import Device from './components/pages/commercial/Device';
-import TimeSlot from './components/pages/commercial/TimeSlot';
+import Devices from './components/pages/commercial/Devices';
+import TimeSlots from './components/pages/commercial/TimeSlots';
 import PieceOfEquipment from './components/PieceOfEquipment';
 import AddDevice from './components/pages/commercial/AddDevice';
 import AddRecipe from './components/AddRecipe';
@@ -58,7 +58,7 @@ function App() {
                     path="/commercial/devices" 
                     element={
                         <ProtectedRoute>
-                            <Device />
+                            <Devices />
                         </ProtectedRoute>
                         
                     }
@@ -76,7 +76,7 @@ function App() {
                     path="/commercial/time_slots" 
                     element={
                         <ProtectedRoute>
-                            <TimeSlot />
+                            <TimeSlots />
                         </ProtectedRoute>
                         
                     }
