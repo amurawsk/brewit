@@ -20,7 +20,7 @@ const AddTimeSlotForm = () => {
         specificDate: null,
     });
     const navigate = useNavigate();
-    const timeSlots = () => navigate('/time_slots');
+    const timeSlots = () => navigate('/commercial/time_slots');
 
     const getData = async () => {
         try {

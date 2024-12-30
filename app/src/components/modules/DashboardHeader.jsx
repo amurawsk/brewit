@@ -6,8 +6,16 @@ const DashboardHeader = () => {
     const navigate = useNavigate();
 
     const logOut = () => navigate('/login');
-    const dashboard = () => navigate('/dashboard');
-
+    const dashboard = () => {
+        if (localStorage.getItem('userType') === 'commercial_brewery') {
+            navigate('/commercial/dashboard');
+        } else if (localStorage.getItem('userType') === 'contract_brewery') {
+            navigate('/contract/dashboard');
+        } else {
+            // TODO handle error
+        }
+    }
+    
     const handleLogout = () => {
         localStorage.removeItem('userType');
         logOut();

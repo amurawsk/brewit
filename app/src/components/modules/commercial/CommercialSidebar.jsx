@@ -13,8 +13,8 @@ import {
 const CommercialSidebar = () => {
     const navigate = useNavigate();
 
-    const goToDevices = () => navigate('/devices');
-    const goToTimeSlots = () => navigate('/time_slots');
+    const goToDevices = () => navigate('/commercial/devices');
+    const goToTimeSlots = () => navigate('/commercial/time_slots');
 
     return (
         <div className={styles.sidebar}>

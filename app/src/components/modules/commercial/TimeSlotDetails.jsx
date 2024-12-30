@@ -20,8 +20,8 @@ const TimeSlotDetails = ({ isPanelOpen, setIsPanelOpen, selectedSlot }) => {
                                     {selectedSlot.status}
                                 </p>
                                 <p>
-                                    <strong>Price:</strong>{' '}
-                                    {selectedSlot.price}
+                                    <strong>Cena:</strong>{' '}
+                                    {selectedSlot.price} zł
                                 </p>
                                 <p>
                                     <strong>Start:</strong>{' '}

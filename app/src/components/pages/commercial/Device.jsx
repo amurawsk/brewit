@@ -11,7 +11,7 @@ import api from '../../../api.js';
 const Device = () => {
     const navigate = useNavigate();
 
-    const addDevice = () => navigate('/devices/add');
+    const addDevice = () => navigate('/commercial/devices/add');
     const [devices, setDevices] = useState([]);
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [deviceFields, setDeviceFields] = useState({});

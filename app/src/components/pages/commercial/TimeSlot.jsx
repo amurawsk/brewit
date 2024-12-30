@@ -12,7 +12,7 @@ import api from '../../../api.js';
 
 const CommercialDashboard = () => {
     const navigate = useNavigate();
-    const addTimeSlot = () => navigate('/time_slots/add');
+    const addTimeSlot = () => navigate('/commercial/time_slots/add');
 
     const [timetableData, setTimetableData] = useState([]);
     const [startHour, setStartHour] = useState(8);

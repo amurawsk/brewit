@@ -47,7 +47,7 @@ const AddDeviceForm = () => {
                 carbonation: formData.carbonation.join(','),
             });
             if (response.status === 201) {
-                navigate('/devices');
+                navigate('/commercial/devices');
             } else {
                 console.error('Error:', response);
                 alert('Błąd podczas dodawania urządzenia!');

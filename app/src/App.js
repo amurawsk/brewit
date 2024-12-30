@@ -38,7 +38,7 @@ function App() {
                 <Route path="/manual" element={<Manual />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+
                 <Route path="/statistics" element={<Statistics />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/register_user" element={<RegisterUser />} />
@@ -56,15 +56,19 @@ function App() {
                     path="/commercial_brewery"
                     element={<CommercialBrewery />}
                 />
-                <Route path="/devices" element={<Device />} />
-                <Route path="/devices/add" element={<AddDevice />} />
-                <Route path="/time_slots" element={<TimeSlot />} />
-                <Route path="/time_slots/add" element={<AddTimeSlot />} />
                 <Route
                     path="/piece_of_equipment"
                     element={<PieceOfEquipment />}
                 />
                 <Route path="/add_recipe" element={<AddRecipe />} />
+
+                {/* IN USE */}
+                <Route path="/commercial/dashboard" element={<Dashboard />} />
+                <Route path="/commercial/devices" element={<Device />} />
+                <Route path="/commercial/devices/add" element={<AddDevice />} />
+                <Route path="/commercial/time_slots" element={<TimeSlot />} />
+                <Route path="/commercial/time_slots/add" element={<AddTimeSlot />} />
+                
             </Routes>
         </Router>
     );

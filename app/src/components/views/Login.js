@@ -6,7 +6,8 @@ import api from '../../api.js';
 const Login = () => {
     const navigate = useNavigate();
 
-    const goToDashboard = () => navigate('/dashboard');
+    const goToCommercialDashboard = () => navigate('/commercial/dashboard');
+    const goToContractBrewery = () => navigate('/contract/dashboard')
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -23,8 +24,17 @@ const Login = () => {
                 localStorage.setItem('ACCESS_TOKEN', access);
                 localStorage.setItem('REFRESH_TOKEN', refresh);
                 localStorage.setItem('userType', user_type);
-
-                goToDashboard();
+                
+                if (user_type === 'commercial_brewery') {
+                    goToCommercialDashboard();
+                }
+                else if (user_type === 'contract_brewery') {
+                    goToContractBrewery();
+                }
+                else {
+                    console.log('ERROR')
+                    // TODO handle error
+                }                
             } else {
                 console.log(response);
                 // TODO: Handle login error
