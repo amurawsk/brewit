@@ -1,4 +1,5 @@
 import React from 'react';
+import ProtectedRoute from './components/ProtectedRoute';
 import {
     BrowserRouter as Router,
     Routes,
@@ -33,12 +34,61 @@ function App() {
     return (
         <Router>
             <Routes>
+                {/* PUBLIC */}
                 <Route path="/" element={<Navigate to="/about_us" />} />
                 <Route path="/about_us" element={<AboutUs />} />
                 <Route path="/manual" element={<Manual />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
 
+                {/* PROTECTED */}
+                <Route 
+                    path="/commercial/dashboard" 
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+                <Route 
+                    path="/commercial/devices" 
+                    element={
+                        <ProtectedRoute>
+                            <Device />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+                <Route 
+                    path="/commercial/devices/add" 
+                    element={
+                        <ProtectedRoute>
+                            <AddDevice />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+                <Route 
+                    path="/commercial/time_slots" 
+                    element={
+                        <ProtectedRoute>
+                            <TimeSlot />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+                <Route 
+                    path="/commercial/time_slots/add" 
+                    element={
+                        <ProtectedRoute>
+                            <AddTimeSlot />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+
+                {/* TODO */}
                 <Route path="/statistics" element={<Statistics />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/register_user" element={<RegisterUser />} />
@@ -61,14 +111,6 @@ function App() {
                     element={<PieceOfEquipment />}
                 />
                 <Route path="/add_recipe" element={<AddRecipe />} />
-
-                {/* IN USE */}
-                <Route path="/commercial/dashboard" element={<Dashboard />} />
-                <Route path="/commercial/devices" element={<Device />} />
-                <Route path="/commercial/devices/add" element={<AddDevice />} />
-                <Route path="/commercial/time_slots" element={<TimeSlot />} />
-                <Route path="/commercial/time_slots/add" element={<AddTimeSlot />} />
-                
             </Routes>
         </Router>
     );
