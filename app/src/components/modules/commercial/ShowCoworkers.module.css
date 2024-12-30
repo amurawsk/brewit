@@ -1,8 +1,14 @@
+.allDevices {
+    display: flex;
+    flex-direction: column;
+}
+
 .coworker {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     border: 1px solid black;
     border-radius: 8px;
-    align-items: flex-start;
     padding: 12px 20px;
     font-size: 16px;
     color: black;
@@ -13,7 +19,7 @@
 }
 
 .coworker:hover {
-    background-color: #f0eeeb; /* change */
+    background-color: #f0eeeb;
 }
 
 .deviceText {
