@@ -33,6 +33,9 @@ const TimeSlotsDateNavigator = ({
         const newStartHour = parseInt(event.target.value, 10);
         if (newStartHour < endHour) {
             setStartHour(newStartHour);
+        } else {
+            setStartHour(newStartHour);
+            setEndHour(newStartHour + 1);
         }
     };
 
@@ -134,12 +137,15 @@ const TimeSlotsDateNavigator = ({
                             className={styles.hourSelectorSelect}
                             value={endHour}
                             onChange={handleEndHourChange}>
-                            {Array.from({ length: 24 }, (_, i) => (
-                                <option key={i} value={i}>
-                                    {i}:00
+                            {Array.from({ length: 23 }, (_, i) => (
+                                <option
+                                    key={i+1}
+                                    value={i+1}
+                                    disabled={i+1 <= startHour}>
+                                    {i+1}:00
                                 </option>
                             ))}
-                            <option key={'24:00'} value={'24:00'}>
+                            <option key={24} value={24}>
                                 23:59
                             </option>
                         </select>
