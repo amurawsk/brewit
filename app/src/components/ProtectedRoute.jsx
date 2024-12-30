@@ -9,7 +9,7 @@ function ProtectedRoute({ children }) {
 
     useEffect(() => {
         const auth = async () => {
-            const token = localStorage.getItem(ACCESS_TOKEN);
+            const token = localStorage.getItem('ACCESS_TOKEN');
 
             if (!token) {
                 setAuthorized(false);
@@ -32,7 +32,7 @@ function ProtectedRoute({ children }) {
     }, []);
 
     const refreshToken = async () => {
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        const refreshToken = localStorage.getItem('REFRESH_TOKEN');
 
         if (!refreshToken) {
             handleUnauthorized();
