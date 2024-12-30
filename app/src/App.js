@@ -30,6 +30,7 @@ import AddRecipe from './components/AddRecipe';
 import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
 import Orders from './components/pages/commercial/Orders';
 import Coworkers from './components/pages/commercial/Coworkers';
+import AddCoworker from './components/pages/commercial/AddCoworker';
 import './App.css';
 
 
@@ -104,6 +105,15 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Coworkers />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+                <Route 
+                    path="/commercial/coworkers/add" 
+                    element={
+                        <ProtectedRoute>
+                            <AddCoworker />
                         </ProtectedRoute>
                         
                     }

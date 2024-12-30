@@ -4,6 +4,7 @@ import styles from './ShowCoworkers.module.css';
 
 const ShowCoworkers = ({ coworkers }) => {
     const removeCoworker = (username) => {
+        // TODO mock
         console.log('Usuwam:', username);
     };
 
