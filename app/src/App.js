@@ -28,7 +28,10 @@ import PieceOfEquipment from './components/PieceOfEquipment';
 import AddDevice from './components/pages/commercial/AddDevice';
 import AddRecipe from './components/AddRecipe';
 import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
+import Orders from './components/pages/commercial/Orders';
+import Coworkers from './components/pages/commercial/Coworkers';
 import './App.css';
+
 
 function App() {
     return (
@@ -83,6 +86,24 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <AddTimeSlot />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+                <Route 
+                    path="/commercial/orders" 
+                    element={
+                        <ProtectedRoute>
+                            <Orders />
+                        </ProtectedRoute>
+                        
+                    }
+                />
+                <Route 
+                    path="/commercial/coworkers" 
+                    element={
+                        <ProtectedRoute>
+                            <Coworkers />
                         </ProtectedRoute>
                         
                     }

@@ -15,6 +15,8 @@ const CommercialSidebar = () => {
 
     const goToDevices = () => navigate('/commercial/devices');
     const goToTimeSlots = () => navigate('/commercial/time_slots');
+    const goToOrders = () => navigate('/commercial/orders');
+    const goToCoworkers = () => navigate('/commercial/coworkers');
 
     return (
         <div className={styles.sidebar}>
@@ -54,7 +56,7 @@ const CommercialSidebar = () => {
                     </div>
                 </div>
                 <hr className={styles.separator}></hr>
-                <div className={styles.sidebarItem}>
+                <div onClick={goToOrders} className={styles.sidebarItem}>
                     <FaClipboard className={styles.icon} />
                     <div className={styles.sidebarText}>
                         <span>Zlecenia</span>
@@ -63,7 +65,7 @@ const CommercialSidebar = () => {
                         </span>
                     </div>
                 </div>
-                <div className={styles.sidebarItem}>
+                <div onClick={goToCoworkers} className={styles.sidebarItem}>
                     <FaUsers className={styles.icon} />
                     <div className={styles.sidebarText}>
                         <span>Współpracownicy</span>
