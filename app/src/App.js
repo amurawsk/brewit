@@ -10,7 +10,7 @@ import AboutUs from './components/views/AboutUs';
 import Manual from './components/views/Manual';
 import Register from './components/views/Register';
 import Login from './components/views/Login';
-import Dashboard from './components/pages/commercial/CommercialDashboard';
+import CommercialDashboard from './components/pages/commercial/CommercialDashboard';
 import Statistics from './components/Statistics';
 import Users from './components/Users';
 import RegisterUser from './components/RegisterUser';
@@ -46,7 +46,7 @@ function App() {
                     path="/commercial/dashboard" 
                     element={
                         <ProtectedRoute>
-                            <Dashboard />
+                            <CommercialDashboard />
                         </ProtectedRoute>
                         
                     }
