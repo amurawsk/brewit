@@ -53,7 +53,11 @@ const Devices = () => {
                         buttonFunction={addDevice}
                     />
 
-                    <ShowDevices devices={devices} openPanel={openPanel} />
+                    {devices.length === 0 ? (
+                        <p className={styles.noDevicesMessage}>Brak urządzeń. Dodaj nowe urządzenie.</p>
+                    ) : (
+                        <ShowDevices devices={devices} openPanel={openPanel} />
+                    )}
                 </div>
             </div>
 
