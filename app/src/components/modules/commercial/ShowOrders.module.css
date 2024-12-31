@@ -1,0 +1,54 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 10px;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+p {
+    margin: 5px 0;
+    font-size: 1rem;
+    color: #666;
+}
+
+b {
+    color: #333;
+}
+
+.greenThumb {
+    color: green;
+}
+
+.redThumb {
+    color: red;
+}
+
+.emptyRate {
+    color: #333;
+}
