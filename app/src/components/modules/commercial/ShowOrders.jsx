@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+
+import ShowOrderDetails from './ShowOrderDetails'
 
 import styles from './ShowOrders.module.css';
 
 const ShowOrders = ({ orders, status }) => {
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
     const filteredOrders = orders.filter((order) => order.status === status);
+
+    const openPanel = () => {
+        setIsPanelOpen(true);
+    }
+
+    const handleOrderClicked = (order) => {
+        setSelectedOrder(order);
+        openPanel();
+    }
 
     return (
         <div>
@@ -13,7 +26,7 @@ const ShowOrders = ({ orders, status }) => {
             ) : (
                 <div className={styles.grid}>
                     {filteredOrders.map((order, index) => (
-                        <div key={index} className={styles.card}>
+                        <div key={index} className={styles.card} onClick={() => handleOrderClicked(order)}>
                             <h2>Zamówienie #{order.id}</h2>
                             <p>
                                 Zleceniodawca: <b>{order.contract_brewery_name}</b>
@@ -63,6 +76,12 @@ const ShowOrders = ({ orders, status }) => {
                     ))}
                 </div>
             )}
+            <ShowOrderDetails
+                isPanelOpen={isPanelOpen}
+                setIsPanelOpen={setIsPanelOpen}
+                order={selectedOrder}
+                setOrder={setSelectedOrder}
+            />
         </div>
     );
 };
