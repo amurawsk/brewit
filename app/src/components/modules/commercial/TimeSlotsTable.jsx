@@ -1,21 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TimeSlotDetails from './TimeSlotDetails';
 
 import styles from './TimeSlotsTable.module.css';
 
-const TimeSlotsTable = ({
-    timetableData,
-    view,
-    selectedDate,
-    startHour,
-    endHour,
-}) => {
+import api from '../../../api.js';
+
+const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
+    const [selectedDevice, setSelectedDevice] = useState(null);
+    const [timetableData, setTimetableData] = useState([]);
     const hours = Array.from(
         { length: endHour - startHour },
         (_, i) => i + startHour
     );
+
+    const getData = async () => {
+        try {
+            const breweryId = 1;
+            const response = await api.get(
+                `devices/brewery/${breweryId}/with-time-slots/`
+            );
+            if (response.status === 200) {
+                setTimetableData(response.data);
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.log('Error fetching devices:', error);
+        }
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const formatDate = (date) => {
         return date.toLocaleDateString('pl-PL');
@@ -72,9 +90,10 @@ const TimeSlotsTable = ({
         return null;
     };
 
-    const handleSlotClick = (slot) => {
+    const handleSlotClick = (slot, row) => {
         if (slot) {
             setSelectedSlot(slot);
+            setSelectedDevice(row);
             setIsPanelOpen(true);
         }
     };
@@ -129,7 +148,10 @@ const TimeSlotsTable = ({
                                                   key={hour}
                                                   className={cellClass}
                                                   onClick={() =>
-                                                      handleSlotClick(timeSlot)
+                                                      handleSlotClick(
+                                                          timeSlot,
+                                                          row
+                                                      )
                                                   }></td>
                                           );
                                       })
@@ -170,6 +192,7 @@ const TimeSlotsTable = ({
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}
                 selectedSlot={selectedSlot}
+                selectedDevice={selectedDevice}
             />
         </div>
     );
