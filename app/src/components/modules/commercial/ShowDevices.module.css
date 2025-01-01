@@ -11,10 +11,12 @@
     margin-bottom: 10px;
     width: 100%;
     box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .device:hover {
-    background-color: #f0eeeb; /* change */
+    background-color: #d9d9d9; /* change */
 }
 
 .deviceText {
@@ -27,6 +29,8 @@
     font-weight: normal;
     font-size: 24px;
     margin-bottom: 5px;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .deviceDescription {

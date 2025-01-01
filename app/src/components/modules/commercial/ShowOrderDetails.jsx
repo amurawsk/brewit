@@ -185,8 +185,8 @@ const ShowDeviceDetails = ({
                         action === 'cancel'
                             ? 'Czy na pewno chcesz anulować to zlecenie?'
                             : action === 'reject'
-                            ? 'Czy na pewno chcesz odrzucić to zlecenie?'
-                            : 'Czy na pewno chcesz zaakceptować to zlecenie?'
+                              ? 'Czy na pewno chcesz odrzucić to zlecenie?'
+                              : 'Czy na pewno chcesz zaakceptować to zlecenie?'
                     }
                     onConfirm={confirmAction}
                     onCancel={cancelAction}
