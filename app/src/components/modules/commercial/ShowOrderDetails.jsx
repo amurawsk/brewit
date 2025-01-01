@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ShowOrderDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
-import TimeSlotsTimeline from '../../utils/TimeSlotsTimeline.jsx';
+import TimeSlotsTimeline from './TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 
 const ShowDeviceDetails = ({
