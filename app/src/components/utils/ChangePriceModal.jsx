@@ -32,7 +32,10 @@ const ChangePriceModal = ({ onConfirm, onCancel }) => {
                         <button type="submit" className={styles.confirmButton}>
                             Zatwierdź
                         </button>
-                        <button type="button" onClick={onCancel} className={styles.cancelButton}>
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className={styles.cancelButton}>
                             Anuluj
                         </button>
                     </div>
