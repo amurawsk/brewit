@@ -14,8 +14,8 @@ const DashboardHeader = () => {
         } else {
             // TODO handle error
         }
-    }
-    
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('REFRESH_TOKEN');

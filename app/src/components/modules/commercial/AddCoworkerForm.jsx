@@ -7,8 +7,8 @@ const AddCoworkerForm = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-            username: '',
-            password: '',
+        username: '',
+        password: '',
     });
 
     const handleSubmit = (e) => {
@@ -16,8 +16,7 @@ const AddCoworkerForm = () => {
         console.log(formData.username, formData.password);
         navigate('/commercial/coworkers');
         // TODO mock
-
-    }
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -30,9 +29,7 @@ const AddCoworkerForm = () => {
     return (
         <div>
             <form className={styles.addCoworkerForm} onSubmit={handleSubmit}>
-                <label
-                    className={styles.addCoworkerLabel}
-                    htmlFor="name">
+                <label className={styles.addCoworkerLabel} htmlFor="name">
                     <b>Nazwa użytkownika: </b>
                 </label>
                 <input
@@ -44,9 +41,7 @@ const AddCoworkerForm = () => {
                     onChange={handleChange}
                     required
                 />
-                <label
-                    className={styles.addCoworkerLabel}
-                    htmlFor="password">
+                <label className={styles.addCoworkerLabel} htmlFor="password">
                     <b>Hasło: </b>
                 </label>
                 <input
@@ -63,7 +58,7 @@ const AddCoworkerForm = () => {
                 </button>
             </form>
         </div>
-    )
-}
+    );
+};
 
 export default AddCoworkerForm;

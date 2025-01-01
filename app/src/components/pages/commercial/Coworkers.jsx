@@ -14,13 +14,13 @@ const Coworkers = () => {
     // TODO mock values
     const coworkers = [
         {
-            username: "jan_kowalski",
-            added_at: "2024-01-01T10:00:00.000Z"
+            username: 'jan_kowalski',
+            added_at: '2024-01-01T10:00:00.000Z',
         },
         {
-            username: "anna_nowak",
-            added_at: "2024-02-15T12:30:00.000Z"
-        }
+            username: 'anna_nowak',
+            added_at: '2024-02-15T12:30:00.000Z',
+        },
     ];
 
     return (
@@ -30,9 +30,9 @@ const Coworkers = () => {
                 <CommercialSidebar />
                 <div className={styles.content}>
                     <PageTittleWithButton
-                            text="Współpracownicy"
-                            buttonText="Dodaj nowego współpracownika"
-                            buttonFunction={addCoworker}
+                        text="Współpracownicy"
+                        buttonText="Dodaj nowego współpracownika"
+                        buttonFunction={addCoworker}
                     />
                     <ShowCoworkers coworkers={coworkers} />
                 </div>

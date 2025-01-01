@@ -139,10 +139,10 @@ const TimeSlotsDateNavigator = ({
                             onChange={handleEndHourChange}>
                             {Array.from({ length: 23 }, (_, i) => (
                                 <option
-                                    key={i+1}
-                                    value={i+1}
-                                    disabled={i+1 <= startHour}>
-                                    {i+1}:00
+                                    key={i + 1}
+                                    value={i + 1}
+                                    disabled={i + 1 <= startHour}>
+                                    {i + 1}:00
                                 </option>
                             ))}
                             <option key={24} value={24}>

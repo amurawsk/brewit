@@ -33,7 +33,6 @@ import Coworkers from './components/pages/commercial/Coworkers';
 import AddCoworker from './components/pages/commercial/AddCoworker';
 import './App.css';
 
-
 function App() {
     return (
         <Router>
@@ -46,76 +45,68 @@ function App() {
                 <Route path="/login" element={<Login />} />
 
                 {/* PROTECTED */}
-                <Route 
-                    path="/commercial/dashboard" 
+                <Route
+                    path="/commercial/dashboard"
                     element={
                         <ProtectedRoute>
                             <CommercialDashboard />
                         </ProtectedRoute>
-                        
                     }
                 />
-                <Route 
-                    path="/commercial/devices" 
+                <Route
+                    path="/commercial/devices"
                     element={
                         <ProtectedRoute>
                             <Devices />
                         </ProtectedRoute>
-                        
                     }
                 />
-                <Route 
-                    path="/commercial/devices/add" 
+                <Route
+                    path="/commercial/devices/add"
                     element={
                         <ProtectedRoute>
                             <AddDevice />
                         </ProtectedRoute>
-                        
                     }
                 />
-                <Route 
-                    path="/commercial/time_slots" 
+                <Route
+                    path="/commercial/time_slots"
                     element={
                         <ProtectedRoute>
                             <TimeSlots />
                         </ProtectedRoute>
-                        
                     }
                 />
-                <Route 
-                    path="/commercial/time_slots/add" 
+                <Route
+                    path="/commercial/time_slots/add"
                     element={
                         <ProtectedRoute>
                             <AddTimeSlot />
                         </ProtectedRoute>
-                        
                     }
                 />
-                <Route 
-                    path="/commercial/orders" 
+                <Route
+                    path="/commercial/orders"
                     element={
                         <ProtectedRoute>
                             <Orders />
                         </ProtectedRoute>
-                        
                     }
                 />
-                <Route 
-                    path="/commercial/coworkers" 
+                <Route
+                    path="/commercial/coworkers"
                     element={
                         <ProtectedRoute>
                             <Coworkers />
                         </ProtectedRoute>
-                        
                     }
                 />
-                <Route 
-                    path="/commercial/coworkers/add" 
+                <Route
+                    path="/commercial/coworkers/add"
                     element={
                         <ProtectedRoute>
                             <AddCoworker />
                         </ProtectedRoute>
-                        
                     }
                 />
 

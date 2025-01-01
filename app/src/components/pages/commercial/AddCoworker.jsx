@@ -8,7 +8,6 @@ import styles from './AddCoworker.module.css';
 import AddCoworkerForm from '../../modules/commercial/AddCoworkerForm.jsx';
 
 const AddCoworker = () => {
-
     return (
         <div>
             <DashboardHeader />

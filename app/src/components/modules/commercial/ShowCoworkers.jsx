@@ -15,9 +15,7 @@ const ShowCoworkers = ({ coworkers }) => {
             ) : (
                 <div className={styles.allDevices}>
                     {coworkers.map((person, index) => (
-                        <div
-                            className={styles.coworker}
-                            key={index}>
+                        <div className={styles.coworker} key={index}>
                             <div className={styles.deviceText}>
                                 <span className={styles.textTitle}>
                                     {person.username}
@@ -34,8 +32,7 @@ const ShowCoworkers = ({ coworkers }) => {
                             </div>
                             <button
                                 className={styles.removeButton}
-                                onClick={() => removeCoworker(person.username)}
-                            >
+                                onClick={() => removeCoworker(person.username)}>
                                 Usuń
                             </button>
                         </div>

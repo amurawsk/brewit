@@ -1,8 +1,13 @@
 import React from 'react';
 import styles from './OrderTypes.module.css';
 
-const OrderTypes = ({activeStatus, setActiveStatus}) => {
-    const buttons = [['oczekujące', 'N'], ['aktualne', 'C'], ['przeszłe', 'P'], ['odrzucone', 'R']];
+const OrderTypes = ({ activeStatus, setActiveStatus }) => {
+    const buttons = [
+        ['oczekujące', 'N'],
+        ['aktualne', 'C'],
+        ['przeszłe', 'P'],
+        ['odrzucone', 'R'],
+    ];
 
     return (
         <div className={styles.buttonGroup}>
@@ -12,8 +17,7 @@ const OrderTypes = ({activeStatus, setActiveStatus}) => {
                     className={`${styles.button} ${
                         activeStatus === button[1] ? styles.active : ''
                     }`}
-                    onClick={() => setActiveStatus(button[1])}
-                >
+                    onClick={() => setActiveStatus(button[1])}>
                     {button[0]}
                 </button>
             ))}

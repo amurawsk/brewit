@@ -54,7 +54,9 @@ const Devices = () => {
                     />
 
                     {devices.length === 0 ? (
-                        <p className={styles.noDevicesMessage}>Brak urządzeń. Dodaj nowe urządzenie.</p>
+                        <p className={styles.noDevicesMessage}>
+                            Brak urządzeń. Dodaj nowe urządzenie.
+                        </p>
                     ) : (
                         <ShowDevices devices={devices} openPanel={openPanel} />
                     )}
