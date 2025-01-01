@@ -57,7 +57,7 @@ const ShowOrders = ({ orders, status }) => {
                             )}
                             {order.status === 'N' && (
                                 <p>
-                                    Typ piwa: <b>{order.beer_type} L</b>
+                                    Typ piwa: <b>{order.beer_type}</b>
                                 </p>
                             )}
                             {order.status !== 'R' && (
