@@ -3,6 +3,12 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 10px;
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .card {
@@ -14,11 +20,12 @@
     transition:
         transform 0.2s,
         box-shadow 0.2s;
-    height: 180px;
+    min-height: 180px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .card:hover {
@@ -31,12 +38,14 @@ h2 {
     font-size: 1.5rem;
     color: #333;
     margin-bottom: 5px;
+    overflow-wrap: break-word;
 }
 
 p {
     margin: 5px 0;
     font-size: 1rem;
     color: #666;
+    overflow-wrap: break-word;
 }
 
 b {
