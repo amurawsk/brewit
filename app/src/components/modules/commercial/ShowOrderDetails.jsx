@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './ShowOrderDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
-
 import TimeSlotsTimeline from '../../utils/TimeSlotsTimeline.jsx';
+import ConfirmModal from '../../utils/ConfirmModal';
 
 const ShowDeviceDetails = ({
     isPanelOpen,
@@ -10,37 +10,33 @@ const ShowDeviceDetails = ({
     order,
     setOrder,
 }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [action, setAction] = useState(null);
+
     const closePanel = () => {
         setIsPanelOpen(false);
         setOrder(null);
     };
 
-    const cancelOrder = () => {
-        // TODO
-        console.log('cancelled');
+    const handleAction = (actionType) => {
+        setAction(actionType);
+        setIsModalOpen(true);
     };
 
-    const rejectOrder = () => {
-        // TODO
-        console.log('rejected');
-    };
-
-    const acceptOrder = () => {
-        // TODO
-        console.log('accepted');
-    };
-
-    useEffect(() => {
-        if (isPanelOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
+    const confirmAction = () => {
+        if (action === 'cancel') {
+            console.log('Zlecenie anulowane');
+        } else if (action === 'reject') {
+            console.log('Zlecenie odrzucone');
+        } else if (action === 'accept') {
+            console.log('Zlecenie zaakceptowane');
         }
+        setIsModalOpen(false);
+    };
 
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [isPanelOpen]);
+    const cancelAction = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div>
@@ -154,12 +150,12 @@ const ShowDeviceDetails = ({
                                     Zamknij
                                 </button>
                                 <button
-                                    onClick={rejectOrder}
+                                    onClick={() => handleAction('reject')}
                                     className={styles.rejectButton}>
                                     Odrzuć
                                 </button>
                                 <button
-                                    onClick={acceptOrder}
+                                    onClick={() => handleAction('accept')}
                                     className={styles.acceptButton}>
                                     Przyjmij
                                 </button>
@@ -168,7 +164,7 @@ const ShowDeviceDetails = ({
                         {order.status === 'C' && (
                             <div className={styles.currentOrderButtonGroup}>
                                 <button
-                                    onClick={cancelOrder}
+                                    onClick={() => handleAction('cancel')}
                                     className={styles.cancelButton}>
                                     Anuluj zlecenie
                                 </button>
@@ -181,6 +177,20 @@ const ShowDeviceDetails = ({
                         )}
                     </div>
                 </div>
+            )}
+
+            {isModalOpen && (
+                <ConfirmModal
+                    message={
+                        action === 'cancel'
+                            ? 'Czy na pewno chcesz anulować to zlecenie?'
+                            : action === 'reject'
+                            ? 'Czy na pewno chcesz odrzucić to zlecenie?'
+                            : 'Czy na pewno chcesz zaakceptować to zlecenie?'
+                    }
+                    onConfirm={confirmAction}
+                    onCancel={cancelAction}
+                />
             )}
         </div>
     );
