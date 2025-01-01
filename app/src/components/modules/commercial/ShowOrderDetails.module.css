@@ -22,20 +22,6 @@
     text-align: center;
 }
 
-.closeButton {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-top: 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.closeButton:hover {
-    background-color: #555;
-}
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -96,4 +82,126 @@
 
 .rejected {
     color: red;
+}
+
+.newOrderButtonGroup {
+    margin-top: 20px;
+}
+
+.closeButton {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+}
+
+.closeButton:hover {
+    background-color: black;
+    color: white;
+}
+
+.backButton {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+}
+
+.backButton:hover {
+    background-color: black;
+    color: white;
+}
+
+.rejectButton {
+    background-color: white;
+    color: red;
+    border: 1px solid red;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.rejectButton:hover {
+    background-color: #ffb3b3;
+}
+
+.acceptButton {
+    background-color: white;
+    color: green;
+    border: 1px solid green;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.acceptButton:hover {
+    background-color: #b3ffb3;
+}
+
+.currentOrderButtonGroup {
+    margin-top: 20px;
+}
+
+.cancelButton {
+    background-color: white;
+    color: red;
+    border: 1px solid red;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+}
+
+.cancelButton:hover {
+    background-color: #ffb3b3;
+}
+
+.okButton {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.okButton:hover {
+    background-color: black;
+    color: white;
 }

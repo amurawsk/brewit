@@ -135,7 +135,7 @@ const Orders = () => {
             ended_at: '2024-01-01T10:00:00.000Z',
             beer_type: 'GHJ',
             beer_volume: 120,
-            status: 'P',
+            status: 'N',
             contract_brewery_name: 'Januszex',
             contract_brewery_owner_name: 'Jan Kowalski',
             contract_brewery_email: 'example@gmail.com',
@@ -144,8 +144,8 @@ const Orders = () => {
             price: 500,
             timeslots: [
                 {
-                    start_timestamp: '2024-01-04T08:00:00.000Z',
-                    end_timestamp: '2024-01-04T10:30:00.000Z',
+                    start_timestamp: '2026-01-04T08:00:00.000Z',
+                    end_timestamp: '2026-01-04T10:30:00.000Z',
                     device_name: 'Maszyna Z',
                     device_serial_number: 'SN-005',
                 },
