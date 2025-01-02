@@ -7,18 +7,16 @@
     margin-top: 5px;
     border-collapse: collapse;
     width: 100%;
-    table-layout: fixed;
+    min-width: 1000px;
+    table-layout: auto;
 }
 
 .tableTh {
     text-align: center;
     background-color: #333;
     color: white;
-}
-
-.defaultSlot {
-    height: 60px;
-    border-radius: 5px;
+    min-width: 120px;
+    white-space: nowrap;
 }
 
 .deviceTableTd {
@@ -27,25 +25,32 @@
     word-wrap: break-word;
     background-color: #f8f9fa;
     color: black;
+    min-width: 120px;
+    max-width: 160px;
+}
+
+.defaultSlot,
+.activeAvailableSlot,
+.activeReservedSlot,
+.activeTakenSlot {
+    height: 60px;
+    border-radius: 5px;
+    min-width: 100px;
+    white-space: nowrap;
+    text-align: center;
 }
 
 .activeAvailableSlot {
     cursor: pointer;
-    height: 60px;
-    border-radius: 5px;
     background-color: green;
 }
 
 .activeReservedSlot {
     cursor: pointer;
-    height: 60px;
-    border-radius: 5px;
     background-color: orange;
 }
 
 .activeTakenSlot {
     cursor: pointer;
-    height: 60px;
-    border-radius: 5px;
     background-color: red;
 }
