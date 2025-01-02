@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from './Orders.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
@@ -7,6 +8,10 @@ import OrderTypes from '../../modules/commercial/OrderTypes.jsx';
 import ShowOrders from '../../modules/commercial/ShowOrders.jsx';
 
 const Orders = () => {
+    const location = useLocation();
+    const status = location.state?.orderType || 'C';
+    const [activeStatus, setActiveStatus] = useState(status);
+
     // TODO mock
     const orders = [
         {
@@ -180,8 +185,6 @@ const Orders = () => {
             ],
         },
     ];
-
-    const [activeStatus, setActiveStatus] = useState('C');
 
     return (
         <div>
