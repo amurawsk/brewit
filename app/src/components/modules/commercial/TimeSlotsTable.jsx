@@ -179,7 +179,7 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
                                               key={i}
                                               className={cellClass}
                                               onClick={() =>
-                                                  handleSlotClick(timeSlot)
+                                                  handleSlotClick(timeSlot, row)
                                               }></td>
                                       );
                                   })}
