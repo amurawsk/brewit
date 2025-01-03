@@ -17,6 +17,7 @@ const CommercialSidebar = () => {
     const goToTimeSlots = () => navigate('/commercial/time_slots');
     const goToOrders = () => navigate('/commercial/orders');
     const goToCoworkers = () => navigate('/commercial/coworkers');
+    const goToBrewery = () => navigate('/commercial/brewery');
 
     return (
         <div className={styles.sidebar}>
@@ -28,7 +29,7 @@ const CommercialSidebar = () => {
             </div>
             <div className={styles.sidebarMenu}>
                 <hr className={styles.separator}></hr>
-                <div className={styles.sidebarItem}>
+                <div onClick={goToBrewery} className={styles.sidebarItem}>
                     <FaBeer className={styles.icon} />
                     <div className={styles.sidebarText}>
                         <span>Mój browar</span>

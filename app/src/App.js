@@ -21,7 +21,6 @@ import Contract from './components/Contract';
 import Recipes from './components/Recipes';
 import Recipe from './components/Recipe';
 import CommercialBreweries from './components/CommercialBreweries';
-import CommercialBrewery from './components/CommercialBrewery';
 import Devices from './components/pages/commercial/Devices';
 import TimeSlots from './components/pages/commercial/TimeSlots';
 import PieceOfEquipment from './components/PieceOfEquipment';
@@ -31,6 +30,7 @@ import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
 import Orders from './components/pages/commercial/Orders';
 import Coworkers from './components/pages/commercial/Coworkers';
 import AddCoworker from './components/pages/commercial/AddCoworker';
+import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import './App.css';
 
 function App() {
@@ -109,6 +109,14 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                    path="/commercial/brewery"
+                    element={
+                        <ProtectedRoute>
+                            <CommercialBrewery />
+                        </ProtectedRoute>
+                    }
+                />
 
                 {/* TODO */}
                 <Route path="/statistics" element={<Statistics />} />
@@ -123,10 +131,6 @@ function App() {
                 <Route
                     path="/commercial_breweries"
                     element={<CommercialBreweries />}
-                />
-                <Route
-                    path="/commercial_brewery"
-                    element={<CommercialBrewery />}
                 />
                 <Route
                     path="/piece_of_equipment"

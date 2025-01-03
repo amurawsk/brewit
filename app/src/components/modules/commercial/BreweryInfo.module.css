@@ -1,0 +1,36 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.section {
+    flex: 1;
+    background-color: #f9f9f9;
+    border: 1px solid black;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.section h3 {
+    margin: 0 0 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.section p {
+    margin: 0;
+    padding: 3px 0;
+}
+
+.descriptionText {
+    color: black;
+}
