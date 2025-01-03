@@ -36,6 +36,7 @@ const AddCoworkerForm = () => {
                     className={styles.addCoworkerInput}
                     type="text"
                     name="username"
+                    maxLength={100}
                     value={formData.username}
                     placeholder="Wpisz nazwę użytkownika"
                     onChange={handleChange}
@@ -48,6 +49,7 @@ const AddCoworkerForm = () => {
                     className={styles.addCoworkerInput}
                     type="text"
                     name="password"
+                    maxLength={100}
                     value={formData.password}
                     placeholder="Wpisz hasło"
                     onChange={handleChange}

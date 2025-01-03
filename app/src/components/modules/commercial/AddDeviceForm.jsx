@@ -24,6 +24,7 @@ const AddDeviceForm = () => {
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
         }));
+        console.log(formData)
     };
 
     const handleCarbonationChange = (value, checked) => {
@@ -95,6 +96,7 @@ const AddDeviceForm = () => {
                                 className={styles.addEquipmentInput}
                                 type="text"
                                 name="name"
+                                maxLength={100}
                                 placeholder="Wpisz nazwę urządzenia"
                                 onChange={handleChange}
                                 required
@@ -110,6 +112,7 @@ const AddDeviceForm = () => {
                                 className={styles.addEquipmentInput}
                                 type="text"
                                 name="serial_number"
+                                maxLength={100}
                                 placeholder="Wpisz numer seryjny"
                                 onChange={handleChange}
                                 required
@@ -146,6 +149,7 @@ const AddDeviceForm = () => {
                                 className={styles.addEquipmentInput}
                                 type="number"
                                 name="temperature_min"
+                                max={formData.temperature_max}
                                 step="0.5"
                                 placeholder="Wpisz temperaturę minimalną"
                                 onChange={handleChange}
@@ -162,6 +166,7 @@ const AddDeviceForm = () => {
                                 className={styles.addEquipmentInput}
                                 type="number"
                                 name="temperature_max"
+                                min={formData.temperature_min}
                                 step="0.5"
                                 placeholder="Wpisz temperaturę maksymalną"
                                 onChange={handleChange}
@@ -231,6 +236,7 @@ const AddDeviceForm = () => {
                             className={styles.addEquipmentInput}
                             type="text"
                             name="supported_containers"
+                            maxLength={100}
                             placeholder="Np. butelki, puszki, kegi..."
                             onChange={handleChange}
                         />
