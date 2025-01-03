@@ -40,24 +40,25 @@
 
 .confirmButton {
     background-color: white;
-    border: 1px solid green;
-    border-radius: 5px;
-    color: green;
-}
-
-.confirmButton:hover {
-    background-color: #b3ffb3;
-}
-
-.cancelButton {
-    background-color: white;
     border: 1px solid red;
     border-radius: 5px;
     color: red;
 }
 
-.cancelButton:hover {
+.confirmButton:hover {
     background-color: #ffb3b3;
+}
+
+.cancelButton {
+    background-color: white;
+    border: 1px solid green;
+    border-radius: 5px;
+    color: green;
+}
+
+.cancelButton:hover {
+    background-color: #b3ffb3;
+
 }
 
 .description {

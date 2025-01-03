@@ -24,7 +24,7 @@ const DashboardHeader = () => {
         } else {
             // TODO handle error
         }
-    }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('ACCESS_TOKEN');
@@ -40,7 +40,9 @@ const DashboardHeader = () => {
             </div>
             <div className={styles.rest}>
                 <div>
-                    <button onClick={myAccount} className={styles.lightButton}>Moje Konto</button>
+                    <button onClick={myAccount} className={styles.lightButton}>
+                        Moje Konto
+                    </button>
                     <button
                         onClick={handleLogout}
                         className={styles.darkButton}>

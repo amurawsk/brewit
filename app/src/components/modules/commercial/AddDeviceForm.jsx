@@ -24,7 +24,7 @@ const AddDeviceForm = () => {
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
         }));
-        console.log(formData)
+        console.log(formData);
     };
 
     const handleCarbonationChange = (value, checked) => {

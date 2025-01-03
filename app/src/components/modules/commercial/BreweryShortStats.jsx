@@ -61,7 +61,7 @@ const BreweryShortStats = ({ statsData }) => {
                 <span
                     className={styles.viewAll}
                     onClick={() => viewCoworkers()}>
-                    Wyświetl wszystkich pracowników...
+                    Wyświetl wszystkich współpracowników...
                 </span>
             </div>
         </div>

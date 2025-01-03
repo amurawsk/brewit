@@ -4,7 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 const AccountInfo = () => {
     // TODO mock
-    const accountInfo = {username: "testowy", created_at: '2024-01-01T10:00:00.000Z', brewery_name: "ABC", brewery_nip: '12345678901', brewery_description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem, tenetur facilis deserunt, dicta dolores, sint at quisquam cumque voluptas inventore vero doloribus. Voluptatem voluptatum deleniti veniam unde fugiat pariatur fuga!'};
+    const accountInfo = {
+        username: 'testowy',
+        created_at: '2024-01-01T10:00:00.000Z',
+        brewery_name: 'ABC',
+        brewery_nip: '12345678901',
+        brewery_description:
+            'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem, tenetur facilis deserunt, dicta dolores, sint at quisquam cumque voluptas inventore vero doloribus. Voluptatem voluptatum deleniti veniam unde fugiat pariatur fuga!',
+    };
 
     const navigate = useNavigate();
 
@@ -18,7 +25,12 @@ const AccountInfo = () => {
                     Nazwa użytkownika: <b>{accountInfo.username}</b>
                 </p>
                 <p>
-                    Data utworzenia konta: <b>{new Date(accountInfo.created_at).toLocaleString('pl-PL')}</b>
+                    Data utworzenia konta:{' '}
+                    <b>
+                        {new Date(accountInfo.created_at).toLocaleString(
+                            'pl-PL'
+                        )}
+                    </b>
                 </p>
             </div>
             <div className={styles.section}>

@@ -189,6 +189,13 @@ const ShowDeviceDetails = ({
                               ? 'Czy na pewno chcesz odrzucić to zlecenie?'
                               : 'Czy na pewno chcesz zaakceptować to zlecenie?'
                     }
+                    description={
+                        action === 'cancel'
+                            ? 'Spowoduje to natychmiastowe zamknięcie zlecenia, używaj tylko w przypadku awarii. Tej czynności nie da się cofnąć!'   
+                            : action === 'reject'
+                              ? 'Spowoduje to, że status zlecenia zostanie zmieniony na odrzucony. Tej czynności nie da się cofnąć!'
+                              : 'Spowoduje to zmianę statusu zlecenia na aktywne, co oznacza przyjęcie zlecenia. Tej czynności nie da się cofnąć!'
+                    }
                     onConfirm={confirmAction}
                     onCancel={cancelAction}
                 />

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import styles from './ShowCoworkers.module.css';
 
@@ -22,12 +22,11 @@ const ShowCoworkers = ({ coworkers }) => {
         // TODO mock
         console.log('Usuwam:', username);
         closePanel();
-    }
+    };
 
     const cancelAction = () => {
         closePanel();
     };
-
 
     return (
         <div>

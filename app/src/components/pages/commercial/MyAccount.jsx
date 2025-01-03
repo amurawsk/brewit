@@ -5,7 +5,6 @@ import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import PageTittle from '../../utils/PageTittle.jsx';
 import AccountInfo from '../../modules/commercial/AccountInfo.jsx';
 
-
 const MyAccount = () => {
     return (
         <div>

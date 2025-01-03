@@ -115,11 +115,11 @@ const TimeSlotDetails = ({
                                             <strong>Numer zlecenia:</strong>{' '}
                                             Zlecenie #{selectedSlot.order}
                                         </p>
-                                        
                                     </>
                                 ) : (
                                     <p>
-                                        To okno czasowe nie jest przypisane do żadnego zlecenia
+                                        To okno czasowe nie jest przypisane do
+                                        żadnego zlecenia
                                     </p>
                                 )}
                             </div>

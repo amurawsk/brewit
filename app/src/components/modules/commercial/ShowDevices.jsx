@@ -21,7 +21,7 @@ const ShowDevices = ({ devices, openPanel }) => {
     const confirmAction = () => {
         console.log(deleteId);
         closePanel();
-    }
+    };
 
     const cancelAction = () => {
         closePanel();
