@@ -3,6 +3,7 @@ import styles from './ShowOrderDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import TimeSlotsTimeline from './TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
+import Notification from '../../utils/Notification.jsx'
 
 const ShowDeviceDetails = ({
     isPanelOpen,
@@ -12,6 +13,14 @@ const ShowDeviceDetails = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
+    const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+
+    const showNotification = () => {
+        setIsNotificationVisible(true);
+        setTimeout(() => {
+            setIsNotificationVisible(false);
+        }, 2000);
+    };
 
     const closePanel = () => {
         setIsPanelOpen(false);
@@ -33,6 +42,7 @@ const ShowDeviceDetails = ({
         }
         setIsModalOpen(false);
         closePanel();
+        showNotification();        
     };
 
     const cancelAction = () => {
@@ -191,7 +201,7 @@ const ShowDeviceDetails = ({
                     }
                     description={
                         action === 'cancel'
-                            ? 'Spowoduje to natychmiastowe zamknięcie zlecenia, używaj tylko w przypadku awarii. Tej czynności nie da się cofnąć!'   
+                            ? 'Spowoduje to natychmiastowe zamknięcie zlecenia, używaj tylko w przypadku awarii. Tej czynności nie da się cofnąć!'
                             : action === 'reject'
                               ? 'Spowoduje to, że status zlecenia zostanie zmieniony na odrzucony. Tej czynności nie da się cofnąć!'
                               : 'Spowoduje to zmianę statusu zlecenia na aktywne, co oznacza przyjęcie zlecenia. Tej czynności nie da się cofnąć!'
@@ -200,6 +210,7 @@ const ShowDeviceDetails = ({
                     onCancel={cancelAction}
                 />
             )}
+            <Notification message="Operacja zakończona sukcesem!" isVisible={isNotificationVisible} />
         </div>
     );
 };
