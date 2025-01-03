@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styles from './ShowDevices.module.css';
 
+import ConfirmModal from '../../utils/ConfirmModal';
+
 const ShowDevices = ({ devices, openPanel }) => {
-    const removeDevice = (id) => {
-        console.log(id);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+
+    const closePanel = () => {
+        setIsModalOpen(false);
+        setDeleteId(null);
+    };
+
+    const handleAction = (id) => {
+        setDeleteId(id);
+        setIsModalOpen(true);
+    };
+
+    const confirmAction = () => {
+        console.log(deleteId);
+        closePanel();
     }
+
+    const cancelAction = () => {
+        closePanel();
+    };
 
     return (
         <div className={styles.allDevices}>
@@ -37,12 +57,20 @@ const ShowDevices = ({ devices, openPanel }) => {
                         className={styles.removeButton}
                         onClick={(event) => {
                             event.stopPropagation();
-                            removeDevice(device.id);
+                            handleAction(device.id);
                         }}>
                         Usuń
                     </button>
                 </div>
             ))}
+            {isModalOpen && (
+                <ConfirmModal
+                    message="Czy na pewno chcesz usunąć to urządzenie?"
+                    description="Spowoduje to usunięcie przypisanych okien czasowych i anulowanie potencjalnych zleceń"
+                    onConfirm={confirmAction}
+                    onCancel={cancelAction}
+                />
+            )}
         </div>
     );
 };

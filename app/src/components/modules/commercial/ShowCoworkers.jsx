@@ -1,12 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import styles from './ShowCoworkers.module.css';
 
+import ConfirmModal from '../../utils/ConfirmModal';
+
 const ShowCoworkers = ({ coworkers }) => {
-    const removeCoworker = (username) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [username, setUsername] = useState(null);
+
+    const closePanel = () => {
+        setIsModalOpen(false);
+        setUsername(null);
+    };
+
+    const handleAction = (username) => {
+        setUsername(username);
+        setIsModalOpen(true);
+    };
+
+    const confirmAction = () => {
         // TODO mock
         console.log('Usuwam:', username);
+        closePanel();
+    }
+
+    const cancelAction = () => {
+        closePanel();
     };
+
 
     return (
         <div>
@@ -32,12 +53,20 @@ const ShowCoworkers = ({ coworkers }) => {
                             </div>
                             <button
                                 className={styles.removeButton}
-                                onClick={() => removeCoworker(person.username)}>
+                                onClick={() => handleAction(person.username)}>
                                 Usuń
                             </button>
                         </div>
                     ))}
                 </div>
+            )}
+            {isModalOpen && (
+                <ConfirmModal
+                    message="Czy na pewno chcesz usunąć tego pracownika?"
+                    description="Spowoduje to, że jego konto zostanie usunięte"
+                    onConfirm={confirmAction}
+                    onCancel={cancelAction}
+                />
             )}
         </div>
     );

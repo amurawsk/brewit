@@ -25,13 +25,14 @@ const ShowDeviceDetails = ({
 
     const confirmAction = () => {
         if (action === 'cancel') {
-            console.log('Zlecenie anulowane');
+            console.log('Zlecenie anulowane', order.id);
         } else if (action === 'reject') {
-            console.log('Zlecenie odrzucone');
+            console.log('Zlecenie odrzucone', order.id);
         } else if (action === 'accept') {
-            console.log('Zlecenie zaakceptowane');
+            console.log('Zlecenie zaakceptowane', order.id);
         }
         setIsModalOpen(false);
+        closePanel();
     };
 
     const cancelAction = () => {
