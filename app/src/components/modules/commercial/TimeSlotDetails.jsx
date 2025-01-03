@@ -108,6 +108,22 @@ const TimeSlotDetails = ({
                                 </p>
                             </div>
                             <div className={styles.detailBox}>
+                                <h3>Zlecenie</h3>
+                                {contractBrewery ? (
+                                    <>
+                                        <p>
+                                            <strong>Numer zlecenia:</strong>{' '}
+                                            Zlecenie #{selectedSlot.order}
+                                        </p>
+                                        
+                                    </>
+                                ) : (
+                                    <p>
+                                        To okno czasowe nie jest przypisane do żadnego zlecenia
+                                    </p>
+                                )}
+                            </div>
+                            <div className={styles.detailBox}>
                                 <h3>Browar kontraktowy</h3>
                                 {contractBrewery ? (
                                     <>
