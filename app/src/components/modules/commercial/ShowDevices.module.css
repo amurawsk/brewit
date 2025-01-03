@@ -1,8 +1,9 @@
 .device {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     border: 1px solid black;
     border-radius: 8px;
-    align-items: flex-start;
     padding: 12px 20px;
     font-size: 16px;
     color: black;
@@ -41,4 +42,19 @@
 
 .deviceDescriptionValue {
     color: black;
+}
+
+.removeButton {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.removeButton:hover {
+    background-color: darkred;
 }

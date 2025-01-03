@@ -3,6 +3,10 @@ import React from 'react';
 import styles from './ShowDevices.module.css';
 
 const ShowDevices = ({ devices, openPanel }) => {
+    const removeDevice = (id) => {
+        console.log(id);
+    }
+
     return (
         <div className={styles.allDevices}>
             {devices.map((device, index) => (
@@ -29,6 +33,14 @@ const ShowDevices = ({ devices, openPanel }) => {
                             </span>
                         </span>
                     </div>
+                    <button
+                        className={styles.removeButton}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            removeDevice(device.id);
+                        }}>
+                        Usuń
+                    </button>
                 </div>
             ))}
         </div>
