@@ -31,6 +31,8 @@ import Orders from './components/pages/commercial/Orders';
 import Coworkers from './components/pages/commercial/Coworkers';
 import AddCoworker from './components/pages/commercial/AddCoworker';
 import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
+import MyAccount from './components/pages/commercial/MyAccount';
+
 import './App.css';
 
 function App() {
@@ -45,6 +47,14 @@ function App() {
                 <Route path="/login" element={<Login />} />
 
                 {/* PROTECTED */}
+                <Route
+                    path="/commercial/account"
+                    element={
+                        <ProtectedRoute>
+                            <MyAccount />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route
                     path="/commercial/dashboard"
                     element={

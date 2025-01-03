@@ -16,6 +16,16 @@ const DashboardHeader = () => {
         }
     };
 
+    const myAccount = () => {
+        if (localStorage.getItem('userType') === 'commercial_brewery') {
+            navigate('/commercial/account');
+        } else if (localStorage.getItem('userType') === 'contract_brewery') {
+            navigate('/contract/account');
+        } else {
+            // TODO handle error
+        }
+    }
+
     const handleLogout = () => {
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('REFRESH_TOKEN');
@@ -30,7 +40,7 @@ const DashboardHeader = () => {
             </div>
             <div className={styles.rest}>
                 <div>
-                    <button className={styles.lightButton}>Moje Konto</button>
+                    <button onClick={myAccount} className={styles.lightButton}>Moje Konto</button>
                     <button
                         onClick={handleLogout}
                         className={styles.darkButton}>
