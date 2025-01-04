@@ -16,9 +16,16 @@ const BreweryInfo = ({ breweryData }) => {
                 <p>
                     Telefon kontaktowy: <b>{breweryData.phone_number}</b>
                 </p>
-                <p>
-                    NIP: <b>{breweryData.nip}</b>
-                </p>
+                {breweryData.owner_name && (
+                    <p>
+                        Dane właściciela: <b>{breweryData.owner_name}</b>
+                    </p>
+                )}
+                {breweryData.nip && (
+                    <p>
+                        NIP: <b>{breweryData.nip}</b>
+                    </p>
+                )}
                 <p>
                     Adres: <b>{breweryData.address}</b>
                 </p>

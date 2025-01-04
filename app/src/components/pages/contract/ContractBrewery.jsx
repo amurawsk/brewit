@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
-import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import BreweryInfo from '../../modules/common/BreweryInfo.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import PageTittle from '../../utils/PageTittle.jsx';
 import EditBreweryInfo from '../../modules/common/EditBreweryInfo';
 import BreweryShortStats from '../../modules/common/BreweryShortStats.jsx';
 
-import styles from './CommercialBrewery.module.css';
+import styles from './ContractBrewery.module.css';
 
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -21,17 +21,12 @@ const CommercialBrewery = () => {
             name: 'Przykład',
             email: 'example@gmail.com',
             phone_number: '123456789',
-            nip: '12345678901',
+            owner_name: 'Jan Kowalski',
             address: 'Szkolna 1',
             description:
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate mollitia velit corrupti harum possimus ipsam nisi odit explicabo fugiat ea, tempora facilis accusantium perferendis voluptas minima, nam ratione numquam aliquid.',
         };
         const stats_info = {
-            no_devices: 1,
-            no_bt: 1,
-            no_ft: 0,
-            no_ac: 0,
-            no_be: 0,
             no_orders: 3,
             no_new: 1,
             no_current: 1,
@@ -57,7 +52,7 @@ const CommercialBrewery = () => {
         <div>
             <DashboardHeader />
             <div className={styles.container}>
-                <CommercialSidebar />
+                <ContractSidebar />
                 <div className={styles.content}>
                     <PageTittleWithButton
                         text="Informacje o browarze"
@@ -72,12 +67,12 @@ const CommercialBrewery = () => {
                             isPanelOpen={isPanelOpen}
                             setIsPanelOpen={setIsPanelOpen}
                             breweryData={breweryData}
-                            fromPage='commercial'
+                            fromPage='contract'
                         />
                     )}
                     <PageTittle text="Statystyki" />
                     {statsData !== null && (
-                        <BreweryShortStats statsData={statsData} fromPage='commercial'/>
+                        <BreweryShortStats statsData={statsData} fromPage='contract' />
                     )}
                 </div>
             </div>

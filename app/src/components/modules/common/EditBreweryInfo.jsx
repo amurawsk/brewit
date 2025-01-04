@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './EditBreweryInfo.module.css';
 
-const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
+const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData, fromPage }) => {
     const [currentBreweryData, setCurrentBreweryData] = useState(breweryData);
 
     const closePanel = () => {
@@ -86,20 +86,39 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                         required
                                     />
                                 </div>
-                                <div>
-                                    <label className={styles.dataLabel}>
-                                        NIP
-                                    </label>
-                                    <input
-                                        className={styles.dataInput}
-                                        type="text"
-                                        placeholder="Podaj NIP"
-                                        name="nip"
-                                        value={currentBreweryData.nip}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
+                                {fromPage === 'commercial' && (
+                                    <div>
+                                        <label className={styles.dataLabel}>
+                                            NIP
+                                        </label>
+                                        <input
+                                            className={styles.dataInput}
+                                            type="text"
+                                            placeholder="Podaj NIP"
+                                            name="nip"
+                                            value={currentBreweryData.nip}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                )}
+                                {fromPage === 'contract' && (
+                                    <div>
+                                        <label className={styles.dataLabel}>
+                                            Dane właściciela
+                                        </label>
+                                        <input
+                                            className={styles.dataInput}
+                                            type="text"
+                                            placeholder="Podaj imię i nazwisko właściciela"
+                                            name="owner_name"
+                                            value={currentBreweryData.owner_name}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                )}
+                                
                                 <div>
                                     <label className={styles.dataLabel}>
                                         Adres
