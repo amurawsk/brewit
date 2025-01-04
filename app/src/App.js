@@ -11,23 +11,12 @@ import Manual from './components/views/Manual';
 import Register from './components/views/Register';
 import Login from './components/views/Login';
 import CommercialDashboard from './components/pages/commercial/CommercialDashboard';
-import Statistics from './components/Statistics';
-import Users from './components/Users';
-import RegisterUser from './components/RegisterUser';
-import ContractBrewery from './components/ContractBrewery';
-import Cart from './components/Cart';
-import Contracts from './components/Contracts';
-import Contract from './components/Contract';
-import Recipes from './components/Recipes';
-import Recipe from './components/Recipe';
-import CommercialBreweries from './components/CommercialBreweries';
 import Devices from './components/pages/commercial/Devices';
 import TimeSlots from './components/pages/commercial/TimeSlots';
-import PieceOfEquipment from './components/PieceOfEquipment';
 import AddDevice from './components/pages/commercial/AddDevice';
-import AddRecipe from './components/AddRecipe';
 import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
 import Orders from './components/pages/commercial/Orders';
+import ContractOrders from './components/pages/contract/Orders'
 import Coworkers from './components/pages/commercial/Coworkers';
 import AddCoworker from './components/pages/commercial/AddCoworker';
 import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
@@ -134,6 +123,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <ContractDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/orders"
+                    element={
+                        <ProtectedRoute>
+                            <ContractOrders />
                         </ProtectedRoute>
                     }
                 />
