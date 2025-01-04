@@ -1,0 +1,111 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.panel {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 700px;
+    max-width: 95%;
+    max-height: 800px;
+    overflow: hidden;
+}
+
+.editDataForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.header {
+    text-align: center;
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.rightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dataLabel {
+    color: #222;
+    font-size: 1rem;
+}
+
+.dataInput {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+    margin-bottom: 10px;
+}
+
+.descriptionInput {
+    min-height: 120px;
+    resize: none;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.buttonsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.backButton {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+}
+
+.backButton:hover {
+    background-color: black;
+    color: white;
+}
+
+.changeDataButton {
+    background-color: white;
+    color: blue;
+    border: 1px solid blue;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+}
+
+.changeDataButton:hover {
+    background-color: #ccccff;
+}
