@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './NavigationBar.css';
+import styles from './NavigationBar.module.css';
 
 const NavigationBar = () => {
     const navigate = useNavigate();
@@ -11,20 +11,20 @@ const NavigationBar = () => {
     const goToRegisterBrewery = () => navigate('/register');
 
     return (
-        <nav className="navigationbar">
-            <div className="logo">brewIT</div>
-            <div className="rest">
-                <ul className="menu">
+        <nav className={styles.navigationBar}>
+            <div className={styles.logo}>brewIT</div>
+            <div className={styles.rest}>
+                <ul className={styles.menu}>
                     <li onClick={goToAboutUs}>Nasza misja</li>
                     <li onClick={goToManual}>Użytkowanie</li>
                 </ul>
-                <div className="button-group">
-                    <button onClick={goToLogin} className="smalllight-button">
+                <div className={styles.buttonGroup}>
+                    <button onClick={goToLogin} className={styles.lightButton}>
                         Zaloguj
                     </button>
                     <button
                         onClick={goToRegisterBrewery}
-                        className="smalldark-button">
+                        className={styles.darkButton}>
                         Zarejestruj
                     </button>
                 </div>

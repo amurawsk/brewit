@@ -1,11 +1,11 @@
 import React from 'react';
-import './Footer.css';
+import styles from './Footer.module.css';
 
 function Footer() {
     return (
-        <footer className="footer">
-            <div className="logo">brewIT</div>
-            <div className="info">
+        <footer className={styles.footer}>
+            <div className={styles.logo}>brewIT</div>
+            <div className={styles.info}>
                 <div>
                     <h4>Informacje</h4>
                     <p>Regulamin</p>

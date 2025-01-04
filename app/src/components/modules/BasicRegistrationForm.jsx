@@ -1,14 +1,15 @@
 import React, { forwardRef } from 'react';
+import styles from './BasicRegistrationForm.module.css';
 
 const BasicRegistrationForm = forwardRef(
     ({ formData, updateFormData }, ref) => {
         return (
             <div>
-                <div className="myform-place">
+                <div className={styles.myformPlace}>
                     <h4>Podaj podstawowe dane</h4>
-                    <hr className="divider" />
-                    <div className="myform-form">
-                        <form className="myform" ref={ref}>
+                    <hr className={styles.divider}/>
+                    <div className={styles.myformForm}>
+                        <form className={styles.myform} ref={ref}>
                             <div>
                                 <label>Nazwa browaru</label>
                                 <input
@@ -48,7 +49,7 @@ const BasicRegistrationForm = forwardRef(
                                     required
                                 />
                             </div>
-                            <div className="description">
+                            <div className={styles.description}>
                                 <label>Opis (opcjonalne)</label>
                                 <input
                                     placeholder="Podaj opis swojego browaru"

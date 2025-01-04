@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationBar from '../modules/NavigationBar.js';
+import NavigationBar from '../modules/NavigationBar.jsx';
 import api from '../../api.js';
+import styles from './Login.module.css';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -45,12 +46,12 @@ const Login = () => {
     return (
         <div>
             <NavigationBar />
-            <div className="page-wrapper">
-                <div className="myform-place">
+            <div className={styles.pageWrapper}>
+                <div className={styles.myformPlace}>
                     <h4>Zaloguj się</h4>
-                    <hr className="divider" />
-                    <div className="myform-form">
-                        <form className="myform" onSubmit={handleLogin}>
+                    <hr className={styles.divider}/>
+                    <div className={styles.myformForm}>
+                        <form className={styles.myform} onSubmit={handleLogin}>
                             <div>
                                 <label for="username">
                                     <b>Nazwa użytkownika: </b>
@@ -77,11 +78,11 @@ const Login = () => {
                                     name="password"
                                     required></input>
                             </div>
-                            <button type="submit" className="bigdark-button">
+                            <button type="submit" className={styles.darkButton}>
                                 Zaloguj się
                             </button>
                         </form>
-                        <p className="link">
+                        <p className={styles.link}>
                             <a href="/register">
                                 {' '}
                                 Nie masz konta? Zarejestruj się...{' '}

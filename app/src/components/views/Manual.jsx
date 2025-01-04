@@ -1,12 +1,13 @@
 import React from 'react';
-import NavigationBar from '../modules/NavigationBar.js';
-import Footer from '../modules/Footer.js';
+import NavigationBar from '../modules/NavigationBar.jsx';
+import Footer from '../modules/Footer.jsx';
+import styles from './Manual.module.css';
 
 function Manual() {
     return (
-        <div className="manual-page">
+        <div className={styles.manualPage}>
             <NavigationBar />
-            <div className="homepage">
+            <div className={styles.homepage}>
                 <h2>Użytkowanie</h2>
                 <p>
                     Aplikacja umożliwia tworzenie zleceń przez browary

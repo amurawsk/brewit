@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     padding: 1rem;
-    gap: 2rem;
+    gap: 1rem;
     color: #555;
     border-top: 1px solid #ddd; /*remove this and the upper one if we dont want the line*/
 }
@@ -20,4 +20,10 @@
 
 .footer .info p:hover {
     color: #000;
+}
+
+.logo {
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
