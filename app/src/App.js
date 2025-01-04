@@ -21,6 +21,7 @@ import ContractOrders from './components/pages/contract/Orders'
 import Coworkers from './components/pages/commercial/Coworkers';
 import ContractCoworkers from './components/pages/contract/Coworkers';
 import AddCoworker from './components/pages/commercial/AddCoworker';
+import ContractAddCoworker from './components/pages/contract/AddCoworker';
 import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import MyAccount from './components/pages/commercial/MyAccount';
 
@@ -149,7 +150,7 @@ function App() {
                     path="/contract/coworkers/add"
                     element={
                         <ProtectedRoute>
-                            {/* <AddCoworker /> */}
+                            <ContractAddCoworker />
                         </ProtectedRoute>
                     }
                 />

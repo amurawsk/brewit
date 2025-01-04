@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './AddCoworkerForm.module.css';
 
-const AddCoworkerForm = () => {
+const AddCoworkerForm = ({fromPage}) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -14,8 +14,14 @@ const AddCoworkerForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData.username, formData.password);
-        navigate('/commercial/coworkers');
-        // TODO mock
+        // TODO
+        if (fromPage === 'commercial') {
+            navigate('/commercial/coworkers');
+        } else if (fromPage === 'contract') {
+            navigate('/contract/coworkers');
+        } else {
+            // TODO handle error
+        }
     };
 
     const handleChange = (event) => {

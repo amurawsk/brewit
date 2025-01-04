@@ -4,7 +4,7 @@ import styles from './Orders.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import PageTittle from '../../utils/PageTittle.jsx';
-import OrderTypes from '../../modules/commercial/OrderTypes.jsx';
+import OrderTypes from '../../modules/common/OrderTypes.jsx';
 import ShowOrders from '../../modules/commercial/ShowOrders.jsx';
 
 const Orders = () => {

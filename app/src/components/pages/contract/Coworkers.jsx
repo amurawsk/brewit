@@ -4,12 +4,12 @@ import styles from './Coworkers.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
-import ShowCoworkers from '../../modules/commercial/ShowCoworkers.jsx';
+import ShowCoworkers from '../../modules/common/ShowCoworkers.jsx';
 
 const Coworkers = () => {
     const navigate = useNavigate();
 
-    const addCoworker = () => navigate('/commercial/coworkers/add');
+    const addCoworker = () => navigate('/contract/coworkers/add');
 
     // TODO mock values
     const coworkers = [

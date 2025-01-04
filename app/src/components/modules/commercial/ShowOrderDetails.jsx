@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ShowOrderDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
-import TimeSlotsTimeline from './TimeSlotsTimeline.jsx';
+import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
 

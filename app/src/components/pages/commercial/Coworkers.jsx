@@ -4,7 +4,7 @@ import styles from './Coworkers.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
-import ShowCoworkers from '../../modules/commercial/ShowCoworkers.jsx';
+import ShowCoworkers from '../../modules/common/ShowCoworkers.jsx';
 
 const Coworkers = () => {
     const navigate = useNavigate();
