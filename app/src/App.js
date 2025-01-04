@@ -34,6 +34,7 @@ import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import MyAccount from './components/pages/commercial/MyAccount';
 
 import './App.css';
+import ContractDashboard from './components/pages/contract/ContractDashboard';
 
 function App() {
     return (
@@ -128,25 +129,14 @@ function App() {
                     }
                 />
 
-                {/* TODO */}
-                <Route path="/statistics" element={<Statistics />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/register_user" element={<RegisterUser />} />
-                <Route path="/contract_brewery" element={<ContractBrewery />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/contracts" element={<Contracts />} />
-                <Route path="/contract" element={<Contract />} />
-                <Route path="/recipes" element={<Recipes />} />
-                <Route path="/recipe" element={<Recipe />} />
                 <Route
-                    path="/commercial_breweries"
-                    element={<CommercialBreweries />}
+                    path="/contract/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <ContractDashboard />
+                        </ProtectedRoute>
+                    }
                 />
-                <Route
-                    path="/piece_of_equipment"
-                    element={<PieceOfEquipment />}
-                />
-                <Route path="/add_recipe" element={<AddRecipe />} />
             </Routes>
         </Router>
     );
