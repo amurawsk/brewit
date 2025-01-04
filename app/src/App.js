@@ -46,7 +46,7 @@ function App() {
                 <Route
                     path="/commercial/account"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <MyAccount />
                         </ProtectedRoute>
                     }
@@ -54,7 +54,7 @@ function App() {
                 <Route
                     path="/commercial/dashboard"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <CommercialDashboard />
                         </ProtectedRoute>
                     }
@@ -62,7 +62,7 @@ function App() {
                 <Route
                     path="/commercial/devices"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <Devices />
                         </ProtectedRoute>
                     }
@@ -70,7 +70,7 @@ function App() {
                 <Route
                     path="/commercial/devices/add"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <AddDevice />
                         </ProtectedRoute>
                     }
@@ -78,7 +78,7 @@ function App() {
                 <Route
                     path="/commercial/time_slots"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <TimeSlots />
                         </ProtectedRoute>
                     }
@@ -86,7 +86,7 @@ function App() {
                 <Route
                     path="/commercial/time_slots/add"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <AddTimeSlot />
                         </ProtectedRoute>
                     }
@@ -94,7 +94,7 @@ function App() {
                 <Route
                     path="/commercial/orders"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <Orders />
                         </ProtectedRoute>
                     }
@@ -102,7 +102,7 @@ function App() {
                 <Route
                     path="/commercial/coworkers"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <Coworkers />
                         </ProtectedRoute>
                     }
@@ -110,7 +110,7 @@ function App() {
                 <Route
                     path="/commercial/coworkers/add"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <AddCoworker />
                         </ProtectedRoute>
                     }
@@ -118,7 +118,7 @@ function App() {
                 <Route
                     path="/commercial/brewery"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <CommercialBrewery />
                         </ProtectedRoute>
                     }
@@ -128,7 +128,7 @@ function App() {
                 <Route
                     path="/contract/account"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="contract_brewery">
                             <ContractAccount />
                         </ProtectedRoute>
                     }
@@ -136,7 +136,7 @@ function App() {
                 <Route
                     path="/contract/dashboard"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="contract_brewery">
                             <ContractDashboard />
                         </ProtectedRoute>
                     }
@@ -144,7 +144,7 @@ function App() {
                 <Route
                     path="/contract/orders"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="contract_brewery">
                             <ContractOrders />
                         </ProtectedRoute>
                     }
@@ -152,7 +152,7 @@ function App() {
                 <Route
                     path="/contract/coworkers"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="contract_brewery">
                             <ContractCoworkers />
                         </ProtectedRoute>
                     }
@@ -160,7 +160,7 @@ function App() {
                 <Route
                     path="/contract/coworkers/add"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="contract_brewery">
                             <ContractAddCoworker />
                         </ProtectedRoute>
                     }
@@ -168,7 +168,7 @@ function App() {
                 <Route
                     path="/contract/brewery"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="contract_brewery">
                             <ContractBrewery />
                         </ProtectedRoute>
                     }

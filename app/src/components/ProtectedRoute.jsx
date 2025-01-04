@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import api from '../api.js';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 
-function ProtectedRoute({ children }) {
+function ProtectedRoute({ children, requiredType }) {
     const [authorized, setAuthorized] = useState(null);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ function ProtectedRoute({ children }) {
                 if (exp < Date.now() / 1000) {
                     await refreshToken();
                 } else {
-                    setAuthorized(true);
+                    checkUserType();
                 }
             } catch (error) {
                 handleUnauthorized();
@@ -44,9 +44,18 @@ function ProtectedRoute({ children }) {
                 refresh: refreshToken,
             });
             localStorage.setItem(ACCESS_TOKEN, response.data.access);
-            setAuthorized(true);
+            checkUserType();
         } catch (error) {
             handleUnauthorized();
+        }
+    };
+
+    const checkUserType = () => {
+        const userType = localStorage.getItem('userType');
+        if (userType === requiredType) {
+            setAuthorized(true);
+        } else {
+            setAuthorized(false);
         }
     };
 
