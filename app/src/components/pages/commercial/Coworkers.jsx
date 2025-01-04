@@ -77,7 +77,6 @@ const Coworkers = () => {
             username: 'anna_nowak',
             added_at: '2024-02-15T12:30:00.000Z',
         },
-        
     ];
 
     return (

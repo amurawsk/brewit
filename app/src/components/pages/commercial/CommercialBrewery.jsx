@@ -14,7 +14,7 @@ const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
     const [statsData, setStatsData] = useState(null);
-    
+
     // TODO mock
     const getData = () => {
         const brewery_info = {
@@ -42,18 +42,17 @@ const CommercialBrewery = () => {
 
         setBreweryData(brewery_info);
         setStatsData(stats_info);
-    }
+    };
 
     useEffect(() => {
         getData();
     }, []);
-    
 
     // TODO
     const editInfo = () => {
         setIsPanelOpen(true);
     };
-    
+
     return (
         <div>
             <DashboardHeader />
@@ -69,7 +68,11 @@ const CommercialBrewery = () => {
                         <BreweryInfo breweryData={breweryData} />
                     )}
                     {isPanelOpen && breweryData !== null && (
-                        <EditBreweryInfo isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} breweryData={breweryData} />
+                        <EditBreweryInfo
+                            isPanelOpen={isPanelOpen}
+                            setIsPanelOpen={setIsPanelOpen}
+                            breweryData={breweryData}
+                        />
                     )}
                     <PageTittle text="Statystyki" />
                     {statsData !== null && (

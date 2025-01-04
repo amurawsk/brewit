@@ -121,7 +121,9 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
                     <tbody>
                         {filteredTimetableData.map((row, rowIndex) => (
                             <tr key={rowIndex}>
-                                <td className={styles.deviceTableTd}>{row.name}</td>
+                                <td className={styles.deviceTableTd}>
+                                    {row.name}
+                                </td>
                                 {view === 'daily'
                                     ? hours
                                           .filter(
@@ -140,7 +142,8 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
                                                       ? styles.activeAvailableSlot
                                                       : timeSlot?.status === 'R'
                                                         ? styles.activeReservedSlot
-                                                        : timeSlot?.status === 'H'
+                                                        : timeSlot?.status ===
+                                                            'H'
                                                           ? styles.activeTakenSlot
                                                           : styles.defaultSlot;
 
@@ -180,7 +183,10 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
                                                   key={i}
                                                   className={cellClass}
                                                   onClick={() =>
-                                                      handleSlotClick(timeSlot, row)
+                                                      handleSlotClick(
+                                                          timeSlot,
+                                                          row
+                                                      )
                                                   }></td>
                                           );
                                       })}

@@ -3,7 +3,7 @@ import styles from './ShowOrderDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import TimeSlotsTimeline from './TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
-import Notification from '../../utils/Notification.jsx'
+import Notification from '../../utils/Notification.jsx';
 
 const ShowDeviceDetails = ({
     isPanelOpen,
@@ -42,7 +42,7 @@ const ShowDeviceDetails = ({
         }
         setIsModalOpen(false);
         closePanel();
-        showNotification();        
+        showNotification();
     };
 
     const cancelAction = () => {
@@ -210,7 +210,10 @@ const ShowDeviceDetails = ({
                     onCancel={cancelAction}
                 />
             )}
-            <Notification message="Operacja zakończona sukcesem!" isVisible={isNotificationVisible} />
+            <Notification
+                message="Operacja zakończona sukcesem!"
+                isVisible={isNotificationVisible}
+            />
         </div>
     );
 };

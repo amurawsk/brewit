@@ -13,7 +13,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
         console.log(currentBreweryData);
         setIsPanelOpen(false);
         setCurrentBreweryData(breweryData);
-    }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,7 +32,9 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                         <form className={styles.editDataForm}>
                             <div className={styles.leftColumn}>
                                 <div>
-                                    <label className={styles.dataLabel}>Nazwa browaru</label>
+                                    <label className={styles.dataLabel}>
+                                        Nazwa browaru
+                                    </label>
                                     <input
                                         className={styles.dataInput}
                                         type="text"
@@ -44,7 +46,9 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                     />
                                 </div>
                                 <div>
-                                    <label className={styles.dataLabel}>Email kontaktowy</label>
+                                    <label className={styles.dataLabel}>
+                                        Email kontaktowy
+                                    </label>
                                     <input
                                         className={styles.dataInput}
                                         type="email"
@@ -56,19 +60,22 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                     />
                                 </div>
                                 <div>
-                                    <label className={styles.dataLabel}>Opis (opcjonalne)</label>
+                                    <label className={styles.dataLabel}>
+                                        Opis (opcjonalne)
+                                    </label>
                                     <textarea
                                         className={`${styles.dataInput} ${styles.descriptionInput}`}
                                         placeholder="Podaj opis swojego browaru"
                                         name="description"
                                         value={currentBreweryData.description}
-                                        onChange={handleChange}
-                                    ></textarea>
+                                        onChange={handleChange}></textarea>
                                 </div>
                             </div>
                             <div className={styles.rightColumn}>
                                 <div>
-                                    <label className={styles.dataLabel}>Telefon kontaktowy</label>
+                                    <label className={styles.dataLabel}>
+                                        Telefon kontaktowy
+                                    </label>
                                     <input
                                         className={styles.dataInput}
                                         type="text"
@@ -80,7 +87,9 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                     />
                                 </div>
                                 <div>
-                                    <label className={styles.dataLabel}>NIP</label>
+                                    <label className={styles.dataLabel}>
+                                        NIP
+                                    </label>
                                     <input
                                         className={styles.dataInput}
                                         type="text"
@@ -92,7 +101,9 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                     />
                                 </div>
                                 <div>
-                                    <label className={styles.dataLabel}>Adres</label>
+                                    <label className={styles.dataLabel}>
+                                        Adres
+                                    </label>
                                     <input
                                         className={styles.dataInput}
                                         type="text"
@@ -108,14 +119,12 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                         <div className={styles.buttonsContainer}>
                             <button
                                 className={styles.backButton}
-                                onClick={closePanel}
-                            >
+                                onClick={closePanel}>
                                 Zamknij
                             </button>
                             <button
                                 className={styles.changeDataButton}
-                                onClick={editData}
-                            >
+                                onClick={editData}>
                                 Zmień dane
                             </button>
                         </div>
