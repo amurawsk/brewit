@@ -12,10 +12,11 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleLogin = async (event) => {
         event.preventDefault();
-
+        setErrorMessage('');
         try {
             const response = await api.post('login/', { username, password });
 
@@ -32,13 +33,14 @@ const Login = () => {
                     goToContractBrewery();
                 } else {
                     console.log('ERROR');
-                    // TODO handle error
+                    //GoToSuperuser
                 }
             } else {
                 console.log(response);
-                // TODO: Handle login error
+                // TODO: This never happens because it's handled by try-catch
             }
         } catch (error) {
+            setErrorMessage('Niepoprawne dane logowania');
             console.log(error);
         }
     };
@@ -78,6 +80,7 @@ const Login = () => {
                                     name="password"
                                     required></input>
                             </div>
+							<div className={styles.errorMessage}>{errorMessage}</div>
                             <button type="submit" className={styles.darkButton}>
                                 Zaloguj się
                             </button>
