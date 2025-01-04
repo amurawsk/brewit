@@ -2,21 +2,20 @@ import React from 'react';
 import styles from './AccountInfo.module.css';
 import { useNavigate } from 'react-router-dom';
 
-const AccountInfo = () => {
+const AccountInfo = ({accountInfo, fromPage}) => {
     // TODO mock
-    const accountInfo = {
-        username: 'testowy',
-        created_at: '2024-01-01T10:00:00.000Z',
-        brewery_name: 'ABC',
-        brewery_nip: '12345678901',
-        brewery_description:
-            'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem, tenetur facilis deserunt, dicta dolores, sint at quisquam cumque voluptas inventore vero doloribus. Voluptatem voluptatum deleniti veniam unde fugiat pariatur fuga!',
-    };
-
     const navigate = useNavigate();
 
-    const goToBrewery = () => navigate('/commercial/brewery');
-
+    const goToBrewery = () => {
+        if (fromPage === 'commercial') {
+            navigate('/commercial/brewery');
+        } else if (fromPage === 'contract') {
+            navigate('/contract/brewery');
+        } else {
+            // TODO handle error
+        }
+    }
+    
     return (
         <div className={styles.content}>
             <div className={styles.section}>
@@ -38,9 +37,16 @@ const AccountInfo = () => {
                 <p>
                     Nazwa browaru: <b>{accountInfo.brewery_name}</b>
                 </p>
-                <p>
-                    NIP: <b>{accountInfo.brewery_nip}</b>
-                </p>
+                {fromPage === 'commercial' && (
+                    <p>
+                        NIP: <b>{accountInfo.brewery_nip}</b>
+                    </p>
+                )}
+                {fromPage === 'contract' && (
+                    <p>
+                        Dane właściciela: <b>{accountInfo.brewery_owner_name}</b>
+                    </p>
+                )}
                 <p>
                     Opis:
                     <p className={styles.descriptionText}>

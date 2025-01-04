@@ -25,6 +25,7 @@ import ContractAddCoworker from './components/pages/contract/AddCoworker';
 import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import ContractBrewery from './components/pages/contract/ContractBrewery';
 import MyAccount from './components/pages/commercial/MyAccount';
+import ContractAccount from './components/pages/contract/MyAccount';
 
 import './App.css';
 
@@ -123,6 +124,15 @@ function App() {
                     }
                 />
 
+                {/* CONTRACT */}
+                <Route
+                    path="/contract/account"
+                    element={
+                        <ProtectedRoute>
+                            <ContractAccount />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route
                     path="/contract/dashboard"
                     element={
