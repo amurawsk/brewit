@@ -33,7 +33,7 @@ const ShowCoworkers = ({ coworkers }) => {
             {coworkers.length === 0 ? (
                 <p className={styles.noOrdersMessage}>Brak współpracowników.</p>
             ) : (
-                <div className={styles.allDevices}>
+                <div className={styles.allCoworkers}>
                     {coworkers.map((person, index) => (
                         <div className={styles.coworker} key={index}>
                             <div className={styles.deviceText}>

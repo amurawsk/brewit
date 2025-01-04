@@ -28,41 +28,43 @@ const ShowDevices = ({ devices, openPanel }) => {
     };
 
     return (
-        <div className={styles.allDevices}>
-            {devices.map((device, index) => (
-                <div
-                    className={styles.device}
-                    key={index}
-                    onClick={() => openPanel(device)}>
-                    <div className={styles.deviceText}>
-                        <span className={styles.deviceTextTitle}>
-                            {device.name}
-                        </span>
-                        <span className={styles.deviceDescription}>
-                            typ urządzenia:
-                            <span className={styles.deviceDescriptionValue}>
-                                {' '}
-                                {device.device_type}
+        <div className={styles.container}>
+            <div className={styles.allDevices}>
+                {devices.map((device, index) => (
+                    <div
+                        className={styles.device}
+                        key={index}
+                        onClick={() => openPanel(device)}>
+                        <div className={styles.deviceText}>
+                            <span className={styles.deviceTextTitle}>
+                                {device.name}
                             </span>
-                        </span>
-                        <span className={styles.deviceDescription}>
-                            nr seryjny:
-                            <span className={styles.deviceDescriptionValue}>
-                                {' '}
-                                {device.serial_number}
+                            <span className={styles.deviceDescription}>
+                                typ urządzenia:
+                                <span className={styles.deviceDescriptionValue}>
+                                    {' '}
+                                    {device.device_type}
+                                </span>
                             </span>
-                        </span>
+                            <span className={styles.deviceDescription}>
+                                nr seryjny:
+                                <span className={styles.deviceDescriptionValue}>
+                                    {' '}
+                                    {device.serial_number}
+                                </span>
+                            </span>
+                        </div>
+                        <button
+                            className={styles.removeButton}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                handleAction(device.id);
+                            }}>
+                            Usuń
+                        </button>
                     </div>
-                    <button
-                        className={styles.removeButton}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            handleAction(device.id);
-                        }}>
-                        Usuń
-                    </button>
-                </div>
-            ))}
+                ))}
+            </div>
             {isModalOpen && (
                 <ConfirmModal
                     message="Czy na pewno chcesz usunąć to urządzenie?"

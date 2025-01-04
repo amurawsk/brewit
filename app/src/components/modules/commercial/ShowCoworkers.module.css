@@ -1,6 +1,9 @@
-.allDevices {
-    display: flex;
-    flex-direction: column;
+.allCoworkers {
+    max-height: 100vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .coworker {
