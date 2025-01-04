@@ -24,6 +24,7 @@ function Register() {
         address: '',
         nameSurname: '',
     });
+	const [errorMessage, setErrorMessage] = useState('');
 
     const handleRegister = () => {
         console.log('Dane rejestracyjne:', formData);
@@ -36,6 +37,7 @@ function Register() {
 
     const submitNamePassword = async (event) => {
         event.preventDefault();
+        setErrorMessage('');
         const username = formData.username;
         try {
             const response = await api.post('check-username-unique/', {
@@ -44,7 +46,8 @@ function Register() {
             if (response.data.unique) {
                 setActiveSection('ChooseType');
             } else {
-                // TODO: Handle non-unique username
+                console.log(response);
+				setErrorMessage('Ta nazwa jest już zajęta');
             }
         } catch (error) {
             return error.response;
@@ -99,6 +102,7 @@ function Register() {
                                         required
                                     />
                                 </div>
+								<div className={styles.errorMessage}>{errorMessage}</div>
                                 <div>
                                     <div className={styles.checkboxPlace}>
                                         <input
