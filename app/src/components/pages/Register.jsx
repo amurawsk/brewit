@@ -6,7 +6,7 @@ import CommercialForm from '../modules/CommercialForm.jsx';
 import api from '../../api.js';
 import styles from './Register.module.css';
 
-function Register() {
+const Register = () => {
     const navigate = useNavigate();
 
     const goToAboutUs = () => navigate('/');

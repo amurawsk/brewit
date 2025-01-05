@@ -6,12 +6,11 @@ import {
     Route,
     Navigate,
 } from 'react-router-dom';
-import AboutUs from './components/views/AboutUs';
-import Manual from './components/views/Manual';
-import Register from './components/views/Register';
-import Login from './components/views/Login';
+import AboutUs from './components/pages/AboutUs';
+import Manual from './components/pages/Manual';
+import Register from './components/pages/Register';
+import Login from './components/pages/Login';
 import CommercialDashboard from './components/pages/commercial/CommercialDashboard';
-import Statistics from './components/Statistics';
 import Users from './components/Users';
 import RegisterUser from './components/RegisterUser';
 import ContractBrewery from './components/ContractBrewery';
@@ -32,6 +31,7 @@ import Coworkers from './components/pages/commercial/Coworkers';
 import AddCoworker from './components/pages/commercial/AddCoworker';
 import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import MyAccount from './components/pages/commercial/MyAccount';
+import Statistics from './components/pages/Statistics';
 
 import './App.css';
 
@@ -127,9 +127,16 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                    path="/commercial/statistics"
+                    element={
+                        <ProtectedRoute>
+                            <Statistics />
+                        </ProtectedRoute>
+                    }
+                />
 
                 {/* TODO */}
-                <Route path="/statistics" element={<Statistics />} />
                 <Route path="/users" element={<Users />} />
                 <Route path="/register_user" element={<RegisterUser />} />
                 <Route path="/contract_brewery" element={<ContractBrewery />} />

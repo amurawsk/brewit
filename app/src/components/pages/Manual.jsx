@@ -3,7 +3,7 @@ import NavigationBar from '../modules/NavigationBar.jsx';
 import Footer from '../modules/Footer.jsx';
 import styles from './Manual.module.css';
 
-function Manual() {
+const Manual = () => {
     return (
         <div className={styles.manualPage}>
             <NavigationBar />

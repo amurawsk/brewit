@@ -3,7 +3,7 @@ import NavigationBar from '../modules/NavigationBar.jsx';
 import Footer from '../modules/Footer.jsx';
 import styles from './AboutUs.module.css';
 
-function AboutUs() {
+const AboutUs = () => {
     return (
         <div className={styles.aboutUsPage}>
             <NavigationBar />

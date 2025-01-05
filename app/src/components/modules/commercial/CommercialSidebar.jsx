@@ -18,6 +18,7 @@ const CommercialSidebar = () => {
     const goToOrders = () => navigate('/commercial/orders');
     const goToCoworkers = () => navigate('/commercial/coworkers');
     const goToBrewery = () => navigate('/commercial/brewery');
+    const goToStatistics = () => navigate('/commercial/statistics');
 
     return (
         <div className={styles.sidebar}>
@@ -76,7 +77,7 @@ const CommercialSidebar = () => {
                     </div>
                 </div>
                 <hr className={styles.separator}></hr>
-                <div className={styles.sidebarItem}>
+                <div onClick={goToStatistics} className={styles.sidebarItem}>
                     <FaChartLine className={styles.icon} />
                     <div className={styles.sidebarText}>
                         <span>Statystyki</span>
