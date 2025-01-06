@@ -8,11 +8,14 @@ const BreweryShortStats = ({ statsData }) => {
     const viewDevices = () => navigate('/commercial/devices');
     const viewOrders = () => navigate('/commercial/orders');
     const viewCoworkers = () => navigate('/commercial/coworkers');
+    const viewRecipes = () => navigate('/contract/recipes');
 
     return (
         <div className={styles.content}>
             <div className={styles.section}>
-                <h3>Urządzenia</h3>
+			{localStorage.getItem('userType') === 'commercial_brewery' && (
+                    <>
+                        <h3>Urządzenia</h3>
                 <p>
                     Ilość urządzeń: <b>{statsData.no_devices}</b>
                 </p>
@@ -31,6 +34,19 @@ const BreweryShortStats = ({ statsData }) => {
                 <span className={styles.viewAll} onClick={() => viewDevices()}>
                     Wyświetl wszystkie urządzenia...
                 </span>
+                    </>
+                )}
+				{localStorage.getItem('userType') === 'contract_brewery' && (
+                    <>
+                        <p>
+                            Przepisy: <b>{statsData.no_recipes}</b>
+                        </p>
+						<span className={styles.viewAll} onClick={() => viewRecipes()}>
+                    Wyświetl wszystkie przepisy...
+                </span>
+                    </>
+                )}
+                
             </div>
             <div className={styles.section}>
                 <h3>Zlecenia</h3>

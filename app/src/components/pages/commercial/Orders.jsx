@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './Orders.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
-import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import CommercialSidebar from "../../modules/commercial/CommercialSidebar.jsx";
+import ContractSidebar from "../../modules/contract/ContractSidebar.jsx";
 import PageTittle from '../../utils/PageTittle.jsx';
 import OrderTypes from '../../modules/commercial/OrderTypes.jsx';
 import ShowOrders from '../../modules/commercial/ShowOrders.jsx';
@@ -190,7 +191,8 @@ const Orders = () => {
         <div>
             <DashboardHeader />
             <div className={styles.container}>
-                <CommercialSidebar />
+				{localStorage.getItem('userType') === 'commercial_brewery' && <CommercialSidebar />}
+				{localStorage.getItem('userType') === 'contract_brewery' && <ContractSidebar />}
                 <div className={styles.content}>
                     <div className={styles.tittleButtonContainer}>
                         <PageTittle text="Zlecenia" />

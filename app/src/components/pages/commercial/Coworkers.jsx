@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Coworkers.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import ShowCoworkers from '../../modules/commercial/ShowCoworkers.jsx';
 
@@ -27,7 +28,8 @@ const Coworkers = () => {
         <div>
             <DashboardHeader />
             <div className={styles.container}>
-                <CommercialSidebar />
+				{localStorage.getItem('userType') === 'commercial_brewery' && <CommercialSidebar />}
+				{localStorage.getItem('userType') === 'contract_brewery' && <ContractSidebar />}
                 <div className={styles.content}>
                     <PageTittleWithButton
                         text="Współpracownicy"

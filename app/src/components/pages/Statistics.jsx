@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DashboardHeader from "../modules/DashboardHeader.jsx";
 import CommercialSidebar from "../modules/commercial/CommercialSidebar.jsx";
+import ContractSidebar from "../modules/contract/ContractSidebar.jsx";
 import PageTittle from '../utils/PageTittle.jsx';
 import StatisticsTypes from '../modules/StatisticsTypes.jsx';
 import styles from "./Statistics.module.css";
@@ -17,7 +18,8 @@ const Statistics = () => {
 		<div>
 			<DashboardHeader />
 			<div className={styles.appContainer}>
-				<CommercialSidebar />
+				{localStorage.getItem('userType') === 'commercial_brewery' && <CommercialSidebar />}
+				{localStorage.getItem('userType') === 'contract_brewery' && <ContractSidebar />}
 				<div className={styles.content}>
 					<div className={styles.tittleButtonContainer}>
 						<PageTittle text="Statystyki" />

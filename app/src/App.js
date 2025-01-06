@@ -17,14 +17,13 @@ import ContractBrewery from './components/ContractBrewery';
 import Cart from './components/Cart';
 import Contracts from './components/Contracts';
 import Contract from './components/Contract';
-import Recipes from './components/Recipes';
 import Recipe from './components/Recipe';
 import CommercialBreweries from './components/CommercialBreweries';
 import Devices from './components/pages/commercial/Devices';
 import TimeSlots from './components/pages/commercial/TimeSlots';
 import PieceOfEquipment from './components/PieceOfEquipment';
 import AddDevice from './components/pages/commercial/AddDevice';
-import AddRecipe from './components/AddRecipe';
+import AddRecipes from './components/AddRecipe';
 import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
 import Orders from './components/pages/commercial/Orders';
 import Coworkers from './components/pages/commercial/Coworkers';
@@ -32,6 +31,8 @@ import AddCoworker from './components/pages/commercial/AddCoworker';
 import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import MyAccount from './components/pages/commercial/MyAccount';
 import Statistics from './components/pages/Statistics';
+import Recipes from './components/pages/contract/Recipes';
+import AddRecipe from './components/pages/contract/AddRecipe';
 
 import './App.css';
 
@@ -135,6 +136,78 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+				<Route
+                    path="/contract/account"
+                    element={
+                        <ProtectedRoute>
+                            <MyAccount />
+                        </ProtectedRoute>
+                    }
+                />
+				<Route
+                    path="/contract/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <CommercialDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+				<Route
+                    path="/contract/recipes"
+                    element={
+                        <ProtectedRoute>
+                            <Recipes />
+                        </ProtectedRoute>
+                    }
+                />
+				<Route
+                    path="/contract/recipes/add"
+                    element={
+                        <ProtectedRoute>
+                            <AddRecipe />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/orders"
+                    element={
+                        <ProtectedRoute>
+                            <Orders />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/coworkers"
+                    element={
+                        <ProtectedRoute>
+                            <Coworkers />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/coworkers/add"
+                    element={
+                        <ProtectedRoute>
+                            <AddCoworker />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/brewery"
+                    element={
+                        <ProtectedRoute>
+                            <CommercialBrewery />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/statistics"
+                    element={
+                        <ProtectedRoute>
+                            <Statistics />
+                        </ProtectedRoute>
+                    }
+                />
 
                 {/* TODO */}
                 <Route path="/users" element={<Users />} />
@@ -153,7 +226,7 @@ function App() {
                     path="/piece_of_equipment"
                     element={<PieceOfEquipment />}
                 />
-                <Route path="/add_recipe" element={<AddRecipe />} />
+                <Route path="/add_recipes" element={<AddRecipe />} />
             </Routes>
         </Router>
     );

@@ -3,6 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import BreweryInfo from '../../modules/commercial/BreweryInfo.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import PageTittle from '../../utils/PageTittle.jsx';
@@ -21,6 +22,7 @@ const CommercialBrewery = () => {
         phone_number: '123456789',
         nip: '12345678901',
         address: 'Szkolna 1',
+		ceo: 'Janusz Pijanka',
         description:
             'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate mollitia velit corrupti harum possimus ipsam nisi odit explicabo fugiat ea, tempora facilis accusantium perferendis voluptas minima, nam ratione numquam aliquid.',
     };
@@ -36,13 +38,15 @@ const CommercialBrewery = () => {
         no_past: 1,
         no_rejected: 0,
         no_employees: 1,
+		no_recipes: 0,
     };
 
     return (
         <div>
             <DashboardHeader />
             <div className={styles.container}>
-                <CommercialSidebar />
+				{localStorage.getItem('userType') === 'commercial_brewery' && <CommercialSidebar />}
+				{localStorage.getItem('userType') === 'contract_brewery' && <ContractSidebar />}
                 <div className={styles.content}>
                     <PageTittleWithButton
                         text="Informacje o browarze"

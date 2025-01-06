@@ -3,12 +3,14 @@ import styles from './AccountInfo.module.css';
 import { useNavigate } from 'react-router-dom';
 
 const AccountInfo = () => {
-    // TODO mock
+    // Mockowane dane
     const accountInfo = {
         username: 'testowy',
         created_at: '2024-01-01T10:00:00.000Z',
         brewery_name: 'ABC',
         brewery_nip: '12345678901',
+        brewery_address: 'Szkolna 1',
+        brewery_ceo: 'Janusz Pijanka',
         brewery_description:
             'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem, tenetur facilis deserunt, dicta dolores, sint at quisquam cumque voluptas inventore vero doloribus. Voluptatem voluptatum deleniti veniam unde fugiat pariatur fuga!',
     };
@@ -26,11 +28,7 @@ const AccountInfo = () => {
                 </p>
                 <p>
                     Data utworzenia konta:{' '}
-                    <b>
-                        {new Date(accountInfo.created_at).toLocaleString(
-                            'pl-PL'
-                        )}
-                    </b>
+                    <b>{new Date(accountInfo.created_at).toLocaleString('pl-PL')}</b>
                 </p>
             </div>
             <div className={styles.section}>
@@ -38,10 +36,24 @@ const AccountInfo = () => {
                 <p>
                     Nazwa browaru: <b>{accountInfo.brewery_name}</b>
                 </p>
-                <p>
-                    NIP: <b>{accountInfo.brewery_nip}</b>
-                </p>
-                <p>
+                {localStorage.getItem('userType') === 'commercial_brewery' && (
+                    <>
+                        <p>
+                            NIP: <b>{accountInfo.brewery_nip}</b>
+                        </p>
+                        <p>
+                            Adres: <b>{accountInfo.brewery_address}</b>
+                        </p>
+                    </>
+                )}
+				{localStorage.getItem('userType') === 'contract_brewery' && (
+                    <>
+                        <p>
+                            CEO: <b>{accountInfo.brewery_ceo}</b>
+                        </p>
+                    </>
+                )}
+				<p>
                     Opis:
                     <p className={styles.descriptionText}>
                         {accountInfo.brewery_description}
