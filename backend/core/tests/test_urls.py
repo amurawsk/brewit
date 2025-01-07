@@ -1,6 +1,6 @@
 from django.urls import reverse, resolve
 from core.views import (
-    LoginView, RegisterCommercialView, CheckUsernameUniqueView, 
+    RegisterCommercialView, CheckUsernameUniqueView, 
     RegisterContractBreweryView, DeviceCreateView, DeviceListForBreweryView, 
     DeviceListAllView, TimeSlotListView, TimeSlotCreateView, DevicesWithTimeSlotsView,
 )

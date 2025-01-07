@@ -1,0 +1,46 @@
+name: Backend CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - backend-configure-tests
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        pip install -r backend/requirements.txt
+
+    - name: Run migrations
+      run: |
+        source .venv/bin/activate
+        python backend/manage.py migrate --noinput
+
+    - name: Run tests
+      run: |
+        source .venv/bin/activate
+        pytest --cov=core --cov-report=xml
+
+    # i could add some formatting/linting actions here
+
+    # - name: Upload code coverage to Codecov (Optional)
+    #   if: success() # Only run if tests pass
+    #   uses: codecov/codecov-action@v3
+    #   with:
+    #     file: coverage.xml # Coverage report file path
