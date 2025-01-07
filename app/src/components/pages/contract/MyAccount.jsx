@@ -22,7 +22,10 @@ const MyAccount = () => {
                 <ContractSidebar />
                 <div className={styles.content}>
                     <PageTittle text="Moje konto" />
-                    <AccountInfo accountInfo={accountInfo} fromPage='contract' />
+                    <AccountInfo
+                        accountInfo={accountInfo}
+                        fromPage="contract"
+                    />
                 </div>
             </div>
         </div>

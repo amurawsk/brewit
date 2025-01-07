@@ -50,7 +50,7 @@ const ShowDeviceDetails = ({
 
     const rateOrder = () => {
         // TODO
-    }
+    };
 
     return (
         <div>
@@ -89,12 +89,10 @@ const ShowDeviceDetails = ({
                             <div className={styles.detailBox}>
                                 <h3>Zleceniobiorca</h3>
                                 <p>
-                                    Nazwa browaru: {order.commercial_brewery_name}
+                                    Nazwa browaru:{' '}
+                                    {order.commercial_brewery_name}
                                 </p>
-                                <p>
-                                    NIP:{' '}
-                                    {order.commercial_brewery_nip}
-                                </p>
+                                <p>NIP: {order.commercial_brewery_nip}</p>
                                 <p>Email: {order.commercial_brewery_email}</p>
                                 <p>
                                     Numer telefonu:{' '}
@@ -167,7 +165,7 @@ const ShowDeviceDetails = ({
                                     onClick={closePanel}
                                     className={styles.backButton}>
                                     Zamknij
-                                </button>                                
+                                </button>
                             </div>
                         )}
                         {order.status === 'C' && (

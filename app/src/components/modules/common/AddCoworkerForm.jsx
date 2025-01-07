@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './AddCoworkerForm.module.css';
 
-const AddCoworkerForm = ({fromPage}) => {
+const AddCoworkerForm = ({ fromPage }) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

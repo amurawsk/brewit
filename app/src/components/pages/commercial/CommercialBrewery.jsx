@@ -72,12 +72,11 @@ const CommercialBrewery = () => {
                             isPanelOpen={isPanelOpen}
                             setIsPanelOpen={setIsPanelOpen}
                             breweryData={breweryData}
-                            fromPage='commercial'
                         />
                     )}
                     <PageTittle text="Statystyki" />
                     {statsData !== null && (
-                        <BreweryShortStats statsData={statsData} fromPage='commercial'/>
+                        <BreweryShortStats statsData={statsData} />
                     )}
                 </div>
             </div>

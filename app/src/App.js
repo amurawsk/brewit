@@ -6,18 +6,19 @@ import {
     Route,
     Navigate,
 } from 'react-router-dom';
-import AboutUs from './components/views/AboutUs';
-import Manual from './components/views/Manual';
-import Register from './components/views/Register';
-import Login from './components/views/Login';
+import AboutUs from './components/pages/AboutUs';
+import Manual from './components/pages/Manual';
+import Register from './components/pages/Register';
+import Login from './components/pages/Login';
 import CommercialDashboard from './components/pages/commercial/CommercialDashboard';
 import ContractDashboard from './components/pages/contract/ContractDashboard';
 import Devices from './components/pages/commercial/Devices';
 import TimeSlots from './components/pages/commercial/TimeSlots';
 import AddDevice from './components/pages/commercial/AddDevice';
+import AddRecipes from './components/AddRecipe';
 import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
 import Orders from './components/pages/commercial/Orders';
-import ContractOrders from './components/pages/contract/Orders'
+import ContractOrders from './components/pages/contract/Orders';
 import Coworkers from './components/pages/commercial/Coworkers';
 import ContractCoworkers from './components/pages/contract/Coworkers';
 import AddCoworker from './components/pages/commercial/AddCoworker';
@@ -26,10 +27,11 @@ import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import ContractBrewery from './components/pages/contract/ContractBrewery';
 import MyAccount from './components/pages/commercial/MyAccount';
 import ContractAccount from './components/pages/contract/MyAccount';
+import Statistics from './components/pages/Statistics';
+import Recipes from './components/pages/contract/Recipes';
+import AddRecipe from './components/pages/contract/AddRecipe';
 
 import './App.css';
-
-
 
 function App() {
     return (
@@ -123,6 +125,95 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                    path="/commercial/statistics"
+                    element={
+                        <ProtectedRoute>
+                            <Statistics />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/account"
+                    element={
+                        <ProtectedRoute>
+                            <MyAccount />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <CommercialDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/recipes"
+                    element={
+                        <ProtectedRoute>
+                            <Recipes />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/recipes/add"
+                    element={
+                        <ProtectedRoute>
+                            <AddRecipe />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/orders"
+                    element={
+                        <ProtectedRoute>
+                            <Orders />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/coworkers"
+                    element={
+                        <ProtectedRoute>
+                            <Coworkers />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/coworkers/add"
+                    element={
+                        <ProtectedRoute>
+                            <AddCoworker />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/brewery"
+                    element={
+                        <ProtectedRoute>
+                            <CommercialBrewery />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/statistics"
+                    element={
+                        <ProtectedRoute>
+                            <Statistics />
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* TODO */}
+                {/* <Route path="/users" element={<Users />} /> */}
+                {/* <Route path="/register_user" element={<RegisterUser />} /> */}
+                {/* <Route path="/cart" element={<Cart />} /> */}
+                {/* <Route path="/contracts" element={<Contracts />} /> */}
+                {/* <Route path="/contract" element={<Contract />} /> */}
+                <Route path="/recipes" element={<Recipes />} />
+                {/* <Route path="/recipe" element={<Recipe />} /> */}
 
                 {/* CONTRACT */}
                 <Route
@@ -173,6 +264,7 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route path="/add_recipes" element={<AddRecipes />} />
             </Routes>
         </Router>
     );

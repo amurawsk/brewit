@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Register.css';
-import NavigationBar from '../modules/NavigationBar.js';
-import ContractForm from '../modules/ContractForm.js';
-import CommercialForm from '../modules/CommercialForm.js';
+import NavigationBar from '../modules/NavigationBar.jsx';
+import ContractForm from '../modules/ContractForm.jsx';
+import CommercialForm from '../modules/CommercialForm.jsx';
 import api from '../../api.js';
+import styles from './Register.module.css';
 
-function Register() {
+const Register = () => {
     const navigate = useNavigate();
 
     const goToAboutUs = () => navigate('/');
@@ -24,6 +24,7 @@ function Register() {
         address: '',
         nameSurname: '',
     });
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleRegister = () => {
         console.log('Dane rejestracyjne:', formData);
@@ -36,6 +37,7 @@ function Register() {
 
     const submitNamePassword = async (event) => {
         event.preventDefault();
+        setErrorMessage('');
         const username = formData.username;
         try {
             const response = await api.post('check-username-unique/', {
@@ -44,7 +46,8 @@ function Register() {
             if (response.data.unique) {
                 setActiveSection('ChooseType');
             } else {
-                // TODO: Handle non-unique username
+                console.log(response);
+                setErrorMessage('Ta nazwa jest już zajęta');
             }
         } catch (error) {
             return error.response;
@@ -52,16 +55,16 @@ function Register() {
     };
 
     return (
-        <div className="register-page">
+        <div className={styles.registerPage}>
             <NavigationBar />
-            <div className="page-wrapper">
+            <div className={styles.pageWrapper}>
                 {activeSection === 'NamePassword' && (
-                    <div className="myform-place">
+                    <div className={styles.myformPlace}>
                         <h4>Zarejestruj się</h4>
-                        <hr className="divider" />
-                        <div className="myform-form">
+                        <hr className={styles.divider} />
+                        <div className={styles.myformForm}>
                             <form
-                                className="myform"
+                                className={styles.myform}
                                 onSubmit={submitNamePassword}>
                                 <div>
                                     <label htmlFor="username">
@@ -99,8 +102,11 @@ function Register() {
                                         required
                                     />
                                 </div>
+                                <div className={styles.errorMessage}>
+                                    {errorMessage}
+                                </div>
                                 <div>
-                                    <div className="chechbox-place">
+                                    <div className={styles.checkboxPlace}>
                                         <input
                                             type="checkbox"
                                             checked={isChecked}
@@ -109,16 +115,18 @@ function Register() {
                                             }
                                             required
                                         />
-                                        <div className="checkbox-text">
+                                        <div className={styles.checkboxText}>
                                             <label>
                                                 Akceptuję regulamin serwisu{' '}
                                             </label>
-                                            <p className="comment">Wymagane</p>
+                                            <p className={styles.comment}>
+                                                Wymagane
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 <button
-                                    className="bigdark-button"
+                                    className={styles.bigDarkButton}
                                     type="submit">
                                     Zarejestruj
                                 </button>
@@ -127,18 +135,18 @@ function Register() {
                     </div>
                 )}
                 {activeSection === 'ChooseType' && (
-                    <div className="myform-place">
+                    <div className={styles.myformPlace}>
                         <h4>Wybierz typ browaru</h4>
-                        <hr className="divider" />
-                        <div className="register-buttongroup">
+                        <hr className={styles.divider} />
+                        <div className={styles.registerButtonGroup}>
                             <button
                                 onClick={() => setActiveSection('Contract')}
-                                className="smalllight-button">
+                                className={styles.smallLightButton}>
                                 Mam browar kontraktowy
                             </button>
                             <button
                                 onClick={() => setActiveSection('Commercial')}
-                                className="smalldark-button">
+                                className={styles.smallDarkButton}>
                                 Mam browar komercyjny
                             </button>
                         </div>
@@ -163,6 +171,6 @@ function Register() {
             </div>
         </div>
     );
-}
+};
 
 export default Register;

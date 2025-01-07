@@ -11,7 +11,7 @@ const ContractDashboard = () => {
                 <ContractSidebar />
                 <div className={styles.content}>
                     {/* TODO */}
-                    Witaj w aplikacji 
+                    Witaj w aplikacji
                 </div>
             </div>
         </div>

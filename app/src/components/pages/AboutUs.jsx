@@ -1,18 +1,18 @@
 import React from 'react';
-import './AboutUs.css';
-import NavigationBar from '../modules/NavigationBar.js';
-import Footer from '../modules/Footer.js';
+import NavigationBar from '../modules/NavigationBar.jsx';
+import Footer from '../modules/Footer.jsx';
+import styles from './AboutUs.module.css';
 
-function AboutUs() {
+const AboutUs = () => {
     return (
-        <div className="aboutus-page">
+        <div className={styles.aboutUsPage}>
             <NavigationBar />
-            <div className="homepage">
-                <div className="homepage-flex">
+            <div className={styles.homepage}>
+                <div className={styles.homepageFlex}>
                     <img
                         src="aboutus.jpg"
                         alt="AboutUs"
-                        className="aboutus-image"
+                        className={styles.aboutUsImage}
                     />
                     <div>
                         <h2>Nasza misja</h2>
@@ -27,6 +27,6 @@ function AboutUs() {
             <Footer />
         </div>
     );
-}
+};
 
 export default AboutUs;

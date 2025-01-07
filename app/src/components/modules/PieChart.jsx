@@ -1,19 +1,40 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import styles from './Orders.module.css';
-import DashboardHeader from '../../modules/DashboardHeader.jsx';
-import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
-import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
-import OrderTypes from '../../modules/common/OrderTypes.jsx';
-import ShowOrders from '../../modules/commercial/ShowOrders.jsx';
+import React from 'react';
+import styles from './PieChart.module.css';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-const Orders = () => {
-    const location = useLocation();
-    const status = location.state?.orderType || 'C';
-    const [activeStatus, setActiveStatus] = useState(status);
+const colorPalette = [
+    '#FFC107',
+    '#FF5722',
+    '#FF7043',
+    '#D7B68A',
+    '#FFCC80',
+    '#6D4C41',
+    '#FFB300',
+    '#FF4500',
+    '#F57C00',
+    '#FF9E80',
+    '#FFD54F',
+    '#FF7043',
+    '#FFA000',
+    '#BF360C',
+    '#FFD180',
+    '#FFE082',
+    '#FF6F00',
+    '#FF9100',
+    '#FB8C00',
+    '#F4511E',
+    '#795548',
+    '#FFEB3B',
+    '#FF9800',
+];
 
-    // TODO mock
+const PieChart = ({ status }) => {
+    let chartData = {};
+    let chartTitle = '';
+
+    /*TODO mock*/
     const orders = [
         {
             id: 1,
@@ -187,29 +208,53 @@ const Orders = () => {
         },
     ];
 
+    const filteredOrders = orders.filter((order) => order.status === 'P');
+
+    if (status === 'R') {
+        chartTitle = 'Liczba udanych i nieudanych warek';
+        const successful = filteredOrders.filter(
+            (order) => order.rate === true
+        ).length;
+        const unsuccessful = filteredOrders.filter(
+            (order) => order.rate === false
+        ).length;
+
+        chartData = {
+            labels: ['Udane', 'Nieudane'],
+            datasets: [
+                {
+                    data: [successful, unsuccessful],
+                    backgroundColor: ['#4caf50', '#f44336'],
+                },
+            ],
+        };
+    } else if (status === 'TB') {
+        const beerTypes = filteredOrders.reduce((acc, order) => {
+            acc[order.beer_type] = (acc[order.beer_type] || 0) + 1;
+            return acc;
+        }, {});
+
+        const labels = Object.keys(beerTypes);
+        const datasetData = Object.values(beerTypes);
+
+        chartTitle = 'Liczba warek dla każdego typu piwa';
+        chartData = {
+            labels: labels,
+            datasets: [
+                {
+                    data: datasetData,
+                    backgroundColor: colorPalette,
+                },
+            ],
+        };
+    }
+
     return (
-        <div>
-            <DashboardHeader />
-            <div className={styles.container}>
-                {localStorage.getItem('userType') === 'commercial_brewery' && (
-                    <CommercialSidebar />
-                )}
-                {localStorage.getItem('userType') === 'contract_brewery' && (
-                    <ContractSidebar />
-                )}
-                <div className={styles.content}>
-                    <div className={styles.tittleButtonContainer}>
-                        <PageTittle text="Zlecenia" />
-                        <OrderTypes
-                            activeStatus={activeStatus}
-                            setActiveStatus={setActiveStatus}
-                        />
-                    </div>
-                    <ShowOrders orders={orders} status={activeStatus} />
-                </div>
-            </div>
+        <div className={styles.pieChartContainer}>
+            <h2>{chartTitle}</h2>
+            <Pie data={chartData} />
         </div>
     );
 };
 
-export default Orders;
+export default PieChart;

@@ -16,19 +16,24 @@ const BreweryInfo = ({ breweryData }) => {
                 <p>
                     Telefon kontaktowy: <b>{breweryData.phone_number}</b>
                 </p>
-                {breweryData.owner_name && (
-                    <p>
-                        Dane właściciela: <b>{breweryData.owner_name}</b>
-                    </p>
+                {localStorage.getItem('userType') === 'commercial_brewery' && (
+                    <>
+                        <p>
+                            NIP: <b>{breweryData.nip}</b>
+                        </p>
+                        <p>
+                            Adres: <b>{breweryData.address}</b>
+                        </p>
+                    </>
                 )}
-                {breweryData.nip && (
-                    <p>
-                        NIP: <b>{breweryData.nip}</b>
-                    </p>
+                {localStorage.getItem('userType') === 'contract_brewery' && (
+                    <>
+                        <p>
+                            Imię i nazwisko właściciela:{' '}
+                            <b>{breweryData.ceo}</b>
+                        </p>
+                    </>
                 )}
-                <p>
-                    Adres: <b>{breweryData.address}</b>
-                </p>
                 <p>
                     Opis:
                     <p className={styles.descriptionText}>

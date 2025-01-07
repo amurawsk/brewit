@@ -1,0 +1,17 @@
+.appContainer {
+    display: flex;
+}
+
+.content {
+    width: 100%;
+    margin: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.noDevicesMessage {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
+}

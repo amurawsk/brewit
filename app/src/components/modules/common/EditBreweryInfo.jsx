@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './EditBreweryInfo.module.css';
 
-const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData, fromPage }) => {
+const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
     const [currentBreweryData, setCurrentBreweryData] = useState(breweryData);
 
     const closePanel = () => {
@@ -86,7 +86,8 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData, fromPage })
                                         required
                                     />
                                 </div>
-                                {fromPage === 'commercial' && (
+                                {localStorage.getItem('userType') ===
+                                    'commercial_brewery' && (
                                     <div>
                                         <label className={styles.dataLabel}>
                                             NIP
@@ -102,7 +103,8 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData, fromPage })
                                         />
                                     </div>
                                 )}
-                                {fromPage === 'contract' && (
+                                {localStorage.getItem('userType') ===
+                                    'contract_brewery' && (
                                     <div>
                                         <label className={styles.dataLabel}>
                                             Dane właściciela
@@ -112,13 +114,15 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData, fromPage })
                                             type="text"
                                             placeholder="Podaj imię i nazwisko właściciela"
                                             name="owner_name"
-                                            value={currentBreweryData.owner_name}
+                                            value={
+                                                currentBreweryData.owner_name
+                                            }
                                             onChange={handleChange}
                                             required
                                         />
                                     </div>
                                 )}
-                                
+
                                 <div>
                                     <label className={styles.dataLabel}>
                                         Adres

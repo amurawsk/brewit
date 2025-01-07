@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavigationBar from '../modules/NavigationBar.js';
+import NavigationBar from '../modules/NavigationBar.jsx';
 import api from '../../api.js';
+import styles from './Login.module.css';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -11,10 +12,11 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleLogin = async (event) => {
         event.preventDefault();
-
+        setErrorMessage('');
         try {
             const response = await api.post('login/', { username, password });
 
@@ -31,13 +33,14 @@ const Login = () => {
                     goToContractBrewery();
                 } else {
                     console.log('ERROR');
-                    // TODO handle error
+                    //GoToSuperuser
                 }
             } else {
                 console.log(response);
-                // TODO: Handle login error
+                // TODO: This never happens because it's handled by try-catch
             }
         } catch (error) {
+            setErrorMessage('Niepoprawne dane logowania');
             console.log(error);
         }
     };
@@ -45,12 +48,12 @@ const Login = () => {
     return (
         <div>
             <NavigationBar />
-            <div className="page-wrapper">
-                <div className="myform-place">
+            <div className={styles.pageWrapper}>
+                <div className={styles.myformPlace}>
                     <h4>Zaloguj się</h4>
-                    <hr className="divider" />
-                    <div className="myform-form">
-                        <form className="myform" onSubmit={handleLogin}>
+                    <hr className={styles.divider} />
+                    <div className={styles.myformForm}>
+                        <form className={styles.myform} onSubmit={handleLogin}>
                             <div>
                                 <label for="username">
                                     <b>Nazwa użytkownika: </b>
@@ -77,11 +80,14 @@ const Login = () => {
                                     name="password"
                                     required></input>
                             </div>
-                            <button type="submit" className="bigdark-button">
+                            <div className={styles.errorMessage}>
+                                {errorMessage}
+                            </div>
+                            <button type="submit" className={styles.darkButton}>
                                 Zaloguj się
                             </button>
                         </form>
-                        <p className="link">
+                        <p className={styles.link}>
                             <a href="/register">
                                 {' '}
                                 Nie masz konta? Zarejestruj się...{' '}
