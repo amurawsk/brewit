@@ -55,8 +55,13 @@ Adding another integration:
 python manage.py makemigrations
 ```
 
-Adding superuser account
+Adding superuser account:
 ```bash
 python manage.py createsuperuser
 ```
 After adding superuser, you can log in by username and password at `/admin` page on server
+
+Running tests (with code coverage stats):
+```bash
+pytest --cov=core
+```

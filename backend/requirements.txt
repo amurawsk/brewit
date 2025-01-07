@@ -9,4 +9,6 @@ sympy==1.13.3
 djangorestframework
 djangorestframework-simplejwt
 django-cors-headers
-
+pytest
+pytest-django
+pytest-cov
