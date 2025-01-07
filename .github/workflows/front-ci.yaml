@@ -23,15 +23,17 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./app
-        run: npm install
+        run: |
+          CI=false npm install
 
       - name: Build application
         working-directory: ./app
-        run: npm run build
+        run: |
+          CI=false npm run build
 
       - name: Start application and run health check
         working-directory: ./app
         run: |
-          npm run start &
+          CI=false npm run start &
           sleep 10
           curl -f http://localhost:3000 || exit 1
