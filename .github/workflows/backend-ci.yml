@@ -40,8 +40,10 @@ jobs:
 
     # i could add some formatting/linting actions here
 
-    # - name: Upload code coverage to Codecov (Optional)
-    #   if: success() # Only run if tests pass
-    #   uses: codecov/codecov-action@v3
-    #   with:
-    #     file: coverage.xml # Coverage report file path
+    - name: Upload code coverage to Codecov (Optional)
+      if: success()
+      uses: codecov/codecov-action@v3
+      with:
+        file: coverage.xml
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}      
