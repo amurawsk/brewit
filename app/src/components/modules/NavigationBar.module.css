@@ -3,7 +3,7 @@
     justify-content: space-between;
     padding: 0.5rem;
     color: #555;
-    box-shadow: 0 2px 5px #ddd; /*remove this and the upper one if we dont want the line*/
+    box-shadow: 0 2px 5px #ddd;
 }
 
 .logo {

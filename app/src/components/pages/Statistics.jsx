@@ -51,7 +51,7 @@ const Statistics = () => {
 								activeStatus={activeStatus}
 								setActiveStatus={setActiveStatus}
 							/>
-							<Histogram status={activeStatus}/> {/* Przekazanie activeStatus */}
+							<Histogram status={activeStatus}/>
 						</div>
 					)}
 

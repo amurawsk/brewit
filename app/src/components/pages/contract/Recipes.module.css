@@ -9,19 +9,9 @@
     box-sizing: border-box;
 }
 
-.content {
-    width: 100%;
-    margin: 0;
-    padding: 0 10px;
-    box-sizing: border-box;
-}
-
-.tittleButtonContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-left: 10px;
-    margin-right: 10px;
+.noDevicesMessage {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
 }

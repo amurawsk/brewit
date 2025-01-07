@@ -226,7 +226,7 @@ function App() {
                     path="/piece_of_equipment"
                     element={<PieceOfEquipment />}
                 />
-                <Route path="/add_recipes" element={<AddRecipe />} />
+                <Route path="/add_recipes" element={<AddRecipes />} />
             </Routes>
         </Router>
     );

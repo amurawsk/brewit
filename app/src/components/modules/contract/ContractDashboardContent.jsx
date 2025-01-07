@@ -9,7 +9,7 @@ const ContractDashboardContent = () => {
     const navigate = useNavigate();
     const addCoworker = () => navigate('/contract/coworkers/add');
     const goToOrders = () => navigate('/contract/orders');
-    const addRecipe = () => navigate('/contract/recipe/add');
+    const addRecipe = () => navigate('/contract/recipes/add');
 
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -235,9 +235,9 @@ const ContractDashboardContent = () => {
                 </div>
             </div>
 
-            {/*<div className={styles.content}>
+            <div className={styles.content}>
                 <div className={styles.section}>
-                    /*<h3>Nowe zlecenia</h3>
+                    <h3>Nowe zlecenia</h3>
                     <div className={styles.grid}>
                         {newOrders.map((order, index) => (
                             <div
@@ -306,7 +306,7 @@ const ContractDashboardContent = () => {
                         Wyświetl wszystkie aktualne zlecenia...
                     </span>
                 </div>
-            </div>*/}
+            </div>
             <ShowOrderDetails
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}

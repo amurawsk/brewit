@@ -29,7 +29,7 @@ const BreweryInfo = ({ breweryData }) => {
 				{localStorage.getItem('userType') === 'contract_brewery' && (
                     <>
                         <p>
-                            CEO: <b>{breweryData.ceo}</b>
+                            Imię i nazwisko właściciela: <b>{breweryData.ceo}</b>
                         </p>
                     </>
                 )}
