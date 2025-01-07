@@ -1,0 +1,72 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 10px;
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 5px;
+    overflow-wrap: break-word;
+}
+
+p {
+    margin: 5px 0;
+    font-size: 1rem;
+    color: #666;
+    overflow-wrap: break-word;
+}
+
+b {
+    color: #333;
+}
+
+.greenThumb {
+    color: green;
+}
+
+.redThumb {
+    color: red;
+}
+
+.emptyRate {
+    color: #333;
+}
+
+.noOrdersMessage {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
+}

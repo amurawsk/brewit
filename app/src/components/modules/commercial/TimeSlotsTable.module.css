@@ -1,0 +1,62 @@
+.tableContainer {
+    overflow-x: hidden;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.scrollableTable {
+    overflow-y: auto;
+    max-height: 100vh;
+    border-radius: 5px;
+}
+
+.table {
+    margin-top: 5px;
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: auto;
+}
+
+.tableTh {
+    text-align: center;
+    background-color: #333;
+    color: white;
+    min-width: 120px;
+    white-space: nowrap;
+}
+
+.deviceTableTd {
+    height: 80px;
+    text-align: center;
+    word-wrap: break-word;
+    background-color: #f8f9fa;
+    color: black;
+    min-width: 120px;
+    max-width: 160px;
+}
+
+.defaultSlot,
+.activeAvailableSlot,
+.activeReservedSlot,
+.activeTakenSlot {
+    height: 60px;
+    border-radius: 5px;
+    min-width: 100px;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.activeAvailableSlot {
+    cursor: pointer;
+    background-color: green;
+}
+
+.activeReservedSlot {
+    cursor: pointer;
+    background-color: orange;
+}
+
+.activeTakenSlot {
+    cursor: pointer;
+    background-color: red;
+}

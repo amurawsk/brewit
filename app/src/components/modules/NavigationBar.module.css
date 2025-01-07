@@ -1,0 +1,68 @@
+.navigationBar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    color: #555;
+    box-shadow: 0 2px 5px #ddd;
+}
+
+.logo {
+    margin-left: 0.5rem;
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.rest {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.menu {
+    display: flex;
+    margin: 0;
+    gap: 1rem;
+    list-style: none;
+    cursor: pointer;
+}
+
+.menu li:hover {
+    color: #000;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.lightButton {
+    font-size: 0.9rem;
+    padding: 0.3rem 1rem;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    color: #333;
+    border-radius: 0.3rem;
+    transition: background-color 0.3s;
+}
+
+.lightButton:hover {
+    background-color: #e2e6ea;
+}
+
+.darkButton {
+    font-size: 0.9rem;
+    padding: 0.3rem 1rem;
+    cursor: pointer;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 0.3rem;
+    transition: background-color 0.3s;
+}
+
+.darkButton:hover {
+    background-color: #555;
+}

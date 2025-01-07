@@ -1,0 +1,68 @@
+.timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.event {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.event::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    width: 1px;
+    height: 100%;
+    background-color: #ccc;
+    transform: translateY(-50%);
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+}
+
+.upcoming {
+    background-color: gray;
+}
+
+.completed {
+    background-color: green;
+}
+
+.inProgress {
+    background-color: blue;
+}
+
+.cancelled {
+    background-color: red;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+}
+
+.status {
+    font-weight: bold;
+}
+
+.time {
+    color: gray;
+}
+
+.line {
+    width: 100%;
+    background-color: #ccc;
+    margin-top: 20px;
+}

@@ -1,0 +1,35 @@
+.addCoworkerForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.addCoworkerLabel {
+    color: #222;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.addCoworkerInput {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0.5rem;
+    margin-bottom: 10px;
+}
+
+.addCoworkerButton {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    width: 100%;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    height: 40px;
+    cursor: pointer;
+}
+
+.addCoworkerButton:hover {
+    background-color: #555;
+}

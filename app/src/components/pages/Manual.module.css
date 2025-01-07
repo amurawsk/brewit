@@ -1,0 +1,13 @@
+.homepage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    height: 60vh;
+}
+
+.homepage h2 {
+    color: #000;
+}

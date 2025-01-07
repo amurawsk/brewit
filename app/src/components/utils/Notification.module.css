@@ -1,0 +1,39 @@
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: white;
+    border: 2px solid blue;
+    color: blue;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    z-index: 1000;
+    animation:
+        fadeIn 0.5s,
+        fadeOut 0.5s 1.5s;
+    max-width: 300px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
