@@ -15,7 +15,6 @@ import ContractDashboard from './components/pages/contract/ContractDashboard';
 import Devices from './components/pages/commercial/Devices';
 import TimeSlots from './components/pages/commercial/TimeSlots';
 import AddDevice from './components/pages/commercial/AddDevice';
-import AddRecipes from './components/AddRecipe';
 import AddTimeSlot from './components/pages/commercial/AddTimeSlot';
 import Orders from './components/pages/commercial/Orders';
 import ContractOrders from './components/pages/contract/Orders';
@@ -128,92 +127,11 @@ function App() {
                 <Route
                     path="/commercial/statistics"
                     element={
-                        <ProtectedRoute>
+                        <ProtectedRoute requiredType="contract_brewery">
                             <Statistics />
                         </ProtectedRoute>
                     }
                 />
-                <Route
-                    path="/contract/account"
-                    element={
-                        <ProtectedRoute>
-                            <MyAccount />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/dashboard"
-                    element={
-                        <ProtectedRoute>
-                            <CommercialDashboard />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/recipes"
-                    element={
-                        <ProtectedRoute>
-                            <Recipes />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/recipes/add"
-                    element={
-                        <ProtectedRoute>
-                            <AddRecipe />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/orders"
-                    element={
-                        <ProtectedRoute>
-                            <Orders />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/coworkers"
-                    element={
-                        <ProtectedRoute>
-                            <Coworkers />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/coworkers/add"
-                    element={
-                        <ProtectedRoute>
-                            <AddCoworker />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/brewery"
-                    element={
-                        <ProtectedRoute>
-                            <CommercialBrewery />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/contract/statistics"
-                    element={
-                        <ProtectedRoute>
-                            <Statistics />
-                        </ProtectedRoute>
-                    }
-                />
-
-                {/* TODO */}
-                {/* <Route path="/users" element={<Users />} /> */}
-                {/* <Route path="/register_user" element={<RegisterUser />} /> */}
-                {/* <Route path="/cart" element={<Cart />} /> */}
-                {/* <Route path="/contracts" element={<Contracts />} /> */}
-                {/* <Route path="/contract" element={<Contract />} /> */}
-                <Route path="/recipes" element={<Recipes />} />
-                {/* <Route path="/recipe" element={<Recipe />} /> */}
 
                 {/* CONTRACT */}
                 <Route
@@ -229,6 +147,22 @@ function App() {
                     element={
                         <ProtectedRoute requiredType="contract_brewery">
                             <ContractDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/recipes"
+                    element={
+                        <ProtectedRoute requiredType="contract_brewery">
+                            <Recipes />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/recipes/add"
+                    element={
+                        <ProtectedRoute requiredType="contract_brewery">
+                            <AddRecipe />
                         </ProtectedRoute>
                     }
                 />
@@ -264,7 +198,14 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-                <Route path="/add_recipes" element={<AddRecipes />} />
+                <Route
+                    path="/contract/statistics"
+                    element={
+                        <ProtectedRoute requiredType="contract_brewery">
+                            <Statistics />
+                        </ProtectedRoute>
+                    }
+                />
             </Routes>
         </Router>
     );

@@ -21,7 +21,7 @@ const AddCoworker = () => {
                 )}
                 <div className={styles.content}>
                     <PageTittle text="Dodaj współpracownika" />
-                    <AddCoworkerForm fromPage="commercial" />
+                    <AddCoworkerForm />
                 </div>
             </div>
         </div>

@@ -15,7 +15,7 @@ const AddCoworker = () => {
                 <ContractSidebar />
                 <div className={styles.content}>
                     <PageTittle text="Dodaj współpracownika" />
-                    <AddCoworkerForm fromPage="contract" />
+                    <AddCoworkerForm />
                 </div>
             </div>
         </div>

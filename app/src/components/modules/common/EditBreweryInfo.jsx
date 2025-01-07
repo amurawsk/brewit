@@ -114,9 +114,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                             type="text"
                                             placeholder="Podaj imię i nazwisko właściciela"
                                             name="owner_name"
-                                            value={
-                                                currentBreweryData.owner_name
-                                            }
+                                            value={currentBreweryData.ceo}
                                             onChange={handleChange}
                                             required
                                         />

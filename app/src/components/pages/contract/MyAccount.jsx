@@ -6,11 +6,12 @@ import PageTittle from '../../utils/PageTittle.jsx';
 import AccountInfo from '../../modules/common/AccountInfo.jsx';
 
 const MyAccount = () => {
+    // Mockowane dane
     const accountInfo = {
         username: 'testowy',
         created_at: '2024-01-01T10:00:00.000Z',
         brewery_name: 'ABC',
-        brewery_owner_name: 'Jan Kowalski',
+        brewery_ceo: 'Janusz Pijanka',
         brewery_description:
             'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem, tenetur facilis deserunt, dicta dolores, sint at quisquam cumque voluptas inventore vero doloribus. Voluptatem voluptatum deleniti veniam unde fugiat pariatur fuga!',
     };
@@ -22,10 +23,7 @@ const MyAccount = () => {
                 <ContractSidebar />
                 <div className={styles.content}>
                     <PageTittle text="Moje konto" />
-                    <AccountInfo
-                        accountInfo={accountInfo}
-                        fromPage="contract"
-                    />
+                    <AccountInfo accountInfo={accountInfo} />
                 </div>
             </div>
         </div>

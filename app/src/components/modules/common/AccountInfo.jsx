@@ -2,19 +2,7 @@ import React from 'react';
 import styles from './AccountInfo.module.css';
 import { useNavigate } from 'react-router-dom';
 
-const AccountInfo = () => {
-    // Mockowane dane
-    const accountInfo = {
-        username: 'testowy',
-        created_at: '2024-01-01T10:00:00.000Z',
-        brewery_name: 'ABC',
-        brewery_nip: '12345678901',
-        brewery_address: 'Szkolna 1',
-        brewery_ceo: 'Janusz Pijanka',
-        brewery_description:
-            'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem, tenetur facilis deserunt, dicta dolores, sint at quisquam cumque voluptas inventore vero doloribus. Voluptatem voluptatum deleniti veniam unde fugiat pariatur fuga!',
-    };
-
+const AccountInfo = ({ accountInfo }) => {
     const navigate = useNavigate();
 
     const goToBrewery = () => {

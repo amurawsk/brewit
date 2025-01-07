@@ -21,7 +21,7 @@ const CommercialBrewery = () => {
             name: 'Przykład',
             email: 'example@gmail.com',
             phone_number: '123456789',
-            owner_name: 'Jan Kowalski',
+            ceo: 'Jan Kowalski',
             address: 'Szkolna 1',
             description:
                 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate mollitia velit corrupti harum possimus ipsam nisi odit explicabo fugiat ea, tempora facilis accusantium perferendis voluptas minima, nam ratione numquam aliquid.',
@@ -67,15 +67,11 @@ const CommercialBrewery = () => {
                             isPanelOpen={isPanelOpen}
                             setIsPanelOpen={setIsPanelOpen}
                             breweryData={breweryData}
-                            fromPage="contract"
                         />
                     )}
                     <PageTittle text="Statystyki" />
                     {statsData !== null && (
-                        <BreweryShortStats
-                            statsData={statsData}
-                            fromPage="contract"
-                        />
+                        <BreweryShortStats statsData={statsData} />
                     )}
                 </div>
             </div>
