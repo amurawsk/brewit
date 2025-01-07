@@ -17,11 +17,6 @@ from .serializers import (
 )
 
 
-# Create your views here.
-def index(request):
-    return HttpResponse("Hello, world. Welcome to the index page")
-
-
 class RegisterCommercialView(APIView):
     permission_classes = [AllowAny]
 
