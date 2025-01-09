@@ -41,8 +41,6 @@ jobs:
     # i could add some formatting/linting actions here
 
     - name: Upload code coverage to Codecov
-      if: success()
       uses: codecov/codecov-action@v5
       with:
-        file: coverage.xml
-        token: ${{ secrets.CODECOV_TOKEN }}      
+        token: ${{ secrets.CODECOV_TOKEN }}
