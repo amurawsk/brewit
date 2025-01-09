@@ -10,10 +10,11 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-bottom: 10px;
-    width: 100%;
+	width: 60vw;
     box-sizing: border-box;
     word-wrap: break-word;
     overflow-wrap: break-word;
+	margin-top: 0.5rem;
 }
 
 .recipe:hover {
@@ -59,6 +60,12 @@
     background-color: darkred;
 }
 
+.addStepContainer {
+	display: flex;
+	gap: 1rem;
+	margin-left: 1rem;
+}
+
 .editButton {
     background-color: darkgrey;
     color: white;
@@ -72,9 +79,4 @@
 
 .editButton:hover {
     background-color: grey;
-}
-
-.buttonGroup {
-	display: flex;
-	gap: 1rem;
 }

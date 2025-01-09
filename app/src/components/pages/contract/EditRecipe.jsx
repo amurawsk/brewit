@@ -1,21 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import styles from './AddRecipe.module.css';
+import styles from './EditRecipe.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import AddRecipeForm from '../../modules/contract/AddRecipeForm.jsx';
 import PageTittle from '../../utils/PageTittle.jsx';
 
-const AddRecipe = () => {
+const EditRecipe = () => {
+    const location = useLocation();
+    const { recipe } = location.state || {};
+
+    const [editedRecipe, setEditedRecipe] = useState(recipe || {});
+
     return (
         <div>
             <DashboardHeader />
             <div className={styles.container}>
                 <ContractSidebar />
                 <div className={styles.addEquipment}>
-                    <PageTittle text="Dodaj przepis" />
+                    <PageTittle text="Edytuj przepis" />
                     <AddRecipeForm 
-						isEditing={true}
+						recipe={editedRecipe}
+						isEditing={false}
 					/>
                 </div>
             </div>
@@ -23,4 +30,4 @@ const AddRecipe = () => {
     );
 };
 
-export default AddRecipe;
+export default EditRecipe;

@@ -80,6 +80,7 @@
     cursor: pointer;
     padding: 0.4rem 1.2rem;
     font-size: 14px;
+    margin-left: 10px;
 }
 
 .cancelButton:hover {
@@ -104,6 +105,25 @@
 .okButton:hover {
     background-color: black;
     color: white;
+}
+
+.editButton {
+    background-color: white;
+    color: green;
+    border: 1px solid green;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.editButton:hover {
+    background-color: lightgreen;
 }
 
 .stages_orders_titles {

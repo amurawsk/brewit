@@ -20,7 +20,7 @@ const Recipes = () => {
             id: 1,
             name: 'Przepis na piwo',
             full_time: '2 tygodnie',
-            full_volume: '20L',
+            full_volume: 20,
             steps: [
                 {
                     name: 'Przygotowanie brzeczki',
@@ -29,10 +29,10 @@ const Recipes = () => {
                     description:
                         'Gotuj wodę i dodaj składniki, aby przygotować brzeczkę.',
                     ingredients: [
-                        { name: 'Woda', amount: '15L' },
-                        { name: 'Słód jęczmienny', amount: '3kg' },
-                        { name: 'Chmiel', amount: '50g' },
-                        { name: 'Drożdże piwne', amount: '10g' },
+                        { name: 'Woda', quantity: '15L' },
+                        { name: 'Słód jęczmienny', quantity: '3kg' },
+                        { name: 'Chmiel', quantity: '50g' },
+                        { name: 'Drożdże piwne', quantity: '10g' },
                     ],
                 },
                 {
@@ -42,8 +42,8 @@ const Recipes = () => {
                     description:
                         'Przenieś brzeczkę do fermentora i pozostaw do fermentacji.',
                     ingredients: [
-                        { name: 'Brzeczka', amount: '20L' },
-                        { name: 'Drożdże piwne', amount: '10g' },
+                        { name: 'Brzeczka', quantity: '20L' },
+                        { name: 'Drożdże piwne', quantity: '10g' },
                     ],
                 },
                 {
@@ -53,8 +53,8 @@ const Recipes = () => {
                     description:
                         'Zabutelkowanie piwa i dodanie cukru do refermentacji.',
                     ingredients: [
-                        { name: 'Piwo po fermentacji', amount: '20L' },
-                        { name: 'Cukier', amount: '50g' },
+                        { name: 'Piwo po fermentacji', quantity: '20L' },
+                        { name: 'Cukier', quantity: '50g' },
                     ],
                 },
                 {
@@ -63,7 +63,7 @@ const Recipes = () => {
                     time: '1-2 tygodnie',
                     description:
                         'Pozostaw piwo w butelkach do pełnego dojrzenia.',
-                    ingredients: [{ name: 'Piwo w butelkach', amount: '20L' }],
+                    ingredients: [{ name: 'Piwo w butelkach', quantity: '20L' }],
                 },
             ],
         },

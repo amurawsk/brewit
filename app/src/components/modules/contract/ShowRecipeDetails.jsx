@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './ShowRecipeDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import ConfirmModal from '../../utils/ConfirmModal';
@@ -13,6 +14,12 @@ const ShowRecipeDetails = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+
+    const navigate = useNavigate();
+
+	const handleEdit = () => {
+		navigate('/contract/recipes/edit', { state: { recipe } });
+	};
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -237,7 +244,7 @@ const ShowRecipeDetails = ({
                                 <h3>Szczegóły przepisu</h3>
                                 <p>Nazwa przepisu: {recipe.name}</p>
                                 <p>Całkowity czas: {recipe.full_time}</p>
-                                <p>Całkowita objętość: {recipe.full_volume}</p>
+                                <p>Całkowita objętość: {recipe.full_volume} L</p>
                             </div>
                         </div>
 
@@ -346,7 +353,13 @@ const ShowRecipeDetails = ({
                                 )}
                             </div>
                         </div>
-                        <div className={styles.currentOrderButtonGroup}>
+
+						<div className={styles.buttonGroup}>
+							<button
+								onClick={handleEdit}
+								className={styles.editButton}>
+								Edytuj
+							</button>
                             <button
                                 onClick={() => handleAction('cancel')}
                                 className={styles.cancelButton}>

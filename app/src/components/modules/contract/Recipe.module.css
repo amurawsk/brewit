@@ -59,6 +59,12 @@
     background-color: darkred;
 }
 
+.buttonGroup {
+	display: flex;
+	gap: 1rem;
+	margin-left: 1rem;
+}
+
 .editButton {
     background-color: darkgrey;
     color: white;
@@ -72,9 +78,4 @@
 
 .editButton:hover {
     background-color: grey;
-}
-
-.buttonGroup {
-	display: flex;
-	gap: 1rem;
 }
