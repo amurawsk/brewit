@@ -84,6 +84,7 @@ class LoginView(APIView):
             user = serializer.validated_data['user']
             user_type = serializer.validated_data['user_type']
             user_id = serializer.validated_data['user_id']
+            brewery_id = serializer.validated_data['brewery_id']
             refresh = RefreshToken.for_user(user)
 
             return Response(
@@ -93,6 +94,7 @@ class LoginView(APIView):
                     "message": "Login successful!",
                     "user_type": user_type,
                     "user_id": user_id,
+                    "brewery_id": brewery_id
                 },
                 status=status.HTTP_200_OK,
             )
