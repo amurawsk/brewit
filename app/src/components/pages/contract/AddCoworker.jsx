@@ -7,6 +7,9 @@ import PageTittle from '../../utils/PageTittle.jsx';
 import styles from './AddCoworker.module.css';
 import AddCoworkerForm from '../../modules/common/AddCoworkerForm.jsx';
 
+/**
+ * Add Coworker page - contains layout (Header, Sidebar, Tittle) and form which allows to add coworker
+ */
 const AddCoworker = () => {
     return (
         <div>

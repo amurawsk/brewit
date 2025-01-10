@@ -5,6 +5,9 @@ import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTittle from '../../utils/PageTittle.jsx';
 import AccountInfo from '../../modules/common/AccountInfo.jsx';
 
+/**
+ * Account page - contains layout (Dashboard, Sidebar, Tittle), displays account details and most important brewery info
+ */
 const MyAccount = () => {
     // Mockowane dane
     const accountInfo = {

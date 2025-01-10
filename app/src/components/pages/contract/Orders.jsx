@@ -7,6 +7,9 @@ import PageTittle from '../../utils/PageTittle.jsx';
 import OrderTypes from '../../modules/common/OrderTypes.jsx';
 import ShowOrders from '../../modules/contract/ShowOrders.jsx';
 
+/**
+ * Orders page - contains layout (Header, Sidebar, Tittle), displays orders (new, current, past, rejected)
+ */
 const Orders = () => {
     const location = useLocation();
     const status = location.state?.orderType || 'C';

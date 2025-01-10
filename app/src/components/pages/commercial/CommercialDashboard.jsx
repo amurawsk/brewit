@@ -6,6 +6,9 @@ import CommercialDashboardContent from '../../modules/commercial/CommercialDashb
 import ContractDashboardContent from '../../modules/contract/ContractDashboardContent.jsx';
 import styles from './CommercialDashboard.module.css';
 
+/**
+ * Dashboard for Commercial Brewery - contains layout (Header, Sidebar) and DashboardContent
+ */
 const CommercialDashboard = () => {
     return (
         <div>

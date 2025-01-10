@@ -8,6 +8,9 @@ import ShowDeviceDetails from '../../modules/commercial/ShowDeviceDetails.jsx';
 import styles from './Devices.module.css';
 import api from '../../../api.js';
 
+/**
+ * Devices page - contains layout (Header, Sidebar, Tittle, Button), displays devices for given brewery
+ */
 const Devices = () => {
     const navigate = useNavigate();
 

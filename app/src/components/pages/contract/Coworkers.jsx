@@ -6,6 +6,9 @@ import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
 import ShowCoworkers from '../../modules/common/ShowCoworkers.jsx';
 
+/**
+ * Coworkers page - contains layout (Header, Sidebar, Tittle, Button), displays coworkers for given brewery & user
+ */
 const Coworkers = () => {
     const navigate = useNavigate();
 

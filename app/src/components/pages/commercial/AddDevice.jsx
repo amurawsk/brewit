@@ -6,6 +6,9 @@ import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import AddDeviceForm from '../../modules/commercial/AddDeviceForm.jsx';
 import PageTittle from '../../utils/PageTittle.jsx';
 
+/**
+ * Add Device page - contains layout (Header, Sidebar, Tittle) and form which allows to add device
+ */
 const AddDevice = () => {
     return (
         <div>

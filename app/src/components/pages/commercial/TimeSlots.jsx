@@ -8,6 +8,9 @@ import TimeSlotsTable from '../../modules/commercial/TimeSlotsTable.jsx';
 
 import styles from './TimeSlots.module.css';
 
+/**
+ * TimeSlots page - contains layout (Header, Sidebar, Tittle, Button), displays date navigator and time slots table
+ */
 const TimeSlots = () => {
     const navigate = useNavigate();
     const addTimeSlot = () => navigate('/commercial/time_slots/add');

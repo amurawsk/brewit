@@ -8,6 +8,9 @@ import PageTittle from '../../utils/PageTittle.jsx';
 
 import styles from './AddTimeSlot.module.css';
 
+/**
+ * Add TimeSlot page - contains layout (Header, Sidebar, Tittle) and form which allows to add time slot
+ */
 const AddTimeSlot = () => {
     return (
         <div>

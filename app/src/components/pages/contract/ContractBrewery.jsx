@@ -10,6 +10,9 @@ import BreweryShortStats from '../../modules/common/BreweryShortStats.jsx';
 
 import styles from './ContractBrewery.module.css';
 
+/**
+ * Contract Brewery page - allows to view or edit brewery data, contains layout (Header, Sidebar, Tittle, Button) and BreweryInfo, BreweryShortStats components
+ */
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
