@@ -63,19 +63,28 @@ function StepsList({
                                 </span>
                                 <span className={styles.recipeDescription}>
                                     Urządzenie:{' '}
-                                    <span className={styles.recipeDescriptionValue}>
+                                    <span
+                                        className={
+                                            styles.recipeDescriptionValue
+                                        }>
                                         {step.device}
                                     </span>
                                 </span>
                                 <span className={styles.recipeDescription}>
                                     Czas:{' '}
-                                    <span className={styles.recipeDescriptionValue}>
+                                    <span
+                                        className={
+                                            styles.recipeDescriptionValue
+                                        }>
                                         {step.time}
                                     </span>
                                 </span>
                                 <span className={styles.recipeDescription}>
                                     Opis:{' '}
-                                    <span className={styles.recipeDescriptionValue}>
+                                    <span
+                                        className={
+                                            styles.recipeDescriptionValue
+                                        }>
                                         {step.description}
                                     </span>
                                 </span>
@@ -83,32 +92,33 @@ function StepsList({
                                     ingredients={step.ingredients}
                                     handleEditIngredient={handleEditIngredient}
                                     stepIndex={index}
-                                    handleDeleteIngredient={handleDeleteIngredient}
+                                    handleDeleteIngredient={
+                                        handleDeleteIngredient
+                                    }
                                 />
                             </div>
                             <div className={styles.addStepContainer}>
                                 <button
                                     className={styles.editButton}
-                                    onClick={() => handleEditStep(index)}
-                                >
+                                    onClick={() => handleEditStep(index)}>
                                     Edytuj
                                 </button>
                                 <button
                                     className={styles.removeButton}
-                                    onClick={() => handleDeleteButton(index)}
-                                >
+                                    onClick={() => handleDeleteButton(index)}>
                                     Usuń
                                 </button>
                             </div>
                         </div>
-                        {!isEditingIngredient && !isEditingStep && !isEditingRecipe && (
-                            <button
-                                className={styles.insertDeviceButton}
-                                onClick={() => handleAddIngredient(index)}
-                            >
-                                Dodaj składnik
-                            </button>
-                        )}
+                        {!isEditingIngredient &&
+                            !isEditingStep &&
+                            !isEditingRecipe && (
+                                <button
+                                    className={styles.insertDeviceButton}
+                                    onClick={() => handleAddIngredient(index)}>
+                                    Dodaj składnik
+                                </button>
+                            )}
                         {isEditingStep && stepIndex === index && (
                             <AddEditStep
                                 stepIndex={stepIndex}

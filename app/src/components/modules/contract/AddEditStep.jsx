@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AddEditStep.module.css';
 
-function AddEditStep({
-    stepIndex,
-    step,
-    handleSubmit,
-    handleCancel,
-}) {
+function AddEditStep({ stepIndex, step, handleSubmit, handleCancel }) {
     const [localStepData, setLocalStepData] = useState({
         name: '',
         device: '',
@@ -62,13 +57,20 @@ function AddEditStep({
                     name="device"
                     value={localStepData.device}
                     onChange={handleChange}
-                    required
-                >
-                    <option value="" disabled>Wybierz typ</option>
+                    required>
+                    <option value="" disabled>
+                        Wybierz typ
+                    </option>
                     <option value="Tank Warzelny">Tank Warzelny</option>
-                    <option value="Pojemnik fermentacyjny">Pojemnik fermentacyjny</option>
-                    <option value="Kocioł do leżakowania">Kocioł do leżakowania</option>
-                    <option value="Urządzenie do rozlewania">Urządzenie do rozlewania</option>
+                    <option value="Pojemnik fermentacyjny">
+                        Pojemnik fermentacyjny
+                    </option>
+                    <option value="Kocioł do leżakowania">
+                        Kocioł do leżakowania
+                    </option>
+                    <option value="Urządzenie do rozlewania">
+                        Urządzenie do rozlewania
+                    </option>
                 </select>
             </div>
             <div>
@@ -86,7 +88,9 @@ function AddEditStep({
                 />
             </div>
             <div>
-                <label className={styles.addEquipmentLabel} htmlFor="description">
+                <label
+                    className={styles.addEquipmentLabel}
+                    htmlFor="description">
                     <b>Opis etapu: </b>
                 </label>
                 <input
@@ -104,8 +108,7 @@ function AddEditStep({
                 <button
                     type="button"
                     className={styles.insertDeviceButton}
-                    onClick={onCancel}
-                >
+                    onClick={onCancel}>
                     Anuluj
                 </button>
             </div>

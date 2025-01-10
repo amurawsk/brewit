@@ -6,11 +6,11 @@ function AddEditIngredient({
     ingredient,
     stepIndex,
     handleSubmit,
-    handleCancel
+    handleCancel,
 }) {
     const [localIngredientData, setLocalIngredientData] = useState({
         name: '',
-        quantity: ''
+        quantity: '',
     });
 
     useEffect(() => {
@@ -39,9 +39,7 @@ function AddEditIngredient({
     return (
         <form onSubmit={onSubmit} className={styles.addDeviceForm}>
             <h4>
-                {ingredientId !== null
-                    ? 'Edytuj składnik'
-                    : 'Dodaj składnik'}
+                {ingredientId !== null ? 'Edytuj składnik' : 'Dodaj składnik'}
             </h4>
             <div>
                 <label className={styles.addEquipmentLabel} htmlFor="name">
@@ -73,13 +71,14 @@ function AddEditIngredient({
             </div>
             <div className={styles.buttonGroup}>
                 <button type="submit" className={styles.insertDeviceButton}>
-                    {ingredientId !== null ? 'Zaktualizuj składnik' : 'Dodaj składnik'}
+                    {ingredientId !== null
+                        ? 'Zaktualizuj składnik'
+                        : 'Dodaj składnik'}
                 </button>
                 <button
                     type="button"
                     className={styles.insertDeviceButton}
-                    onClick={onCancel}
-                >
+                    onClick={onCancel}>
                     Anuluj
                 </button>
             </div>

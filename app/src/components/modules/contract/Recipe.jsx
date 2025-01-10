@@ -3,11 +3,7 @@ import styles from './Recipe.module.css';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
 
-function Recipe({
-    recipe,
-    handleEditRecipe,
-    handleDeleteRecipe
-}) {
+function Recipe({ recipe, handleEditRecipe, handleDeleteRecipe }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
@@ -53,14 +49,12 @@ function Recipe({
                 <div className={styles.buttonGroup}>
                     <button
                         className={styles.editButton}
-                        onClick={() => handleEditRecipe()}
-                    >
+                        onClick={() => handleEditRecipe()}>
                         Edytuj
                     </button>
                     <button
                         className={styles.removeButton}
-                        onClick={() => setIsModalOpen(true)}
-                    >
+                        onClick={() => setIsModalOpen(true)}>
                         Usuń
                     </button>
                 </div>

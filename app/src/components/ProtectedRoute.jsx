@@ -10,12 +10,12 @@ function ProtectedRoute({ children, requiredType }) {
     useEffect(() => {
         const refreshToken = async () => {
             const refreshToken = localStorage.getItem('REFRESH_TOKEN');
-    
+
             if (!refreshToken) {
                 handleUnauthorized();
                 return;
             }
-    
+
             try {
                 const response = await api.post('token/refresh/', {
                     refresh: refreshToken,
@@ -26,7 +26,7 @@ function ProtectedRoute({ children, requiredType }) {
                 handleUnauthorized();
             }
         };
-    
+
         const checkUserType = () => {
             const userType = localStorage.getItem('userType');
             if (userType === requiredType) {

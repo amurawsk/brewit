@@ -14,9 +14,7 @@ const AddRecipe = () => {
                 <ContractSidebar />
                 <div className={styles.addEquipment}>
                     <PageTittle text="Dodaj przepis" />
-                    <AddRecipeForm 
-						isEditing={true}
-					/>
+                    <AddRecipeForm isEditing={true} />
                 </div>
             </div>
         </div>

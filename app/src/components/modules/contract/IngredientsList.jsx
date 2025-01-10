@@ -11,7 +11,8 @@ function IngredientsList({
 }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const [ingredientIndexToDelete, setIngredientIndexToDelete] = useState(null);
+    const [ingredientIndexToDelete, setIngredientIndexToDelete] =
+        useState(null);
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -54,14 +55,14 @@ function IngredientsList({
                     <div className={styles.addStepContainer}>
                         <button
                             className={styles.editButton}
-                            onClick={() => handleEditIngredient(stepIndex, idx)}
-                        >
+                            onClick={() =>
+                                handleEditIngredient(stepIndex, idx)
+                            }>
                             Edytuj
                         </button>
                         <button
                             className={styles.removeButton}
-                            onClick={() => handleDeleteButton(idx)}
-                        >
+                            onClick={() => handleDeleteButton(idx)}>
                             Usuń
                         </button>
                     </div>

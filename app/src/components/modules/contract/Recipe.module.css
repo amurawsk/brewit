@@ -60,9 +60,9 @@
 }
 
 .buttonGroup {
-	display: flex;
-	gap: 1rem;
-	margin-left: 1rem;
+    display: flex;
+    gap: 1rem;
+    margin-left: 1rem;
 }
 
 .editButton {

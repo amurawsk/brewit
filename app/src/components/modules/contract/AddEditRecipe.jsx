@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AddEditRecipe.module.css';
 
-function AddEditRecipe({
-    recipe,
-    handleSubmit,
-    handleCancel,
-}) {
+function AddEditRecipe({ recipe, handleSubmit, handleCancel }) {
     const [localFormData, setLocalFormData] = useState({
         name: '',
         full_time: '',
@@ -72,7 +68,9 @@ function AddEditRecipe({
                 />
             </div>
             <div>
-                <label className={styles.addEquipmentLabel} htmlFor="full_volume">
+                <label
+                    className={styles.addEquipmentLabel}
+                    htmlFor="full_volume">
                     <b>Całkowita objętość (L): </b>
                 </label>
                 <input
@@ -95,8 +93,7 @@ function AddEditRecipe({
                     <button
                         type="button"
                         className={styles.insertDeviceButton}
-                        onClick={onCancel}
-                    >
+                        onClick={onCancel}>
                         Anuluj
                     </button>
                 )}

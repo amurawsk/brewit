@@ -17,9 +17,9 @@ const ShowRecipeDetails = ({
 
     const navigate = useNavigate();
 
-	const handleEdit = () => {
-		navigate('/contract/recipes/edit', { state: { recipe } });
-	};
+    const handleEdit = () => {
+        navigate('/contract/recipes/edit', { state: { recipe } });
+    };
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -244,7 +244,9 @@ const ShowRecipeDetails = ({
                                 <h3>Szczegóły przepisu</h3>
                                 <p>Nazwa przepisu: {recipe.name}</p>
                                 <p>Całkowity czas: {recipe.full_time}</p>
-                                <p>Całkowita objętość: {recipe.full_volume} L</p>
+                                <p>
+                                    Całkowita objętość: {recipe.full_volume} L
+                                </p>
                             </div>
                         </div>
 
@@ -354,12 +356,12 @@ const ShowRecipeDetails = ({
                             </div>
                         </div>
 
-						<div className={styles.buttonGroup}>
-							<button
-								onClick={handleEdit}
-								className={styles.editButton}>
-								Edytuj
-							</button>
+                        <div className={styles.buttonGroup}>
+                            <button
+                                onClick={handleEdit}
+                                className={styles.editButton}>
+                                Edytuj
+                            </button>
                             <button
                                 onClick={() => handleAction('cancel')}
                                 className={styles.cancelButton}>

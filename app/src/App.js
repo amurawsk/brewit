@@ -167,7 +167,7 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
-				<Route
+                <Route
                     path="/contract/recipes/edit"
                     element={
                         <ProtectedRoute requiredType="contract_brewery">

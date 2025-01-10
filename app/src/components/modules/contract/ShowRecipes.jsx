@@ -9,11 +9,11 @@ const ShowRecipes = ({ recipes, openPanel }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [ingredientId, setIngredientId] = useState(null);
 
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
-	const handleEdit = (recipe) => {
-		navigate('/contract/recipes/edit', { state: { recipe } });
-	};
+    const handleEdit = (recipe) => {
+        navigate('/contract/recipes/edit', { state: { recipe } });
+    };
 
     const closePanel = () => {
         setIsModalOpen(false);
@@ -59,27 +59,26 @@ const ShowRecipes = ({ recipes, openPanel }) => {
                                 {recipe.full_volume} L
                             </span>
                         </span>
-                	</div>
-					<div className={styles.buttonGroup}>
-						<button
-							className={styles.editButton}
-							onClick={(event) => {
-								event.stopPropagation();
-								handleEdit(recipe);
-							}}
-						>
-							Edytuj
-						</button>
-						<button
-							className={styles.removeButton}
-							onClick={(event) => {
-								event.stopPropagation();
-								handleAction(recipe.id);
-							}}>
-							Usuń
-						</button>
-					</div>
-				</div>
+                    </div>
+                    <div className={styles.buttonGroup}>
+                        <button
+                            className={styles.editButton}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                handleEdit(recipe);
+                            }}>
+                            Edytuj
+                        </button>
+                        <button
+                            className={styles.removeButton}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                handleAction(recipe.id);
+                            }}>
+                            Usuń
+                        </button>
+                    </div>
+                </div>
             ))}
             {isModalOpen && (
                 <ConfirmModal

@@ -62,7 +62,9 @@ const Recipes = () => {
                     time: '1-2 tygodnie',
                     description:
                         'Pozostaw piwo w butelkach do pełnego dojrzenia.',
-                    ingredients: [{ name: 'Piwo w butelkach', quantity: '20L' }],
+                    ingredients: [
+                        { name: 'Piwo w butelkach', quantity: '20L' },
+                    ],
                 },
             ],
         },
