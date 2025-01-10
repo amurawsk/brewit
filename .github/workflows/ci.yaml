@@ -3,10 +3,11 @@ name: CI for Full Stack App
 on:
   push:
     branches:
+      - main
       - front-dev
   pull_request:
     branches:
-      - front-dev
+      - main
 
 jobs:
   stack:
