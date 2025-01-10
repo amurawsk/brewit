@@ -30,6 +30,11 @@ jobs:
 
       # i could add some formatting/linting actions here
 
+      - name: Extract coverage report from container
+        run: |
+          container_name=$(docker compose ps -q backend)
+          docker cp $container_name:/code/coverage.xml ./coverage.xml
+
       - name: Upload code coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
