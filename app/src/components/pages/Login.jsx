@@ -21,7 +21,8 @@ const Login = () => {
             const response = await api.post('login/', { username, password });
 
             if (response.status === 200) {
-                const { refresh, access, user_type, user_id, brewery_id } = response.data;
+                const { refresh, access, user_type, user_id, brewery_id } =
+                    response.data;
 
                 localStorage.setItem('ACCESS_TOKEN', access);
                 localStorage.setItem('REFRESH_TOKEN', refresh);
