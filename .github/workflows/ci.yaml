@@ -51,4 +51,5 @@ jobs:
           docker compose exec frontend npm test
 
       - name: Stop Docker containers (frontend & backend)
+        if: always()
         run: docker compose down
