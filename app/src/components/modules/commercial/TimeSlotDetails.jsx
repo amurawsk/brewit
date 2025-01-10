@@ -5,6 +5,13 @@ import ChangePriceModal from '../../utils/ChangePriceModal';
 
 import styles from './TimeSlotDetails.module.css';
 
+/**
+ * ShowTimeSlotDetails - pop-up which is visible after clicking on chosen timeslot, displays all timeslot details, allows to change price / cancel timeslot
+ * @param isPanelOpen - defines if panel is visible
+ * @param setIsPanelOpen - setter for isPanelOpen
+ * @param selectedSlot - timeslot which was selected by user
+ * @param selectedDevice - device which was selected by user
+ */
 const TimeSlotDetails = ({
     isPanelOpen,
     setIsPanelOpen,

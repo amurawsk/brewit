@@ -10,6 +10,9 @@ import {
     FaChartLine,
 } from 'react-icons/fa';
 
+/**
+ * Defines sidebar for commercial_brewery, allows to navigate through the pages
+ */
 const CommercialSidebar = () => {
     const navigate = useNavigate();
 

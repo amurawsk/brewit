@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import PageTittle from '../../utils/PageTittle';
 import ShowOrderDetails from './ShowOrderDetails';
 
+/**
+ * CommercialDashboardContent - defines what is displayed to commercial_brewery user on dashboard page, currently it displays 3 (or less) new orders and 3 (or less) current orders
+ */
 const CommercialDashboardContent = () => {
     const navigate = useNavigate();
     const addDevice = () => navigate('/commercial/devices/add');

@@ -2,6 +2,14 @@ import React from 'react';
 
 import styles from './ShowDeviceDetails.module.css';
 
+/**
+ * ShowDeviceDetails - sidebar which is visible after clicking on chosen device, displays all device details, allows to change most of them
+ * @param isPanelOpen - defines if panel is visible
+ * @param setIsPanelOpen - setter for isPanelOpen
+ * @param deviceFields - all necessary data, selected device details
+ * @param selectedDevice - device which was selected by user
+ * @param setDeviceFields - setter for deviceFields 
+ */
 const ShowDeviceDetails = ({
     isPanelOpen,
     setIsPanelOpen,

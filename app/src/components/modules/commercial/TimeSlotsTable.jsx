@@ -5,6 +5,13 @@ import styles from './TimeSlotsTable.module.css';
 
 import api from '../../../api.js';
 
+/**
+ * TimeSlotsTable - main component displaying table with timeslots, table looks different for 'hour' and 'day' view
+ * @param view - 'daily' or 'weekly' view
+ * @param selectedDate - current chosen date (by user)
+ * @param startHour - for 'hour' view user can determine timetable start hour
+ * @param endHour - for 'hour' view user can determine timetable end hour
+ */
 const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);

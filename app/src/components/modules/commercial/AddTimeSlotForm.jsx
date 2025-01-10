@@ -9,6 +9,9 @@ import styles from './AddTimeSlotForm.module.css';
 
 registerLocale('pl', pl);
 
+/**
+ * AddDeviceForm - gets timeslot start- and end-timestamp from user, picked from day calendar or hour calendar (depends on device_type), on submit sends request to api
+ */
 const AddTimeSlotForm = () => {
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [devices, setDevices] = useState([]);

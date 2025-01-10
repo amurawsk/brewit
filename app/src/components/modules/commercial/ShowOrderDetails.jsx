@@ -5,6 +5,13 @@ import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
 
+/**
+ * ShowOrderDetails - pop-up window which is visible after clicking on chosen order, displays all order details, allows to accept / reject / cancel order
+ * @param isPanelOpen - defines if panel is visible
+ * @param setIsPanelOpen - setter for isPanelOpen
+ * @param order - chosen order data
+ * @param setOrder - setter for order
+ */
 const ShowDeviceDetails = ({
     isPanelOpen,
     setIsPanelOpen,

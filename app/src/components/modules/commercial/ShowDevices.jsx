@@ -4,6 +4,11 @@ import styles from './ShowDevices.module.css';
 
 import ConfirmModal from '../../utils/ConfirmModal';
 
+/**
+ * ShowDevices - displays all devices as an styled list, displays name, type, serial number
+ * @param devices - data, all devices that will be displayed
+ * @param openPanel - function which opens panel with device details
+ */
 const ShowDevices = ({ devices, openPanel }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
