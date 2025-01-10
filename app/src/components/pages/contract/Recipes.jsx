@@ -12,7 +12,6 @@ const Recipes = () => {
 
     const addRecipe = () => navigate('/contract/recipes/add');
     const [recipe, setRecipe] = useState(null);
-    const [recipeFields, setRecipeFields] = useState({});
     const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     const recipes = [
@@ -71,7 +70,6 @@ const Recipes = () => {
 
     const openPanel = (recipe) => {
         setRecipe(recipe);
-        setRecipeFields({ ...recipe });
         setIsPanelOpen(true);
     };
 

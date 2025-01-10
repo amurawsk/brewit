@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 
 import styles from './EditRecipe.module.css';
@@ -11,8 +11,6 @@ const EditRecipe = () => {
     const location = useLocation();
     const { recipe } = location.state || {};
 
-    const [editedRecipe, setEditedRecipe] = useState(recipe || {});
-
     return (
         <div>
             <DashboardHeader />
@@ -21,9 +19,9 @@ const EditRecipe = () => {
                 <div className={styles.addEquipment}>
                     <PageTittle text="Edytuj przepis" />
                     <AddRecipeForm 
-						recipe={editedRecipe}
-						isEditing={false}
-					/>
+                        recipe={recipe}
+                        isEditing={false}
+                    />
                 </div>
             </div>
         </div>
