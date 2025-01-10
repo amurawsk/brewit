@@ -1,67 +1,33 @@
 # BrewIT
-## React
-Prerequisities: `npm` must be installed.
-### Running React project
-1. Move to `app` directory
+## Setup
+Prerequisities: Docker and Docker Compose must be installed.
+
+1. Create `.env` file based on `example.env` file.
+2. Build and run container:
+    ```bash
+    docker compose up --build
+    ```
+3. The app is now alive at [localhost:3000](localhost:3000) and the server is alive at [localhost:8000](localhost:8000).
+
+## Database backup
+Creating a database backup:
 ```bash
-cd app
+docker compose exec db pg_dump -U <db_username> <db_name> > backup.sql
 ```
 
-2. Install packages
+Restoring the database:
 ```bash
-npm install
+docker compose exec db psql -U <użytkownik> <nazwa_bazy> < backup.sql
 ```
 
-3. Run the app
-```
-npm start
-```
-
-4. The app is now alive at [localhost:3000](localhost:3000)
-
-## Django
-Prerequisities: `python3` must be installed.
-### Running Django project (WIP)
-1. Enter django backend directory
+## Other commands
+Testing backend (with code coverage):
 ```bash
-cd backend
-```
-1. Create a virtual environment and activate it
-```bash
-python -m venv .venv
-source .venv/bin/activate
+docker compose exec backend pytest --cov=core
 ```
 
-2. Install all dependencies
+Adding a superuser account:
 ```bash
-pip install -r requirements.txt
+docker compose exec backend python manage.py createsuperuser
 ```
-
-3. Migrate the (temporary) database
-```bash
-python manage.py migrate
-```
-
-4. Run the development server
-```bash
-python manage.py runserver
-```
-
-5. The app is now alive at [localhost:8000](localhost:8000)
-
-### Another commands
-Adding another integration:
-```bash
-python manage.py makemigrations
-```
-
-Adding superuser account:
-```bash
-python manage.py createsuperuser
-```
-After adding superuser, you can log in by username and password at `/admin` page on server
-
-Running tests (with code coverage stats):
-```bash
-pytest --cov=core
-```
+After adding the superuser, you can log in by username and password at `/admin` page on server.
