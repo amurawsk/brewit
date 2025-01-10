@@ -43,7 +43,7 @@ class RegisterCommercialView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RegisterContractBreweryView(APIView):
+class RegisterContractView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, _):

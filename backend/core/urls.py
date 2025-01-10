@@ -9,7 +9,7 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("check-username-unique/", views.CheckUsernameUniqueView.as_view(), name="check_username_unique"),
     path("register/commercial/", RegisterCommercialView.as_view(), name="register_commercial"),
-    path("register/contract/", views.RegisterContractBreweryView.as_view(), name="register_contract"),
+    path("register/contract/", views.RegisterContractView.as_view(), name="register_contract"),
     path("login/", LoginView.as_view(), name="login"),
 
     path("devices/add/", views.DeviceCreateView.as_view(), name="device_create"),

@@ -1,7 +1,7 @@
 from django.urls import reverse, resolve
 from core.views import (
     LoginView, RegisterCommercialView, CheckUsernameUniqueView, 
-    RegisterContractBreweryView, DeviceCreateView, DeviceListForBreweryView, 
+    RegisterContractView, DeviceCreateView, DeviceListForBreweryView, 
     DeviceListAllView, TimeSlotListView, TimeSlotCreateView, DevicesWithTimeSlotsView,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -28,7 +28,7 @@ def test_register_commercial_url_resolves():
 def test_register_contract_url_resolves():
     url = reverse("register_contract")
     assert url == "/api/register/contract/"
-    assert resolve(url).func.view_class == RegisterContractBreweryView
+    assert resolve(url).func.view_class == RegisterContractView
 
 
 def test_login_url_resolves():
