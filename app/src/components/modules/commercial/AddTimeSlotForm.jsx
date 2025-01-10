@@ -24,7 +24,7 @@ const AddTimeSlotForm = () => {
 
     const getData = async () => {
         try {
-            const breweryId = 1;
+            const breweryId = localStorage.getItem('breweryId');
             const response = await api.get(`devices/brewery/${breweryId}/`);
             if (response.status === 200) {
                 setDevices(response.data);

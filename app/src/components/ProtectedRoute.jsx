@@ -62,6 +62,9 @@ function ProtectedRoute({ children, requiredType }) {
     const handleUnauthorized = () => {
         localStorage.removeItem(ACCESS_TOKEN);
         localStorage.removeItem(REFRESH_TOKEN);
+        localStorage.removeItem('userType');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('breweryId');
         setAuthorized(false);
     };
 

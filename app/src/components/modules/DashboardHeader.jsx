@@ -30,6 +30,8 @@ const DashboardHeader = () => {
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('REFRESH_TOKEN');
         localStorage.removeItem('userType');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('breweryId');
         logOut();
     };
 

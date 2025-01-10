@@ -17,7 +17,7 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
 
     const getData = async () => {
         try {
-            const breweryId = 1;
+            const breweryId = localStorage.getItem('breweryId');
             const response = await api.get(
                 `devices/brewery/${breweryId}/with-time-slots/`
             );
