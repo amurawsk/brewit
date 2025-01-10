@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -18,6 +16,22 @@ from .serializers import (
 
 
 class RegisterCommercialView(APIView):
+    """
+    View for registering a new commercial brewery user. Class allows any user to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the commercial brewery registration data, validates it,
+            creates a new user, and returns an authentication token (refresh and access tokens).
+            If registration fails, it returns validation errors.
+
+    Responses:
+        - 201 Created: If the registration is successful, the response contains
+          the access and refresh tokens, a success message and user type.
+        - 400 Bad Request: If the registration data is invalid, the response
+          contains error messages related to the registration data.
+        - 405 Method Not Allowed: If a GET request is made to this endpoint,
+          the response indicates that only POST is allowed.
+    """
     permission_classes = [AllowAny]
 
     def get(self, _):
@@ -44,6 +58,22 @@ class RegisterCommercialView(APIView):
 
 
 class RegisterContractView(APIView):
+    """
+    View for registering a new contract brewery user. Class allows any user to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the contract brewery registration data, validates it,
+            creates a new user, and returns an authentication token (refresh and access tokens).
+            If registration fails, it returns validation errors.
+
+    Responses:
+        - 201 Created: If the registration is successful, the response contains
+          the access and refresh tokens, a success message and user type.
+        - 400 Bad Request: If the registration data is invalid, the response
+          contains error messages related to the registration data.
+        - 405 Method Not Allowed: If a GET request is made to this endpoint,
+          the response indicates that only POST is allowed.
+    """
     permission_classes = [AllowAny]
 
     def get(self, _):
@@ -70,6 +100,21 @@ class RegisterContractView(APIView):
 
 
 class LoginView(APIView):
+    """
+    View for logging into existing account. Class allows any user to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the user login data, validates it and logs the user in.
+            If login process fails, it returns validation errors.
+
+    Responses:
+        - 201 Created: If the registration is successful, the response contains
+          the access and refresh tokens, an user and brewery ids and user type.
+        - 400 Bad Request: If the credentials are invalid, the response
+          contains error messages related to the credentials.
+        - 405 Method Not Allowed: If a GET request is made to this endpoint,
+          the response indicates that only POST is allowed.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -97,6 +142,19 @@ class LoginView(APIView):
 
 
 class CheckUsernameUniqueView(APIView):
+    """View for checking if a username is unique. Class allows any user to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the username data, validates it and checks if the username is unique.
+            If the username is unique, it returns a success message.
+            If the username is not unique, it returns an error message.
+
+    Responses:
+        - 200 OK: If the username is unique, the response contains a success message.
+        - 200 OK: If the username is not unique, the response contains an error message
+        - 405 Method Not Allowed: If a GET request is made to this endpoint,
+          the response indicates that only POST is allowed.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -121,6 +179,23 @@ class CheckUsernameUniqueView(APIView):
 
 
 class DeviceCreateView(APIView):
+    """View for creating a new device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the device data, validates it and creates a new device.
+            If the device creation is successful, it returns a success message.
+            If the device creation fails, it returns validation errors.
+
+    Responses:
+        - 201 Created: If the device is successfully created, the response contains
+          a success message and the device id.
+        - 400 Bad Request: If the device creation fails, the response contains
+          error messages related to the device data.
+        - 403 Forbidden: If the user is not authorized to add devices for this brewery,
+          the response contains an error message.
+        - 405 Method Not Allowed: If a GET request is made to this endpoint,
+          the response indicates that only POST is allowed.
+    """
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -150,6 +225,19 @@ class DeviceCreateView(APIView):
 
 
 class DeviceListForBreweryView(APIView):
+    """View for listing devices for a specific brewery. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a list of devices for the brewery.
+            If the user is not authorized to view devices for this brewery, it returns an error message.
+
+    Responses:
+        - 200 OK: If the user is authorized to view devices for this brewery, the response contains
+          a list of devices for the brewery.
+        - 403 Forbidden: If the user is not authorized to view devices for this brewery,
+          the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
     permission_classes = [IsAuthenticated]
 
     def get(self, request, brewery_id):
@@ -178,6 +266,19 @@ class DeviceListForBreweryView(APIView):
 
 
 class DeviceListAllView(APIView):
+    """View for listing all devices. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all devices.
+            If the user is not authorized to view all devices, it returns an error message.
+
+    Responses:
+        - 200 OK: If the user is authorized to view all devices, the response contains
+          a list of all devices.
+        - 403 Forbidden: If the user is not authorized to view all devices,
+          the response contains an error message
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -202,6 +303,24 @@ class DeviceListAllView(APIView):
 
 
 class TimeSlotCreateView(APIView):
+    """View for creating a new time slot. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the time slot data, validates it and creates a new time slot.
+            If the time slot creation is successful, it returns a success message.
+            If the time slot creation fails, it returns validation errors.
+
+    Responses:
+        - 201 Created: If the time slot is successfully created, the response contains
+          a success message and the time slot id.
+        - 400 Bad Request: If the time slot creation fails, the response contains
+          error messages related to the time slot data.
+        - 403 Forbidden: If the user is not authorized to add time slots for this device,
+          the response contains an error message.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+        - 405 Method Not Allowed: If a GET request is made to this endpoint,
+          the response indicates that only POST is allowed.
+    """
     permission_classes = [IsAuthenticated]
 
     def post(self, request, device_id):
@@ -239,6 +358,16 @@ class TimeSlotCreateView(APIView):
 
 
 class TimeSlotListView(APIView):
+    """View for listing all time slots for a specific device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the device id, validates it and returns a list of time slots for the device.
+
+    Responses:
+        - 200 OK: If the time slots are successfully retrieved, the response contains
+            a list of time slots for the device.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+    """
     permission_classes = [IsAuthenticated]
 
     def get(self, request, device_id):
@@ -259,6 +388,19 @@ class TimeSlotListView(APIView):
 
 
 class DevicesWithTimeSlotsView(APIView):
+    """View for listing all devices with time slots for a specific brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a list of devices with time slots for the brewery.
+
+    Responses:
+        - 200 OK: If the devices with time slots are successfully retrieved, the response contains
+            a list of devices with time slots for the brewery.
+        - 403 Forbidden: If the user is not authorized to view devices with time slots for this brewery,
+            the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
     permission_classes = [IsAuthenticated]
 
     def get(self, request, brewery_id):
