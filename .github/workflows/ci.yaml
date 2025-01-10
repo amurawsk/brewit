@@ -70,6 +70,3 @@ jobs:
       - name: Shut down backend services
         if: always()
         run: docker compose down
-
-volumes:
-  postgres_data:
