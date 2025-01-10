@@ -333,6 +333,18 @@ def test_check_username_not_unique_commercial():
     assert response.data['unique'] == False      # NOQA: E712
 
 
+@pytest.mark.django_db
+def test_check_username_invalid_request_type():
+    client = APIClient()
+    url = reverse('check_username_unique')
+    data = {
+        'username': 'uniqueusername'
+    }
+
+    response = client.get(url, data, format='json')
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
 ####################
 # /api/login/
 ####################
@@ -381,3 +393,16 @@ def test_login_invalid_password(commercial_brewery_user):
     response = client.post(url, data, format='json')
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data['non_field_errors'][0] == 'Invalid credentials'
+
+
+@pytest.mark.django_db
+def test_login_invalid_request_type(commercial_brewery_user):
+    client = APIClient()
+    url = reverse('login')
+    data = {
+        'username': 'brewery',
+        'password': 'pass1'
+    }
+
+    response = client.get(url, data, format='json')
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
