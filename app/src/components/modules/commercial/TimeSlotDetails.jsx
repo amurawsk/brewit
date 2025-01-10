@@ -22,7 +22,7 @@ const TimeSlotDetails = ({
         return name;
     };
 
-    const getContractBreweryData = () => {
+    useEffect(() => {
         if (selectedSlot && selectedSlot.order !== null) {
             setContractBrewery({
                 name: 'Mock browar 1',
@@ -33,10 +33,6 @@ const TimeSlotDetails = ({
         } else {
             setContractBrewery(null);
         }
-    };
-
-    useEffect(() => {
-        getContractBreweryData();
     }, [selectedSlot]);
 
     const confirmAction = () => {

@@ -8,6 +8,34 @@ function ProtectedRoute({ children, requiredType }) {
     const [authorized, setAuthorized] = useState(null);
 
     useEffect(() => {
+        const refreshToken = async () => {
+            const refreshToken = localStorage.getItem('REFRESH_TOKEN');
+    
+            if (!refreshToken) {
+                handleUnauthorized();
+                return;
+            }
+    
+            try {
+                const response = await api.post('token/refresh/', {
+                    refresh: refreshToken,
+                });
+                localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                checkUserType();
+            } catch (error) {
+                handleUnauthorized();
+            }
+        };
+    
+        const checkUserType = () => {
+            const userType = localStorage.getItem('userType');
+            if (userType === requiredType) {
+                setAuthorized(true);
+            } else {
+                setAuthorized(false);
+            }
+        };
+
         const auth = async () => {
             const token = localStorage.getItem('ACCESS_TOKEN');
 
@@ -29,35 +57,7 @@ function ProtectedRoute({ children, requiredType }) {
         };
 
         auth();
-    }, []);
-
-    const refreshToken = async () => {
-        const refreshToken = localStorage.getItem('REFRESH_TOKEN');
-
-        if (!refreshToken) {
-            handleUnauthorized();
-            return;
-        }
-
-        try {
-            const response = await api.post('token/refresh/', {
-                refresh: refreshToken,
-            });
-            localStorage.setItem(ACCESS_TOKEN, response.data.access);
-            checkUserType();
-        } catch (error) {
-            handleUnauthorized();
-        }
-    };
-
-    const checkUserType = () => {
-        const userType = localStorage.getItem('userType');
-        if (userType === requiredType) {
-            setAuthorized(true);
-        } else {
-            setAuthorized(false);
-        }
-    };
+    }, [requiredType]);
 
     const handleUnauthorized = () => {
         localStorage.removeItem(ACCESS_TOKEN);
