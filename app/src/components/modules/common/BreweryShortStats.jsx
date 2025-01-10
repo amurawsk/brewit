@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './BreweryShortStats.module.css';
 
+/**
+ * BreweryShortStats - displays basic stats - number of devices, recipes, orders, coworkers
+ * @param statsData - stats
+ */
 const BreweryShortStats = ({ statsData }) => {
     const navigate = useNavigate();
 

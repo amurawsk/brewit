@@ -1,6 +1,10 @@
 import React from 'react';
 import styles from './TimeSlotsTimeline.module.css';
 
+/**
+ * TimeSlotsTimeline - displays all timeslots in aesthetic way (as a timeline)
+ * @param order - chosen order details
+ */
 const TimeSlotsTimeline = ({ order }) => {
     const getDotColor = (start, end, status) => {
         const currentTime = new Date().toISOString();

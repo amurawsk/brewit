@@ -1,6 +1,11 @@
 import React from 'react';
 import styles from './OrderTypes.module.css';
 
+/**
+ * OrderTypes - group of buttons used to determine which orders should be displayed
+ * @param activeStatus - chosen status
+ * @param setActiveStatus -  status setter
+ */
 const OrderTypes = ({ activeStatus, setActiveStatus }) => {
     const buttons = [
         ['oczekujące', 'N'],

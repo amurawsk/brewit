@@ -4,6 +4,12 @@ import styles from './ShowCoworkers.module.css';
 
 import ConfirmModal from '../../utils/ConfirmModal';
 
+/**
+ * ShowCoworkers - displays coworkers styled list, shows username, created_at
+ * 
+ * If coworkers list is empty, component displays proper info 
+ * @param coworkers - coworkers list 
+ */
 const ShowCoworkers = ({ coworkers }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [username, setUsername] = useState(null);

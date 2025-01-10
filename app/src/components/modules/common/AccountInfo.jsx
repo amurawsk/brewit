@@ -2,6 +2,10 @@ import React from 'react';
 import styles from './AccountInfo.module.css';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * AccountInfo - shows account details - username, created_at and some important brewery info
+ * @param accountInfo - data
+ */
 const AccountInfo = ({ accountInfo }) => {
     const navigate = useNavigate();
 

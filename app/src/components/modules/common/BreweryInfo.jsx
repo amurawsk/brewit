@@ -2,6 +2,10 @@ import React from 'react';
 
 import styles from './BreweryInfo.module.css';
 
+/**
+ * BreweryInfo - shows brewery details - name, email, phone_number, ceo / nip
+ * @param breweryData - data
+ */
 const BreweryInfo = ({ breweryData }) => {
     return (
         <div className={styles.content}>

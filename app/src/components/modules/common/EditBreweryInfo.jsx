@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import styles from './EditBreweryInfo.module.css';
 
+/**
+ * 
+ * @param isPanelOpen - determines if panel is visible
+ * @param setIsPanelOpen - setter for isPanelOpen
+ * @param breweryData - current brewery data
+ */
 const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
     const [currentBreweryData, setCurrentBreweryData] = useState(breweryData);
 

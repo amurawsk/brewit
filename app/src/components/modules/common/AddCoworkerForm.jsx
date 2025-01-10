@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './AddCoworkerForm.module.css';
 
+/**
+ * AddCoworkerForm - similar to login page - has username and password fields
+ */
 const AddCoworkerForm = () => {
     const navigate = useNavigate();
 
