@@ -39,9 +39,13 @@ class CommercialBrewery(Brewery):
     address = models.CharField(max_length=255)
 
     def validate_unique(self, exclude: Collection[str] | None = ...) -> None:
+        if CommercialBrewery.objects.filter(name=self.name).exists():
+            raise ValidationError(
+                "Commercial brewery with this name already exists."
+            )
         if ContractBrewery.objects.filter(name=self.name).exists():
             raise ValidationError(
-                "Contract brewery with this Name already exists."
+                "Contract brewery with this name already exists."
             )
         return super().validate_unique(exclude)
 
@@ -52,7 +56,11 @@ class ContractBrewery(Brewery):
     def validate_unique(self, exclude: Collection[str] | None = ...) -> None:
         if CommercialBrewery.objects.filter(name=self.name).exists():
             raise ValidationError(
-                "Commercial brewery with this Name already exists."
+                "Commercial brewery with this name already exists."
+            )
+        if ContractBrewery.objects.filter(name=self.name).exists():
+            raise ValidationError(
+                "Contract brewery with this name already exists."
             )
         return super().validate_unique(exclude)
 
