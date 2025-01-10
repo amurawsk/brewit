@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
-import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
+import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import ShowDevices from '../../modules/commercial/ShowDevices.jsx';
 import ShowDeviceDetails from '../../modules/commercial/ShowDeviceDetails.jsx';
 import styles from './Devices.module.css';
 import api from '../../../api.js';
 
 /**
- * Devices page - contains layout (Header, Sidebar, Tittle, Button), displays devices for given brewery
+ * Devices page - contains layout (Header, Sidebar, Title, Button), displays devices for given brewery
  */
 const Devices = () => {
     const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Devices = () => {
             <div className={styles.appContainer}>
                 <CommercialSidebar />
                 <div className={styles.content}>
-                    <PageTittleWithButton
+                    <PageTitleWithButton
                         text="Urządzenia"
                         buttonText="Dodaj nowe urządzenie"
                         buttonFunction={addDevice}

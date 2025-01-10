@@ -4,12 +4,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import AddTimeSlotForm from '../../modules/commercial/AddTimeSlotForm.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 
 import styles from './AddTimeSlot.module.css';
 
 /**
- * Add TimeSlot page - contains layout (Header, Sidebar, Tittle) and form which allows to add time slot
+ * Add TimeSlot page - contains layout (Header, Sidebar, Title) and form which allows to add time slot
  */
 const AddTimeSlot = () => {
     return (
@@ -18,7 +18,7 @@ const AddTimeSlot = () => {
             <div className={styles.container}>
                 <CommercialSidebar />
                 <div className={styles.content}>
-                    <PageTittle text="Dodaj okno czasowe" />
+                    <PageTitle text="Dodaj okno czasowe" />
                     <AddTimeSlotForm />
                 </div>
             </div>

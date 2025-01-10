@@ -4,12 +4,12 @@ import styles from './Orders.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 import OrderTypes from '../../modules/common/OrderTypes.jsx';
 import ShowOrders from '../../modules/commercial/ShowOrders.jsx';
 
 /**
- * Orders page - contains layout (Header, Sidebar, Tittle), displays orders (new, current, past, rejected)
+ * Orders page - contains layout (Header, Sidebar, Title), displays orders (new, current, past, rejected)
  */
 const Orders = () => {
     const location = useLocation();
@@ -201,8 +201,8 @@ const Orders = () => {
                     <ContractSidebar />
                 )}
                 <div className={styles.content}>
-                    <div className={styles.tittleButtonContainer}>
-                        <PageTittle text="Zlecenia" />
+                    <div className={styles.TitleButtonContainer}>
+                        <PageTitle text="Zlecenia" />
                         <OrderTypes
                             activeStatus={activeStatus}
                             setActiveStatus={setActiveStatus}

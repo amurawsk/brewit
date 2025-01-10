@@ -128,7 +128,7 @@ function App() {
                 <Route
                     path="/commercial/statistics"
                     element={
-                        <ProtectedRoute requiredType="contract_brewery">
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <Statistics />
                         </ProtectedRoute>
                     }

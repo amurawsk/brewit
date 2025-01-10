@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './CommercialDashboardContent.module.css';
 import { useNavigate } from 'react-router-dom';
 
-import PageTittle from '../../utils/PageTittle';
+import PageTitle from '../../utils/PageTitle';
 import ShowOrderDetails from './ShowOrderDetails';
 
 /**
@@ -223,8 +223,8 @@ const CommercialDashboardContent = () => {
 
     return (
         <div className={styles.dashboard}>
-            <div className={styles.tittleButtonContainer}>
-                <PageTittle text="Szybki dostęp" />
+            <div className={styles.TitleButtonContainer}>
+                <PageTitle text="Szybki dostęp" />
                 <div className={styles.actionBar}>
                     <button
                         className={styles.darkButton}

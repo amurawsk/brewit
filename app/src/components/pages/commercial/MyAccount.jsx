@@ -3,11 +3,11 @@ import styles from './MyAccount.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 import AccountInfo from '../../modules/common/AccountInfo.jsx';
 
 /**
- * Account page - contains layout (Dashboard, Sidebar, Tittle), displays account details and most important brewery info
+ * Account page - contains layout (Dashboard, Sidebar, Title), displays account details and most important brewery info
  */
 const MyAccount = () => {
     const accountInfo = {
@@ -31,7 +31,7 @@ const MyAccount = () => {
                     <ContractSidebar />
                 )}
                 <div className={styles.content}>
-                    <PageTittle text="Moje konto" />
+                    <PageTitle text="Moje konto" />
                     <AccountInfo accountInfo={accountInfo} />
                 </div>
             </div>

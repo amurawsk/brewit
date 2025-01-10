@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
-import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
+import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import ShowRecipes from '../../modules/contract/ShowRecipes.jsx';
 import ShowRecipeDetails from '../../modules/contract/ShowRecipeDetails.jsx';
 import styles from './Recipes.module.css';
@@ -81,7 +81,7 @@ const Recipes = () => {
             <div className={styles.appContainer}>
                 <ContractSidebar />
                 <div className={styles.content}>
-                    <PageTittleWithButton
+                    <PageTitleWithButton
                         text="Przepisy"
                         buttonText="Dodaj nowy przepis"
                         buttonFunction={addRecipe}

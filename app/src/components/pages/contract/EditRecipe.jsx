@@ -5,7 +5,7 @@ import styles from './EditRecipe.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import AddRecipeForm from '../../modules/contract/AddRecipeForm.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 
 const EditRecipe = () => {
     const location = useLocation();
@@ -17,7 +17,7 @@ const EditRecipe = () => {
             <div className={styles.container}>
                 <ContractSidebar />
                 <div className={styles.addEquipment}>
-                    <PageTittle text="Edytuj przepis" />
+                    <PageTitle text="Edytuj przepis" />
                     <AddRecipeForm recipe={recipe} isEditing={false} />
                 </div>
             </div>

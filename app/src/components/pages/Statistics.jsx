@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DashboardHeader from '../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../modules/commercial/CommercialSidebar.jsx';
 import ContractSidebar from '../modules/contract/ContractSidebar.jsx';
-import PageTittle from '../utils/PageTittle.jsx';
+import PageTitle from '../utils/PageTitle.jsx';
 import StatisticsTypes from '../modules/StatisticsTypes.jsx';
 import styles from './Statistics.module.css';
 import PieChart from '../modules/PieChart.jsx';
@@ -25,8 +25,8 @@ const Statistics = () => {
                     <ContractSidebar />
                 )}
                 <div className={styles.content}>
-                    <div className={styles.tittleButtonContainer}>
-                        <PageTittle text="Statystyki" />
+                    <div className={styles.TitleButtonContainer}>
+                        <PageTitle text="Statystyki" />
                         <StatisticsTypes
                             activeStatus={activeStatus}
                             setActiveStatus={setActiveStatus}

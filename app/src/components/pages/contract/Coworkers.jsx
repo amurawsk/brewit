@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Coworkers.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
-import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
+import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import ShowCoworkers from '../../modules/common/ShowCoworkers.jsx';
 
 /**
- * Coworkers page - contains layout (Header, Sidebar, Tittle, Button), displays coworkers for given brewery & user
+ * Coworkers page - contains layout (Header, Sidebar, Title, Button), displays coworkers for given brewery & user
  */
 const Coworkers = () => {
     const navigate = useNavigate();
@@ -88,7 +88,7 @@ const Coworkers = () => {
             <div className={styles.container}>
                 <ContractSidebar />
                 <div className={styles.content}>
-                    <PageTittleWithButton
+                    <PageTitleWithButton
                         text="Współpracownicy"
                         buttonText="Dodaj nowego współpracownika"
                         buttonFunction={addCoworker}

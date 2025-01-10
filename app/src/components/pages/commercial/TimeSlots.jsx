@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
-import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
+import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import TimeSlotsDateNavigator from '../../modules/commercial/TimeSlotsDateNavigator.jsx';
 import TimeSlotsTable from '../../modules/commercial/TimeSlotsTable.jsx';
 
 import styles from './TimeSlots.module.css';
 
 /**
- * TimeSlots page - contains layout (Header, Sidebar, Tittle, Button), displays date navigator and time slots table
+ * TimeSlots page - contains layout (Header, Sidebar, Title, Button), displays date navigator and time slots table
  */
 const TimeSlots = () => {
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ const TimeSlots = () => {
             <div className={styles.appContainer}>
                 <CommercialSidebar />
                 <div className={styles.content}>
-                    <PageTittleWithButton
+                    <PageTitleWithButton
                         text="Okna czasowe"
                         buttonText="Dodaj nowe okno czasowe"
                         buttonFunction={addTimeSlot}

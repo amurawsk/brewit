@@ -3,12 +3,12 @@ import { useLocation } from 'react-router-dom';
 import styles from './Orders.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 import OrderTypes from '../../modules/common/OrderTypes.jsx';
 import ShowOrders from '../../modules/contract/ShowOrders.jsx';
 
 /**
- * Orders page - contains layout (Header, Sidebar, Tittle), displays orders (new, current, past, rejected)
+ * Orders page - contains layout (Header, Sidebar, Title), displays orders (new, current, past, rejected)
  */
 const Orders = () => {
     const location = useLocation();
@@ -195,8 +195,8 @@ const Orders = () => {
             <div className={styles.container}>
                 <ContractSidebar />
                 <div className={styles.content}>
-                    <div className={styles.tittleButtonContainer}>
-                        <PageTittle text="Zlecenia" />
+                    <div className={styles.TitleButtonContainer}>
+                        <PageTitle text="Zlecenia" />
                         <OrderTypes
                             activeStatus={activeStatus}
                             setActiveStatus={setActiveStatus}

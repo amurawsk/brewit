@@ -1,10 +1,10 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import PageTittleWithButton from '../../components/utils/PageTittleWithButton';
+import PageTitleWithButton from '../../components/utils/PageTitleWithButton';
 
-describe('PageTittleWithButton', () => {
+describe('PageTitleWithButton', () => {
     it('should render the correct title text', () => {
         render(
-            <PageTittleWithButton
+            <PageTitleWithButton
                 text="Test Title"
                 buttonText="Click Me"
                 buttonFunction={jest.fn()}
@@ -16,7 +16,7 @@ describe('PageTittleWithButton', () => {
 
     it('should render the correct button text', () => {
         render(
-            <PageTittleWithButton
+            <PageTitleWithButton
                 text="Test Title"
                 buttonText="Click Me"
                 buttonFunction={jest.fn()}
@@ -29,7 +29,7 @@ describe('PageTittleWithButton', () => {
     it('should call buttonFunction when button is clicked', () => {
         const mockButtonFunction = jest.fn();
         render(
-            <PageTittleWithButton
+            <PageTitleWithButton
                 text="Test Title"
                 buttonText="Click Me"
                 buttonFunction={mockButtonFunction}
@@ -43,7 +43,7 @@ describe('PageTittleWithButton', () => {
 
     it('should apply correct styles to title and button', () => {
         render(
-            <PageTittleWithButton
+            <PageTitleWithButton
                 text="Test Title"
                 buttonText="Click Me"
                 buttonFunction={jest.fn()}
@@ -53,7 +53,7 @@ describe('PageTittleWithButton', () => {
         const title = screen.getByText('Test Title');
         const button = screen.getByText('Click Me');
 
-        expect(title).toHaveClass('tittle');
+        expect(title).toHaveClass('Title');
         expect(button).toHaveClass('button');
     });
 });

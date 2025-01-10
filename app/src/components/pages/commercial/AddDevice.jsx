@@ -4,10 +4,10 @@ import styles from './AddDevice.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import AddDeviceForm from '../../modules/commercial/AddDeviceForm.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 
 /**
- * Add Device page - contains layout (Header, Sidebar, Tittle) and form which allows to add device
+ * Add Device page - contains layout (Header, Sidebar, Title) and form which allows to add device
  */
 const AddDevice = () => {
     return (
@@ -16,7 +16,7 @@ const AddDevice = () => {
             <div className={styles.container}>
                 <CommercialSidebar />
                 <div className={styles.addEquipment}>
-                    <PageTittle text="Dodaj urządzenie" />
+                    <PageTitle text="Dodaj urządzenie" />
                     <AddDeviceForm />
                 </div>
             </div>
