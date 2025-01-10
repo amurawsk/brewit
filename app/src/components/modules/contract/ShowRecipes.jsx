@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './ShowRecipes.module.css';
 
@@ -6,20 +7,26 @@ import ConfirmModal from '../../utils/ConfirmModal';
 
 const ShowRecipes = ({ recipes, openPanel }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [deleteId, setDeleteId] = useState(null);
+    const [ingredientId, setIngredientId] = useState(null);
+
+    const navigate = useNavigate();
+
+    const handleEdit = (recipe) => {
+        navigate('/contract/recipes/edit', { state: { recipe } });
+    };
 
     const closePanel = () => {
         setIsModalOpen(false);
-        setDeleteId(null);
+        setIngredientId(null);
     };
 
     const handleAction = (id) => {
-        setDeleteId(id);
+        setIngredientId(id);
         setIsModalOpen(true);
     };
 
     const confirmAction = () => {
-        console.log(deleteId);
+        console.log(ingredientId);
         closePanel();
     };
 
@@ -49,18 +56,28 @@ const ShowRecipes = ({ recipes, openPanel }) => {
                             całkowita objętość:
                             <span className={styles.recipeDescriptionValue}>
                                 {' '}
-                                {recipe.full_volume}
+                                {recipe.full_volume} L
                             </span>
                         </span>
                     </div>
-                    <button
-                        className={styles.removeButton}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            handleAction(recipe.id);
-                        }}>
-                        Usuń
-                    </button>
+                    <div className={styles.buttonGroup}>
+                        <button
+                            className={styles.editButton}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                handleEdit(recipe);
+                            }}>
+                            Edytuj
+                        </button>
+                        <button
+                            className={styles.removeButton}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                handleAction(recipe.id);
+                            }}>
+                            Usuń
+                        </button>
+                    </div>
                 </div>
             ))}
             {isModalOpen && (

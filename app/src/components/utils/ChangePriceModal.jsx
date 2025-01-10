@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import styles from './ChangePriceModal.module.css';
 
+/**
+ * Small pop-up window, enables setting new price
+ * @param onConfirm - function executed when 'Confirm' button is clicked
+ * @param onCancel - function executed when 'Cancel' button is clicked
+ */
 const ChangePriceModal = ({ onConfirm, onCancel }) => {
     const [newPrice, setNewPrice] = useState('');
 

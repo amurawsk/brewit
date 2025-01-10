@@ -26,6 +26,11 @@ Testing backend (with code coverage):
 docker compose exec backend pytest --cov=core
 ```
 
+Testing frontend:
+```bash
+docker compose exec frontend npm test
+```
+
 Adding a superuser account:
 ```bash
 docker compose exec backend python manage.py createsuperuser

@@ -3,13 +3,16 @@ import React, { useState, useEffect } from 'react';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import BreweryInfo from '../../modules/common/BreweryInfo.jsx';
-import PageTittleWithButton from '../../utils/PageTittleWithButton.jsx';
-import PageTittle from '../../utils/PageTittle.jsx';
+import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 import EditBreweryInfo from '../../modules/common/EditBreweryInfo';
 import BreweryShortStats from '../../modules/common/BreweryShortStats.jsx';
 
 import styles from './ContractBrewery.module.css';
 
+/**
+ * Contract Brewery page - allows to view or edit brewery data, contains layout (Header, Sidebar, Title, Button) and BreweryInfo, BreweryShortStats components
+ */
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
@@ -54,7 +57,7 @@ const CommercialBrewery = () => {
             <div className={styles.container}>
                 <ContractSidebar />
                 <div className={styles.content}>
-                    <PageTittleWithButton
+                    <PageTitleWithButton
                         text="Informacje o browarze"
                         buttonText="Edytuj informacje"
                         buttonFunction={editInfo}
@@ -69,7 +72,7 @@ const CommercialBrewery = () => {
                             breweryData={breweryData}
                         />
                     )}
-                    <PageTittle text="Statystyki" />
+                    <PageTitle text="Statystyki" />
                     {statsData !== null && (
                         <BreweryShortStats statsData={statsData} />
                     )}

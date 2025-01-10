@@ -29,6 +29,7 @@ import ContractAccount from './components/pages/contract/MyAccount';
 import Statistics from './components/pages/Statistics';
 import Recipes from './components/pages/contract/Recipes';
 import AddRecipe from './components/pages/contract/AddRecipe';
+import EditRecipe from './components/pages/contract/EditRecipe';
 
 import './App.css';
 
@@ -127,7 +128,7 @@ function App() {
                 <Route
                     path="/commercial/statistics"
                     element={
-                        <ProtectedRoute requiredType="contract_brewery">
+                        <ProtectedRoute requiredType="commercial_brewery">
                             <Statistics />
                         </ProtectedRoute>
                     }
@@ -163,6 +164,14 @@ function App() {
                     element={
                         <ProtectedRoute requiredType="contract_brewery">
                             <AddRecipe />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/recipes/edit"
+                    element={
+                        <ProtectedRoute requiredType="contract_brewery">
+                            <EditRecipe />
                         </ProtectedRoute>
                     }
                 />

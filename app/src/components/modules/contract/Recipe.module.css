@@ -1,0 +1,81 @@
+.recipe {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.recipe:hover {
+    background-color: #d9d9d9;
+}
+
+.recipeText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.recipeTextTitle {
+    font-weight: normal;
+    font-size: 24px;
+    margin-bottom: 5px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.recipeDescription {
+    font-size: 12px;
+    color: gray;
+    margin-top: 4px;
+}
+
+.recipeDescriptionValue {
+    color: black;
+}
+
+.removeButton {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.removeButton:hover {
+    background-color: darkred;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.editButton {
+    background-color: darkgrey;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.editButton:hover {
+    background-color: grey;
+}

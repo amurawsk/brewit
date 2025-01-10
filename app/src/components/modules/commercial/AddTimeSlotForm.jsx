@@ -9,6 +9,9 @@ import styles from './AddTimeSlotForm.module.css';
 
 registerLocale('pl', pl);
 
+/**
+ * AddDeviceForm - gets timeslot start- and end-timestamp from user, picked from day calendar or hour calendar (depends on device_type), on submit sends request to api
+ */
 const AddTimeSlotForm = () => {
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [devices, setDevices] = useState([]);
@@ -24,7 +27,7 @@ const AddTimeSlotForm = () => {
 
     const getData = async () => {
         try {
-            const breweryId = 1;
+            const breweryId = localStorage.getItem('breweryId');
             const response = await api.get(`devices/brewery/${breweryId}/`);
             if (response.status === 200) {
                 setDevices(response.data);

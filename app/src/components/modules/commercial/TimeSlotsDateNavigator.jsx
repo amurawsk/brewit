@@ -3,6 +3,17 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 
 import styles from './TimeSlotsDateNavigator.module.css';
 
+/**
+ * TimeSlotDateNavigator - allows to choose day / week to get only proper timeslots
+ * @param view - 'daily' or 'weekly' view
+ * @param setView - setter for view
+ * @param selectedDate - current chosen date (by user)
+ * @param setSelectedDate - setter for selectedDate
+ * @param startHour - for 'hour' view user can determine timetable start hour
+ * @param endHour - for 'hour' view user can determine timetable end hour
+ * @param setStartHour - setter for start hour
+ * @param setEndHour - setter for end hour
+ */
 const TimeSlotsDateNavigator = ({
     view,
     setView,

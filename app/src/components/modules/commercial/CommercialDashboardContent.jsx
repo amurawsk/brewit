@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import styles from './CommercialDashboardContent.module.css';
 import { useNavigate } from 'react-router-dom';
 
-import PageTittle from '../../utils/PageTittle';
+import PageTitle from '../../utils/PageTitle';
 import ShowOrderDetails from './ShowOrderDetails';
 
+/**
+ * CommercialDashboardContent - defines what is displayed to commercial_brewery user on dashboard page, currently it displays 3 (or less) new orders and 3 (or less) current orders
+ */
 const CommercialDashboardContent = () => {
     const navigate = useNavigate();
     const addDevice = () => navigate('/commercial/devices/add');
@@ -220,8 +223,8 @@ const CommercialDashboardContent = () => {
 
     return (
         <div className={styles.dashboard}>
-            <div className={styles.tittleButtonContainer}>
-                <PageTittle text="Szybki dostęp" />
+            <div className={styles.TitleButtonContainer}>
+                <PageTitle text="Szybki dostęp" />
                 <div className={styles.actionBar}>
                     <button
                         className={styles.darkButton}

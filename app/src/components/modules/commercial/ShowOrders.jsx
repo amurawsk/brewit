@@ -5,6 +5,11 @@ import ShowOrderDetails from './ShowOrderDetails';
 
 import styles from './ShowOrders.module.css';
 
+/**
+ * ShowOrders - displays all orders as an styled list, displays id, brewery_name, created_on, ...
+ * @param orders - orders data that will be displayed
+ * @param status - defines which orders will be displayed (shows order only if order.status = status)
+ */
 const ShowOrders = ({ orders, status }) => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);

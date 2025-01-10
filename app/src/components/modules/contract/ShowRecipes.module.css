@@ -58,3 +58,23 @@
 .removeButton:hover {
     background-color: darkred;
 }
+
+.editButton {
+    background-color: darkgrey;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.editButton:hover {
+    background-color: grey;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 1rem;
+}

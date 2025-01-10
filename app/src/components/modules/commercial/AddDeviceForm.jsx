@@ -3,6 +3,9 @@ import styles from './AddDeviceForm.module.css';
 import api from '../../../api.js';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * AddDeviceForm - gets all necessary data from user, different for each device_type, on submit sends request to api
+ */
 const AddDeviceForm = () => {
     const [formData, setFormData] = useState({
         name: '',
