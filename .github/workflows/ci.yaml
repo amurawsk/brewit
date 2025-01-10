@@ -47,7 +47,7 @@ jobs:
 
       - name: Run tests in frontend container
         run: |
-          docker exec frontend npm test
+          docker compose exec frontend npm test
 
       - name: Stop Docker containers (frontend & backend)
         run: docker compose down
