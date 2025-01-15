@@ -515,7 +515,7 @@ class TimeSlotDeleteView(APIView):
     def get(self, request, time_slot_id):
         user = request.user
         try:
-            time_slot = TimeSlot.objects.get(id=time_slot_id)
+            time_slot = TimeSlot.objects.get(id=time_slot_id, is_deleted=False)
 
             profile = Profile.objects.get(user=user)
             if profile.commercial_brewery != time_slot.device.commercial_brewery:
@@ -527,6 +527,18 @@ class TimeSlotDeleteView(APIView):
             return Response({"error": "Time slot not found."}, status=status.HTTP_404_NOT_FOUND)
         except Profile.DoesNotExist:
             return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if time_slot.order:
+            if time_slot.order.status == "P":
+                return Response(
+                    {"error": "Cannot delete time slot with an order in the past."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if time_slot.order.status != "R":
+                return Response(
+                    {"error": "Cannot delete time slot with an active order. Delete the order first."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         time_slot.delete()
         return Response({"message": "Time slot successfully deleted."}, status=status.HTTP_200_OK)
