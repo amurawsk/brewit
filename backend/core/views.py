@@ -376,6 +376,18 @@ class TimeSlotCreateView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
+        overlapping_slots = TimeSlot.objects.filter(
+            device=device,
+            is_deleted=False,
+            start_timestamp__lt=end_timestamp,
+            end_timestamp__gt=start_timestamp,
+        )
+        if overlapping_slots.exists():
+            return Response(
+                {"error": "Overlapping time slots already exist. Cannot create new time slots."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         time_slots = []
         if slot_type == "H":
             if device.device_type not in ["BT", "BE"]:
