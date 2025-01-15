@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile, TimeSlot
+from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile, TimeSlot, Order
+from django.db.models import Count
 
 
 class MeasurementField(serializers.Field):
@@ -16,6 +17,56 @@ class CommercialBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = CommercialBrewery
         fields = ['name', 'contract_phone_number', 'contract_email', 'description', 'nip', 'address']
+
+
+class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='contract_email')
+    phone_number = serializers.CharField(source="contract_phone_number")
+
+    class Meta:
+        model = CommercialBrewery
+        fields = [
+            'name',
+            'email',
+            'phone_number',
+            'nip',
+            'address',
+            'description'
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        devices = {
+            val['device_type']: val['no'] for val in list(
+                instance
+                .device_set
+                .values('device_type')
+                .annotate(no=Count('device_type'))
+            )
+        }
+        data['no_devices'] = sum(devices.values())
+        data['no_bt'] = devices.get("BT", 0)
+        data['no_ft'] = devices.get("FT", 0)
+        data['no_ac'] = devices.get("AC", 0)
+        data['no_be'] = devices.get("BE", 0)
+        orders = {
+            val["status"]: val["no"] for val in list(
+                Order.objects.filter(
+                    timeslot__device__commercial_brewery=instance
+                ).distinct()
+                .values('status')
+                .annotate(no=Count('status', distinct=True))
+            )
+        }
+        data['no_orders'] = sum(orders.values())
+        data['no_new'] = orders.get("N", 0)
+        data['no_current'] = orders.get("C", 0)
+        data['no_past'] = orders.get("P", 0)
+        data['no_rejected'] = orders.get("R", 0)
+        data["no_employees"] = Profile.objects.filter(
+            commercial_brewery=instance
+        ).count()
+        return data
 
 
 class ContractBrewerySerializer(serializers.ModelSerializer):
