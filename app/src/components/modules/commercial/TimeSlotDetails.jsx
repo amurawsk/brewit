@@ -5,6 +5,8 @@ import ChangePriceModal from '../../utils/ChangePriceModal';
 
 import styles from './TimeSlotDetails.module.css';
 
+import api from '../../../api.js';
+
 /**
  * ShowTimeSlotDetails - pop-up which is visible after clicking on chosen timeslot, displays all timeslot details, allows to change price / cancel timeslot
  * @param isPanelOpen - defines if panel is visible
@@ -53,11 +55,28 @@ const TimeSlotDetails = ({
         setIsModalOpen(false);
     };
 
-    const handleChangePrice = (newPrice) => {
-        // TODO
-        console.log('Nowa cena:', newPrice);
-        setIsPriceDialogOpen(false);
-        setIsPanelOpen(false);
+    const handleChangePrice = async (newPrice) => {
+        try {
+            const payload = {
+                'time_slot_id': selectedSlot.id,
+                'new_price': newPrice
+            }
+            const response = await api.post('time-slots/edit/price/', payload);
+
+            if (response.status === 200) {
+                // const { refresh, access, user_type, user_id, brewery_id } =
+                    // response.data;
+                console.log(response)
+            } else {
+                console.log(response);
+                // TODO: This never happens because it's handled by try-catch
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsPriceDialogOpen(false);
+            setIsPanelOpen(false);
+        }
     };
 
     const handleCancel = () => {
