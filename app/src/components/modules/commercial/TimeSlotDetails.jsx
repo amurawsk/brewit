@@ -56,11 +56,26 @@ const TimeSlotDetails = ({
         }
     }, [selectedSlot]);
 
-    const confirmAction = () => {
-        // TODO
-        console.log('Usuwanie okna...');
-        setIsModalOpen(false);
-        setIsPanelOpen(false);
+    const deleteTimeSlot = async () => {
+        try {
+            const response = await api.get(`time-slots/delete/${selectedSlot.id}/`);
+            console.log(response)
+            if (response.status === 200) {
+                if (refreshData) {
+                    refreshData();
+                    showNotification('Pomyślnie usunięto!');
+                }
+            } else {
+                showNotification('Wystąpił błąd!');
+                console.log(response)
+            }
+        } catch (error) {
+            showNotification('Wystąpił błąd!');
+            console.log(error);
+        } finally {
+            setIsModalOpen(false);
+            setIsPanelOpen(false);
+        }
     };
 
     const cancelAction = () => {
@@ -219,8 +234,8 @@ const TimeSlotDetails = ({
             {isModalOpen && (
                 <ConfirmModal
                     message="Czy na pewno chcesz usunąć to okno czasowe?"
-                    description="Jeśli jest ono zajęte lub zarezerwowane ta czynność spowoduje anulowanie zamówienia"
-                    onConfirm={confirmAction}
+                    description="Jeśli jest ono zajęte lub zarezerwowane najpierw anuluj / odrzuć przypisane zlecenie"
+                    onConfirm={deleteTimeSlot}
                     onCancel={cancelAction}
                 />
             )}
