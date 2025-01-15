@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './EditBreweryInfo.module.css';
 
 /**
- * 
+ * EditBreweryInfo - enables editing brewery data
  * @param isPanelOpen - determines if panel is visible
  * @param setIsPanelOpen - setter for isPanelOpen
  * @param breweryData - current brewery data
