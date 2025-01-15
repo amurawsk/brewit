@@ -419,7 +419,7 @@ class TimeSlotCreateView(APIView):
                 )
             start_timestamp = datetime(start_timestamp.year, start_timestamp.month, start_timestamp.day, 0, 0, 0)
             end_timestamp = datetime(end_timestamp.year, end_timestamp.month, end_timestamp.day, 23, 59, 59)
-            while start_timestamp <= end_timestamp:
+            while start_timestamp.date <= end_timestamp.date:
                 time_slot_data = {
                     "status": time_slot_status,
                     "slot_type": slot_type,
