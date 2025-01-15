@@ -20,5 +20,5 @@ urlpatterns = [
     path("devices/<int:device_id>/time-slots/all/", views.TimeSlotListView.as_view(), name="time_slot_list_all"),
     path("devices/<int:device_id>/time-slots/add/", views.TimeSlotCreateView.as_view(), name="time_slot_create"),
     path("time-slots/edit/price/", views.TimeSlotEditPriceView.as_view(), name="time_slot_edit_price"),
-    # path("devices/<int:device_id>/time-slots/delete/", views.TimeSlotDeleteView.as_view(), name="time_slot_delete"),
+    path("time-slots/delete/<int:time_slot_id>/", views.TimeSlotDeleteView.as_view(), name="time_slot_delete"),
 ]

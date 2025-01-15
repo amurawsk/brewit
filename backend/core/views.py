@@ -497,6 +497,41 @@ class TimeSlotEditPriceView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class TimeSlotDeleteView(APIView):
+    """View for deleting a time slot. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the time slot id, validates it and deletes the time slot.
+            If the time slot deletion is successful, it returns a success message.
+            If the time slot deletion fails, it returns an error message.
+
+    Responses:
+        - 200 OK: If the time slot is successfully deleted, the response contains a success message.
+        - 403 Forbidden: If the user is not authorized to delete this time slot, the response contains an error message.
+        - 404 Not Found: If the time slot or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, time_slot_id):
+        user = request.user
+        try:
+            time_slot = TimeSlot.objects.get(id=time_slot_id)
+
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery != time_slot.device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to delete this time slot."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        except TimeSlot.DoesNotExist:
+            return Response({"error": "Time slot not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        time_slot.delete()
+        return Response({"message": "Time slot successfully deleted."}, status=status.HTTP_200_OK)
+
+
 class DevicesWithTimeSlotsView(APIView):
     """View for listing all devices with time slots for a specific brewery.
     Class allows only authenticated users to access this view.
