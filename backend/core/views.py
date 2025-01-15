@@ -11,6 +11,7 @@ from .serializers import (
     LoginSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
+    TimeSlotEditPriceSerializer,
     TimeSlotSerializer,
 )
 
@@ -385,6 +386,46 @@ class TimeSlotListView(APIView):
         time_slots = TimeSlot.objects.filter(device=device)
         serializer = TimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TimeSlotEditPriceView(APIView):
+    """View for editing the price of a time slot. Class allows only authenticated users to access this view.
+    This view supports HTTP methods:
+    - POST: Accepts the time slot id and new price, validates the data and updates the price of the time slot.
+            If the price update is successful, it returns a success message.
+            If the price update fails, it returns validation errors.
+    Responses:
+        - 200 OK: If the price is successfully updated, the response contains a success message.
+        - 400 Bad Request: If the price update fails, the response contains error messages related to the price data.
+        - 403 Forbidden: If the user is not authorized to edit the price of this time slot, the response contains an error message.
+        - 404 Not Found: If the time slot or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        try:
+            time_slot_id = request.data.get("time_slot_id")
+            time_slot = TimeSlot.objects.get(id=time_slot_id)
+
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery != time_slot.device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to edit the price of this time slot."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        except TimeSlot.DoesNotExist:
+            return Response({"error": "Time slot not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        data = {"price": request.data.get("new_price")}
+
+        serializer = TimeSlotEditPriceSerializer(time_slot, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Time slot price successfully updated."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DevicesWithTimeSlotsView(APIView):

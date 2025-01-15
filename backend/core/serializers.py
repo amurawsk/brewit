@@ -155,6 +155,17 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         return data
 
 
+class TimeSlotEditPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = ['price']
+
+    def validate_price(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Price must be a positive number.")
+        return value
+
+
 class DeviceWithTimeSlotsSerializer(serializers.ModelSerializer):
     timeSlots = TimeSlotSerializer(source='timeslot_set', many=True)
 
