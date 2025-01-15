@@ -193,6 +193,11 @@ class TimeSlot(models.Model):
         null=True,
         blank=True
     )
+    is_deleted = models.BooleanField(default=False)
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.save()
 
     class Meta:
         constraints = [

@@ -452,7 +452,7 @@ class TimeSlotListView(APIView):
         except Profile.DoesNotExist:
             return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        time_slots = TimeSlot.objects.filter(device=device)
+        time_slots = TimeSlot.objects.filter(device=device, is_deleted=False)
         serializer = TimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -512,7 +512,7 @@ class TimeSlotDeleteView(APIView):
     """
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, time_slot_id):
+    def get(self, request, time_slot_id):
         user = request.user
         try:
             time_slot = TimeSlot.objects.get(id=time_slot_id)
