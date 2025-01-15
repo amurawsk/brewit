@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -319,8 +320,6 @@ class TimeSlotCreateView(APIView):
         - 403 Forbidden: If the user is not authorized to add time slots for this device,
           the response contains an error message.
         - 404 Not Found: If the device or user profile is not found, the response contains an error message.
-        - 405 Method Not Allowed: If a GET request is made to this endpoint,
-          the response indicates that only POST is allowed.
     """
     permission_classes = [IsAuthenticated]
 
@@ -351,11 +350,81 @@ class TimeSlotCreateView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = TimeSlotSerializer(data=request.data)
-        if serializer.is_valid():
-            time_slot = serializer.save(device=device)
-            return Response({"message": "Time slot successfully created.", "id": time_slot.id}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        time_slot_status = request.data.get("status")
+        slot_type = request.data.get("slot_type")
+        price = request.data.get("price")
+        start_timestamp_str = request.data.get("start_timestamp")
+        end_timestamp_str = request.data.get("end_timestamp")
+
+        try:
+            start_timestamp = datetime.fromisoformat(start_timestamp_str)
+        except ValueError:
+            return Response(
+                {"error": "Invalid start timestamp format."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            end_timestamp = datetime.fromisoformat(end_timestamp_str)
+        except ValueError:
+            return Response(
+                {"error": "Invalid end timestamp format."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if start_timestamp >= end_timestamp:
+            return Response(
+                {"error": "Start time must be before end time."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        time_slots = []
+        if slot_type == "H":
+            while start_timestamp + timedelta(hours=1) <= end_timestamp:
+                time_slot_data = {
+                    "status": time_slot_status,
+                    "slot_type": slot_type,
+                    "price": price,
+                    "start_timestamp": start_timestamp,
+                    "end_timestamp": start_timestamp + timedelta(hours=1),
+                    "device": device.id,
+                }
+                serializer = TimeSlotSerializer(data=time_slot_data)
+                if serializer.is_valid():
+                    time_slot = serializer.save(device=device)
+                    time_slots.append(time_slot)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                start_timestamp += timedelta(hours=1)
+        elif slot_type == "D":
+            start_timestamp = datetime(start_timestamp.year, start_timestamp.month, start_timestamp.day, 0, 0, 0)
+            end_timestamp = datetime(end_timestamp.year, end_timestamp.month, end_timestamp.day, 23, 59, 59)
+            while start_timestamp <= end_timestamp:
+                time_slot_data = {
+                    "status": time_slot_status,
+                    "slot_type": slot_type,
+                    "price": price,
+                    "start_timestamp": start_timestamp,
+                    "end_timestamp": datetime(
+                        start_timestamp.year, start_timestamp.month, start_timestamp.day, 23, 59, 59
+                    ),
+                    "device": device.id,
+                }
+                serializer = TimeSlotSerializer(data=time_slot_data)
+                if serializer.is_valid():
+                    time_slot = serializer.save(device=device)
+                    time_slots.append(time_slot)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                start_timestamp += timedelta(days=1)
+        else:
+            return Response(
+                {"error": "Invalid slot type."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(
+            {"message": "Time slots successfully created.", "ids": [time_slot.id for time_slot in time_slots]},
+            status=status.HTTP_201_CREATED
+        )
 
 
 class TimeSlotListView(APIView):
