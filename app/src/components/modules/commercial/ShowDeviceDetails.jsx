@@ -8,7 +8,7 @@ import styles from './ShowDeviceDetails.module.css';
  * @param setIsPanelOpen - setter for isPanelOpen
  * @param deviceFields - all necessary data, selected device details
  * @param selectedDevice - device which was selected by user
- * @param setDeviceFields - setter for deviceFields 
+ * @param setDeviceFields - setter for deviceFields
  */
 const ShowDeviceDetails = ({
     isPanelOpen,

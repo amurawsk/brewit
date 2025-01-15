@@ -208,6 +208,7 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
                 setIsPanelOpen={setIsPanelOpen}
                 selectedSlot={selectedSlot}
                 selectedDevice={selectedDevice}
+                refreshData={getData}
             />
         </div>
     );

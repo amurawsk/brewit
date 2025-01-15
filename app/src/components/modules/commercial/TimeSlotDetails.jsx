@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import ConfirmModal from '../../utils/ConfirmModal';
 import ChangePriceModal from '../../utils/ChangePriceModal';
+import Notification from '../../utils/Notification.jsx';
 
 import styles from './TimeSlotDetails.module.css';
 
@@ -19,16 +20,27 @@ const TimeSlotDetails = ({
     setIsPanelOpen,
     selectedSlot,
     selectedDevice,
+    refreshData,
 }) => {
     const [contractBrewery, setContractBrewery] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPriceDialogOpen, setIsPriceDialogOpen] = useState(false);
+    const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+    const [notificationText, setNotificationText] = useState(null);
 
     const truncateDeviceName = (name) => {
         if (name && name.length > 25) {
             return name.slice(0, 25) + '...';
         }
         return name;
+    };
+
+    const showNotification = (text) => {
+        setNotificationText(text);
+        setIsNotificationVisible(true);
+        setTimeout(() => {
+            setIsNotificationVisible(false);
+        }, 2000);
     };
 
     useEffect(() => {
@@ -58,20 +70,21 @@ const TimeSlotDetails = ({
     const handleChangePrice = async (newPrice) => {
         try {
             const payload = {
-                'time_slot_id': selectedSlot.id,
-                'new_price': newPrice
-            }
+                time_slot_id: selectedSlot.id,
+                new_price: newPrice,
+            };
             const response = await api.post('time-slots/edit/price/', payload);
 
             if (response.status === 200) {
-                // const { refresh, access, user_type, user_id, brewery_id } =
-                    // response.data;
-                console.log(response)
+                if (refreshData) {
+                    refreshData();
+                    showNotification('Pomyślnie zmieniono cenę!');
+                }
             } else {
-                console.log(response);
-                // TODO: This never happens because it's handled by try-catch
+                showNotification('Wystąpił błąd!');
             }
         } catch (error) {
+            showNotification('Wystąpił błąd!');
             console.log(error);
         } finally {
             setIsPriceDialogOpen(false);
@@ -217,6 +230,10 @@ const TimeSlotDetails = ({
                     onCancel={handleCancel}
                 />
             )}
+            <Notification
+                message={notificationText}
+                isVisible={isNotificationVisible}
+            />
         </div>
     );
 };

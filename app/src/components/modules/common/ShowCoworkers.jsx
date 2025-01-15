@@ -6,9 +6,9 @@ import ConfirmModal from '../../utils/ConfirmModal';
 
 /**
  * ShowCoworkers - displays coworkers styled list, shows username, created_at
- * 
- * If coworkers list is empty, component displays proper info 
- * @param coworkers - coworkers list 
+ *
+ * If coworkers list is empty, component displays proper info
+ * @param coworkers - coworkers list
  */
 const ShowCoworkers = ({ coworkers }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
