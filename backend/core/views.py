@@ -378,6 +378,11 @@ class TimeSlotCreateView(APIView):
 
         time_slots = []
         if slot_type == "H":
+            if device.device_type not in ["BT", "BE"]:
+                return Response(
+                    {"error": "Invalid slot type for device type."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             while start_timestamp + timedelta(hours=1) <= end_timestamp:
                 time_slot_data = {
                     "status": time_slot_status,
@@ -395,6 +400,11 @@ class TimeSlotCreateView(APIView):
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                 start_timestamp += timedelta(hours=1)
         elif slot_type == "D":
+            if device.device_type not in ["FT", "AC"]:
+                return Response(
+                    {"error": "Invalid slot type for device type."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             start_timestamp = datetime(start_timestamp.year, start_timestamp.month, start_timestamp.day, 0, 0, 0)
             end_timestamp = datetime(end_timestamp.year, end_timestamp.month, end_timestamp.day, 23, 59, 59)
             while start_timestamp <= end_timestamp:
