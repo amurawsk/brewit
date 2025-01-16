@@ -167,8 +167,12 @@ class TimeSlotEditPriceSerializer(serializers.ModelSerializer):
 
 
 class DeviceWithTimeSlotsSerializer(serializers.ModelSerializer):
-    timeSlots = TimeSlotSerializer(source='timeslot_set', many=True)
+    timeSlots = serializers.SerializerMethodField()
 
     class Meta:
         model = Device
         fields = ['id', 'name', 'device_type', 'timeSlots']
+
+    def get_timeSlots(self, obj):
+        time_slots = obj.timeslot_set.filter(is_deleted=False)
+        return TimeSlotSerializer(time_slots, many=True).data
