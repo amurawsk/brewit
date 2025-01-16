@@ -22,25 +22,24 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
         (_, i) => i + startHour
     );
 
-    const getData = async () => {
-        try {
-            const breweryId = localStorage.getItem('breweryId');
-            const response = await api.get(
-                `devices/brewery/${breweryId}/with-time-slots/`
-            );
-            if (response.status === 200) {
-                setTimetableData(response.data);
-            } else {
-                console.log(response);
-            }
-        } catch (error) {
-            console.log('Error fetching devices:', error);
-        }
-    };
-
     useEffect(() => {
-        getData();
-    }, []);
+        const getData = async () => {
+            try {
+                const breweryId = localStorage.getItem('breweryId');
+                const response = await api.get(`devices/brewery/${breweryId}/with-time-slots/`);
+                if (response.status === 200) {
+                    setTimetableData(response.data);
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log('Error fetching devices:', error);
+            }
+        };
+        if (!isPanelOpen) {
+            getData();
+        }
+    }, [isPanelOpen]);
 
     const formatDate = (date) => {
         return date.toLocaleDateString('pl-PL');
@@ -208,7 +207,6 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour }) => {
                 setIsPanelOpen={setIsPanelOpen}
                 selectedSlot={selectedSlot}
                 selectedDevice={selectedDevice}
-                refreshData={getData}
             />
         </div>
     );

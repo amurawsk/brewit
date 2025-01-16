@@ -20,7 +20,6 @@ const TimeSlotDetails = ({
     setIsPanelOpen,
     selectedSlot,
     selectedDevice,
-    refreshData,
 }) => {
     const [contractBrewery, setContractBrewery] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,6 +44,7 @@ const TimeSlotDetails = ({
 
     useEffect(() => {
         if (selectedSlot && selectedSlot.order !== null) {
+            // TODO change to contract brewery info (from order_id)
             setContractBrewery({
                 name: 'Mock browar 1',
                 owners_name: 'Jan Kowalski',
@@ -61,10 +61,7 @@ const TimeSlotDetails = ({
             const response = await api.get(`time-slots/delete/${selectedSlot.id}/`);
             console.log(response)
             if (response.status === 200) {
-                if (refreshData) {
-                    refreshData();
-                    showNotification('Pomyślnie usunięto!');
-                }
+                showNotification('Pomyślnie usunięto!');
             } else {
                 showNotification('Wystąpił błąd!');
                 console.log(response)
@@ -91,10 +88,7 @@ const TimeSlotDetails = ({
             const response = await api.post('time-slots/edit/price/', payload);
 
             if (response.status === 200) {
-                if (refreshData) {
-                    refreshData();
-                    showNotification('Pomyślnie zmieniono cenę!');
-                }
+                showNotification('Pomyślnie zmieniono cenę!');
             } else {
                 showNotification('Wystąpił błąd!');
             }
