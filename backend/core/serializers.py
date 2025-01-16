@@ -179,6 +179,21 @@ class DeviceWithTimeSlotsSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+
     class Meta:
         model = Order
         fields = ['id', 'created_at', 'status', 'beer_type', 'beer_volume', 'description', 'rate', 'ended_at', 'contract_brewery', 'recipe']
+
+
+class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    timeSlots = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = ['id', 'created_at', 'status', 'beer_type', 'beer_volume', 'description', 'rate', 'ended_at', 'contract_brewery', 'recipe', 'timeSlots']
+
+    def get_timeSlots(self, obj):
+        time_slots = obj.timeslot_set.filter(is_deleted=False)
+        return TimeSlotSerializer(time_slots, many=True).data

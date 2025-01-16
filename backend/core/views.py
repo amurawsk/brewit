@@ -4,13 +4,14 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Profile, TimeSlot
+from .models import Device, Order, Profile, TimeSlot
 from .serializers import (
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
     DeviceWithTimeSlotsSerializer,
     LoginSerializer,
     OrderSerializer,
+    OrderWithTimeSlotsSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
     TimeSlotEditPriceSerializer,
@@ -699,3 +700,47 @@ class OrderCreateView(APIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OrderDetailView(APIView):
+    """View for retrieving details of an order. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the order id, validates it and returns the details of the order.
+
+    Responses:
+        - 200 OK: If the order details are successfully retrieved, the response contains
+          the details of the order.
+        - 403 Forbidden: If the user is not authorized to view the details of this order,
+          the response contains an error message.
+        - 404 Not Found: If the order or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, order_id):
+        user = request.user
+        try:
+            order = Order.objects.get(id=order_id)
+            profile = Profile.objects.get(user=user)
+            time_slot = TimeSlot.objects.filter(order=order).first()
+            if (
+                profile.contract_brewery != order.contract_brewery and
+                profile.commercial_brewery != time_slot.device.commercial_brewery
+            ):
+                return Response(
+                    {"error": "Unauthorized to view this order."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = OrderWithTimeSlotsSerializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
