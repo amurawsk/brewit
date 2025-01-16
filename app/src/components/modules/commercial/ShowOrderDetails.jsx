@@ -5,6 +5,8 @@ import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
 
+import api from '../../../api.js';
+
 /**
  * ShowOrderDetails - pop-up window which is visible after clicking on chosen order, displays all order details, allows to accept / reject / cancel order
  * @param isPanelOpen - defines if panel is visible
@@ -12,7 +14,7 @@ import Notification from '../../utils/Notification.jsx';
  * @param order - chosen order data
  * @param setOrder - setter for order
  */
-const ShowDeviceDetails = ({
+const ShowOrderDetails = ({
     isPanelOpen,
     setIsPanelOpen,
     order,
@@ -21,8 +23,10 @@ const ShowDeviceDetails = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+    const [notificationText, setNotificationText] = useState(null);
 
-    const showNotification = () => {
+    const showNotification = (text) => {
+        setNotificationText(text);
         setIsNotificationVisible(true);
         setTimeout(() => {
             setIsNotificationVisible(false);
@@ -39,13 +43,52 @@ const ShowDeviceDetails = ({
         setIsModalOpen(true);
     };
 
+    const acceptOrder = async () => {
+        try {
+            const response = await api.get(`orders/${order.id}/accept/`);
+            console.log(response)
+            if (response.status === 200) {
+                showNotification('Pomyślnie zaakceptowano!');
+            } else {
+                showNotification('Wystąpił błąd!');
+                console.log(response)
+            }
+        } catch (error) {
+            showNotification('Wystąpił błąd!');
+            console.log(error);
+        } finally {
+            setIsModalOpen(false);
+            setIsPanelOpen(false);
+        }
+    };
+
+    const rejectOrder = async () => {
+        try {
+            const response = await api.get(`orders/${order.id}/reject/`);
+            console.log(response)
+            if (response.status === 200) {
+                showNotification('Pomyślnie odrzucono!');
+            } else {
+                showNotification('Wystąpił błąd!');
+                console.log(response)
+            }
+        } catch (error) {
+            showNotification('Wystąpił błąd!');
+            console.log(error);
+        } finally {
+            setIsModalOpen(false);
+            setIsPanelOpen(false);
+        }
+    };
+
     const confirmAction = () => {
         if (action === 'cancel') {
+            // TODO
             console.log('Zlecenie anulowane', order.id);
         } else if (action === 'reject') {
-            console.log('Zlecenie odrzucone', order.id);
+            rejectOrder();
         } else if (action === 'accept') {
-            console.log('Zlecenie zaakceptowane', order.id);
+            acceptOrder();
         }
         setIsModalOpen(false);
         closePanel();
@@ -218,11 +261,11 @@ const ShowDeviceDetails = ({
                 />
             )}
             <Notification
-                message="Operacja zakończona sukcesem!"
+                message={notificationText}
                 isVisible={isNotificationVisible}
             />
         </div>
     );
 };
 
-export default ShowDeviceDetails;
+export default ShowOrderDetails;
