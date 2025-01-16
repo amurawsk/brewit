@@ -10,6 +10,7 @@ from .serializers import (
     DeviceSerializer,
     DeviceWithTimeSlotsSerializer,
     LoginSerializer,
+    OrderSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
     TimeSlotEditPriceSerializer,
@@ -602,3 +603,99 @@ class DevicesWithTimeSlotsView(APIView):
         devices = Device.objects.filter(commercial_brewery_id=brewery_id)
         serializer = DeviceWithTimeSlotsSerializer(devices, many=True)
         return Response(serializer.data, status=200)
+
+
+class OrderCreateView(APIView):
+    """View for creating a new order. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the order data, validates it and creates a new order.
+            If the order creation is successful, it returns a success message.
+            If the order creation fails, it returns validation errors.
+
+    Responses:
+        - 201 Created: If the order is successfully created, the response contains
+          a success message and the order id.
+        - 400 Bad Request: If the order creation fails, the response contains
+          error messages related to the order data.
+        - 403 Forbidden: If the user is not authorized to create orders for this device,
+          the response contains an error message.
+        - 404 Not Found: If the timeslot, device or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        try:
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to create orders for this user."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        time_slot_ids = request.data.get("time_slot_ids")
+        if not time_slot_ids or not isinstance(time_slot_ids, list):
+            return Response(
+                {"error": "Time slot IDs must be provided as a list."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        time_slots = TimeSlot.objects.filter(id__in=time_slot_ids, is_deleted=False)
+        if time_slots.count() != len(time_slot_ids):
+            return Response(
+                {"error": "Invalid time slot ids."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if time_slots.filter(status="R").exists():
+            return Response(
+                {"error": "Cannot create order for reserved time slots."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if time_slots.filter(status="U").exists():
+            return Response(
+                {"error": "Cannot create order for unavailable time slots."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if time_slots.filter(status="H").exists():
+            return Response(
+                {"error": "Cannot create order for hired time slots."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if time_slots.filter(start_timestamp__lt=datetime.now()).exists():
+            return Response(
+                {"error": "Cannot create order for time slots in the past."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if time_slots.filter(order__isnull=False).exists():
+            return Response(
+                {"error": "Cannot create order for time slots with active orders."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        data = {
+            "beer_type": request.data.get("beer_type"),
+            "beer_volume": request.data.get("beer_volume"),
+            "description": request.data.get("description"),
+            "contract_brewery": profile.contract_brewery.id,
+        }
+
+        serializer = OrderSerializer(data=data)
+        if serializer.is_valid():
+            order = serializer.save()
+            time_slots.update(order=order)
+            return Response(
+                {"message": "Order successfully created.", "id": order.id},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

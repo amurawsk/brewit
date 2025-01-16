@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile, TimeSlot
+from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Order, Profile, TimeSlot
 
 
 class MeasurementField(serializers.Field):
@@ -176,3 +176,9 @@ class DeviceWithTimeSlotsSerializer(serializers.ModelSerializer):
     def get_timeSlots(self, obj):
         time_slots = obj.timeslot_set.filter(is_deleted=False)
         return TimeSlotSerializer(time_slots, many=True).data
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['id', 'created_at', 'status', 'beer_type', 'beer_volume', 'description', 'rate', 'ended_at', 'contract_brewery', 'recipe']

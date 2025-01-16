@@ -21,4 +21,21 @@ urlpatterns = [
     path("devices/<int:device_id>/time-slots/add/", views.TimeSlotCreateView.as_view(), name="time_slot_create"),
     path("time-slots/edit/price/", views.TimeSlotEditPriceView.as_view(), name="time_slot_edit_price"),
     path("time-slots/delete/<int:time_slot_id>/", views.TimeSlotDeleteView.as_view(), name="time_slot_delete"),
+
+    path("orders/add/", views.OrderCreateView.as_view(), name="order_create"),
+    # path("orders/<int:order_id>/details/", views.OrderDetailView.as_view(), name="order_detail"),
+    # path("orders/<int:order_id>/accept/", views.OrderAcceptView.as_view(), name="order_accept"),
+    # path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
+    # path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
+    # path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
+    # path(
+    #     "orders/commercial/<int:brewery_id>/status/<char:status>/",
+    #     views.OrderListCommercialView.as_view(),
+    #     name="order_list_commercial"
+    # ),
+    # path(
+    #     "orders/contract/<int:brewery_id>/status/<char:status>/",
+    #     views.OrderListContractView.as_view(),
+    #     name="order_list_contract"
+    # ),
 ]
