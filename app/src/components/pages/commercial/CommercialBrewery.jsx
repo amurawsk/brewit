@@ -10,44 +10,29 @@ import BreweryShortStats from '../../modules/common/BreweryShortStats.jsx';
 
 import styles from './CommercialBrewery.module.css';
 
+import api from '../../../api.js';
+
 /**
  * Commercial Brewery page - allows to view or edit brewery data, contains layout (Header, Sidebar, Title, Button) and BreweryInfo, BreweryShortStats components
  */
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
-    const [statsData, setStatsData] = useState(null);
-
-    // TODO mock
-    const getData = () => {
-        const brewery_info = {
-            name: 'Przykład',
-            email: 'example@gmail.com',
-            phone_number: '123456789',
-            nip: '12345678901',
-            address: 'Szkolna 1',
-            description:
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate mollitia velit corrupti harum possimus ipsam nisi odit explicabo fugiat ea, tempora facilis accusantium perferendis voluptas minima, nam ratione numquam aliquid.',
-        };
-        const stats_info = {
-            no_devices: 1,
-            no_bt: 1,
-            no_ft: 0,
-            no_ac: 0,
-            no_be: 0,
-            no_orders: 3,
-            no_new: 1,
-            no_current: 1,
-            no_past: 1,
-            no_rejected: 0,
-            no_employees: 1,
-        };
-
-        setBreweryData(brewery_info);
-        setStatsData(stats_info);
-    };
 
     useEffect(() => {
+        const getData = async () => {
+            try {
+                console.log()
+                const response = await api.get(`commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`);
+                if (response.status === 200) {
+                    setBreweryData(response.data);
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log('Error fetching devices:', error);
+            }
+        };
         getData();
     }, []);
 
@@ -78,8 +63,8 @@ const CommercialBrewery = () => {
                         />
                     )}
                     <PageTitle text="Statystyki" />
-                    {statsData !== null && (
-                        <BreweryShortStats statsData={statsData} />
+                    {breweryData !== null && (
+                    <BreweryShortStats statsData={breweryData} />
                     )}
                 </div>
             </div>
