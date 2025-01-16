@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Order, Profile, TimeSlot
+from .models import Device, Order, Profile, TimeSlot, CommercialBrewery
 from .serializers import (
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
@@ -16,6 +16,7 @@ from .serializers import (
     RegisterContractSerializer,
     TimeSlotEditPriceSerializer,
     TimeSlotSerializer,
+    CommercialBreweryInfoSerializer
 )
 
 
@@ -981,3 +982,27 @@ class OrderListContractView(APIView):
         orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data, status=200)
+class CommercialBreweryInfo(APIView):
+    """View for listing commercial brewery info with orders and devices.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the brewery is successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery is not found
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, brewery_id):
+        try:
+            brewery = CommercialBrewery.objects.get(pk=brewery_id)
+            serializer = CommercialBreweryInfoSerializer(brewery)
+            return Response(serializer.data, status=200)
+        except CommercialBrewery.DoesNotExist:
+            return Response(
+                {"error": 'Commercial brewery not found.'},
+                status=404
+            )

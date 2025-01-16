@@ -38,4 +38,6 @@ urlpatterns = [
         views.OrderListContractView.as_view(),
         name="order_list_contract"
     ),
+
+    path("commercial-brewery/<int:brewery_id>/", views.CommercialBreweryInfo.as_view(), name="commercial_brewery_info"),
 ]
