@@ -5,10 +5,9 @@ import ShowOrderDetails from './ShowOrderDetails';
 
 import styles from './ShowOrders.module.css';
 
-const ShowOrders = ({ orders, status }) => {
+const ShowOrders = ({ orders }) => {
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
-    const filteredOrders = orders.filter((order) => order.status === status);
 
     const openPanel = () => {
         setIsPanelOpen(true);
@@ -21,13 +20,13 @@ const ShowOrders = ({ orders, status }) => {
 
     return (
         <div>
-            {filteredOrders.length === 0 ? (
+            {orders.length === 0 ? (
                 <p className={styles.noOrdersMessage}>
                     Brak zleceń o tym statusie.
                 </p>
             ) : (
                 <div className={styles.grid}>
-                    {filteredOrders.map((order, index) => (
+                    {orders.map((order, index) => (
                         <div
                             key={index}
                             className={styles.card}
