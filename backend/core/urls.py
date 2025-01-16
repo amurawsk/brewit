@@ -24,10 +24,10 @@ urlpatterns = [
 
     path("orders/add/", views.OrderCreateView.as_view(), name="order_create"),
     path("orders/<int:order_id>/details/", views.OrderDetailView.as_view(), name="order_detail"),
-    # path("orders/<int:order_id>/accept/", views.OrderAcceptView.as_view(), name="order_accept"),
-    # path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
+    path("orders/<int:order_id>/accept/", views.OrderAcceptView.as_view(), name="order_accept"),
+    path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
+    path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
     # path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
-    # path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
     # path(
     #     "orders/commercial/<int:brewery_id>/status/<char:status>/",
     #     views.OrderListCommercialView.as_view(),
