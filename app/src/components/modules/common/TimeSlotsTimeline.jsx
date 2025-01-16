@@ -22,7 +22,7 @@ const TimeSlotsTimeline = ({ order }) => {
 
     return (
         <div className={styles.timeline}>
-            {order.timeslots.map((timeslot, index) => (
+            {order.timeSlots.map((timeslot, index) => (
                 <div key={index} className={styles.event}>
                     <div
                         className={`${styles.dot} ${getDotColor(timeslot.start_timestamp, timeslot.end_timestamp, order.status)}`}
