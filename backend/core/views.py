@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from .serializers import (
     LoginSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
+    TimeSlotEditPriceSerializer,
     TimeSlotSerializer,
 )
 
@@ -318,8 +320,6 @@ class TimeSlotCreateView(APIView):
         - 403 Forbidden: If the user is not authorized to add time slots for this device,
           the response contains an error message.
         - 404 Not Found: If the device or user profile is not found, the response contains an error message.
-        - 405 Method Not Allowed: If a GET request is made to this endpoint,
-          the response indicates that only POST is allowed.
     """
     permission_classes = [IsAuthenticated]
 
@@ -350,11 +350,103 @@ class TimeSlotCreateView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        serializer = TimeSlotSerializer(data=request.data)
-        if serializer.is_valid():
-            time_slot = serializer.save(device=device)
-            return Response({"message": "Time slot successfully created.", "id": time_slot.id}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        time_slot_status = request.data.get("status")
+        slot_type = request.data.get("slot_type")
+        price = request.data.get("price")
+        start_timestamp_str = request.data.get("start_timestamp")
+        end_timestamp_str = request.data.get("end_timestamp")
+
+        try:
+            start_timestamp = datetime.fromisoformat(start_timestamp_str)
+        except ValueError:
+            return Response(
+                {"error": "Invalid start timestamp format."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            end_timestamp = datetime.fromisoformat(end_timestamp_str)
+        except ValueError:
+            return Response(
+                {"error": "Invalid end timestamp format."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if start_timestamp >= end_timestamp:
+            return Response(
+                {"error": "Start time must be before end time."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        overlapping_slots = TimeSlot.objects.filter(
+            device=device,
+            is_deleted=False,
+            start_timestamp__lt=end_timestamp,
+            end_timestamp__gt=start_timestamp,
+        )
+        if overlapping_slots.exists():
+            return Response(
+                {"error": "Overlapping time slots already exist. Cannot create new time slots."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        time_slots = []
+        if slot_type == "H":
+            if device.device_type not in ["BT", "BE"]:
+                return Response(
+                    {"error": "Invalid slot type for device type."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            while start_timestamp + timedelta(hours=1) <= end_timestamp:
+                time_slot_data = {
+                    "status": time_slot_status,
+                    "slot_type": slot_type,
+                    "price": price,
+                    "start_timestamp": start_timestamp,
+                    "end_timestamp": start_timestamp + timedelta(hours=1),
+                    "device": device.id,
+                }
+                serializer = TimeSlotSerializer(data=time_slot_data)
+                if serializer.is_valid():
+                    time_slot = serializer.save(device=device)
+                    time_slots.append(time_slot)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                start_timestamp += timedelta(hours=1)
+        elif slot_type == "D":
+            if device.device_type not in ["FT", "AC"]:
+                return Response(
+                    {"error": "Invalid slot type for device type."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            start_timestamp = datetime(start_timestamp.year, start_timestamp.month, start_timestamp.day, 0, 0, 0)
+            end_timestamp = datetime(end_timestamp.year, end_timestamp.month, end_timestamp.day, 23, 59, 59)
+            while start_timestamp.date() <= end_timestamp.date():
+                time_slot_data = {
+                    "status": time_slot_status,
+                    "slot_type": slot_type,
+                    "price": price,
+                    "start_timestamp": start_timestamp,
+                    "end_timestamp": datetime(
+                        start_timestamp.year, start_timestamp.month, start_timestamp.day, 23, 59, 59
+                    ),
+                    "device": device.id,
+                }
+                serializer = TimeSlotSerializer(data=time_slot_data)
+                if serializer.is_valid():
+                    time_slot = serializer.save(device=device)
+                    time_slots.append(time_slot)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                start_timestamp += timedelta(days=1)
+        else:
+            return Response(
+                {"error": "Invalid slot type."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(
+            {"message": "Time slots successfully created.", "ids": [time_slot.id for time_slot in time_slots]},
+            status=status.HTTP_201_CREATED
+        )
 
 
 class TimeSlotListView(APIView):
@@ -382,9 +474,96 @@ class TimeSlotListView(APIView):
         except Profile.DoesNotExist:
             return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        time_slots = TimeSlot.objects.filter(device=device)
+        time_slots = TimeSlot.objects.filter(device=device, is_deleted=False)
         serializer = TimeSlotSerializer(time_slots, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TimeSlotEditPriceView(APIView):
+    """View for editing the price of a time slot. Class allows only authenticated users to access this view.
+    This view supports HTTP methods:
+    - POST: Accepts the time slot id and new price, validates the data and updates the price of the time slot.
+            If the price update is successful, it returns a success message.
+            If the price update fails, it returns validation errors.
+    Responses:
+        - 200 OK: If the price is successfully updated, the response contains a success message.
+        - 400 Bad Request: If the price update fails, the response contains error messages related to the price data.
+        - 403 Forbidden: If the user is not authorized to edit the price of this time slot, the response contains an error message.
+        - 404 Not Found: If the time slot or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        try:
+            time_slot_id = request.data.get("time_slot_id")
+            time_slot = TimeSlot.objects.get(id=time_slot_id)
+
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery != time_slot.device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to edit the price of this time slot."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        except TimeSlot.DoesNotExist:
+            return Response({"error": "Time slot not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        data = {"price": request.data.get("new_price")}
+
+        serializer = TimeSlotEditPriceSerializer(time_slot, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Time slot price successfully updated."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TimeSlotDeleteView(APIView):
+    """View for deleting a time slot. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the time slot id, validates it and deletes the time slot.
+            If the time slot deletion is successful, it returns a success message.
+            If the time slot deletion fails, it returns an error message.
+
+    Responses:
+        - 200 OK: If the time slot is successfully deleted, the response contains a success message.
+        - 403 Forbidden: If the user is not authorized to delete this time slot, the response contains an error message.
+        - 404 Not Found: If the time slot or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, time_slot_id):
+        user = request.user
+        try:
+            time_slot = TimeSlot.objects.get(id=time_slot_id, is_deleted=False)
+
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery != time_slot.device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to delete this time slot."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+        except TimeSlot.DoesNotExist:
+            return Response({"error": "Time slot not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Profile.DoesNotExist:
+            return Response({"error": "User profile not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if time_slot.order:
+            if time_slot.order.status == "P":
+                return Response(
+                    {"error": "Cannot delete time slot with an order in the past."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if time_slot.order.status != "R":
+                return Response(
+                    {"error": "Cannot delete time slot with an active order. Delete the order first."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        time_slot.delete()
+        return Response({"message": "Time slot successfully deleted."}, status=status.HTTP_200_OK)
 
 
 class DevicesWithTimeSlotsView(APIView):
