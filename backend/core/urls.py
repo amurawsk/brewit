@@ -28,14 +28,14 @@ urlpatterns = [
     path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
     path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
     # path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
-    # path(
-    #     "orders/commercial/<int:brewery_id>/status/<char:status>/",
-    #     views.OrderListCommercialView.as_view(),
-    #     name="order_list_commercial"
-    # ),
-    # path(
-    #     "orders/contract/<int:brewery_id>/status/<char:status>/",
-    #     views.OrderListContractView.as_view(),
-    #     name="order_list_contract"
-    # ),
+    path(
+        "orders/commercial/status/<str:status>/",
+        views.OrderListCommercialView.as_view(),
+        name="order_list_commercial"
+    ),
+    path(
+        "orders/contract/status/<str:status>/",
+        views.OrderListContractView.as_view(),
+        name="order_list_contract"
+    ),
 ]

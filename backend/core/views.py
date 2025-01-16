@@ -913,3 +913,71 @@ class OrderWithdrawView(APIView):
             {"message": "Order successfully withdrawn."},
             status=status.HTTP_200_OK
         )
+
+
+class OrderListCommercialView(APIView):
+    """View for listing orders with specific status for a commercial brewery. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the status, validates them and returns a list of orders with the specific status for the brewery.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of orders with the specific status for the brewery.
+        - 403 Forbidden: If the user is not authorized to view orders for this brewery, the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, status):
+        user = request.user
+        try:
+            profile = user.profile
+            commercial_brewery = profile.commercial_brewery
+            if not commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to view orders for this brewery."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status=status)
+        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
+        return Response(serializer.data, status=200)
+
+
+class OrderListContractView(APIView):
+    """View for listing orders with specific status for a contract brewery. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the status, validates them and returns a list of orders with the specific status for the brewery.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of orders with the specific status for the brewery.
+        - 403 Forbidden: If the user is not authorized to view orders for this brewery, the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, status):
+        user = request.user
+        try:
+            profile = user.profile
+            contract_brewery = profile.contract_brewery
+            if not contract_brewery:
+                return Response(
+                    {"error": "Unauthorized to view orders for this brewery."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data, status=200)
