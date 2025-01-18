@@ -493,7 +493,7 @@ class CommercialAccountInfoView(APIView):
     - GET: Accepts the account id, validates it and returns a response.
 
     Responses:
-        - 200 OK: If the brewery is successfully retrieved
+        - 200 OK: If the account is successfully retrieved
         - 400 Bad Request: If the account is not a commercial account
         - 403 Forbidden: If the user is not authorized
         - 404 Not Found: If the account is not found
@@ -529,7 +529,7 @@ class ContractAccountInfoView(APIView):
     - GET: Accepts the account id, validates it and returns a response.
 
     Responses:
-        - 200 OK: If the brewery is successfully retrieved
+        - 200 OK: If the account is successfully retrieved
         - 400 Bad Request: If the account is not a contract account
         - 403 Forbidden: If the user is not authorized
         - 404 Not Found: If the account is not found
@@ -558,7 +558,17 @@ class ContractAccountInfoView(APIView):
 
 
 class CoworkersView(APIView):
-    """
+    """View for listing coworkers of given account.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the coworkers are successfully retrieved
+        - 400 Bad Request: If the account is neither commercial nor contract
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account is not found
     """
 
     permission_classes = [IsAuthenticated]
