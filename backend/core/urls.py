@@ -47,5 +47,10 @@ urlpatterns = [
         "coworkers/remove/",
         views.RemoveCoworkerView.as_view(),
         name="coworker_remove"
+    ),
+    path(
+        "coworkers/create/",
+        views.AddCoworkerView.as_view(),
+        name="coworker_add"
     )
 ]

@@ -20,6 +20,9 @@ from .serializers import (
     TimeSlotSerializer,
 )
 from . import serializers
+from django.contrib.auth.models import User
+from django.db.utils import IntegrityError
+from django.contrib.auth.hashers import make_password
 
 
 class RegisterCommercialView(APIView):
@@ -648,4 +651,52 @@ class RemoveCoworkerView(APIView):
             return Response(
                 {"error": "The user cannot remove specified account."},
                 status=status.HTTP_403_FORBIDDEN
+            )
+
+
+class AddCoworkerView(APIView):
+    """View for creating an account assigned to the same brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the "coworker_username", "coworker_password", validates it
+    and returns a response.
+
+    Responses:
+        - 201 Created: If the account is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 409 Not Found: If the provided username is taken
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        profile = request.user.profile
+        serializer = serializers.AccountCreationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                {serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            coworker = User.objects.create(
+                username=serializer.data["coworker_username"],
+                password=make_password(serializer.data["coworker_password"])
+            )
+            Profile.objects.create(
+                user=coworker,
+                contract_brewery=profile.contract_brewery,
+                commercial_brewery=profile.commercial_brewery
+            )
+            return Response(
+                {
+                    "message": f"Successfully added coworker {coworker.username}."
+                },
+                status=status.HTTP_201_CREATED
+            )
+        except IntegrityError:
+            return Response(
+                {"error": "User of provided username already exists."},
+                status=status.HTTP_409_CONFLICT
             )
