@@ -121,23 +121,25 @@ const AddDeviceForm = () => {
                                 required
                             />
                         </div>
-                        <div>
-                            <label
-                                className={styles.addEquipmentLabel}
-                                htmlFor="capacity">
-                                <b>Pojemność (L): </b>
-                            </label>
-                            <input
-                                className={styles.addEquipmentInput}
-                                type="number"
-                                name="capacity"
-                                min="0"
-                                step="0.1"
-                                placeholder="Wpisz pojemność"
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                        {device_type !== 'BE' &&
+                            <div>
+                                <label
+                                    className={styles.addEquipmentLabel}
+                                    htmlFor="capacity">
+                                    <b>Pojemność (L): </b>
+                                </label>
+                                <input
+                                    className={styles.addEquipmentInput}
+                                    type="number"
+                                    name="capacity"
+                                    min="0"
+                                    step="0.1"
+                                    placeholder="Wpisz pojemność"
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        }
                     </>
                 )}
                 {device_type !== 'BE' && device_type && (
@@ -193,7 +195,7 @@ const AddDeviceForm = () => {
                         />
                     </div>
                 )}
-                {(device_type === 'BT' || device_type === 'BE') && (
+                {(device_type === 'AC' || device_type === 'BE') && (
                     <div className={styles.sourBeerCheckbox}>
                         <label
                             className={styles.addEquipmentLabel}

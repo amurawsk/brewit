@@ -278,10 +278,12 @@ const TimeSlotDetails = ({
                                                 deviceDetails.device_type
                                             )}
                                         </p>
-                                        <p>
-                                            <strong>Pojemność:</strong>{' '}
-                                            {deviceDetails.capacity} {'(L)'}
-                                        </p>
+                                        {deviceDetails.device_type !== 'BE' &&
+                                            <p>
+                                                <strong>Pojemność:</strong>{' '}
+                                                {deviceDetails.capacity} {'(L)'}
+                                            </p>
+                                        }
                                         {deviceDetails.device_type !== 'BE' && (
                                             <p>
                                                 <strong>
@@ -308,7 +310,7 @@ const TimeSlotDetails = ({
                                                 deviceDetails.sour_beers
                                             )}
                                         </p>
-                                        {(deviceDetails.device_type === 'BT' ||
+                                        {(deviceDetails.device_type === 'AC' ||
                                             deviceDetails.device_type ===
                                                 'BE') && (
                                             <p>

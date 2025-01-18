@@ -19,6 +19,31 @@
     color: black;
 }
 
+.deviceTypeBox {
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+    color: white;
+}
+
+.deviceTypeBT {
+    background-color: #f0a;
+}
+
+.deviceTypeFT {
+    background-color: #0af;
+}
+
+.deviceTypeAC {
+    background-color: #fa0;
+}
+
+.deviceTypeBE {
+    background-color: #0fa;
+}
+
 .sidePanel {
     position: fixed;
     top: 0;
@@ -82,7 +107,7 @@
     margin-top: 10px;
     padding: 0.4rem 1.2rem;
     font-size: 12px;
-    width: 50%;
+    width: 48%;
     cursor: pointer;
     background-color: #f8f9fa;
     border: 1px solid #ccc;
@@ -99,7 +124,7 @@
     margin-top: 10px;
     padding: 0.4rem 1.2rem;
     font-size: 12px;
-    width: 50%;
+    width: 48%;
     cursor: pointer;
     background-color: #333;
     color: #fff;
@@ -110,4 +135,9 @@
 
 .applyButton:hover {
     background-color: #555;
+}
+
+.panelButtons {
+    display: flex;
+    justify-content: space-between;
 }
