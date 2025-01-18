@@ -980,5 +980,5 @@ class OrderListContractView(APIView):
             )
 
         orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
-        serializer = OrderSerializer(orders, many=True)
+        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
         return Response(serializer.data, status=200)

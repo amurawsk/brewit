@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Order, Profile, TimeSlot
+from django.db.models import Sum
 
 
 class MeasurementField(serializers.Field):
@@ -145,9 +146,18 @@ class DeviceSerializer(serializers.ModelSerializer):
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
+    device = serializers.SerializerMethodField()
+
     class Meta:
         model = TimeSlot
         fields = ['id', 'status', 'slot_type', 'price', 'start_timestamp', 'end_timestamp', 'device', 'order']
+
+    def get_device(self, obj):
+        return {
+            "id": obj.device.id,
+            "name": obj.device.name,
+            "serial_number": obj.device.serial_number
+        }
 
     def validate(self, data):
         if data['start_timestamp'] >= data['end_timestamp']:
@@ -188,7 +198,17 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
     beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    contract_brewery = ContractBrewerySerializer()
+    total_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
-        fields = ['id', 'created_at', 'status', 'beer_type', 'beer_volume', 'description', 'rate', 'ended_at', 'contract_brewery', 'recipe', 'timeSlots']
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume', 
+            'description', 'rate', 'ended_at', 'contract_brewery',
+            'recipe', 'time_slots', 'total_price'
+        ]
+
+    def get_total_price(self, obj):
+        return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
