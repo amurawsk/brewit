@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './MyAccount.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
@@ -38,9 +38,9 @@ const MyAccount = () => {
                 <ContractSidebar />
                 <div className={styles.content}>
                     <PageTitle text="Moje konto" />
-                    {accountInfo !== null &&
+                    {accountInfo !== null && (
                         <AccountInfo accountInfo={accountInfo} />
-                    }
+                    )}
                 </div>
             </div>
         </div>

@@ -1,18 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styles from './ShowDeviceDetails.module.css';
 
-const ShowDeviceDetails = ({
-    isPanelOpen,
-    setIsPanelOpen,
-    deviceFields,
-}) => {
-    const [currentDeviceFields, setCurrentDeviceFields] = useState(deviceFields);
+const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields }) => {
+    const [currentDeviceFields, setCurrentDeviceFields] =
+        useState(deviceFields);
 
     useEffect(() => {
-        setCurrentDeviceFields(deviceFields)
-        console.log(deviceFields)
-    }, [deviceFields])
+        setCurrentDeviceFields(deviceFields);
+    }, [deviceFields]);
 
     const handleFieldChange = (field, value, checked) => {
         if (field === 'carbonation') {
@@ -36,13 +32,16 @@ const ShowDeviceDetails = ({
             const updatedValue = ['capacity', 'price'].includes(field)
                 ? parseFloat(value)
                 : value;
-            setCurrentDeviceFields({ ...currentDeviceFields, [field]: updatedValue });
+            setCurrentDeviceFields({
+                ...currentDeviceFields,
+                [field]: updatedValue,
+            });
         }
-    };    
+    };
 
     const changeDevice = () => {
         // TODO
-        console.log(currentDeviceFields)
+        console.log(currentDeviceFields);
     };
 
     const resolveDeviceType = (type) => {
@@ -67,12 +66,15 @@ const ShowDeviceDetails = ({
                             Szczegóły urządzenia
                         </span>
                         <span className={styles.detailsHeaderSmall}>
-                            W tym panelu możesz również edytować swoje urządzenie
+                            W tym panelu możesz również edytować swoje
+                            urządzenie
                         </span>
                     </div>
                     <div
                         className={`${styles.deviceTypeBox} ${
-                            styles[`deviceType${currentDeviceFields.device_type}`]
+                            styles[
+                                `deviceType${currentDeviceFields.device_type}`
+                            ]
                         }`}>
                         {resolveDeviceType(currentDeviceFields.device_type)}
                     </div>
@@ -86,7 +88,7 @@ const ShowDeviceDetails = ({
                             handleFieldChange('name', e.target.value)
                         }
                     />
-                    {currentDeviceFields.device_type !== 'BE' && 
+                    {currentDeviceFields.device_type !== 'BE' && (
                         <div className={styles.panelContent}>
                             <label className={styles.panelContentLabel}>
                                 Pojemność (L):
@@ -99,11 +101,14 @@ const ShowDeviceDetails = ({
                                 placeholder="Wpisz pojemność"
                                 value={currentDeviceFields.capacity}
                                 onChange={(e) =>
-                                    handleFieldChange('capacity', e.target.value)
+                                    handleFieldChange(
+                                        'capacity',
+                                        e.target.value
+                                    )
                                 }
                             />
                         </div>
-                    }                    
+                    )}
                     {currentDeviceFields.device_type !== 'BE' &&
                         currentDeviceFields.device_type && (
                             <div className={styles.panelContent}>

@@ -1,6 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser, FaCalendarAlt, FaBuilding, FaMapMarkerAlt, FaBarcode, FaUserTie, FaInfoCircle } from 'react-icons/fa'; // Import ikon
+import {
+    FaUser,
+    FaCalendarAlt,
+    FaBuilding,
+    FaMapMarkerAlt,
+    FaBarcode,
+    FaUserTie,
+    FaInfoCircle,
+} from 'react-icons/fa'; // Import ikon
 import styles from './AccountInfo.module.css';
 
 /**
@@ -27,12 +35,16 @@ const AccountInfo = ({ accountInfo }) => {
                     <FaUser className={styles.icon} /> Dane konta
                 </h3>
                 <p>
-                    <FaUserTie className={styles.icon} /> Nazwa użytkownika: <b>{accountInfo.username}</b>
+                    <FaUserTie className={styles.icon} /> Nazwa użytkownika:{' '}
+                    <b>{accountInfo.username}</b>
                 </p>
                 <p>
-                    <FaCalendarAlt className={styles.icon} /> Data utworzenia konta:{' '}
+                    <FaCalendarAlt className={styles.icon} /> Data utworzenia
+                    konta:{' '}
                     <b>
-                        {new Date(accountInfo.created_at).toLocaleString('pl-PL')}
+                        {new Date(accountInfo.created_at).toLocaleString(
+                            'pl-PL'
+                        )}
                     </b>
                 </p>
             </div>
@@ -41,22 +53,26 @@ const AccountInfo = ({ accountInfo }) => {
                     <FaBuilding className={styles.icon} /> Przypisany browar
                 </h3>
                 <p>
-                    <FaBuilding className={styles.icon} /> Nazwa browaru: <b>{accountInfo.brewery_name}</b>
+                    <FaBuilding className={styles.icon} /> Nazwa browaru:{' '}
+                    <b>{accountInfo.brewery_name}</b>
                 </p>
                 {localStorage.getItem('userType') === 'commercial_brewery' && (
                     <>
                         <p>
-                            <FaBarcode className={styles.icon} /> NIP: <b>{accountInfo.brewery_nip}</b>
+                            <FaBarcode className={styles.icon} /> NIP:{' '}
+                            <b>{accountInfo.brewery_nip}</b>
                         </p>
                         <p>
-                            <FaMapMarkerAlt className={styles.icon} /> Adres: <b>{accountInfo.brewery_address}</b>
+                            <FaMapMarkerAlt className={styles.icon} /> Adres:{' '}
+                            <b>{accountInfo.brewery_address}</b>
                         </p>
                     </>
                 )}
                 {localStorage.getItem('userType') === 'contract_brewery' && (
                     <>
                         <p>
-                            <FaUserTie className={styles.icon} /> CEO: <b>{accountInfo.brewery_ceo}</b>
+                            <FaUserTie className={styles.icon} /> CEO:{' '}
+                            <b>{accountInfo.brewery_ceo}</b>
                         </p>
                     </>
                 )}

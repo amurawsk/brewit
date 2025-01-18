@@ -44,9 +44,9 @@ const MyAccount = () => {
                 )}
                 <div className={styles.content}>
                     <PageTitle text="Moje konto" />
-                    {accountInfo !== null &&
+                    {accountInfo !== null && (
                         <AccountInfo accountInfo={accountInfo} />
-                    }
+                    )}
                 </div>
             </div>
         </div>

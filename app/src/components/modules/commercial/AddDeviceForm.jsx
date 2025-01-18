@@ -121,7 +121,7 @@ const AddDeviceForm = () => {
                                 required
                             />
                         </div>
-                        {device_type !== 'BE' &&
+                        {device_type !== 'BE' && (
                             <div>
                                 <label
                                     className={styles.addEquipmentLabel}
@@ -139,7 +139,7 @@ const AddDeviceForm = () => {
                                     required
                                 />
                             </div>
-                        }
+                        )}
                     </>
                 )}
                 {device_type !== 'BE' && device_type && (

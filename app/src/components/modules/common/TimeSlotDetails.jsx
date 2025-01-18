@@ -278,12 +278,12 @@ const TimeSlotDetails = ({
                                                 deviceDetails.device_type
                                             )}
                                         </p>
-                                        {deviceDetails.device_type !== 'BE' &&
+                                        {deviceDetails.device_type !== 'BE' && (
                                             <p>
                                                 <strong>Pojemność:</strong>{' '}
                                                 {deviceDetails.capacity} {'(L)'}
                                             </p>
-                                        }
+                                        )}
                                         {deviceDetails.device_type !== 'BE' && (
                                             <p>
                                                 <strong>

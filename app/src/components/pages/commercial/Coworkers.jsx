@@ -15,7 +15,7 @@ import api from '../../../api.js';
 const Coworkers = () => {
     const navigate = useNavigate();
     const addCoworker = () => navigate('/commercial/coworkers/add');
-    
+
     const [coworkers, setCoworkers] = useState(null);
 
     useEffect(() => {
@@ -53,9 +53,9 @@ const Coworkers = () => {
                         buttonText="Dodaj nowego współpracownika"
                         buttonFunction={addCoworker}
                     />
-                    {coworkers !== null &&
+                    {coworkers !== null && (
                         <ShowCoworkers coworkers={coworkers} />
-                    }
+                    )}
                 </div>
             </div>
         </div>

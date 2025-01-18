@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Coworkers.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
@@ -48,9 +48,9 @@ const Coworkers = () => {
                         buttonText="Dodaj nowego współpracownika"
                         buttonFunction={addCoworker}
                     />
-                    {coworkers !== null &&
+                    {coworkers !== null && (
                         <ShowCoworkers coworkers={coworkers} />
-                    }
+                    )}
                 </div>
             </div>
         </div>
