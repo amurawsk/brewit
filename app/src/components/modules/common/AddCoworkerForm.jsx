@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './AddCoworkerForm.module.css';
 
+import api from '../../../api.js';
+
 /**
  * AddCoworkerForm - similar to login page - has username and password fields
  */
@@ -14,10 +16,25 @@ const AddCoworkerForm = () => {
         password: '',
     });
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(formData.username, formData.password);
-        // TODO
+        try {
+            const response = await api.post(`coworkers/create/`, {
+                coworker_username: formData.username,
+                coworker_password: formData.password
+            });
+            if (response.status === 201) {
+                
+            } else {
+                console.error('Error:', response);
+                alert('Błąd podczas dodawania pracownika!');
+            }
+        } catch (error) {
+            console.error('Error fetching devices:', error);
+            alert('Błąd sieci! Spróbuj ponownie później.');
+        }
+
         if (localStorage.getItem('userType') === 'commercial_brewery') {
             navigate('/commercial/coworkers');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
