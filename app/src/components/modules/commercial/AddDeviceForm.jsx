@@ -11,7 +11,7 @@ const AddDeviceForm = () => {
         name: '',
         device_type: '',
         serial_number: '',
-        capacity: '',
+        capacity: '0',
         temperature_min: 0,
         temperature_max: 0,
         sour_beers: false,
