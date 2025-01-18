@@ -160,6 +160,10 @@ class AccountInfoSerializer(serializers.ModelSerializer):
         ]
 
 
+class CoworkerSerializer(serializers.Serializer):
+    coworker_id = serializers.IntegerField()
+
+
 class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery

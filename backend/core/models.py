@@ -91,6 +91,9 @@ class Profile(models.Model):
             )
         ]
 
+    def __str__(self):
+        return f"Profile of {self.user}"
+
 
 class DeviceType(models.TextChoices):
     BREWING_TANK = "BT", "Tank warzelny"

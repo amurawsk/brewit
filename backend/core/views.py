@@ -442,7 +442,7 @@ class CommercialBreweryInfoView(APIView):
     Responses:
         - 200 OK: If the brewery is successfully retrieved
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the brewery is not found
+        - 404 Not Found: If the brewery was not found
     """
     permission_classes = [IsAuthenticated]
 
@@ -468,7 +468,7 @@ class ContractBreweryInfoView(APIView):
     Responses:
         - 200 OK: If the brewery is successfully retrieved
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the brewery is not found
+        - 404 Not Found: If the brewery was not found
     """
 
     permission_classes = [IsAuthenticated]
@@ -496,7 +496,7 @@ class CommercialAccountInfoView(APIView):
         - 200 OK: If the account is successfully retrieved
         - 400 Bad Request: If the account is not a commercial account
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the account is not found
+        - 404 Not Found: If the account was not found
     """
 
     permission_classes = [IsAuthenticated]
@@ -532,7 +532,7 @@ class ContractAccountInfoView(APIView):
         - 200 OK: If the account is successfully retrieved
         - 400 Bad Request: If the account is not a contract account
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the account is not found
+        - 404 Not Found: If the account was not found
     """
 
     permission_classes = [IsAuthenticated]
@@ -568,7 +568,7 @@ class CoworkersView(APIView):
         - 200 OK: If the coworkers are successfully retrieved
         - 400 Bad Request: If the account is neither commercial nor contract
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the account is not found
+        - 404 Not Found: If the account was not found
     """
 
     permission_classes = [IsAuthenticated]
@@ -600,4 +600,58 @@ class CoworkersView(APIView):
         except Profile.DoesNotExist:
             return Response(
                 {"error": "Account not found."}
+            )
+
+
+class RemoveCoworkerView(APIView):
+    """View for deactivating given account.
+    Class allows only authenticated users to access this view.
+    Only users from the same brewery or users can deactivate accounts.
+
+    This view supports HTTP methods:
+    - POST: Accepts the "coworker_id", validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully deactivated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        profile = request.user.profile
+        serializer = serializers.CoworkerSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                {serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            coworker = Profile.objects.get(pk=serializer.data['coworker_id'])
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Specified account not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if (
+            (profile.commercial_brewery == coworker.commercial_brewery
+                and profile.commercial_brewery is not None)
+            or (profile.contract_brewery == coworker.contract_brewery
+                and profile.contract_brewery is not None)
+            or (profile.contract_brewery is None
+                and profile.commercial_brewery is None)
+        ):
+            coworker_user = coworker.user
+            coworker_user.is_active = False
+            coworker_user.save()
+            return Response(
+                f"Successfilly deactivated user of id={coworker.pk}",
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"error": "The user cannot remove specified account."},
+                status=status.HTTP_403_FORBIDDEN
             )

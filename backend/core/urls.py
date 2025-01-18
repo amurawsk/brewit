@@ -41,6 +41,11 @@ urlpatterns = [
     path(
         "coworkers/<int:profile_id>/",
         views.CoworkersView.as_view(),
-        name="coworkers"
+        name="coworker_list"
+    ),
+    path(
+        "coworkers/remove/",
+        views.RemoveCoworkerView.as_view(),
+        name="coworker_remove"
     )
 ]
