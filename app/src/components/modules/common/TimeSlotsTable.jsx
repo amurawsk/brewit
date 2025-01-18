@@ -263,14 +263,13 @@ const TimeSlotsTable = ({
                 </table>
             </div>
 
-            {isPanelOpen && (
-                <TimeSlotDetails
-                    setIsPanelOpen={setIsPanelOpen}
-                    selectedSlot={selectedSlot}
-                    selectedDevice={selectedDevice}
-                    addTimeSlot={addTimeSlot}
-                />
-            )}
+            <TimeSlotDetails
+                isPanelOpen={isPanelOpen}
+                setIsPanelOpen={setIsPanelOpen}
+                selectedSlot={selectedSlot}
+                selectedDevice={selectedDevice}
+                addTimeSlot={addTimeSlot}
+            />
         </div>
     );
 };

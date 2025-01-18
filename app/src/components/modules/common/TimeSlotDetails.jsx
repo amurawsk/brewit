@@ -10,12 +10,14 @@ import api from '../../../api.js';
 
 /**
  * ShowTimeSlotDetails - pop-up which is visible after clicking on chosen timeslot, displays all timeslot details, allows to change price / cancel timeslot
+ * @param isPanelOpen - defines if panel is visible
  * @param setIsPanelOpen - setter for isPanelOpen
  * @param selectedSlot - timeslot which was selected by user
  * @param selectedDevice - device which was selected by user
  * @param addTimeSlot
  */
 const TimeSlotDetails = ({
+    isPanelOpen,
     setIsPanelOpen,
     selectedSlot,
     selectedDevice,
@@ -138,222 +140,222 @@ const TimeSlotDetails = ({
     };
 
     const handleAddTimeSlot = () => {
-        addTimeSlot(
-            // this returns success (true / false)
-            selectedSlot.id,
-            selectedDevice.name,
-            selectedSlot.start_timestamp,
-            selectedSlot.end_timestamp
-        );
+        if (addTimeSlot(selectedSlot.id, selectedDevice.name, selectedSlot.start_timestamp, selectedSlot.end_timestamp)) {
+            showNotification('Pomyślnie dodano!');
+        } else {
+            showNotification('To okno czasowe jest już dodane!');
+        }
         setIsPanelOpen(false);
     };
 
     return (
         <div>
-            <div className={styles.overlay}>
-                <div className={styles.panel}>
-                    <div className={styles.header}>
-                        <div className={styles.left}>
-                            {truncateDeviceName(selectedDevice.name)}
-                        </div>
-                        <div className={styles.right}>
-                            Status:{' '}
-                            {selectedSlot.status === 'F' ? (
-                                <span className={styles.available}>
-                                    Dostępne
-                                </span>
-                            ) : selectedSlot.status === 'R' ? (
-                                <span className={styles.reserved}>
-                                    Zarezerwowane
-                                </span>
-                            ) : selectedSlot.status === 'H' ? (
-                                <span className={styles.taken}>Zajęte</span>
-                            ) : (
-                                'Nieznany status'
-                            )}
-                        </div>
-                    </div>
-                    <div className={styles.details}>
-                        <div className={styles.detailBox}>
-                            <h3>Informacje</h3>
-                            <p>
-                                <strong>Start:</strong>{' '}
-                                {new Date(
-                                    selectedSlot.start_timestamp
-                                ).toLocaleString('pl-PL')}
-                            </p>
-                            <p>
-                                <strong>Koniec:</strong>{' '}
-                                {new Date(
-                                    selectedSlot.end_timestamp
-                                ).toLocaleString('pl-PL')}
-                            </p>
-                            <p>
-                                <strong>Cena:</strong> {selectedSlot.price} zł
-                            </p>
-                        </div>
-                        {localStorage.getItem('userType') ===
-                            'commercial_brewery' && (
-                            <div className={styles.detailBox}>
-                                <h3>Zlecenie</h3>
-                                {contractBrewery ? (
-                                    <>
-                                        <p>
-                                            <strong>Numer zlecenia:</strong>{' '}
-                                            Zlecenie #{selectedSlot.order}
-                                        </p>
-                                    </>
+            {isPanelOpen && (
+                <div className={styles.overlay}>
+                    <div className={styles.panel}>
+                        <div className={styles.header}>
+                            <div className={styles.left}>
+                                {truncateDeviceName(selectedDevice.name)}
+                            </div>
+                            <div className={styles.right}>
+                                Status:{' '}
+                                {selectedSlot.status === 'F' ? (
+                                    <span className={styles.available}>
+                                        Dostępne
+                                    </span>
+                                ) : selectedSlot.status === 'R' ? (
+                                    <span className={styles.reserved}>
+                                        Zarezerwowane
+                                    </span>
+                                ) : selectedSlot.status === 'H' ? (
+                                    <span className={styles.taken}>Zajęte</span>
                                 ) : (
-                                    <p>
-                                        To okno czasowe nie jest przypisane do
-                                        żadnego zlecenia
-                                    </p>
+                                    'Nieznany status'
                                 )}
                             </div>
-                        )}
-                        {localStorage.getItem('userType') ===
-                            'commercial_brewery' && (
+                        </div>
+                        <div className={styles.details}>
                             <div className={styles.detailBox}>
-                                <h3>Browar kontraktowy</h3>
-                                {contractBrewery ? (
-                                    <>
-                                        <p>
-                                            <strong>Nazwa browaru:</strong>{' '}
-                                            {contractBrewery.name}
-                                        </p>
-                                        <p>
-                                            <strong>Właściciel:</strong>{' '}
-                                            {contractBrewery.owners_name}
-                                        </p>
-                                        <p>
-                                            <strong>Email:</strong>{' '}
-                                            {contractBrewery.email}
-                                        </p>
-                                        <p>
-                                            <strong>Telefon:</strong>{' '}
-                                            {contractBrewery.phone_number}
-                                        </p>
-                                    </>
-                                ) : (
-                                    <p>
-                                        To okno czasowe nie jest zarezerwowane /
-                                        zajęte przez żaden browar kontraktowy
-                                    </p>
-                                )}
+                                <h3>Informacje</h3>
+                                <p>
+                                    <strong>Start:</strong>{' '}
+                                    {new Date(
+                                        selectedSlot.start_timestamp
+                                    ).toLocaleString('pl-PL')}
+                                </p>
+                                <p>
+                                    <strong>Koniec:</strong>{' '}
+                                    {new Date(
+                                        selectedSlot.end_timestamp
+                                    ).toLocaleString('pl-PL')}
+                                </p>
+                                <p>
+                                    <strong>Cena:</strong> {selectedSlot.price} zł
+                                </p>
                             </div>
-                        )}
-                        {localStorage.getItem('userType') ===
-                            'contract_brewery' &&
-                            deviceDetails && (
+                            {localStorage.getItem('userType') ===
+                                'commercial_brewery' && (
                                 <div className={styles.detailBox}>
-                                    <h3>Szczegóły urządzenia</h3>
-                                    <p>
-                                        <strong>Nazwa urządzenia:</strong>{' '}
-                                        {deviceDetails.name}
-                                    </p>
-                                    <p>
-                                        <strong>Typ urządzenia:</strong>{' '}
-                                        {resolveDeviceType(
-                                            deviceDetails.device_type
-                                        )}
-                                    </p>
-                                    <p>
-                                        <strong>Pojemność:</strong>{' '}
-                                        {deviceDetails.capacity} {'(L)'}
-                                    </p>
-                                    {deviceDetails.device_type !== 'BE' && (
+                                    <h3>Zlecenie</h3>
+                                    {contractBrewery ? (
+                                        <>
+                                            <p>
+                                                <strong>Numer zlecenia:</strong>{' '}
+                                                Zlecenie #{selectedSlot.order}
+                                            </p>
+                                        </>
+                                    ) : (
                                         <p>
-                                            <strong>
-                                                Temperatura minimalna:
-                                            </strong>{' '}
-                                            {deviceDetails.temperature_min}{' '}
-                                            {'(℃)'}
-                                        </p>
-                                    )}
-                                    {deviceDetails.device_type !== 'BE' && (
-                                        <p>
-                                            <strong>
-                                                Temperatura maksymalna:
-                                            </strong>{' '}
-                                            {deviceDetails.temperature_max}{' '}
-                                            {'(℃)'}
-                                        </p>
-                                    )}
-                                    <p>
-                                        <strong>
-                                            Do obsługi piw kwaśnych:
-                                        </strong>{' '}
-                                        {resolveSourBeers(
-                                            deviceDetails.sour_beers
-                                        )}
-                                    </p>
-                                    {(deviceDetails.device_type === 'BT' ||
-                                        deviceDetails.device_type === 'BE') && (
-                                        <p>
-                                            <strong>Nagazowywanie:</strong>{' '}
-                                            {deviceDetails.carbonation}
-                                        </p>
-                                    )}
-                                    {deviceDetails.device_type === 'BE' && (
-                                        <p>
-                                            <strong>
-                                                Obsługiwane pojemniki:
-                                            </strong>{' '}
-                                            {deviceDetails.supported_containers}
+                                            To okno czasowe nie jest przypisane do
+                                            żadnego zlecenia
                                         </p>
                                     )}
                                 </div>
                             )}
-                    </div>
-                    {localStorage.getItem('userType') ===
-                        'commercial_brewery' && (
-                        <div className={styles.newOrderButtonGroup}>
-                            {Date.now() <
-                                new Date(selectedSlot.end_timestamp) && (
-                                <button
-                                    onClick={() => setIsModalOpen(true)}
-                                    className={styles.deleteButton}>
-                                    Usuń okno czasowe
-                                </button>
+                            {localStorage.getItem('userType') ===
+                                'commercial_brewery' && (
+                                <div className={styles.detailBox}>
+                                    <h3>Browar kontraktowy</h3>
+                                    {contractBrewery ? (
+                                        <>
+                                            <p>
+                                                <strong>Nazwa browaru:</strong>{' '}
+                                                {contractBrewery.name}
+                                            </p>
+                                            <p>
+                                                <strong>Właściciel:</strong>{' '}
+                                                {contractBrewery.owners_name}
+                                            </p>
+                                            <p>
+                                                <strong>Email:</strong>{' '}
+                                                {contractBrewery.email}
+                                            </p>
+                                            <p>
+                                                <strong>Telefon:</strong>{' '}
+                                                {contractBrewery.phone_number}
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <p>
+                                            To okno czasowe nie jest zarezerwowane /
+                                            zajęte przez żaden browar kontraktowy
+                                        </p>
+                                    )}
+                                </div>
                             )}
-                            {!selectedSlot.order &&
-                                Date.now() <
-                                    new Date(selectedSlot.start_timestamp) && (
+                            {localStorage.getItem('userType') ===
+                                'contract_brewery' &&
+                                deviceDetails && (
+                                    <div className={styles.detailBox}>
+                                        <h3>Szczegóły urządzenia</h3>
+                                        <p>
+                                            <strong>Nazwa urządzenia:</strong>{' '}
+                                            {deviceDetails.name}
+                                        </p>
+                                        <p>
+                                            <strong>Typ urządzenia:</strong>{' '}
+                                            {resolveDeviceType(
+                                                deviceDetails.device_type
+                                            )}
+                                        </p>
+                                        <p>
+                                            <strong>Pojemność:</strong>{' '}
+                                            {deviceDetails.capacity} {'(L)'}
+                                        </p>
+                                        {deviceDetails.device_type !== 'BE' && (
+                                            <p>
+                                                <strong>
+                                                    Temperatura minimalna:
+                                                </strong>{' '}
+                                                {deviceDetails.temperature_min}{' '}
+                                                {'(℃)'}
+                                            </p>
+                                        )}
+                                        {deviceDetails.device_type !== 'BE' && (
+                                            <p>
+                                                <strong>
+                                                    Temperatura maksymalna:
+                                                </strong>{' '}
+                                                {deviceDetails.temperature_max}{' '}
+                                                {'(℃)'}
+                                            </p>
+                                        )}
+                                        <p>
+                                            <strong>
+                                                Do obsługi piw kwaśnych:
+                                            </strong>{' '}
+                                            {resolveSourBeers(
+                                                deviceDetails.sour_beers
+                                            )}
+                                        </p>
+                                        {(deviceDetails.device_type === 'BT' ||
+                                            deviceDetails.device_type === 'BE') && (
+                                            <p>
+                                                <strong>Nagazowywanie:</strong>{' '}
+                                                {deviceDetails.carbonation}
+                                            </p>
+                                        )}
+                                        {deviceDetails.device_type === 'BE' && (
+                                            <p>
+                                                <strong>
+                                                    Obsługiwane pojemniki:
+                                                </strong>{' '}
+                                                {deviceDetails.supported_containers}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+                        </div>
+                        {localStorage.getItem('userType') ===
+                            'commercial_brewery' && (
+                            <div className={styles.newOrderButtonGroup}>
+                                {Date.now() <
+                                    new Date(selectedSlot.end_timestamp) && (
                                     <button
-                                        onClick={() =>
-                                            setIsPriceDialogOpen(true)
-                                        }
-                                        className={styles.changePriceButton}>
-                                        Zmień cenę
+                                        onClick={() => setIsModalOpen(true)}
+                                        className={styles.deleteButton}>
+                                        Usuń okno czasowe
                                     </button>
                                 )}
-                            <button
-                                onClick={() => setIsPanelOpen(false)}
-                                className={styles.backButton}>
-                                Zamknij
-                            </button>
-                        </div>
-                    )}
-                    {localStorage.getItem('userType') ===
-                        'contract_brewery' && (
-                        <div className={styles.newOrderButtonGroup}>
-                            <button
-                                onClick={() => setIsPanelOpen(false)}
-                                className={styles.backButton}>
-                                Zamknij
-                            </button>
-                            {Date.now() <
-                                new Date(selectedSlot.start_timestamp) && (
+                                {!selectedSlot.order &&
+                                    Date.now() <
+                                        new Date(selectedSlot.start_timestamp) && (
+                                        <button
+                                            onClick={() =>
+                                                setIsPriceDialogOpen(true)
+                                            }
+                                            className={styles.changePriceButton}>
+                                            Zmień cenę
+                                        </button>
+                                    )}
                                 <button
-                                    onClick={() => handleAddTimeSlot()}
-                                    className={styles.addToTimeSlotsButton}>
-                                    Dodaj do zlecenia
+                                    onClick={() => setIsPanelOpen(false)}
+                                    className={styles.backButton}>
+                                    Zamknij
                                 </button>
-                            )}
-                        </div>
-                    )}
+                            </div>
+                        )}
+                        {localStorage.getItem('userType') ===
+                            'contract_brewery' && (
+                            <div className={styles.newOrderButtonGroup}>
+                                <button
+                                    onClick={() => setIsPanelOpen(false)}
+                                    className={styles.backButton}>
+                                    Zamknij
+                                </button>
+                                {Date.now() <
+                                    new Date(selectedSlot.start_timestamp) && (
+                                    <button
+                                        onClick={() => handleAddTimeSlot()}
+                                        className={styles.addToTimeSlotsButton}>
+                                        Dodaj do zlecenia
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
             {isModalOpen && (
                 <ConfirmModal
                     message="Czy na pewno chcesz usunąć to okno czasowe?"
