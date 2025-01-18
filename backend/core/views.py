@@ -746,6 +746,45 @@ class OrderDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class OrderListForDeviceView(APIView):
+    """View for listing orders for a specific device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the device id, validates it and returns a list of orders for the device.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of orders for the device.
+        - 403 Forbidden: If the user is not authorized to view orders for this device, the response contains an error message.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, device_id):
+        user = request.user
+        try:
+            device = Device.objects.get(id=device_id)
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery != device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to view orders for this device."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Device.DoesNotExist:
+            return Response(
+                {"error": "Device not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        orders = Order.objects.filter(timeslot__device=device)
+        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class OrderAcceptView(APIView):
     """View for accepting an order. Class allows only authenticated users to access this view.
 

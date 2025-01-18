@@ -28,6 +28,7 @@ urlpatterns = [
     path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
     path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
     # path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
+    path("orders/device/<int:device_id>/all/", views.OrderListForDeviceView.as_view(), name="order_list_device"),
     path(
         "orders/commercial/status/<str:status>/",
         views.OrderListCommercialView.as_view(),
