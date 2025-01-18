@@ -24,6 +24,10 @@ const ChooseCommercial = () => {
                 phone_number: '123456789',
                 email: 'example@gmail.com',
                 description: 'Some description',
+                no_bt: 1,
+                no_ft: 1,
+                no_ac: 1,
+                no_be: 1,
             },
             {
                 id: 2,
@@ -33,6 +37,10 @@ const ChooseCommercial = () => {
                 phone_number: '123456789',
                 email: 'example@gmail.com',
                 description: 'Some description',
+                no_bt: 1,
+                no_ft: 1,
+                no_ac: 1,
+                no_be: 1,
             },
         ]);
     }, []);

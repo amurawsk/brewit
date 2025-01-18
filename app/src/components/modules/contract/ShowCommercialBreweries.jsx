@@ -26,11 +26,31 @@ const ShowCommercialBreweries = ({ breweries }) => {
                 </p>
             ) : (
                 <div className={styles.allBreweries}>
+                    <div className={styles.statDescriptionBar}>
+                        <div className={styles.statDescription}>
+                            <div className={styles.statBoxHeader} style={{ backgroundColor: '#f0a' }}></div>
+                            <span className={styles.statText}>Liczba tanków warzelnych w browarze</span>
+                        </div>
+                        <div className={styles.statDescription}>
+                            <div className={styles.statBoxHeader} style={{ backgroundColor: '#0af' }}></div>
+                            <span className={styles.statText}>Liczba pojemników fermentacyjnych w browarze</span>
+                        </div>
+                        <div className={styles.statDescription}>
+                            <div className={styles.statBoxHeader} style={{ backgroundColor: '#fa0' }}></div>
+                            <span className={styles.statText}>Liczba kotłów do leżakowania w browarze</span>
+                        </div>
+                        <div className={styles.statDescription}>
+                            <div className={styles.statBoxHeader} style={{ backgroundColor: '#0fa' }}></div>
+                            <span className={styles.statText}>Liczba urządzeń do rozlewu w browarze</span>
+                        </div>
+                    </div>
+
                     {breweries.map((brewery, index) => (
                         <div
                             className={styles.brewery}
                             key={brewery.id}
-                            onClick={() => selectBrewery(brewery)}>
+                            onClick={() => selectBrewery(brewery)}
+                        >
                             <div className={styles.breweryText}>
                                 <span className={styles.textTitle}>
                                     {brewery.name}
@@ -38,17 +58,30 @@ const ShowCommercialBreweries = ({ breweries }) => {
                                 <span className={styles.description}>
                                     NIP:
                                     <span className={styles.descriptionValue}>
-                                        {' '}
-                                        {brewery.nip}
+                                        {' '}{brewery.nip}
                                     </span>
                                 </span>
                                 <span className={styles.description}>
                                     Adres:
                                     <span className={styles.descriptionValue}>
-                                        {' '}
-                                        {brewery.address}
+                                        {' '}{brewery.address}
                                     </span>
                                 </span>
+                            </div>
+
+                            <div className={styles.breweryStats}>
+                                <div className={styles.statBox} style={{ backgroundColor: '#f0a' }}>
+                                    <span className={styles.statValue}>{brewery.no_bt}</span>
+                                </div>
+                                <div className={styles.statBox} style={{ backgroundColor: '#0af' }}>
+                                    <span className={styles.statValue}>{brewery.no_ft}</span>
+                                </div>
+                                <div className={styles.statBox} style={{ backgroundColor: '#fa0' }}>
+                                    <span className={styles.statValue}>{brewery.no_ac}</span>
+                                </div>
+                                <div className={styles.statBox} style={{ backgroundColor: '#0fa' }}>
+                                    <span className={styles.statValue}>{brewery.no_be}</span>
+                                </div>
                             </div>
                         </div>
                     ))}
