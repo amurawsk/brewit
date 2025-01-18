@@ -694,7 +694,7 @@ class OrderCreateView(APIView):
         serializer = OrderSerializer(data=data)
         if serializer.is_valid():
             order = serializer.save()
-            time_slots.update(order=order)
+            time_slots.update(order=order, status="R")
             return Response(
                 {"message": "Order successfully created.", "id": order.id},
                 status=status.HTTP_201_CREATED
@@ -791,6 +791,7 @@ class OrderAcceptView(APIView):
 
         order.status = "C"
         order.save()
+        time_slot.status = "H"
         return Response({"message": "Order successfully accepted."}, status=status.HTTP_200_OK)
 
 
@@ -838,13 +839,13 @@ class OrderRejectView(APIView):
             )
 
         order.status = "R"
+        order.ended_at = datetime.now()
         order.save()
 
         time_slots = TimeSlot.objects.filter(order=order)
         new_time_slots = []
         for time_slot in time_slots:
             new_time_slot = TimeSlot(
-                slot_type=time_slot.slot_type,
                 price=time_slot.price,
                 start_timestamp=time_slot.start_timestamp,
                 end_timestamp=time_slot.end_timestamp,
@@ -906,7 +907,7 @@ class OrderWithdrawView(APIView):
             )
 
         time_slots = TimeSlot.objects.filter(order=order)
-        time_slots.update(order=None)
+        time_slots.update(order=None, status="F")
 
         order.delete()
         return Response(
