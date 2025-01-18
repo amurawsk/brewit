@@ -131,9 +131,11 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                             onClick={handleBack}>
                             Cofnij
                         </button>
-                        <button className={styles.submitButton} type="submit">
-                            Złóż zlecenie
-                        </button>
+                        {timeSlots.length !== 0 &&
+                            <button className={styles.submitButton} type="submit">
+                                Złóż zlecenie
+                            </button>
+                        }
                     </div>
                 </form>
             </div>
