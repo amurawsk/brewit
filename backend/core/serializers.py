@@ -104,6 +104,30 @@ class ContractBreweryInfoSerializer(serializers.ModelSerializer):
         return data
 
 
+class CommercialAccountInfoSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    created_at = serializers.DateTimeField(source="user.date_joined")
+    brewery_name = serializers.CharField(source="commercial_brewery.name")
+    brewery_nip = serializers.CharField(source="commercial_brewery.nip")
+    brewery_address = serializers.CharField(
+        source="commercial_brewery.address"
+    )
+    brewery_description = serializers.CharField(
+        source="commercial_brewery.description"
+    )
+
+    class Meta:
+        model = Profile
+        fields = [
+            "username",
+            "created_at",
+            "brewery_name",
+            "brewery_nip",
+            "brewery_address",
+            "brewery_description"
+        ]
+
+
 class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery

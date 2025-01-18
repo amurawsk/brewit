@@ -459,7 +459,7 @@ class CommercialBreweryInfo(APIView):
 
 
 class ContractBreweryInfo(APIView):
-    """View for listing contract brewery's info with orders and devices.
+    """View for listing contract brewery's info with orders.
     Class allows only authenticated users to access this view.
 
     This view supports HTTP methods:
@@ -483,3 +483,39 @@ class ContractBreweryInfo(APIView):
                 {"error": "Contract brewery not found."},
                 status=404
             )
+
+
+class CommercialAccountInfo(APIView):
+    """View for listing commercial account's info.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the brewery is successfully retrieved
+        - 400 Bad Request: If the account is not a commercial account
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account is not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, user_id):
+        try:
+            profile = Profile.objects.get(pk=user_id)
+            if profile.commercial_brewery is None:
+                return Response(
+                    {
+                        "error": ("Requested account is not a commercial "
+                                  "brewery account.")
+                    },
+                    status=400
+                )
+            serializer = serializers.CommercialAccountInfoSerializer(profile)
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."},
+                status=404
+            ) 
