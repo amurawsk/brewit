@@ -16,7 +16,6 @@ const Devices = () => {
 
     const addDevice = () => navigate('/commercial/devices/add');
     const [devices, setDevices] = useState([]);
-    const [selectedDevice, setSelectedDevice] = useState(null);
     const [deviceFields, setDeviceFields] = useState({});
     const [isPanelOpen, setIsPanelOpen] = useState(false);
 
@@ -39,7 +38,6 @@ const Devices = () => {
     }, []);
 
     const openPanel = (device) => {
-        setSelectedDevice(device);
         setDeviceFields({ ...device });
         setIsPanelOpen(true);
     };
@@ -70,8 +68,6 @@ const Devices = () => {
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}
                 deviceFields={deviceFields}
-                selectedDevice={selectedDevice}
-                setDeviceFields={setDeviceFields}
             />
         </div>
     );

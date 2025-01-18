@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import styles from './ShowDeviceDetails.module.css';
 
@@ -6,34 +6,43 @@ const ShowDeviceDetails = ({
     isPanelOpen,
     setIsPanelOpen,
     deviceFields,
-    selectedDevice,
-    setDeviceFields,
 }) => {
+    const [currentDeviceFields, setCurrentDeviceFields] = useState(deviceFields);
+
+    useEffect(() => {
+        setCurrentDeviceFields(deviceFields)
+        console.log(deviceFields)
+    }, [deviceFields])
+
     const handleFieldChange = (field, value, checked) => {
         if (field === 'carbonation') {
-            setDeviceFields((prevFields) => {
-                let newCarbonation = [...prevFields.carbonation];
+            setCurrentDeviceFields((prevFields) => {
+                let currentCarbonation = prevFields.carbonation
+                    ? prevFields.carbonation.split(',')
+                    : [];
                 if (checked) {
-                    if (!newCarbonation.includes(value)) {
-                        newCarbonation.push(value);
+                    if (!currentCarbonation.includes(value)) {
+                        currentCarbonation.push(value);
                     }
                 } else {
-                    newCarbonation = newCarbonation.filter(
+                    currentCarbonation = currentCarbonation.filter(
                         (item) => item !== value
                     );
                 }
-                return { ...prevFields, [field]: newCarbonation };
+                const updatedCarbonation = currentCarbonation.join(',');
+                return { ...prevFields, [field]: updatedCarbonation };
             });
         } else {
             const updatedValue = ['capacity', 'price'].includes(field)
                 ? parseFloat(value)
                 : value;
-            setDeviceFields({ ...deviceFields, [field]: updatedValue });
+            setCurrentDeviceFields({ ...currentDeviceFields, [field]: updatedValue });
         }
-    };
+    };    
 
     const changeDevice = () => {
         // TODO
+        console.log(currentDeviceFields)
     };
 
     const resolveDeviceType = (type) => {
@@ -51,7 +60,7 @@ const ShowDeviceDetails = ({
                 onClick={() => setIsPanelOpen(false)}>
                 ×
             </button>
-            {selectedDevice && (
+            {currentDeviceFields && (
                 <div className={styles.panelContent}>
                     <div className={styles.detailsHeader}>
                         <span className={styles.detailsHeaderLarge}>
@@ -63,21 +72,21 @@ const ShowDeviceDetails = ({
                     </div>
                     <div
                         className={`${styles.deviceTypeBox} ${
-                            styles[`deviceType${deviceFields.device_type}`]
+                            styles[`deviceType${currentDeviceFields.device_type}`]
                         }`}>
-                        {resolveDeviceType(deviceFields.device_type)}
+                        {resolveDeviceType(currentDeviceFields.device_type)}
                     </div>
                     <label className={styles.panelContentLabel}>Nazwa:</label>
                     <input
                         className={styles.panelContentInput}
                         type="text"
                         placeholder="Wpisz nazwę"
-                        value={deviceFields.name}
+                        value={currentDeviceFields.name}
                         onChange={(e) =>
                             handleFieldChange('name', e.target.value)
                         }
                     />
-                    {deviceFields.device_type !== 'BE' && 
+                    {currentDeviceFields.device_type !== 'BE' && 
                         <div className={styles.panelContent}>
                             <label className={styles.panelContentLabel}>
                                 Pojemność (L):
@@ -88,15 +97,15 @@ const ShowDeviceDetails = ({
                                 min="0"
                                 step="0.1"
                                 placeholder="Wpisz pojemność"
-                                value={deviceFields.capacity}
+                                value={currentDeviceFields.capacity}
                                 onChange={(e) =>
                                     handleFieldChange('capacity', e.target.value)
                                 }
                             />
                         </div>
                     }                    
-                    {deviceFields.device_type !== 'BE' &&
-                        deviceFields.device_type && (
+                    {currentDeviceFields.device_type !== 'BE' &&
+                        currentDeviceFields.device_type && (
                             <div className={styles.panelContent}>
                                 <label className={styles.panelContentLabel}>
                                     Temperatura minimalna (℃):
@@ -106,7 +115,7 @@ const ShowDeviceDetails = ({
                                     type="number"
                                     step="0.5"
                                     placeholder="Wpisz temperaturę minimalną"
-                                    value={deviceFields.temperature_min}
+                                    value={currentDeviceFields.temperature_min}
                                     onChange={(e) =>
                                         handleFieldChange(
                                             'temperature_min',
@@ -122,7 +131,7 @@ const ShowDeviceDetails = ({
                                     type="number"
                                     step="0.5"
                                     placeholder="Wpisz temperaturę maksymalną"
-                                    value={deviceFields.temperature_max}
+                                    value={currentDeviceFields.temperature_max}
                                     onChange={(e) =>
                                         handleFieldChange(
                                             'temperature_max',
@@ -139,13 +148,13 @@ const ShowDeviceDetails = ({
                         className={styles.checkboxInput}
                         type="checkbox"
                         value="Zaznacz, jeśli obsługuje"
-                        checked={deviceFields.sour_beers}
+                        checked={currentDeviceFields.sour_beers}
                         onChange={(e) =>
                             handleFieldChange('sour_beers', e.target.checked)
                         }
                     />
-                    {(deviceFields.device_type === 'AC' ||
-                        deviceFields.device_type === 'BE') && (
+                    {(currentDeviceFields.device_type === 'AC' ||
+                        currentDeviceFields.device_type === 'BE') && (
                         <div className={styles.panelContent}>
                             <label className={styles.panelContentLabel}>
                                 Nagazowanie:
@@ -157,7 +166,7 @@ const ShowDeviceDetails = ({
                                     id="CO2"
                                     name="carbonation"
                                     value="CO2"
-                                    checked={deviceFields.carbonation.includes(
+                                    checked={currentDeviceFields.carbonation.includes(
                                         'CO2'
                                     )}
                                     onChange={(e) =>
@@ -180,7 +189,7 @@ const ShowDeviceDetails = ({
                                     id="N2"
                                     name="carbonation"
                                     value="N2"
-                                    checked={deviceFields.carbonation.includes(
+                                    checked={currentDeviceFields.carbonation.includes(
                                         'N2'
                                     )}
                                     onChange={(e) =>
@@ -203,7 +212,7 @@ const ShowDeviceDetails = ({
                                     id="CO2-N2"
                                     name="carbonation"
                                     value="mieszanka"
-                                    checked={deviceFields.carbonation.includes(
+                                    checked={currentDeviceFields.carbonation.includes(
                                         'mieszanka'
                                     )}
                                     onChange={(e) =>
@@ -223,7 +232,7 @@ const ShowDeviceDetails = ({
                         </div>
                     )}
 
-                    {deviceFields.device_type === 'BE' && (
+                    {currentDeviceFields.device_type === 'BE' && (
                         <div className={styles.panelContent}>
                             <label className={styles.panelContentLabel}>
                                 Obsługiwane pojemniki:
@@ -232,7 +241,7 @@ const ShowDeviceDetails = ({
                                 className={styles.panelContentInput}
                                 type="text"
                                 placeholder="Np. butelki, puszki, kegi..."
-                                value={deviceFields.supported_containers}
+                                value={currentDeviceFields.supported_containers}
                                 onChange={(e) =>
                                     handleFieldChange(
                                         'supported_containers',
