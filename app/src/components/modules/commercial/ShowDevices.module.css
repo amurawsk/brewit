@@ -1,16 +1,3 @@
-.container {
-    display: flex;
-    flex-direction: column;
-}
-
-.allDevices {
-    max-height: 100vh;
-    overflow-y: auto;
-    border-radius: 8px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
 .device {
     display: flex;
     justify-content: space-between;
@@ -21,7 +8,7 @@
     font-size: 16px;
     color: black;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, border-color 0.3s;
     margin-bottom: 10px;
     width: 100%;
     box-sizing: border-box;
@@ -29,8 +16,36 @@
     overflow-wrap: break-word;
 }
 
-.device:hover {
-    background-color: #d9d9d9;
+.device.BT {
+    border-color: #f0a;
+}
+
+.device.FT {
+    border-color: #0af;
+}
+
+.device.AC {
+    border-color: #fa0;
+}
+
+.device.BE {
+    border-color: #0fa;
+}
+
+.device.BT:hover {
+    background-color: rgba(240, 10, 170, 0.1);
+}
+
+.device.FT:hover {
+    background-color: rgba(0, 175, 255, 0.1);
+}
+
+.device.AC:hover {
+    background-color: rgba(250, 160, 0, 0.1);
+}
+
+.device.BE:hover {
+    background-color: rgba(0, 250, 170, 0.1);
 }
 
 .deviceText {

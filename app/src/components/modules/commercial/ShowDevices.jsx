@@ -37,7 +37,7 @@ const ShowDevices = ({ devices, openPanel }) => {
             <div className={styles.allDevices}>
                 {devices.map((device, index) => (
                     <div
-                        className={styles.device}
+                    className={`${styles.device} ${styles[device.device_type]}`}
                         key={index}
                         onClick={() => openPanel(device)}>
                         <div className={styles.deviceText}>
