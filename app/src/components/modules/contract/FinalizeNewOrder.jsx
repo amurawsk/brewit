@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './FinalizeNewOrder.module.css';
 import NewOrderTimeSlotsTimeline from './NewOrderTimeSlotsTimeline';
@@ -30,7 +30,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
     };
 
     const handleReset = () => {
-        navigate('/contract/orders/add/choose-brewery')
+        navigate('/contract/orders/add/choose-brewery');
     };
 
     const handleBack = () => {
@@ -79,9 +79,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
             <div className={styles.section}>
                 <h3>Informacje</h3>
                 <form className={styles.orderForm} onSubmit={handleSubmit}>
-                    <label
-                        className={styles.orderFormLabel}
-                        htmlFor="name">
+                    <label className={styles.orderFormLabel} htmlFor="name">
                         <b>Typ piwa: </b>
                     </label>
                     <input
@@ -94,9 +92,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                         onChange={(e) => setBeerType(e.target.value)}
                         required
                     />
-                    <label
-                        className={styles.orderFormLabel}
-                        htmlFor="capacity">
+                    <label className={styles.orderFormLabel} htmlFor="capacity">
                         <b>Całkowita objętość piwa (L): </b>
                     </label>
                     <input
@@ -110,9 +106,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                         onChange={(e) => setBeerVolume(e.target.value)}
                         required
                     />
-                    <label
-                        className={styles.orderFormLabel}
-                        htmlFor="name">
+                    <label className={styles.orderFormLabel} htmlFor="name">
                         <b>Opis: </b>
                     </label>
                     <input
@@ -128,21 +122,16 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                         <button
                             type="button"
                             className={styles.deleteButton}
-                            onClick={handleReset}
-                        >
+                            onClick={handleReset}>
                             Wyczyść zlecenie
                         </button>
                         <button
                             type="button"
                             className={styles.backButton}
-                            onClick={handleBack}
-                        >
+                            onClick={handleBack}>
                             Cofnij
                         </button>
-                        <button
-                            className={styles.submitButton}
-                            type="submit"
-                        >
+                        <button className={styles.submitButton} type="submit">
                             Złóż zlecenie
                         </button>
                     </div>

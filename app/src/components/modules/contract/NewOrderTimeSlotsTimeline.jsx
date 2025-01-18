@@ -10,9 +10,7 @@ const NewOrderTimeSlotsTimeline = ({ timeSlots }) => {
         <div className={styles.timeline}>
             {timeSlots.map((timeslot, index) => (
                 <div key={index} className={styles.event}>
-                    <div
-                        className={`${styles.dot} ${styles.upcoming}`}
-                    />
+                    <div className={`${styles.dot} ${styles.upcoming}`} />
                     <div className={styles.details}>
                         <div className={styles.status}>
                             {timeslot.deviceName}

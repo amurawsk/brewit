@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
@@ -14,7 +14,7 @@ import FinalizeNewOrder from '../../modules/contract/FinalizeNewOrder.jsx';
 const FinalizeOrder = () => {
     const location = useLocation();
     const brewery = location.state?.brewery || null;
-    const timeSlots = location.state?.timeSlots || []
+    const timeSlots = location.state?.timeSlots || [];
 
     return (
         <div>
@@ -23,7 +23,10 @@ const FinalizeOrder = () => {
                 <ContractSidebar />
                 <div className={styles.content}>
                     <PageTitle text="Potwierdź zlecenie" />
-                    <FinalizeNewOrder selectedBrewery={brewery} timeSlots={timeSlots} />
+                    <FinalizeNewOrder
+                        selectedBrewery={brewery}
+                        timeSlots={timeSlots}
+                    />
                 </div>
             </div>
         </div>

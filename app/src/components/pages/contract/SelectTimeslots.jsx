@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Coworkers.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
@@ -15,7 +15,7 @@ const SelectTimeslots = () => {
 
     const location = useLocation();
     const brewery = location.state?.brewery || null;
-    const oldTimeSlots = location.state?.timeSlots || []
+    const oldTimeSlots = location.state?.timeSlots || [];
 
     const [startHour, setStartHour] = useState(8);
     const [endHour, setEndHour] = useState(16);
@@ -29,14 +29,17 @@ const SelectTimeslots = () => {
         });
     };
 
-    const addTimeSlot = (timeSlotId, deviceName, startTimestamp, endTimestamp) => {
-        const exists = timeSlots.some(
-            (slot) => slot.timeSlotId === timeSlotId
-        );
+    const addTimeSlot = (
+        timeSlotId,
+        deviceName,
+        startTimestamp,
+        endTimestamp
+    ) => {
+        const exists = timeSlots.some((slot) => slot.timeSlotId === timeSlotId);
         if (!exists) {
             setTimeSlots((prevTimeSlots) => [
                 ...prevTimeSlots,
-                { timeSlotId, deviceName, startTimestamp, endTimestamp }
+                { timeSlotId, deviceName, startTimestamp, endTimestamp },
             ]);
             return true;
         }

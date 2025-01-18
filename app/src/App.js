@@ -36,7 +36,6 @@ import FinalizeOrder from './components/pages/contract/FinalizeOrder';
 
 import './App.css';
 
-
 function App() {
     return (
         <Router>

@@ -21,11 +21,16 @@ const ShowCommercialBreweries = ({ breweries }) => {
     return (
         <div>
             {breweries.length === 0 ? (
-                <p className={styles.noOrdersMessage}>Brak browarów komercyjnych.</p>
+                <p className={styles.noOrdersMessage}>
+                    Brak browarów komercyjnych.
+                </p>
             ) : (
                 <div className={styles.allBreweries}>
                     {breweries.map((brewery, index) => (
-                        <div className={styles.brewery} key={brewery.id} onClick={() => selectBrewery(brewery)}>
+                        <div
+                            className={styles.brewery}
+                            key={brewery.id}
+                            onClick={() => selectBrewery(brewery)}>
                             <div className={styles.breweryText}>
                                 <span className={styles.textTitle}>
                                     {brewery.name}

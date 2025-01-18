@@ -12,7 +12,14 @@ import api from '../../../api.js';
  * @param startHour - for 'hour' view user can determine timetable start hour
  * @param endHour - for 'hour' view user can determine timetable end hour
  */
-const TimeSlotsTable = ({ view, selectedDate, startHour, endHour, selectedBreweryId, addTimeSlot }) => {
+const TimeSlotsTable = ({
+    view,
+    selectedDate,
+    startHour,
+    endHour,
+    selectedBreweryId,
+    addTimeSlot,
+}) => {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState(null);
@@ -26,7 +33,9 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour, selectedBrewer
         const getData = async () => {
             try {
                 const breweryId = localStorage.getItem('breweryId');
-                const response = await api.get(`devices/brewery/${breweryId}/with-time-slots/`);
+                const response = await api.get(
+                    `devices/brewery/${breweryId}/with-time-slots/`
+                );
                 if (response.status === 200) {
                     setTimetableData(response.data);
                 } else {
@@ -37,7 +46,10 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour, selectedBrewer
             }
         };
 
-        if (!isPanelOpen && (localStorage.getItem('userType') === 'commercial_brewery')) {
+        if (
+            !isPanelOpen &&
+            localStorage.getItem('userType') === 'commercial_brewery'
+        ) {
             getData();
         }
     }, [isPanelOpen]);
@@ -46,49 +58,49 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour, selectedBrewer
         // TODO mock
         const timeSlotsData = [
             {
-                "id": 35,
-                "name": "Tank warzel",
-                "device_type": "BT",
-                "timeSlots": [
+                id: 35,
+                name: 'Tank warzel',
+                device_type: 'BT',
+                timeSlots: [
                     {
-                        "id": 94,
-                        "status": "F",
-                        "slot_type": "H",
-                        "price": "123.00",
-                        "start_timestamp": "2025-01-19T13:00:00+01:00",
-                        "end_timestamp": "2025-01-19T14:00:00+01:00",
-                        "device": 35,
-                        "order": null
+                        id: 94,
+                        status: 'F',
+                        slot_type: 'H',
+                        price: '123.00',
+                        start_timestamp: '2025-01-19T13:00:00+01:00',
+                        end_timestamp: '2025-01-19T14:00:00+01:00',
+                        device: 35,
+                        order: null,
                     },
                     {
-                        "id": 95,
-                        "status": "F",
-                        "slot_type": "H",
-                        "price": "123.00",
-                        "start_timestamp": "2025-01-19T15:00:00+01:00",
-                        "end_timestamp": "2025-01-19T16:00:00+01:00",
-                        "device": 35,
-                        "order": null
-                    }
-                ]
+                        id: 95,
+                        status: 'F',
+                        slot_type: 'H',
+                        price: '123.00',
+                        start_timestamp: '2025-01-19T15:00:00+01:00',
+                        end_timestamp: '2025-01-19T16:00:00+01:00',
+                        device: 35,
+                        order: null,
+                    },
+                ],
             },
             {
-                "id": 36,
-                "name": "Nazwa",
-                "device_type": "BT",
-                "timeSlots": []
-            }
-        ]
+                id: 36,
+                name: 'Nazwa',
+                device_type: 'BT',
+                timeSlots: [],
+            },
+        ];
 
         const getAvailableTimeslots = async () => {
             setTimetableData(timeSlotsData);
             // console.log(selectedBreweryId)
-        }
+        };
 
         if (localStorage.getItem('userType') === 'contract_brewery') {
             getAvailableTimeslots();
         }
-    }, [selectedBreweryId])
+    }, [selectedBreweryId]);
 
     const formatDate = (date) => {
         return date.toLocaleDateString('pl-PL');
@@ -251,14 +263,14 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour, selectedBrewer
                 </table>
             </div>
 
-            {isPanelOpen && 
+            {isPanelOpen && (
                 <TimeSlotDetails
-                setIsPanelOpen={setIsPanelOpen}
-                selectedSlot={selectedSlot}
-                selectedDevice={selectedDevice}
-                addTimeSlot={addTimeSlot}
+                    setIsPanelOpen={setIsPanelOpen}
+                    selectedSlot={selectedSlot}
+                    selectedDevice={selectedDevice}
+                    addTimeSlot={addTimeSlot}
                 />
-            }
+            )}
         </div>
     );
 };

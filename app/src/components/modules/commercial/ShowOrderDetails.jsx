@@ -14,12 +14,7 @@ import api from '../../../api.js';
  * @param order - chosen order data
  * @param setOrder - setter for order
  */
-const ShowOrderDetails = ({
-    isPanelOpen,
-    setIsPanelOpen,
-    order,
-    setOrder,
-}) => {
+const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
@@ -46,12 +41,12 @@ const ShowOrderDetails = ({
     const acceptOrder = async () => {
         try {
             const response = await api.get(`orders/${order.id}/accept/`);
-            console.log(response)
+            console.log(response);
             if (response.status === 200) {
                 showNotification('Pomyślnie zaakceptowano!');
             } else {
                 showNotification('Wystąpił błąd!');
-                console.log(response)
+                console.log(response);
             }
         } catch (error) {
             showNotification('Wystąpił błąd!');
@@ -65,12 +60,12 @@ const ShowOrderDetails = ({
     const rejectOrder = async () => {
         try {
             const response = await api.get(`orders/${order.id}/reject/`);
-            console.log(response)
+            console.log(response);
             if (response.status === 200) {
                 showNotification('Pomyślnie odrzucono!');
             } else {
                 showNotification('Wystąpił błąd!');
-                console.log(response)
+                console.log(response);
             }
         } catch (error) {
             showNotification('Wystąpił błąd!');
@@ -195,7 +190,10 @@ const ShowOrderDetails = ({
                         <div className={styles.timelineHeader}>
                             <h3>Oś Czasu wynajmowanych urządzeń</h3>
                         </div>
-                        <TimeSlotsTimeline timeSlots={order.timeSlots} orderStatus={order.status}/>
+                        <TimeSlotsTimeline
+                            timeSlots={order.timeSlots}
+                            orderStatus={order.status}
+                        />
                         {order.status !== 'N' && order.status !== 'C' && (
                             <button
                                 onClick={closePanel}

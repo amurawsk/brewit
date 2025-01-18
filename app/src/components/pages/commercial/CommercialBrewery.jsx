@@ -22,8 +22,10 @@ const CommercialBrewery = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                console.log()
-                const response = await api.get(`commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`);
+                console.log();
+                const response = await api.get(
+                    `commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`
+                );
                 if (response.status === 200) {
                     setBreweryData(response.data);
                 } else {

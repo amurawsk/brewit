@@ -23,7 +23,9 @@ const Orders = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`orders/commercial/status/${activeStatus}/`);
+                const response = await api.get(
+                    `orders/commercial/status/${activeStatus}/`
+                );
                 if (response.status === 200) {
                     setOrders(response.data);
                 } else {
@@ -56,7 +58,11 @@ const Orders = () => {
                             setActiveStatus={setActiveStatus}
                         />
                     </div>
-                    <ShowOrders orders={orders} isPanelOpen={isPanelOpen} setIsPanelOpen={setIsPanelOpen} />
+                    <ShowOrders
+                        orders={orders}
+                        isPanelOpen={isPanelOpen}
+                        setIsPanelOpen={setIsPanelOpen}
+                    />
                 </div>
             </div>
         </div>

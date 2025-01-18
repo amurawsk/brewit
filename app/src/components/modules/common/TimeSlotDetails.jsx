@@ -19,7 +19,7 @@ const TimeSlotDetails = ({
     setIsPanelOpen,
     selectedSlot,
     selectedDevice,
-    addTimeSlot
+    addTimeSlot,
 }) => {
     const [contractBrewery, setContractBrewery] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,41 +60,43 @@ const TimeSlotDetails = ({
     useEffect(() => {
         // TODO mock - change to get_device_by_id(selectedDevice.id)
         setDeviceDetails({
-            "id": 35,
-            "name": "Tank warzel",
-            "device_type": "BT",
-            "serial_number": "123",
-            "capacity": 100.0,
-            "temperature_min": 10.0,
-            "temperature_max": 90.0,
-            "sour_beers": false,
-            "carbonation": "N2",
-            "supported_containers": "",
-            "commercial_brewery": 34
-        })
-    }, [selectedDevice])
+            id: 35,
+            name: 'Tank warzel',
+            device_type: 'BT',
+            serial_number: '123',
+            capacity: 100.0,
+            temperature_min: 10.0,
+            temperature_max: 90.0,
+            sour_beers: false,
+            carbonation: 'N2',
+            supported_containers: '',
+            commercial_brewery: 34,
+        });
+    }, [selectedDevice]);
 
     const resolveDeviceType = (type) => {
-        if (type === 'BT') return 'Tank warzelny'
-        if (type === 'BE') return 'Urządzenie do rozlewania'
-        if (type === 'FT') return 'Pojemnik fermentacyjny'
-        if (type === 'AC') return 'Kocioł do leżakowania'
-    }
+        if (type === 'BT') return 'Tank warzelny';
+        if (type === 'BE') return 'Urządzenie do rozlewania';
+        if (type === 'FT') return 'Pojemnik fermentacyjny';
+        if (type === 'AC') return 'Kocioł do leżakowania';
+    };
 
     const resolveSourBeers = (sourBeers) => {
-        if (sourBeers) return 'TAK'
-        else return 'NIE'
-    }
+        if (sourBeers) return 'TAK';
+        else return 'NIE';
+    };
 
     const deleteTimeSlot = async () => {
         try {
-            const response = await api.get(`time-slots/delete/${selectedSlot.id}/`);
-            console.log(response)
+            const response = await api.get(
+                `time-slots/delete/${selectedSlot.id}/`
+            );
+            console.log(response);
             if (response.status === 200) {
                 showNotification('Pomyślnie usunięto!');
             } else {
                 showNotification('Wystąpił błąd!');
-                console.log(response)
+                console.log(response);
             }
         } catch (error) {
             showNotification('Wystąpił błąd!');
@@ -136,9 +138,15 @@ const TimeSlotDetails = ({
     };
 
     const handleAddTimeSlot = () => {
-        const success = addTimeSlot(selectedSlot.id, selectedDevice.name, selectedSlot.start_timestamp, selectedSlot.end_timestamp);
+        addTimeSlot(
+            // this returns success (true / false)
+            selectedSlot.id,
+            selectedDevice.name,
+            selectedSlot.start_timestamp,
+            selectedSlot.end_timestamp
+        );
         setIsPanelOpen(false);
-    }
+    };
 
     return (
         <div>
@@ -181,11 +189,11 @@ const TimeSlotDetails = ({
                                 ).toLocaleString('pl-PL')}
                             </p>
                             <p>
-                                <strong>Cena:</strong> {selectedSlot.price}{' '}
-                                zł
+                                <strong>Cena:</strong> {selectedSlot.price} zł
                             </p>
                         </div>
-                        {(localStorage.getItem('userType') === 'commercial_brewery') && 
+                        {localStorage.getItem('userType') ===
+                            'commercial_brewery' && (
                             <div className={styles.detailBox}>
                                 <h3>Zlecenie</h3>
                                 {contractBrewery ? (
@@ -202,8 +210,9 @@ const TimeSlotDetails = ({
                                     </p>
                                 )}
                             </div>
-                        }
-                        {(localStorage.getItem('userType') === 'commercial_brewery') && 
+                        )}
+                        {localStorage.getItem('userType') ===
+                            'commercial_brewery' && (
                             <div className={styles.detailBox}>
                                 <h3>Browar kontraktowy</h3>
                                 {contractBrewery ? (
@@ -232,53 +241,72 @@ const TimeSlotDetails = ({
                                     </p>
                                 )}
                             </div>
-                        }{(localStorage.getItem('userType') === 'contract_brewery') && deviceDetails && 
-                            <div className={styles.detailBox}>
-                                <h3>Szczegóły urządzenia</h3>
-                                <p>
-                                    <strong>Nazwa urządzenia:</strong>{' '}
-                                    {deviceDetails.name}
-                                </p>
-                                <p>
-                                    <strong>Typ urządzenia:</strong>{' '}
-                                    {resolveDeviceType(deviceDetails.device_type)}
-                                </p>
-                                <p>
-                                    <strong>Pojemność:</strong>{' '}
-                                    {deviceDetails.capacity} {'(L)'}
-                                </p>
-                                {deviceDetails.device_type !== 'BE' && 
+                        )}
+                        {localStorage.getItem('userType') ===
+                            'contract_brewery' &&
+                            deviceDetails && (
+                                <div className={styles.detailBox}>
+                                    <h3>Szczegóły urządzenia</h3>
                                     <p>
-                                        <strong>Temperatura minimalna:</strong>{' '}
-                                        {deviceDetails.temperature_min} {'(℃)'}
+                                        <strong>Nazwa urządzenia:</strong>{' '}
+                                        {deviceDetails.name}
                                     </p>
-                                }
-                                {deviceDetails.device_type !== 'BE' && 
                                     <p>
-                                        <strong>Temperatura maksymalna:</strong>{' '}
-                                        {deviceDetails.temperature_max} {'(℃)'}
+                                        <strong>Typ urządzenia:</strong>{' '}
+                                        {resolveDeviceType(
+                                            deviceDetails.device_type
+                                        )}
                                     </p>
-                                }
-                                <p>
-                                    <strong>Do obsługi piw kwaśnych:</strong>{' '}
-                                    {resolveSourBeers(deviceDetails.sour_beers)}
-                                </p>
-                                {(deviceDetails.device_type === 'BT' || deviceDetails.device_type === 'BE') && 
                                     <p>
-                                        <strong>Nagazowywanie:</strong>{' '}
-                                        {deviceDetails.carbonation}
+                                        <strong>Pojemność:</strong>{' '}
+                                        {deviceDetails.capacity} {'(L)'}
                                     </p>
-                                }
-                                {(deviceDetails.device_type === 'BE') && 
+                                    {deviceDetails.device_type !== 'BE' && (
+                                        <p>
+                                            <strong>
+                                                Temperatura minimalna:
+                                            </strong>{' '}
+                                            {deviceDetails.temperature_min}{' '}
+                                            {'(℃)'}
+                                        </p>
+                                    )}
+                                    {deviceDetails.device_type !== 'BE' && (
+                                        <p>
+                                            <strong>
+                                                Temperatura maksymalna:
+                                            </strong>{' '}
+                                            {deviceDetails.temperature_max}{' '}
+                                            {'(℃)'}
+                                        </p>
+                                    )}
                                     <p>
-                                        <strong>Obsługiwane pojemniki:</strong>{' '}
-                                        {deviceDetails.supported_containers}
+                                        <strong>
+                                            Do obsługi piw kwaśnych:
+                                        </strong>{' '}
+                                        {resolveSourBeers(
+                                            deviceDetails.sour_beers
+                                        )}
                                     </p>
-                                }
-                            </div>
-                        }
+                                    {(deviceDetails.device_type === 'BT' ||
+                                        deviceDetails.device_type === 'BE') && (
+                                        <p>
+                                            <strong>Nagazowywanie:</strong>{' '}
+                                            {deviceDetails.carbonation}
+                                        </p>
+                                    )}
+                                    {deviceDetails.device_type === 'BE' && (
+                                        <p>
+                                            <strong>
+                                                Obsługiwane pojemniki:
+                                            </strong>{' '}
+                                            {deviceDetails.supported_containers}
+                                        </p>
+                                    )}
+                                </div>
+                            )}
                     </div>
-                    {(localStorage.getItem('userType') === 'commercial_brewery') && 
+                    {localStorage.getItem('userType') ===
+                        'commercial_brewery' && (
                         <div className={styles.newOrderButtonGroup}>
                             {Date.now() <
                                 new Date(selectedSlot.end_timestamp) && (
@@ -305,8 +333,9 @@ const TimeSlotDetails = ({
                                 Zamknij
                             </button>
                         </div>
-                    }
-                    {(localStorage.getItem('userType') === 'contract_brewery') && 
+                    )}
+                    {localStorage.getItem('userType') ===
+                        'contract_brewery' && (
                         <div className={styles.newOrderButtonGroup}>
                             <button
                                 onClick={() => setIsPanelOpen(false)}
@@ -322,7 +351,7 @@ const TimeSlotDetails = ({
                                 </button>
                             )}
                         </div>
-                    }
+                    )}
                 </div>
             </div>
             {isModalOpen && (

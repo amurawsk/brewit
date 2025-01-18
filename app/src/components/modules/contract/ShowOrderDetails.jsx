@@ -146,7 +146,10 @@ const ShowDeviceDetails = ({
                         <div className={styles.timelineHeader}>
                             <h3>Oś Czasu wynajmowanych urządzeń</h3>
                         </div>
-                        <TimeSlotsTimeline timeSlots={order.timeSlots} orderStatus={order.status} />
+                        <TimeSlotsTimeline
+                            timeSlots={order.timeSlots}
+                            orderStatus={order.status}
+                        />
                         {order.status === 'R' && (
                             <button
                                 onClick={closePanel}

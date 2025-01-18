@@ -21,7 +21,9 @@ const Orders = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const response = await api.get(`orders/contract/status/${activeStatus}/`);
+                const response = await api.get(
+                    `orders/contract/status/${activeStatus}/`
+                );
                 if (response.status === 200) {
                     setOrders(response.data);
                 } else {
