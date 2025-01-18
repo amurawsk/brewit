@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import {
     FaBeer,
     FaCogs,
-    FaTools,
     FaTachometerAlt,
     FaList,
     FaClock,
     FaCheck,
     FaTimes,
     FaHistory,
+    FaWineBottle
 } from 'react-icons/fa';
 
 import styles from './BreweryShortStats.module.css';
@@ -75,7 +75,7 @@ const BreweryShortStats = ({ statsData }) => {
                             </div>
                             <div
                                 className={`${styles.deviceStatBox} ${styles.deviceStatBoxBe}`}>
-                                <FaTools className={styles.deviceIcon} />
+                                <FaWineBottle className={styles.deviceIcon} />
                                 <span className={styles.deviceLabel}>
                                     Ilość urządzeń do rozlewania:
                                 </span>

@@ -76,23 +76,23 @@
 }
 
 .deviceStatBoxBt {
-    background-color: #f0a;
-    color: white;
+    border: 1px solid #f0a;
+    color: #f0a;
 }
 
 .deviceStatBoxFt {
-    background-color: #0af;
-    color: white;
+    border: 1px solid #0af;
+    color: #0af;
 }
 
 .deviceStatBoxAc {
-    background-color: #fa0;
-    color: white;
+    border: 1px solid #fa0;
+    color: #fa0;
 }
 
 .deviceStatBoxBe {
-    background-color: #0fa;
-    color: white;
+    border: 1px solid #0fa;
+    color: #0fa;
 }
 
 .orderStatBoxGeneral {
