@@ -568,39 +568,33 @@ class CoworkersView(APIView):
         - 200 OK: If the coworkers are successfully retrieved
         - 400 Bad Request: If the account is neither commercial nor contract
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the account was not found
     """
 
     permission_classes = [IsAuthenticated]
 
-    def get(self, _, profile_id):
-        try:
-            profile = Profile.objects.get(pk=profile_id)
-            coworkers = None
-            if (brewery := profile.commercial_brewery) is not None:
-                coworkers = Profile.objects.filter(
-                    commercial_brewery=profile.commercial_brewery,
-                    user__is_active=True
-                ).exclude(pk=profile_id)
-            elif (brewery := profile.contract_brewery) is not None:
-                coworkers = Profile.objects.filter(
-                    contract_brewery=brewery,
-                    user__is_active=True
-                ).exclude(pk=profile_id)
-            else:
-                return Response(
-                    {"error": "Improper account type."},
-                    status=400
-                )
-            serializer = serializers.AccountInfoSerializer(
-                coworkers,
-                many=True
-            )
-            return Response(serializer.data, status=200)
-        except Profile.DoesNotExist:
+    def get(self, request):
+        profile = request.user.profile
+        coworkers = None
+        if (brewery := profile.commercial_brewery) is not None:
+            coworkers = Profile.objects.filter(
+                commercial_brewery=profile.commercial_brewery,
+                user__is_active=True
+            ).exclude(pk=profile.pk)
+        elif (brewery := profile.contract_brewery) is not None:
+            coworkers = Profile.objects.filter(
+                contract_brewery=brewery,
+                user__is_active=True
+            ).exclude(pk=profile.pk)
+        else:
             return Response(
-                {"error": "Account not found."}
+                {"error": "Improper account type."},
+                status=status.HTTP_400_BAD_REQUEST
             )
+        serializer = serializers.AccountInfoSerializer(
+            coworkers,
+            many=True
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RemoveCoworkerView(APIView):
