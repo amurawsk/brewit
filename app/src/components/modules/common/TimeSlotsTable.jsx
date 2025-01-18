@@ -19,6 +19,8 @@ const TimeSlotsTable = ({
     endHour,
     selectedBreweryId,
     addTimeSlot,
+    removeTimeSlot,
+    isCurrentlyAdded,
 }) => {
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -175,6 +177,21 @@ const TimeSlotsTable = ({
         return false;
     });
 
+    const getCellClass = (timeSlot) => {
+        if (isCurrentlyAdded && isCurrentlyAdded(timeSlot?.id))
+            return styles.currentlyAdded;
+        switch (timeSlot?.status) {
+            case 'F':
+                return styles.activeAvailableSlot;
+            case 'R':
+                return styles.activeReservedSlot;
+            case 'H':
+                return styles.activeTakenSlot;
+            default:
+                return styles.defaultSlot;
+        }
+    };
+
     return (
         <div className={styles.tableContainer}>
             <div className={styles.scrollableTable}>
@@ -204,15 +221,10 @@ const TimeSlotsTable = ({
                                                   hour,
                                                   selectedDate
                                               );
-                                              const cellClass =
-                                                  timeSlot?.status === 'F'
-                                                      ? styles.activeAvailableSlot
-                                                      : timeSlot?.status === 'R'
-                                                        ? styles.activeReservedSlot
-                                                        : timeSlot?.status ===
-                                                            'H'
-                                                          ? styles.activeTakenSlot
-                                                          : styles.defaultSlot;
+                                              const cellClass = getCellClass(
+                                                  timeSlot,
+                                                  styles
+                                              );
 
                                               return (
                                                   <td
@@ -269,6 +281,8 @@ const TimeSlotsTable = ({
                 selectedSlot={selectedSlot}
                 selectedDevice={selectedDevice}
                 addTimeSlot={addTimeSlot}
+                removeTimeSlot={removeTimeSlot}
+                isCurrentlyAdded={isCurrentlyAdded}
             />
         </div>
     );

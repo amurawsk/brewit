@@ -46,6 +46,25 @@ const SelectTimeslots = () => {
         return false;
     };
 
+    const removeTimeSlot = (timeSlotId) => {
+        const exists = timeSlots.some((slot) => slot.timeSlotId === timeSlotId);
+        if (exists) {
+            setTimeSlots((prevTimeSlots) =>
+                prevTimeSlots.filter((slot) => slot.timeSlotId !== timeSlotId)
+            );
+            return true;
+        }
+        return false;
+    };
+
+    const isCurrentlyAdded = (timeSlotId) => {
+        const exists = timeSlots.some((slot) => slot.timeSlotId === timeSlotId);
+        if (exists) {
+            return true;
+        }
+        return false;
+    };
+
     return (
         <div>
             <DashboardHeader />
@@ -77,6 +96,8 @@ const SelectTimeslots = () => {
                         endHour={endHour}
                         selectedBreweryId={brewery.id}
                         addTimeSlot={addTimeSlot}
+                        removeTimeSlot={removeTimeSlot}
+                        isCurrentlyAdded={isCurrentlyAdded}
                     />
                 </div>
             </div>

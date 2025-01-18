@@ -155,3 +155,21 @@
 .addToTimeSlotsButton:hover {
     background-color: #ccccff;
 }
+
+.deleteFromTimeSlotButton {
+    background-color: white;
+    color: red;
+    border: 1px solid red;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-left: auto;
+    margin-top: 20px;
+    cursor: pointer;
+    padding: 0.4rem 1.2rem;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.deleteFromTimeSlotButton:hover {
+    background-color: #ffb3b3;
+}

@@ -22,6 +22,8 @@ const TimeSlotDetails = ({
     selectedSlot,
     selectedDevice,
     addTimeSlot,
+    removeTimeSlot,
+    isCurrentlyAdded,
 }) => {
     const [contractBrewery, setContractBrewery] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -151,6 +153,15 @@ const TimeSlotDetails = ({
             showNotification('Pomyślnie dodano!');
         } else {
             showNotification('To okno czasowe jest już dodane!');
+        }
+        setIsPanelOpen(false);
+    };
+
+    const handleRemoveTimeSlot = () => {
+        if (removeTimeSlot(selectedSlot.id)) {
+            showNotification('Pomyślnie usunięto!');
+        } else {
+            showNotification('To okno czasowe nie jest dodane!');
         }
         setIsPanelOpen(false);
     };
@@ -359,14 +370,34 @@ const TimeSlotDetails = ({
                                     className={styles.backButton}>
                                     Zamknij
                                 </button>
-                                {Date.now() <
-                                    new Date(selectedSlot.start_timestamp) && (
-                                    <button
-                                        onClick={() => handleAddTimeSlot()}
-                                        className={styles.addToTimeSlotsButton}>
-                                        Dodaj do zlecenia
-                                    </button>
-                                )}
+                                {!isCurrentlyAdded(selectedSlot.id) &&
+                                    Date.now() <
+                                        new Date(
+                                            selectedSlot.start_timestamp
+                                        ) && (
+                                        <button
+                                            onClick={() => handleAddTimeSlot()}
+                                            className={
+                                                styles.addToTimeSlotsButton
+                                            }>
+                                            Dodaj do zlecenia
+                                        </button>
+                                    )}
+                                {isCurrentlyAdded(selectedSlot.id) &&
+                                    Date.now() <
+                                        new Date(
+                                            selectedSlot.start_timestamp
+                                        ) && (
+                                        <button
+                                            onClick={() =>
+                                                handleRemoveTimeSlot()
+                                            }
+                                            className={
+                                                styles.deleteFromTimeSlotButton
+                                            }>
+                                            Usuń ze zlecenia
+                                        </button>
+                                    )}
                             </div>
                         )}
                     </div>
