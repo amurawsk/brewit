@@ -140,7 +140,14 @@ const TimeSlotDetails = ({
     };
 
     const handleAddTimeSlot = () => {
-        if (addTimeSlot(selectedSlot.id, selectedDevice.name, selectedSlot.start_timestamp, selectedSlot.end_timestamp)) {
+        if (
+            addTimeSlot(
+                selectedSlot.id,
+                selectedDevice.name,
+                selectedSlot.start_timestamp,
+                selectedSlot.end_timestamp
+            )
+        ) {
             showNotification('Pomyślnie dodano!');
         } else {
             showNotification('To okno czasowe jest już dodane!');
@@ -190,7 +197,8 @@ const TimeSlotDetails = ({
                                     ).toLocaleString('pl-PL')}
                                 </p>
                                 <p>
-                                    <strong>Cena:</strong> {selectedSlot.price} zł
+                                    <strong>Cena:</strong> {selectedSlot.price}{' '}
+                                    zł
                                 </p>
                             </div>
                             {localStorage.getItem('userType') ===
@@ -206,8 +214,8 @@ const TimeSlotDetails = ({
                                         </>
                                     ) : (
                                         <p>
-                                            To okno czasowe nie jest przypisane do
-                                            żadnego zlecenia
+                                            To okno czasowe nie jest przypisane
+                                            do żadnego zlecenia
                                         </p>
                                     )}
                                 </div>
@@ -237,8 +245,9 @@ const TimeSlotDetails = ({
                                         </>
                                     ) : (
                                         <p>
-                                            To okno czasowe nie jest zarezerwowane /
-                                            zajęte przez żaden browar kontraktowy
+                                            To okno czasowe nie jest
+                                            zarezerwowane / zajęte przez żaden
+                                            browar kontraktowy
                                         </p>
                                     )}
                                 </div>
@@ -289,7 +298,8 @@ const TimeSlotDetails = ({
                                             )}
                                         </p>
                                         {(deviceDetails.device_type === 'BT' ||
-                                            deviceDetails.device_type === 'BE') && (
+                                            deviceDetails.device_type ===
+                                                'BE') && (
                                             <p>
                                                 <strong>Nagazowywanie:</strong>{' '}
                                                 {deviceDetails.carbonation}
@@ -300,7 +310,9 @@ const TimeSlotDetails = ({
                                                 <strong>
                                                     Obsługiwane pojemniki:
                                                 </strong>{' '}
-                                                {deviceDetails.supported_containers}
+                                                {
+                                                    deviceDetails.supported_containers
+                                                }
                                             </p>
                                         )}
                                     </div>
@@ -319,12 +331,16 @@ const TimeSlotDetails = ({
                                 )}
                                 {!selectedSlot.order &&
                                     Date.now() <
-                                        new Date(selectedSlot.start_timestamp) && (
+                                        new Date(
+                                            selectedSlot.start_timestamp
+                                        ) && (
                                         <button
                                             onClick={() =>
                                                 setIsPriceDialogOpen(true)
                                             }
-                                            className={styles.changePriceButton}>
+                                            className={
+                                                styles.changePriceButton
+                                            }>
                                             Zmień cenę
                                         </button>
                                     )}
