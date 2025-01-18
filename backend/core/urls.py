@@ -15,7 +15,11 @@ urlpatterns = [
     path("devices/add/", views.DeviceCreateView.as_view(), name="device_create"),
     path("devices/brewery/<int:brewery_id>/", views.DeviceListForBreweryView.as_view(), name="device_list_brewery"),
     path("devices/all/", views.DeviceListAllView.as_view(), name="device_list_all"),
-    path("devices/brewery/<int:brewery_id>/with-time-slots/", views.DevicesWithTimeSlotsView.as_view(), name="time_slot_list_brewery"),
+    path(
+        "devices/brewery/<int:brewery_id>/with-time-slots/",
+        views.DevicesWithTimeSlotsView.as_view(),
+        name="time_slot_list_brewery"
+    ),
 
     path("devices/<int:device_id>/time-slots/all/", views.TimeSlotListView.as_view(), name="time_slot_list_all"),
     path("devices/<int:device_id>/time-slots/add/", views.TimeSlotCreateView.as_view(), name="time_slot_create"),
@@ -27,7 +31,7 @@ urlpatterns = [
     path("orders/<int:order_id>/accept/", views.OrderAcceptView.as_view(), name="order_accept"),
     path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
     path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
-    # path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
+    path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
     path("orders/device/<int:device_id>/all/", views.OrderListForDeviceView.as_view(), name="order_list_device"),
     path(
         "orders/commercial/status/<str:status>/",
