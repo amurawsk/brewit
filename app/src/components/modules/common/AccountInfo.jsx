@@ -57,12 +57,14 @@ const AccountInfo = ({ accountInfo }) => {
                         </p>
                     </>
                 )}
-                <p>
+                {accountInfo.brewery_description !== '' &&
+                    <p>
                     Opis:
                     <p className={styles.descriptionText}>
                         {accountInfo.brewery_description}
                     </p>
                 </p>
+                }
                 <span className={styles.viewAll} onClick={() => goToBrewery()}>
                     Wyświetl stronę browaru...
                 </span>
