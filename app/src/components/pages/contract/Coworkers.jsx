@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Coworkers.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import ShowCoworkers from '../../modules/common/ShowCoworkers.jsx';
+
+import api from '../../../api.js';
 
 /**
  * Coworkers page - contains layout (Header, Sidebar, Title, Button), displays coworkers for given brewery & user
@@ -14,73 +16,26 @@ const Coworkers = () => {
 
     const addCoworker = () => navigate('/contract/coworkers/add');
 
-    // TODO mock values
-    const coworkers = [
-        {
-            username: 'jan_kowalski',
-            added_at: '2024-01-01T10:00:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-        {
-            username: 'anna_nowak',
-            added_at: '2024-02-15T12:30:00.000Z',
-        },
-    ];
+    const [coworkers, setCoworkers] = useState(null);
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                console.log();
+                const response = await api.get(
+                    `coworkers/${parseInt(localStorage.getItem('userId'))}/`
+                );
+                if (response.status === 200) {
+                    setCoworkers(response.data);
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log('Error fetching devices:', error);
+            }
+        };
+        getData();
+    }, []);
 
     return (
         <div>
@@ -93,7 +48,9 @@ const Coworkers = () => {
                         buttonText="Dodaj nowego współpracownika"
                         buttonFunction={addCoworker}
                     />
-                    <ShowCoworkers coworkers={coworkers} />
+                    {coworkers !== null &&
+                        <ShowCoworkers coworkers={coworkers} />
+                    }
                 </div>
             </div>
         </div>
