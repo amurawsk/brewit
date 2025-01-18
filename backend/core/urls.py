@@ -19,4 +19,5 @@ urlpatterns = [
     path("devices/<int:device_id>/time-slots/add/", views.TimeSlotCreateView.as_view(), name="time_slot_create"),
     path("devices/brewery/<int:brewery_id>/with-time-slots/", views.DevicesWithTimeSlotsView.as_view(), name="time_slot_list_brewery"),
     path("commercial-brewery/<int:brewery_id>/", views.CommercialBreweryInfo.as_view(), name="commercial_brewery_info"),
+    path("contract-brewery/<int:brewery_id>/", views.ContractBreweryInfo.as_view(), name="contract_brewery_info"),
 ]

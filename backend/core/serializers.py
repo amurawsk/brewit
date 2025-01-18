@@ -69,6 +69,41 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
         return data
 
 
+class ContractBreweryInfoSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='contract_email')
+    ceo = serializers.CharField(source='owner_name')
+    phone_number = serializers.CharField(source="contract_phone_number")
+
+    class Meta:
+        model = CommercialBrewery
+        fields = [
+            'name',
+            'email',
+            'phone_number',
+            'ceo',
+            'description'
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        orders = {
+            val["status"]: val["no"] for val in list(
+                Order.objects.filter(contract_brewery=instance)
+                .values("status")
+                .annotate(no=Count('status'))
+            )
+        }
+        data['no_orders'] = sum(orders.values())
+        data['no_new'] = orders.get("N", 0)
+        data['no_current'] = orders.get("C", 0)
+        data['no_past'] = orders.get("P", 0)
+        data['no_rejected'] = orders.get("R", 0)
+        data['no_employees'] = Profile.objects.filter(
+            contract_brewery=instance
+        ).count()
+        return data
+
+
 class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery

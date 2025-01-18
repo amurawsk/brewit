@@ -3,7 +3,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Profile, TimeSlot, CommercialBrewery
+from .models import (
+    Device,
+    Profile,
+    TimeSlot,
+    CommercialBrewery,
+    ContractBrewery
+)
 from .serializers import (
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
@@ -12,8 +18,8 @@ from .serializers import (
     RegisterCommercialSerializer,
     RegisterContractSerializer,
     TimeSlotSerializer,
-    CommercialBreweryInfoSerializer
 )
+from . import serializers
 
 
 class RegisterCommercialView(APIView):
@@ -427,7 +433,7 @@ class DevicesWithTimeSlotsView(APIView):
 
 
 class CommercialBreweryInfo(APIView):
-    """View for listing commercial brewery info with orders and devices.
+    """View for listing commercial brewery's info with orders and devices.
     Class allows only authenticated users to access this view.
 
     This view supports HTTP methods:
@@ -443,10 +449,37 @@ class CommercialBreweryInfo(APIView):
     def get(self, _, brewery_id):
         try:
             brewery = CommercialBrewery.objects.get(pk=brewery_id)
-            serializer = CommercialBreweryInfoSerializer(brewery)
+            serializer = serializers.CommercialBreweryInfoSerializer(brewery)
             return Response(serializer.data, status=200)
         except CommercialBrewery.DoesNotExist:
             return Response(
                 {"error": 'Commercial brewery not found.'},
+                status=404
+            )
+
+
+class ContractBreweryInfo(APIView):
+    """View for listing contract brewery's info with orders and devices.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the brewery is successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery is not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, brewery_id):
+        try:
+            brewery = ContractBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.ContractBreweryInfoSerializer(brewery)
+            return Response(serializer.data, status=200)
+        except ContractBrewery.DoesNotExist:
+            return Response(
+                {"error": "Contract brewery not found."},
                 status=404
             )
