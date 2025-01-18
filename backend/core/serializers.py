@@ -148,6 +148,18 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
         ]
 
 
+class AccountInfoSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    added_at = serializers.DateTimeField(source="user.date_joined")
+
+    class Meta:
+        model = Profile
+        fields = [
+            "username",
+            "added_at"
+        ]
+
+
 class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery

@@ -432,7 +432,7 @@ class DevicesWithTimeSlotsView(APIView):
         return Response(serializer.data, status=200)
 
 
-class CommercialBreweryInfo(APIView):
+class CommercialBreweryInfoView(APIView):
     """View for listing commercial brewery's info with orders and devices.
     Class allows only authenticated users to access this view.
 
@@ -458,7 +458,7 @@ class CommercialBreweryInfo(APIView):
             )
 
 
-class ContractBreweryInfo(APIView):
+class ContractBreweryInfoView(APIView):
     """View for listing contract brewery's info with orders.
     Class allows only authenticated users to access this view.
 
@@ -485,7 +485,7 @@ class ContractBreweryInfo(APIView):
             )
 
 
-class CommercialAccountInfo(APIView):
+class CommercialAccountInfoView(APIView):
     """View for listing commercial account's info.
     Class allows only authenticated users to access this view.
 
@@ -521,7 +521,7 @@ class CommercialAccountInfo(APIView):
             )
 
 
-class ContractAccountInfo(APIView):
+class ContractAccountInfoView(APIView):
     """View for listing contract account's info.
     Class allows only authenticated users to access this view.
 
@@ -554,4 +554,38 @@ class ContractAccountInfo(APIView):
             return Response(
                 {"error": "Account not found."},
                 status=404
+            )
+
+
+class CoworkersView(APIView):
+    """
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, profile_id):
+        try:
+            profile = Profile.objects.get(pk=profile_id)
+            coworkers = None
+            if (brewery := profile.commercial_brewery) is not None:
+                coworkers = Profile.objects.filter(
+                    commercial_brewery=profile.commercial_brewery
+                ).exclude(pk=profile_id)
+            elif (brewery := profile.contract_brewery) is not None:
+                coworkers = Profile.objects.filter(
+                    contract_brewery=brewery
+                ).exclude(pk=profile_id)
+            else:
+                return Response(
+                    {"error": "Improper account type."},
+                    status=400
+                )
+            serializer = serializers.AccountInfoSerializer(
+                coworkers,
+                many=True
+            )
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."}
             )

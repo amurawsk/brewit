@@ -20,22 +20,27 @@ urlpatterns = [
     path("devices/brewery/<int:brewery_id>/with-time-slots/", views.DevicesWithTimeSlotsView.as_view(), name="time_slot_list_brewery"),
     path(
         "commercial-brewery/<int:brewery_id>/",
-        views.CommercialBreweryInfo.as_view(),
+        views.CommercialBreweryInfoView.as_view(),
         name="commercial_brewery_info"
     ),
     path(
         "contract-brewery/<int:brewery_id>/",
-        views.ContractBreweryInfo.as_view(),
+        views.ContractBreweryInfoView.as_view(),
         name="contract_brewery_info"
     ),
     path(
         "accounts/commercial/<int:profile_id>/",
-        views.CommercialAccountInfo.as_view(),
+        views.CommercialAccountInfoView.as_view(),
         name="commercial_account_info"
     ),
     path(
         "accounts/contract/<int:profile_id>/",
-        views.ContractAccountInfo.as_view(),
+        views.ContractAccountInfoView.as_view(),
         name="contract_account_info"
     ),
+    path(
+        "coworkers/<int:profile_id>/",
+        views.CoworkersView.as_view(),
+        name="coworkers"
+    )
 ]
