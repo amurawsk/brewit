@@ -135,8 +135,8 @@ const TimeSlotDetails = ({
         setIsPriceDialogOpen(false);
     };
 
-    const handleAddTimeSlot = async (slotId) => {
-        const success = addTimeSlot(slotId);
+    const handleAddTimeSlot = () => {
+        const success = addTimeSlot(selectedSlot.id, selectedDevice.name, selectedSlot.start_timestamp, selectedSlot.end_timestamp);
         setIsPanelOpen(false);
     }
 
@@ -316,7 +316,7 @@ const TimeSlotDetails = ({
                             {Date.now() <
                                 new Date(selectedSlot.start_timestamp) && (
                                 <button
-                                    onClick={() => handleAddTimeSlot(selectedSlot.id)}
+                                    onClick={() => handleAddTimeSlot()}
                                     className={styles.addToTimeSlotsButton}>
                                     Dodaj do zlecenia
                                 </button>

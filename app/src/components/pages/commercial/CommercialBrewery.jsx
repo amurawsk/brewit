@@ -64,7 +64,7 @@ const CommercialBrewery = () => {
                     )}
                     <PageTitle text="Statystyki" />
                     {breweryData !== null && (
-                    <BreweryShortStats statsData={breweryData} />
+                        <BreweryShortStats statsData={breweryData} />
                     )}
                 </div>
             </div>

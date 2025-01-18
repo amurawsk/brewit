@@ -12,7 +12,7 @@ import styles from './ChooseCommercial.module.css';
  */
 const ChooseCommercial = () => {
     // TODO MOCK
-    const [breweries, setBreweries] = useState([{id: 1, name: 'TestBrewery', nip: '1234567890', address: 'Szkolna 1'}, {id: 2, name: 'TestBrewery2', nip: '1234567890', address: 'Szkolna 1'}]);
+    const [breweries, setBreweries] = useState([{id: 1, name: 'TestBrewery', nip: '1234567890', address: 'Szkolna 1', phone_number: '123456789', email: 'example@gmail.com'}, {id: 2, name: 'TestBrewery2', nip: '1234567890', address: 'Szkolna 1', phone_number: '123456789', email: 'example@gmail.com'}]);
 
 
     return (

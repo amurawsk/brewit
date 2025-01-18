@@ -134,6 +134,10 @@
     margin-left: 10px;
 }
 
+.changePriceButton:hover {
+    background-color: #ccccff;
+}
+
 .addToTimeSlotsButton {
     background-color: white;
     color: blue;
@@ -148,6 +152,6 @@
     margin-left: 10px;
 }
 
-.changePriceButton:hover {
+.addToTimeSlotsButton:hover {
     background-color: #ccccff;
 }

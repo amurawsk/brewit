@@ -12,7 +12,7 @@ import TimeSlotsTable from '../../modules/common/TimeSlotsTable.jsx';
  */
 const SelectTimeslots = () => {
     const location = useLocation();
-    const breweryId = location.state?.breweryId || null;
+    const brewery = location.state?.brewery || null;
 
     const [startHour, setStartHour] = useState(8);
     const [endHour, setEndHour] = useState(16);
@@ -21,12 +21,22 @@ const SelectTimeslots = () => {
     const [timeSlots, setTimeSlots] = useState([]);
 
     const navigate = useNavigate();
-    const showSummary = () => navigate('/contract/orders/add/finalize');
 
-    const addTimeSlot = (timeSlotId) => {
-        const exists = timeSlots.includes(timeSlotId);
+    const showSummary = () => {
+        navigate('/contract/orders/add/finalize', {
+            state: { brewery: brewery, timeSlots: timeSlots },
+        });
+    };
+
+    const addTimeSlot = (timeSlotId, deviceName, startTimestamp, endTimestamp) => {
+        const exists = timeSlots.some(
+            (slot) => slot.timeSlotId === timeSlotId
+        );
         if (!exists) {
-            setTimeSlots((prevTimeSlots) => [...prevTimeSlots, timeSlotId]);
+            setTimeSlots((prevTimeSlots) => [
+                ...prevTimeSlots,
+                { timeSlotId, deviceName, startTimestamp, endTimestamp }
+            ]);
             return true;
         }
         return false;
@@ -61,7 +71,7 @@ const SelectTimeslots = () => {
                         selectedDate={selectedDate}
                         startHour={startHour}
                         endHour={endHour}
-                        selectedBreweryId={breweryId}
+                        selectedBreweryId={brewery.id}
                         addTimeSlot={addTimeSlot}
                     />
                 </div>

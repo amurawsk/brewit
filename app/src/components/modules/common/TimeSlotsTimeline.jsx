@@ -3,9 +3,9 @@ import styles from './TimeSlotsTimeline.module.css';
 
 /**
  * TimeSlotsTimeline - displays all timeslots in aesthetic way (as a timeline)
- * @param order - chosen order details
+ * @param timeSlots - chosen order timeSlots
  */
-const TimeSlotsTimeline = ({ order }) => {
+const TimeSlotsTimeline = ({ timeSlots, orderStatus }) => {
     const getDotColor = (start, end, status) => {
         const currentTime = new Date().toISOString();
         if (status === 'R') {
@@ -22,10 +22,10 @@ const TimeSlotsTimeline = ({ order }) => {
 
     return (
         <div className={styles.timeline}>
-            {order.timeSlots.map((timeslot, index) => (
+            {timeSlots.map((timeslot, index) => (
                 <div key={index} className={styles.event}>
                     <div
-                        className={`${styles.dot} ${getDotColor(timeslot.start_timestamp, timeslot.end_timestamp, order.status)}`}
+                        className={`${styles.dot} ${getDotColor(timeslot.start_timestamp, timeslot.end_timestamp, orderStatus)}`}
                     />
                     <div className={styles.details}>
                         <div className={styles.status}>

@@ -14,7 +14,7 @@ const ShowCommercialBreweries = ({ breweries }) => {
 
     const selectBrewery = (brewery) => {
         navigate('/contract/orders/add/select-timeslots', {
-            state: { breweryId: brewery.id },
+            state: { brewery: brewery },
         });
     };
 
