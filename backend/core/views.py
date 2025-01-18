@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Order, Profile, TimeSlot, CommercialBrewery
+from .models import Device, Order, Profile, TimeSlot, CommercialBrewery, ContractBrewery
 from .serializers import (
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
@@ -16,8 +16,8 @@ from .serializers import (
     RegisterContractSerializer,
     TimeSlotEditPriceSerializer,
     TimeSlotSerializer,
-    CommercialBreweryInfoSerializer
 )
+from . import serializers
 
 
 class RegisterCommercialView(APIView):
@@ -982,8 +982,9 @@ class OrderListContractView(APIView):
         orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
         serializer = OrderSerializer(orders, many=True)
         return Response(serializer.data, status=200)
-class CommercialBreweryInfo(APIView):
-    """View for listing commercial brewery info with orders and devices.
+
+class CommercialBreweryInfoView(APIView):
+    """View for listing commercial brewery's info with orders and devices.
     Class allows only authenticated users to access this view.
 
     This view supports HTTP methods:
@@ -992,17 +993,216 @@ class CommercialBreweryInfo(APIView):
     Responses:
         - 200 OK: If the brewery is successfully retrieved
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the brewery is not found
+        - 404 Not Found: If the brewery was not found
     """
     permission_classes = [IsAuthenticated]
 
     def get(self, _, brewery_id):
         try:
             brewery = CommercialBrewery.objects.get(pk=brewery_id)
-            serializer = CommercialBreweryInfoSerializer(brewery)
+            serializer = serializers.CommercialBreweryInfoSerializer(brewery)
             return Response(serializer.data, status=200)
         except CommercialBrewery.DoesNotExist:
             return Response(
                 {"error": 'Commercial brewery not found.'},
                 status=404
+            )
+
+
+class ContractBreweryInfoView(APIView):
+    """View for listing contract brewery's info with orders.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the brewery is successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, brewery_id):
+        try:
+            brewery = ContractBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.ContractBreweryInfoSerializer(brewery)
+            return Response(serializer.data, status=200)
+        except ContractBrewery.DoesNotExist:
+            return Response(
+                {"error": "Contract brewery not found."},
+                status=404
+            )
+
+
+class CommercialAccountInfoView(APIView):
+    """View for listing commercial account's info.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully retrieved
+        - 400 Bad Request: If the account is not a commercial account
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, profile_id):
+        try:
+            profile = Profile.objects.get(pk=profile_id)
+            if profile.commercial_brewery is None:
+                return Response(
+                    {
+                        "error": ("Requested account is not a commercial "
+                                  "brewery account.")
+                    },
+                    status=400
+                )
+            serializer = serializers.CommercialAccountInfoSerializer(profile)
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."},
+                status=404
+            )
+
+
+class ContractAccountInfoView(APIView):
+    """View for listing contract account's info.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully retrieved
+        - 400 Bad Request: If the account is not a contract account
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, profile_id):
+        try:
+            profile = Profile.objects.get(pk=profile_id)
+            if profile.contract_brewery is None:
+                return Response(
+                    {
+                        "error": ("Requested account is not a contract "
+                                  "brewery account.")
+                    },
+                    status=400
+                )
+            serializer = serializers.ContractAccountInfoSerializer(profile)
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."},
+                status=404
+            )
+
+
+class CoworkersView(APIView):
+    """View for listing coworkers of given account.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the coworkers are successfully retrieved
+        - 400 Bad Request: If the account is neither commercial nor contract
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, profile_id):
+        try:
+            profile = Profile.objects.get(pk=profile_id)
+            coworkers = None
+            if (brewery := profile.commercial_brewery) is not None:
+                coworkers = Profile.objects.filter(
+                    commercial_brewery=profile.commercial_brewery,
+                    user__is_active=True
+                ).exclude(pk=profile_id)
+            elif (brewery := profile.contract_brewery) is not None:
+                coworkers = Profile.objects.filter(
+                    contract_brewery=brewery,
+                    user__is_active=True
+                ).exclude(pk=profile_id)
+            else:
+                return Response(
+                    {"error": "Improper account type."},
+                    status=400
+                )
+            serializer = serializers.AccountInfoSerializer(
+                coworkers,
+                many=True
+            )
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."}
+            )
+
+
+class RemoveCoworkerView(APIView):
+    """View for deactivating given account.
+    Class allows only authenticated users to access this view.
+    Only users from the same brewery or users can deactivate accounts.
+
+    This view supports HTTP methods:
+    - POST: Accepts the "coworker_id", validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully deactivated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        profile = request.user.profile
+        serializer = serializers.CoworkerSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                {serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            coworker = Profile.objects.get(pk=serializer.data['coworker_id'])
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Specified account not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if (
+            (profile.commercial_brewery == coworker.commercial_brewery
+                and profile.commercial_brewery is not None)
+            or (profile.contract_brewery == coworker.contract_brewery
+                and profile.contract_brewery is not None)
+            or (profile.contract_brewery is None
+                and profile.commercial_brewery is None)
+        ):
+            coworker_user = coworker.user
+            coworker_user.is_active = False
+            coworker_user.save()
+            return Response(
+                f"Successfilly deactivated user of id={coworker.pk}",
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"error": "The user cannot remove specified account."},
+                status=status.HTTP_403_FORBIDDEN
             )

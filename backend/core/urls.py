@@ -38,6 +38,34 @@ urlpatterns = [
         views.OrderListContractView.as_view(),
         name="order_list_contract"
     ),
-
-    path("commercial-brewery/<int:brewery_id>/", views.CommercialBreweryInfo.as_view(), name="commercial_brewery_info"),
+    path(
+        "commercial-brewery/<int:brewery_id>/",
+        views.CommercialBreweryInfoView.as_view(),
+        name="commercial_brewery_info"
+    ),
+    path(
+        "contract-brewery/<int:brewery_id>/",
+        views.ContractBreweryInfoView.as_view(),
+        name="contract_brewery_info"
+    ),
+    path(
+        "accounts/commercial/<int:profile_id>/",
+        views.CommercialAccountInfoView.as_view(),
+        name="commercial_account_info"
+    ),
+    path(
+        "accounts/contract/<int:profile_id>/",
+        views.ContractAccountInfoView.as_view(),
+        name="contract_account_info"
+    ),
+    path(
+        "coworkers/<int:profile_id>/",
+        views.CoworkersView.as_view(),
+        name="coworker_list"
+    ),
+    path(
+        "coworkers/remove/",
+        views.RemoveCoworkerView.as_view(),
+        name="coworker_remove"
+    )
 ]
