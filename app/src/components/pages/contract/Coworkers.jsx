@@ -23,7 +23,7 @@ const Coworkers = () => {
             try {
                 console.log();
                 const response = await api.get(
-                    `coworkers/${parseInt(localStorage.getItem('userId'))}/`
+                    `coworkers/`
                 );
                 if (response.status === 200) {
                     setCoworkers(response.data);
