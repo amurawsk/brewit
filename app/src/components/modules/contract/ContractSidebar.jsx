@@ -17,7 +17,7 @@ const ContractSidebar = () => {
     const goToCoworkers = () => navigate('/contract/coworkers');
     const goToBrewery = () => navigate('/contract/brewery');
 
-    const goToNewOrder = () => {}; // TODO
+    const goToNewOrder = () => navigate('/contract/orders/add/choose-brewery')
     const goToRecipes = () => navigate('/contract/recipes');
     const goToStatistics = () => navigate('/contract/statistics');
 

@@ -30,8 +30,12 @@ import Statistics from './components/pages/Statistics';
 import Recipes from './components/pages/contract/Recipes';
 import AddRecipe from './components/pages/contract/AddRecipe';
 import EditRecipe from './components/pages/contract/EditRecipe';
+import ChooseCommercial from './components/pages/contract/ChooseCommercial';
+import SelectTimeslots from './components/pages/contract/SelectTimeslots';
+import FinalizeOrder from './components/pages/contract/FinalizeOrder';
 
 import './App.css';
+
 
 function App() {
     return (
@@ -180,6 +184,30 @@ function App() {
                     element={
                         <ProtectedRoute requiredType="contract_brewery">
                             <ContractOrders />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/orders/add/choose-brewery"
+                    element={
+                        <ProtectedRoute requiredType="contract_brewery">
+                            <ChooseCommercial />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/orders/add/select-timeslots"
+                    element={
+                        <ProtectedRoute requiredType="contract_brewery">
+                            <SelectTimeslots />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/contract/orders/add/finalize"
+                    element={
+                        <ProtectedRoute requiredType="contract_brewery">
+                            <FinalizeOrder />
                         </ProtectedRoute>
                     }
                 />
