@@ -569,11 +569,13 @@ class CoworkersView(APIView):
             coworkers = None
             if (brewery := profile.commercial_brewery) is not None:
                 coworkers = Profile.objects.filter(
-                    commercial_brewery=profile.commercial_brewery
+                    commercial_brewery=profile.commercial_brewery,
+                    user__is_active=True
                 ).exclude(pk=profile_id)
             elif (brewery := profile.contract_brewery) is not None:
                 coworkers = Profile.objects.filter(
-                    contract_brewery=brewery
+                    contract_brewery=brewery,
+                    user__is_active=True
                 ).exclude(pk=profile_id)
             else:
                 return Response(
