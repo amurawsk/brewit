@@ -44,7 +44,9 @@ const ChooseCommercial = () => {
                 <ContractSidebar />
                 <div className={styles.content}>
                     <PageTitle text="Wybierz browar komercyjny" />
-                    <ShowCommercialBreweries breweries={breweries} />
+                    {breweries && 
+                        <ShowCommercialBreweries breweries={breweries} />
+                    }
                 </div>
             </div>
         </div>
