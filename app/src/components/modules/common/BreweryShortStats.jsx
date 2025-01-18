@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaBeer, FaCogs, FaTools, FaTachometerAlt, FaList, FaClock, FaCheck, FaTimes, FaHistory } from 'react-icons/fa';
 
 import styles from './BreweryShortStats.module.css';
 
@@ -20,15 +21,6 @@ const BreweryShortStats = ({ statsData }) => {
             // TODO handle error
         }
     };
-    const viewCoworkers = () => {
-        if (localStorage.getItem('userType') === 'commercial_brewery') {
-            navigate('/commercial/coworkers');
-        } else if (localStorage.getItem('userType') === 'contract_brewery') {
-            navigate('/contract/coworkers');
-        } else {
-            // TODO handle error
-        }
-    };
 
     const viewRecipes = () => navigate('/contract/recipes');
 
@@ -38,25 +30,29 @@ const BreweryShortStats = ({ statsData }) => {
                 {localStorage.getItem('userType') === 'commercial_brewery' && (
                     <>
                         <h3>Urządzenia</h3>
-                        <p>
-                            Ilość urządzeń: <b>{statsData.no_devices}</b>
-                        </p>
-                        <p className={styles.indentText}>
-                            - tanków warzelnych: <b>{statsData.no_bt}</b>
-                        </p>
-                        <p className={styles.indentText}>
-                            - pojemników fermentacyjnych:{' '}
-                            <b>{statsData.no_ft}</b>
-                        </p>
-                        <p className={styles.indentText}>
-                            - kotłów do leżakowania: <b>{statsData.no_ac}</b>
-                        </p>
-                        <p className={styles.indentText}>
-                            - urządzeń do rozlewania: <b>{statsData.no_be}</b>
-                        </p>
-                        <span
-                            className={styles.viewAll}
-                            onClick={() => viewDevices()}>
+                        <div className={styles.deviceStats}>
+                            <div className={`${styles.deviceStatBox} ${styles.deviceStatBoxBt}`}>
+                                <FaBeer className={styles.deviceIcon} />
+                                <span className={styles.deviceLabel}>Ilość tanków warzelnych:</span>
+                                <span className={styles.deviceValue}>{statsData.no_bt}</span>
+                            </div>
+                            <div className={`${styles.deviceStatBox} ${styles.deviceStatBoxFt}`}>
+                                <FaCogs className={styles.deviceIcon} />
+                                <span className={styles.deviceLabel}>Ilość pojemników fermentacyjnych:</span>
+                                <span className={styles.deviceValue}>{statsData.no_ft}</span>
+                            </div>
+                            <div className={`${styles.deviceStatBox} ${styles.deviceStatBoxAc}`}>
+                                <FaTachometerAlt className={styles.deviceIcon} />
+                                <span className={styles.deviceLabel}>Ilość kotłów do leżakowania:</span>
+                                <span className={styles.deviceValue}>{statsData.no_ac}</span>
+                            </div>
+                            <div className={`${styles.deviceStatBox} ${styles.deviceStatBoxBe}`}>
+                                <FaTools className={styles.deviceIcon} />
+                                <span className={styles.deviceLabel}>Ilość urządzeń do rozlewania:</span>
+                                <span className={styles.deviceValue}>{statsData.no_be}</span>
+                            </div>
+                        </div>
+                        <span className={styles.viewAll} onClick={() => viewDevices()}>
                             Wyświetl wszystkie urządzenia...
                         </span>
                     </>
@@ -66,9 +62,7 @@ const BreweryShortStats = ({ statsData }) => {
                         <p>
                             Przepisy: <b>{statsData.no_recipes}</b>
                         </p>
-                        <span
-                            className={styles.viewAll}
-                            onClick={() => viewRecipes()}>
+                        <span className={styles.viewAll} onClick={() => viewRecipes()}>
                             Wyświetl wszystkie przepisy...
                         </span>
                     </>
@@ -76,34 +70,39 @@ const BreweryShortStats = ({ statsData }) => {
             </div>
             <div className={styles.section}>
                 <h3>Zlecenia</h3>
-                <p>
-                    Ilość zleceń: <b>{statsData.no_orders}</b>
-                </p>
-                <p className={styles.indentText}>
-                    - oczekujących: <b>{statsData.no_new}</b>
-                </p>
-                <p className={styles.indentText}>
-                    - aktualnych: <b>{statsData.no_current}</b>
-                </p>
-                <p className={styles.indentText}>
-                    - przeszłych: <b>{statsData.no_past}</b>
-                </p>
-                <p className={styles.indentText}>
-                    - odrzuconych: <b>{statsData.no_rejected}</b>
-                </p>
+                <div className={styles.orderSection}>
+                    <div className={styles.orderStatsContainer}>
+                        <div className={styles.orderStatBoxGeneral}>
+                            <FaList className={styles.orderIcon} />
+                            <span className={styles.orderLabel}>Ilość zleceń:</span>
+                            <span className={styles.orderValue}>{statsData.no_orders}</span>
+                        </div>
+                        <div className={styles.orderStats}>
+                            <div className={`${styles.orderStatBox} ${styles.orderStatBoxNew}`}>
+                                <FaClock className={styles.orderIcon} />
+                                <span className={styles.orderLabel}>Oczekujących:</span>
+                                <span className={styles.orderValue}>{statsData.no_new}</span>
+                            </div>
+                            <div className={`${styles.orderStatBox} ${styles.orderStatBoxCurrent}`}>
+                                <FaCheck className={styles.orderIcon} />
+                                <span className={styles.orderLabel}>Aktualnych:</span>
+                                <span className={styles.orderValue}>{statsData.no_current}</span>
+                            </div>
+                            <div className={`${styles.orderStatBox} ${styles.orderStatBoxPast}`}>
+                                <FaHistory className={styles.orderIcon} />
+                                <span className={styles.orderLabel}>Przeszłych:</span>
+                                <span className={styles.orderValue}>{statsData.no_past}</span>
+                            </div>
+                            <div className={`${styles.orderStatBox} ${styles.orderStatBoxRejected}`}>
+                                <FaTimes className={styles.orderIcon} />
+                                <span className={styles.orderLabel}>Odrzuconych:</span>
+                                <span className={styles.orderValue}>{statsData.no_rejected}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <span className={styles.viewAll} onClick={() => viewOrders()}>
                     Wyświetl wszystkie zlecenia...
-                </span>
-            </div>
-            <div className={styles.section}>
-                <h3>Pracownicy</h3>
-                <p>
-                    Ilość pracowników: <b>{statsData.no_employees}</b>
-                </p>
-                <span
-                    className={styles.viewAll}
-                    onClick={() => viewCoworkers()}>
-                    Wyświetl wszystkich współpracowników...
                 </span>
             </div>
         </div>
