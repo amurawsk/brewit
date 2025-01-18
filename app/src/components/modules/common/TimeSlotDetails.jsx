@@ -10,22 +10,23 @@ import api from '../../../api.js';
 
 /**
  * ShowTimeSlotDetails - pop-up which is visible after clicking on chosen timeslot, displays all timeslot details, allows to change price / cancel timeslot
- * @param isPanelOpen - defines if panel is visible
  * @param setIsPanelOpen - setter for isPanelOpen
  * @param selectedSlot - timeslot which was selected by user
  * @param selectedDevice - device which was selected by user
+ * @param addTimeSlot
  */
 const TimeSlotDetails = ({
-    isPanelOpen,
     setIsPanelOpen,
     selectedSlot,
     selectedDevice,
+    addTimeSlot
 }) => {
     const [contractBrewery, setContractBrewery] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPriceDialogOpen, setIsPriceDialogOpen] = useState(false);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [notificationText, setNotificationText] = useState(null);
+    const [deviceDetails, setDeviceDetails] = useState(null);
 
     const truncateDeviceName = (name) => {
         if (name && name.length > 25) {
@@ -55,6 +56,35 @@ const TimeSlotDetails = ({
             setContractBrewery(null);
         }
     }, [selectedSlot]);
+
+    useEffect(() => {
+        // TODO mock - change to get_device_by_id(selectedDevice.id)
+        setDeviceDetails({
+            "id": 35,
+            "name": "Tank warzel",
+            "device_type": "BT",
+            "serial_number": "123",
+            "capacity": 100.0,
+            "temperature_min": 10.0,
+            "temperature_max": 90.0,
+            "sour_beers": false,
+            "carbonation": "N2",
+            "supported_containers": "",
+            "commercial_brewery": 34
+        })
+    }, [selectedDevice])
+
+    const resolveDeviceType = (type) => {
+        if (type === 'BT') return 'Tank warzelny'
+        if (type === 'BE') return 'Urządzenie do rozlewania'
+        if (type === 'FT') return 'Pojemnik fermentacyjny'
+        if (type === 'AC') return 'Kocioł do leżakowania'
+    }
+
+    const resolveSourBeers = (sourBeers) => {
+        if (sourBeers) return 'TAK'
+        else return 'NIE'
+    }
 
     const deleteTimeSlot = async () => {
         try {
@@ -105,52 +135,57 @@ const TimeSlotDetails = ({
         setIsPriceDialogOpen(false);
     };
 
+    const handleAddTimeSlot = async (slotId) => {
+        const success = addTimeSlot(slotId);
+        setIsPanelOpen(false);
+    }
+
     return (
         <div>
-            {isPanelOpen && (
-                <div className={styles.overlay}>
-                    <div className={styles.panel}>
-                        <div className={styles.header}>
-                            <div className={styles.left}>
-                                {truncateDeviceName(selectedDevice.name)}
-                            </div>
-                            <div className={styles.right}>
-                                Status:{' '}
-                                {selectedSlot.status === 'F' ? (
-                                    <span className={styles.available}>
-                                        Dostępne
-                                    </span>
-                                ) : selectedSlot.status === 'R' ? (
-                                    <span className={styles.reserved}>
-                                        Zarezerwowane
-                                    </span>
-                                ) : selectedSlot.status === 'H' ? (
-                                    <span className={styles.taken}>Zajęte</span>
-                                ) : (
-                                    'Nieznany status'
-                                )}
-                            </div>
+            <div className={styles.overlay}>
+                <div className={styles.panel}>
+                    <div className={styles.header}>
+                        <div className={styles.left}>
+                            {truncateDeviceName(selectedDevice.name)}
                         </div>
-                        <div className={styles.details}>
-                            <div className={styles.detailBox}>
-                                <h3>Informacje</h3>
-                                <p>
-                                    <strong>Start:</strong>{' '}
-                                    {new Date(
-                                        selectedSlot.start_timestamp
-                                    ).toLocaleString('pl-PL')}
-                                </p>
-                                <p>
-                                    <strong>Koniec:</strong>{' '}
-                                    {new Date(
-                                        selectedSlot.end_timestamp
-                                    ).toLocaleString('pl-PL')}
-                                </p>
-                                <p>
-                                    <strong>Cena:</strong> {selectedSlot.price}{' '}
-                                    zł
-                                </p>
-                            </div>
+                        <div className={styles.right}>
+                            Status:{' '}
+                            {selectedSlot.status === 'F' ? (
+                                <span className={styles.available}>
+                                    Dostępne
+                                </span>
+                            ) : selectedSlot.status === 'R' ? (
+                                <span className={styles.reserved}>
+                                    Zarezerwowane
+                                </span>
+                            ) : selectedSlot.status === 'H' ? (
+                                <span className={styles.taken}>Zajęte</span>
+                            ) : (
+                                'Nieznany status'
+                            )}
+                        </div>
+                    </div>
+                    <div className={styles.details}>
+                        <div className={styles.detailBox}>
+                            <h3>Informacje</h3>
+                            <p>
+                                <strong>Start:</strong>{' '}
+                                {new Date(
+                                    selectedSlot.start_timestamp
+                                ).toLocaleString('pl-PL')}
+                            </p>
+                            <p>
+                                <strong>Koniec:</strong>{' '}
+                                {new Date(
+                                    selectedSlot.end_timestamp
+                                ).toLocaleString('pl-PL')}
+                            </p>
+                            <p>
+                                <strong>Cena:</strong> {selectedSlot.price}{' '}
+                                zł
+                            </p>
+                        </div>
+                        {(localStorage.getItem('userType') === 'commercial_brewery') && 
                             <div className={styles.detailBox}>
                                 <h3>Zlecenie</h3>
                                 {contractBrewery ? (
@@ -167,6 +202,8 @@ const TimeSlotDetails = ({
                                     </p>
                                 )}
                             </div>
+                        }
+                        {(localStorage.getItem('userType') === 'commercial_brewery') && 
                             <div className={styles.detailBox}>
                                 <h3>Browar kontraktowy</h3>
                                 {contractBrewery ? (
@@ -195,7 +232,53 @@ const TimeSlotDetails = ({
                                     </p>
                                 )}
                             </div>
-                        </div>
+                        }{(localStorage.getItem('userType') === 'contract_brewery') && deviceDetails && 
+                            <div className={styles.detailBox}>
+                                <h3>Szczegóły urządzenia</h3>
+                                <p>
+                                    <strong>Nazwa urządzenia:</strong>{' '}
+                                    {deviceDetails.name}
+                                </p>
+                                <p>
+                                    <strong>Typ urządzenia:</strong>{' '}
+                                    {resolveDeviceType(deviceDetails.device_type)}
+                                </p>
+                                <p>
+                                    <strong>Pojemność:</strong>{' '}
+                                    {deviceDetails.capacity} {'(L)'}
+                                </p>
+                                {deviceDetails.device_type !== 'BE' && 
+                                    <p>
+                                        <strong>Temperatura minimalna:</strong>{' '}
+                                        {deviceDetails.temperature_min} {'(℃)'}
+                                    </p>
+                                }
+                                {deviceDetails.device_type !== 'BE' && 
+                                    <p>
+                                        <strong>Temperatura maksymalna:</strong>{' '}
+                                        {deviceDetails.temperature_max} {'(℃)'}
+                                    </p>
+                                }
+                                <p>
+                                    <strong>Do obsługi piw kwaśnych:</strong>{' '}
+                                    {resolveSourBeers(deviceDetails.sour_beers)}
+                                </p>
+                                {(deviceDetails.device_type === 'BT' || deviceDetails.device_type === 'BE') && 
+                                    <p>
+                                        <strong>Nagazowywanie:</strong>{' '}
+                                        {deviceDetails.carbonation}
+                                    </p>
+                                }
+                                {(deviceDetails.device_type === 'BE') && 
+                                    <p>
+                                        <strong>Obsługiwane pojemniki:</strong>{' '}
+                                        {deviceDetails.supported_containers}
+                                    </p>
+                                }
+                            </div>
+                        }
+                    </div>
+                    {(localStorage.getItem('userType') === 'commercial_brewery') && 
                         <div className={styles.newOrderButtonGroup}>
                             {Date.now() <
                                 new Date(selectedSlot.end_timestamp) && (
@@ -222,9 +305,26 @@ const TimeSlotDetails = ({
                                 Zamknij
                             </button>
                         </div>
-                    </div>
+                    }
+                    {(localStorage.getItem('userType') === 'contract_brewery') && 
+                        <div className={styles.newOrderButtonGroup}>
+                            <button
+                                onClick={() => setIsPanelOpen(false)}
+                                className={styles.backButton}>
+                                Zamknij
+                            </button>
+                            {Date.now() <
+                                new Date(selectedSlot.start_timestamp) && (
+                                <button
+                                    onClick={() => handleAddTimeSlot(selectedSlot.id)}
+                                    className={styles.addToTimeSlotsButton}>
+                                    Dodaj do zlecenia
+                                </button>
+                            )}
+                        </div>
+                    }
                 </div>
-            )}
+            </div>
             {isModalOpen && (
                 <ConfirmModal
                     message="Czy na pewno chcesz usunąć to okno czasowe?"
