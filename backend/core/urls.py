@@ -59,7 +59,7 @@ urlpatterns = [
         name="contract_account_info"
     ),
     path(
-        "coworkers/<int:profile_id>/",
+        "coworkers/",
         views.CoworkersView.as_view(),
         name="coworker_list"
     ),
@@ -67,5 +67,10 @@ urlpatterns = [
         "coworkers/remove/",
         views.RemoveCoworkerView.as_view(),
         name="coworker_remove"
+    ),
+    path(
+        "coworkers/create/",
+        views.AddCoworkerView.as_view(),
+        name="coworker_add"
     )
 ]

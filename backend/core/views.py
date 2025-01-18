@@ -18,6 +18,9 @@ from .serializers import (
     TimeSlotSerializer,
 )
 from . import serializers
+from django.contrib.auth.models import User
+from django.db.utils import IntegrityError
+from django.contrib.auth.hashers import make_password
 
 
 class RegisterCommercialView(APIView):
@@ -1119,39 +1122,33 @@ class CoworkersView(APIView):
         - 200 OK: If the coworkers are successfully retrieved
         - 400 Bad Request: If the account is neither commercial nor contract
         - 403 Forbidden: If the user is not authorized
-        - 404 Not Found: If the account was not found
     """
 
     permission_classes = [IsAuthenticated]
 
-    def get(self, _, profile_id):
-        try:
-            profile = Profile.objects.get(pk=profile_id)
-            coworkers = None
-            if (brewery := profile.commercial_brewery) is not None:
-                coworkers = Profile.objects.filter(
-                    commercial_brewery=profile.commercial_brewery,
-                    user__is_active=True
-                ).exclude(pk=profile_id)
-            elif (brewery := profile.contract_brewery) is not None:
-                coworkers = Profile.objects.filter(
-                    contract_brewery=brewery,
-                    user__is_active=True
-                ).exclude(pk=profile_id)
-            else:
-                return Response(
-                    {"error": "Improper account type."},
-                    status=400
-                )
-            serializer = serializers.AccountInfoSerializer(
-                coworkers,
-                many=True
-            )
-            return Response(serializer.data, status=200)
-        except Profile.DoesNotExist:
+    def get(self, request):
+        profile = request.user.profile
+        coworkers = None
+        if (brewery := profile.commercial_brewery) is not None:
+            coworkers = Profile.objects.filter(
+                commercial_brewery=profile.commercial_brewery,
+                user__is_active=True
+            ).exclude(pk=profile.pk)
+        elif (brewery := profile.contract_brewery) is not None:
+            coworkers = Profile.objects.filter(
+                contract_brewery=brewery,
+                user__is_active=True
+            ).exclude(pk=profile.pk)
+        else:
             return Response(
-                {"error": "Account not found."}
+                {"error": "Improper account type."},
+                status=status.HTTP_400_BAD_REQUEST
             )
+        serializer = serializers.AccountInfoSerializer(
+            coworkers,
+            many=True
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RemoveCoworkerView(APIView):
@@ -1205,4 +1202,52 @@ class RemoveCoworkerView(APIView):
             return Response(
                 {"error": "The user cannot remove specified account."},
                 status=status.HTTP_403_FORBIDDEN
+            )
+
+
+class AddCoworkerView(APIView):
+    """View for creating an account assigned to the same brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the "coworker_username", "coworker_password", validates it
+    and returns a response.
+
+    Responses:
+        - 201 Created: If the account is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 409 Not Found: If the provided username is taken
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        profile = request.user.profile
+        serializer = serializers.AccountCreationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                {serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            coworker = User.objects.create(
+                username=serializer.data["coworker_username"],
+                password=make_password(serializer.data["coworker_password"])
+            )
+            Profile.objects.create(
+                user=coworker,
+                contract_brewery=profile.contract_brewery,
+                commercial_brewery=profile.commercial_brewery
+            )
+            return Response(
+                {
+                    "message": f"Successfully added coworker {coworker.username}."
+                },
+                status=status.HTTP_201_CREATED
+            )
+        except IntegrityError:
+            return Response(
+                {"error": "User of provided username already exists."},
+                status=status.HTTP_409_CONFLICT
             )

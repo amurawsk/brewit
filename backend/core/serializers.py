@@ -164,6 +164,11 @@ class CoworkerSerializer(serializers.Serializer):
     coworker_id = serializers.IntegerField()
 
 
+class AccountCreationSerializer(serializers.Serializer):
+    coworker_username = serializers.CharField()
+    coworker_password = serializers.CharField()
+
+
 class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery
