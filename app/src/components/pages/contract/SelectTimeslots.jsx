@@ -11,16 +11,17 @@ import TimeSlotsTable from '../../modules/common/TimeSlotsTable.jsx';
  * SelectTimeslots page - contains layout (Header, Sidebar, Title, Button)
  */
 const SelectTimeslots = () => {
+    const navigate = useNavigate();
+
     const location = useLocation();
     const brewery = location.state?.brewery || null;
+    const oldTimeSlots = location.state?.timeSlots || []
 
     const [startHour, setStartHour] = useState(8);
     const [endHour, setEndHour] = useState(16);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [view, setView] = useState('daily');
-    const [timeSlots, setTimeSlots] = useState([]);
-
-    const navigate = useNavigate();
+    const [timeSlots, setTimeSlots] = useState(oldTimeSlots);
 
     const showSummary = () => {
         navigate('/contract/orders/add/finalize', {

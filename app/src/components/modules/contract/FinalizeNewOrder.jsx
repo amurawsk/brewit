@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 import styles from './FinalizeNewOrder.module.css';
 import NewOrderTimeSlotsTimeline from './NewOrderTimeSlotsTimeline';
 
@@ -8,11 +10,14 @@ import NewOrderTimeSlotsTimeline from './NewOrderTimeSlotsTimeline';
  * @param timeSlots
  */
 const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
+    const navigate = useNavigate();
+
     const [beerType, setBeerType] = useState('');
     const [beerVolume, setBeerVolume] = useState('');
     const [orderDescription, setOrderDescription] = useState('');
 
     const handleSubmit = (e) => {
+        // TODO connect
         e.preventDefault();
         console.log({
             beerType,
@@ -25,13 +30,13 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
     };
 
     const handleReset = () => {
-        setBeerType('');
-        setBeerVolume(0);
-        setOrderDescription('');
+        navigate('/contract/orders/add/choose-brewery')
     };
 
     const handleBack = () => {
-        console.log("Cofnięto działanie");
+        navigate('/contract/orders/add/select-timeslots', {
+            state: { brewery: selectedBrewery, timeSlots: timeSlots },
+        });
     };
 
     return (

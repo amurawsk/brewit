@@ -59,6 +59,16 @@ const TimeSlotsTable = ({ view, selectedDate, startHour, endHour, selectedBrewer
                         "end_timestamp": "2025-01-19T14:00:00+01:00",
                         "device": 35,
                         "order": null
+                    },
+                    {
+                        "id": 95,
+                        "status": "F",
+                        "slot_type": "H",
+                        "price": "123.00",
+                        "start_timestamp": "2025-01-19T15:00:00+01:00",
+                        "end_timestamp": "2025-01-19T16:00:00+01:00",
+                        "device": 35,
+                        "order": null
                     }
                 ]
             },

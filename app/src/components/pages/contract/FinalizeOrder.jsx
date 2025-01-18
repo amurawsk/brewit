@@ -14,7 +14,7 @@ import FinalizeNewOrder from '../../modules/contract/FinalizeNewOrder.jsx';
 const FinalizeOrder = () => {
     const location = useLocation();
     const brewery = location.state?.brewery || null;
-    const timeSlots = location.state?.timeSlots || null
+    const timeSlots = location.state?.timeSlots || []
 
     return (
         <div>
