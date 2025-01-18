@@ -17,7 +17,6 @@ const MyAccount = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                console.log();
                 const response = await api.get(
                     `accounts/commercial/${parseInt(localStorage.getItem('userId'))}/`
                 );
