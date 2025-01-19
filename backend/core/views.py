@@ -264,7 +264,7 @@ class DeviceListForBreweryView(APIView):
                 profile.contract_brewery or
                 (profile.commercial_brewery and profile.commercial_brewery.id == int(brewery_id))
             ):
-                devices = Device.objects.filter(commercial_brewery_id=brewery_id)
+                devices = Device.objects.filter(commercial_brewery_id=brewery_id, is_deleted=False)
             else:
                 return Response(
                     {"error": "Unauthorized to view devices for this brewery."},
@@ -755,7 +755,7 @@ class DevicesWithTimeSlotsView(APIView):
                 status=404
             )
 
-        devices = Device.objects.filter(commercial_brewery_id=brewery_id)
+        devices = Device.objects.filter(commercial_brewery_id=brewery_id, is_deleted=False)
         serializer = DeviceWithTimeSlotsSerializer(devices, many=True)
         return Response(serializer.data, status=200)
 
@@ -794,7 +794,7 @@ class DevicesWithFreeTimeSlotsView(APIView):
                 status=404
             )
 
-        devices = Device.objects.filter(commercial_brewery_id=brewery_id)
+        devices = Device.objects.filter(commercial_brewery_id=brewery_id, is_deleted=False)
         devices_with_free_time_slots = []
         for device in devices:
             free_time_slots = TimeSlot.objects.filter(
