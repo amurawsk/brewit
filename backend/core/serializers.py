@@ -243,6 +243,10 @@ class RecipeCreationSerializer(serializers.ModelSerializer):
         fields = ["name", "full_volume"]
 
 
+class RecipeRemoveSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     beer_volume = serializers.FloatField(source="beer_volume.l")

@@ -871,6 +871,33 @@ class RecipiesView(APIView):
             status=status.HTTP_201_CREATED
         )
 
+    def delete(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.RecipeRemoveSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            recipe = Recipe.objects.get(pk=serializer.data["id"])
+            if recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "User is not an employee of recipe's brewery."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            _, deleted = recipe.delete()
+            return Response(deleted, status.HTTP_200_OK)
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 class OrderView(APIView):
     """View for orders based on provided recipe.
