@@ -7,7 +7,8 @@ from .models import (
     Device,
     Order,
     Recipe,
-    Stage
+    Stage,
+    Ingredient
 )
 
 # Register your models here.
@@ -19,3 +20,4 @@ admin.site.register(Device)
 admin.site.register(Order)
 admin.site.register(Recipe)
 admin.site.register(Stage)
+admin.site.register(Ingredient)

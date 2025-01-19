@@ -52,5 +52,10 @@ urlpatterns = [
         "coworkers/create/",
         views.AddCoworkerView.as_view(),
         name="coworker_add"
+    ),
+    path(
+        "recipies/",
+        views.RecipiesView.as_view(),
+        name="recipies_list"
     )
 ]

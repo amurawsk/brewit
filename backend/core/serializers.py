@@ -1,7 +1,18 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Profile, TimeSlot, Order
+from .models import (
+    CommercialBrewery,
+    CommercialBrewery,
+    ContractBrewery,
+    Device,
+    Profile,
+    TimeSlot,
+    Order,
+    Ingredient,
+    Stage,
+    Recipe,
+)
 from django.db.models import Count
 
 
@@ -178,6 +189,42 @@ class CoworkerSerializer(serializers.Serializer):
 class AccountCreationSerializer(serializers.Serializer):
     coworker_username = serializers.CharField()
     coworker_password = serializers.CharField()
+
+
+class IngredientSerizalier(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ["pk", "name", "amount"]
+
+
+class StageSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerizalier(
+        many=True,
+        read_only=True,
+        source="ingredient_set"
+    )
+    time = serializers.FloatField(source="time.day")
+
+    class Meta:
+        model = Stage
+        fields = [
+            "pk",
+            "name",
+            "device_type",
+            "time",
+            "description",
+            "ingredients"
+        ]
+
+
+class RecipeSerializer(serializers.ModelSerializer):
+    steps = StageSerializer(many=True, read_only=True, source="stage_set")
+    full_volume = serializers.FloatField(source="full_volume.l")
+    full_time = serializers.FloatField(source="full_time.day")
+
+    class Meta:
+        model = Recipe
+        fields = ["pk", "name", "full_volume", "full_time", "steps"]
 
 
 class ContractBrewerySerializer(serializers.ModelSerializer):
