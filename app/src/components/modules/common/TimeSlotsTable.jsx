@@ -60,8 +60,7 @@ const TimeSlotsTable = ({
         const getData = async () => {
             try {
                 const response = await api.get(
-                    // TODO change to proper url
-                    `devices/brewery/${selectedBreweryId}/with-time-slots/`
+                    `devices/brewery/${selectedBreweryId}/with-time-slots/free/`
                 );
                 if (response.status === 200) {
                     setTimetableData(response.data);
