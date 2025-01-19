@@ -4,6 +4,8 @@ import styles from './ShowCoworkers.module.css';
 
 import ConfirmModal from '../../utils/ConfirmModal';
 
+import api from '../../../api.js';
+
 /**
  * ShowCoworkers - displays coworkers styled list, shows username, created_at
  *
@@ -12,21 +14,33 @@ import ConfirmModal from '../../utils/ConfirmModal';
  */
 const ShowCoworkers = ({ coworkers }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [username, setUsername] = useState(null);
+    const [userId, setUserId] = useState(null);
 
     const closePanel = () => {
         setIsModalOpen(false);
-        setUsername(null);
+        setUserId(null);
     };
 
-    const handleAction = (username) => {
-        setUsername(username);
+    const handleAction = (id) => {
+        setUserId(id);
         setIsModalOpen(true);
     };
 
-    const confirmAction = () => {
-        // TODO mock
-        console.log('Usuwam:', username);
+    const confirmAction = async () => {
+        try {
+            const response = await api.post(`coworkers/remove/`, {
+                coworker_id: userId
+            });
+            if (response.status === 201) {
+                
+            } else {
+                console.error('Error:', response);
+                alert('Błąd podczas dodawania pracownika!');
+            }
+        } catch (error) {
+            console.error('Error fetching devices:', error);
+            alert('Błąd sieci! Spróbuj ponownie później.');
+        }
         closePanel();
     };
 
@@ -58,7 +72,7 @@ const ShowCoworkers = ({ coworkers }) => {
                             </div>
                             <button
                                 className={styles.removeButton}
-                                onClick={() => handleAction(person.username)}>
+                                onClick={() => handleAction(person.id)}>
                                 Usuń
                             </button>
                         </div>

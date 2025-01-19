@@ -18,7 +18,6 @@ const AddCoworkerForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData.username, formData.password);
         try {
             const response = await api.post(`coworkers/create/`, {
                 coworker_username: formData.username,
