@@ -910,6 +910,56 @@ class RecipiesView(APIView):
             )
 
 
+class RecipeUpdateView(APIView):
+    """View for recipies of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "name", "full_volume", validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the recipe is successfully updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the recipe was not found.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.RecipeUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            recipe = Recipe.objects.get(pk=serializer.data["id"])
+            if recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "User is not an employee of recipe's brewery."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            recipe.name = serializer.data["name"]
+            recipe.full_volume = Volume(liter=serializer.data["full_volume"])
+            recipe.save()
+            return Response(
+                {"message": "Recipe updated successfully."},
+                status=status.HTTP_200_OK
+            )
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
 class OrderView(APIView):
     """View for orders based on provided recipe.
     Class allows only authenticated users to access this view.

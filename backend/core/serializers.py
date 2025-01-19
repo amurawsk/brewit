@@ -243,6 +243,14 @@ class RecipeCreationSerializer(serializers.ModelSerializer):
         fields = ["name", "full_volume"]
 
 
+class RecipeUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk")
+
+    class Meta:
+        model = Recipe
+        fields = ["id", "name", "full_volume"]
+
+
 class RecipeRemoveSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
