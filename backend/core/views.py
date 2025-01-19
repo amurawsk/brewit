@@ -10,6 +10,7 @@ from .serializers import (
     BreweryWithDevicesNumberSerializer,
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
+    DeviceWithFreeTimeSlotsSerializer,
     DeviceWithTimeSlotsSerializer,
     LoginSerializer,
     OrderSerializer,
@@ -314,6 +315,47 @@ class DeviceListAllView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class DeviceDetailView(APIView):
+    """View for retrieving details of a device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the device id, validates it and returns the details of the device.
+            If the user is not authorized to view this device, it returns an error message.
+
+    Responses:
+        - 200 OK: If the user is authorized to view this device, the response contains
+          the details of the device.
+        - 403 Forbidden: If the user is not authorized to view this device, the response contains an error message.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, device_id):
+        user = request.user
+
+        try:
+            device = Device.objects.get(id=device_id)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to view this device."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Device.DoesNotExist:
+            return Response(
+                {"error": "Device not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = DeviceSerializer(device)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class TimeSlotCreateView(APIView):
     """View for creating a new time slot. Class allows only authenticated users to access this view.
 
@@ -598,7 +640,7 @@ class DevicesWithTimeSlotsView(APIView):
         try:
             profile = user.profile
             commercial_brewery = profile.commercial_brewery
-            if not commercial_brewery or commercial_brewery.id != brewery_id:
+            if not profile.contract_brewery and commercial_brewery.id != brewery_id:
                 return Response(
                     {"error": "Unauthorized to view devices with time slots for this brewery."},
                     status=403
@@ -611,6 +653,56 @@ class DevicesWithTimeSlotsView(APIView):
 
         devices = Device.objects.filter(commercial_brewery_id=brewery_id)
         serializer = DeviceWithTimeSlotsSerializer(devices, many=True)
+        return Response(serializer.data, status=200)
+
+
+class DevicesWithFreeTimeSlotsView(APIView):
+    """View for listing all devices with available time slots for a specific brewery.
+    It is skipping the devices that have no available time slots.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a list of devices with available time slots for the brewery.
+
+    Responses:
+        - 200 OK: If the devices with available time slots are successfully retrieved, the response contains
+            a list of devices with available time slots for the brewery.
+        - 403 Forbidden: If the user is not authorized to view devices with available time slots for this brewery,
+            the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, brewery_id):
+        user = request.user
+
+        try:
+            profile = user.profile
+            commercial_brewery = profile.commercial_brewery
+            if not profile.contract_brewery and commercial_brewery.id != brewery_id:
+                return Response(
+                    {"error": "Unauthorized to view devices with available time slots for this brewery."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        devices = Device.objects.filter(commercial_brewery_id=brewery_id)
+        devices_with_free_time_slots = []
+        for device in devices:
+            free_time_slots = TimeSlot.objects.filter(
+                device=device,
+                status="F",
+                is_deleted=False,
+                start_timestamp__gte=datetime.now(),
+            )
+            if free_time_slots.exists():
+                devices_with_free_time_slots.append(device)
+
+        serializer = DeviceWithFreeTimeSlotsSerializer(devices_with_free_time_slots, many=True)
         return Response(serializer.data, status=200)
 
 
