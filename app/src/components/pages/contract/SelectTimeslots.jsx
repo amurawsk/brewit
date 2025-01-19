@@ -76,7 +76,6 @@ const SelectTimeslots = () => {
                         buttonText="Wyświetl podsumowanie"
                         buttonFunction={showSummary}
                     />
-                    {/* TODO filter */}
 
                     <TimeSlotsDateNavigator
                         view={view}
