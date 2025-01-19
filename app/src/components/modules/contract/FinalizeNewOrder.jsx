@@ -18,16 +18,16 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
     const [beerVolume, setBeerVolume] = useState('');
     const [orderDescription, setOrderDescription] = useState('');
 
-    console.log(timeSlots)
+    console.log(timeSlots);
 
     const handleSubmit = (e) => {
         const createOrder = async () => {
             try {
                 const response = await api.post(`orders/add/`, {
-                    "beer_type": beerType,
-                    "beer_volume": beerVolume,
-                    "description": orderDescription,
-                    "time_slot_ids": timeSlots.map(slot => slot.timeSlotId)
+                    beer_type: beerType,
+                    beer_volume: beerVolume,
+                    description: orderDescription,
+                    time_slot_ids: timeSlots.map((slot) => slot.timeSlotId),
                 });
                 if (response.status === 201) {
                     navigate('/contract/orders', {
@@ -41,9 +41,9 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                 console.error('Error fetching devices:', error);
                 alert('Błąd sieci! Spróbuj ponownie później.');
             }
-        }
+        };
         e.preventDefault();
-        createOrder();        
+        createOrder();
     };
 
     const handleReset = () => {
@@ -67,7 +67,8 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                     Email kontaktowy: <b>{selectedBrewery.contract_email}</b>
                 </p>
                 <p>
-                    Telefon kontaktowy: <b>{selectedBrewery.contract_phone_number}</b>
+                    Telefon kontaktowy:{' '}
+                    <b>{selectedBrewery.contract_phone_number}</b>
                 </p>
                 <p>
                     NIP: <b>{selectedBrewery.nip}</b>

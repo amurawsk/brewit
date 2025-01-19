@@ -4,7 +4,12 @@ import styles from './ShowDeviceDetails.module.css';
 
 import api from '../../../api.js';
 
-const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, getData }) => {
+const ShowDeviceDetails = ({
+    isPanelOpen,
+    setIsPanelOpen,
+    deviceFields,
+    getData,
+}) => {
     const [currentDeviceFields, setCurrentDeviceFields] =
         useState(deviceFields);
 
@@ -44,20 +49,24 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, getData 
     const editDevice = () => {
         const postData = async () => {
             try {
-                const response = await api.post(`devices/${currentDeviceFields.id}/edit/`, {
-                    name: currentDeviceFields.name,
-                    serial_number: currentDeviceFields.serial_number,
-                    capacity: currentDeviceFields.capacity,
-                    temperature_min: currentDeviceFields.temperature_min,
-                    temperature_max: currentDeviceFields.temperature_max,
-                    sour_beers: currentDeviceFields.sour_beers,
-                    carbonation: currentDeviceFields.carbonation,
-                    supported_containers: currentDeviceFields.supported_containers
-                });
+                const response = await api.post(
+                    `devices/${currentDeviceFields.id}/edit/`,
+                    {
+                        name: currentDeviceFields.name,
+                        serial_number: currentDeviceFields.serial_number,
+                        capacity: currentDeviceFields.capacity,
+                        temperature_min: currentDeviceFields.temperature_min,
+                        temperature_max: currentDeviceFields.temperature_max,
+                        sour_beers: currentDeviceFields.sour_beers,
+                        carbonation: currentDeviceFields.carbonation,
+                        supported_containers:
+                            currentDeviceFields.supported_containers,
+                    }
+                );
                 if (response.status === 200) {
                     getData();
                 } else {
-                    console.log('Wystąpił błąd', response)
+                    console.log('Wystąpił błąd', response);
                 }
             } catch (error) {
                 console.error('Error fetching devices:', error);
@@ -65,7 +74,7 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, getData 
             }
             setIsPanelOpen(false);
         };
-        postData()
+        postData();
     };
 
     const resolveDeviceType = (type) => {

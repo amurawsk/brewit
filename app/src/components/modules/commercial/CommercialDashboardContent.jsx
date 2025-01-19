@@ -100,7 +100,8 @@ const CommercialDashboardContent = () => {
                                         Typ piwa: <b>{order.beer_type}</b>
                                     </p>
                                     <p>
-                                        Objętość piwa: <b>{order.beer_volume} L</b>
+                                        Objętość piwa:{' '}
+                                        <b>{order.beer_volume} L</b>
                                     </p>
                                 </div>
                             ))
@@ -138,7 +139,8 @@ const CommercialDashboardContent = () => {
                                         </b>
                                     </p>
                                     <p>
-                                        Objętość piwa: <b>{order.beer_volume} L</b>
+                                        Objętość piwa:{' '}
+                                        <b>{order.beer_volume} L</b>
                                     </p>
                                 </div>
                             ))

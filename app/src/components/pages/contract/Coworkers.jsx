@@ -23,9 +23,7 @@ const Coworkers = () => {
         const getData = async () => {
             try {
                 console.log();
-                const response = await api.get(
-                    `coworkers/`
-                );
+                const response = await api.get(`coworkers/`);
                 if (response.status === 200) {
                     setCoworkers(response.data);
                 } else {
@@ -52,7 +50,11 @@ const Coworkers = () => {
                         buttonFunction={addCoworker}
                     />
                     {coworkers !== null && (
-                        <ShowCoworkers coworkers={coworkers} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+                        <ShowCoworkers
+                            coworkers={coworkers}
+                            isModalOpen={isModalOpen}
+                            setIsModalOpen={setIsModalOpen}
+                        />
                     )}
                 </div>
             </div>

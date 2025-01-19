@@ -55,16 +55,16 @@ const TimeSlotDetails = ({
                 );
                 console.log(response);
                 if (response.status === 200) {
-                    setContractBrewery(response.data)
+                    setContractBrewery(response.data);
                 } else {
                     console.log(response);
                 }
             } catch (error) {
                 console.log(error);
             }
-        }
-        
-        if (selectedSlot && selectedSlot.order !== null) {    
+        };
+
+        if (selectedSlot && selectedSlot.order !== null) {
             getData();
         } else {
             setContractBrewery(null);
@@ -79,14 +79,14 @@ const TimeSlotDetails = ({
                 );
                 console.log(response);
                 if (response.status === 200) {
-                    setDeviceDetails(response.data)
+                    setDeviceDetails(response.data);
                 } else {
                     console.log(response);
                 }
             } catch (error) {
                 console.log(error);
             }
-        }
+        };
         getData();
     }, [selectedDevice]);
 
@@ -263,7 +263,9 @@ const TimeSlotDetails = ({
                                             </p>
                                             <p>
                                                 <strong>Telefon:</strong>{' '}
-                                                {contractBrewery.contract_phone_number}
+                                                {
+                                                    contractBrewery.contract_phone_number
+                                                }
                                             </p>
                                         </>
                                     ) : (

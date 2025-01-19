@@ -20,27 +20,35 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
     const editData = async () => {
         try {
             if (localStorage.getItem('userType') === 'commercial_brewery') {
-                const response = await api.post(`commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`, {
-                    name: currentBreweryData.name,
-                    email: currentBreweryData.email,
-                    phone_number: currentBreweryData.phone_number,
-                    nip: currentBreweryData.nip,
-                    address: currentBreweryData.address,
-                    description: currentBreweryData.description
-                });
+                const response = await api.post(
+                    `commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`,
+                    {
+                        name: currentBreweryData.name,
+                        email: currentBreweryData.email,
+                        phone_number: currentBreweryData.phone_number,
+                        nip: currentBreweryData.nip,
+                        address: currentBreweryData.address,
+                        description: currentBreweryData.description,
+                    }
+                );
                 if (response.status !== 200) {
-                    console.log('Wystąpił błąd', response)
+                    console.log('Wystąpił błąd', response);
                 }
-            } else if (localStorage.getItem('userType') === 'contract_brewery') {
-                const response = await api.post(`contract-brewery/${parseInt(localStorage.getItem('breweryId'))}/`, {
-                    name: currentBreweryData.name,
-                    email: currentBreweryData.email,
-                    phone_number: currentBreweryData.phone_number,
-                    owner_name: currentBreweryData.ceo,
-                    description: currentBreweryData.description
-                });
+            } else if (
+                localStorage.getItem('userType') === 'contract_brewery'
+            ) {
+                const response = await api.post(
+                    `contract-brewery/${parseInt(localStorage.getItem('breweryId'))}/`,
+                    {
+                        name: currentBreweryData.name,
+                        email: currentBreweryData.email,
+                        phone_number: currentBreweryData.phone_number,
+                        owner_name: currentBreweryData.ceo,
+                        description: currentBreweryData.description,
+                    }
+                );
                 if (response.status !== 200) {
-                    console.log('Wystąpił błąd', response)
+                    console.log('Wystąpił błąd', response);
                 }
             }
         } catch (error) {

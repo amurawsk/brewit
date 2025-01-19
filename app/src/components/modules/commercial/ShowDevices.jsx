@@ -44,12 +44,12 @@ const ShowDevices = ({ devices, openPanel, getData }) => {
                 if (response.status === 200) {
                     getData();
                 } else {
-                    showNotification('Nie można usunąć urządzenia!')
+                    showNotification('Nie można usunąć urządzenia!');
                 }
             } catch (error) {
-                showNotification('Nie można usunąć urządzenia!')
+                showNotification('Nie można usunąć urządzenia!');
             }
-        }
+        };
         removeDevice();
         closePanel();
     };

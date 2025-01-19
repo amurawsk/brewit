@@ -21,10 +21,9 @@ const AddCoworkerForm = () => {
         try {
             const response = await api.post(`coworkers/create/`, {
                 coworker_username: formData.username,
-                coworker_password: formData.password
+                coworker_password: formData.password,
             });
             if (response.status === 201) {
-                
             } else {
                 console.error('Error:', response);
                 alert('Błąd podczas dodawania pracownika!');

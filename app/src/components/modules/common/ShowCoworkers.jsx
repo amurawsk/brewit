@@ -29,10 +29,9 @@ const ShowCoworkers = ({ coworkers, isModalOpen, setIsModalOpen }) => {
     const confirmAction = async () => {
         try {
             const response = await api.post(`coworkers/remove/`, {
-                coworker_id: userId
+                coworker_id: userId,
             });
             if (response.status === 200) {
-                
             } else {
                 console.error('Error:', response);
                 alert('Błąd podczas dodawania pracownika!');

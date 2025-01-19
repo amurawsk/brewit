@@ -9,7 +9,7 @@ import {
     FaCheck,
     FaTimes,
     FaHistory,
-    FaWineBottle
+    FaWineBottle,
 } from 'react-icons/fa';
 
 import styles from './BreweryShortStats.module.css';

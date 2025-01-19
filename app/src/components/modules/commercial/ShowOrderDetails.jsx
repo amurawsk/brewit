@@ -152,10 +152,16 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
                                     Właściciel:{' '}
                                     {order.contract_brewery.owner_name}
                                 </p>
-                                <p>Email: {order.contract_brewery.contract_email}</p>
+                                <p>
+                                    Email:{' '}
+                                    {order.contract_brewery.contract_email}
+                                </p>
                                 <p>
                                     Numer telefonu:{' '}
-                                    {order.contract_brewery.contract_phone_number}
+                                    {
+                                        order.contract_brewery
+                                            .contract_phone_number
+                                    }
                                 </p>
                             </div>
                             <div className={styles.detailBox}>

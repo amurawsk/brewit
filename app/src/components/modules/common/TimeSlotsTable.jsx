@@ -194,9 +194,8 @@ const TimeSlotsTable = ({
                                                   hour,
                                                   selectedDate
                                               );
-                                              const cellClass = getCellClass(
-                                                  timeSlot
-                                              );
+                                              const cellClass =
+                                                  getCellClass(timeSlot);
 
                                               return (
                                                   <td
@@ -220,9 +219,8 @@ const TimeSlotsTable = ({
                                               null,
                                               day
                                           );
-                                          const cellClass = getCellClass(
-                                            timeSlot
-                                        );
+                                          const cellClass =
+                                              getCellClass(timeSlot);
 
                                           return (
                                               <td
