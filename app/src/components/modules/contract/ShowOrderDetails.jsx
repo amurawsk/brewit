@@ -90,20 +90,20 @@ const ShowDeviceDetails = ({
                                 <h3>Zleceniobiorca</h3>
                                 <p>
                                     Nazwa browaru:{' '}
-                                    {order.commercial_brewery_name}
+                                    {order.commercial_brewery.name}
                                 </p>
-                                <p>NIP: {order.commercial_brewery_nip}</p>
-                                <p>Email: {order.commercial_brewery_email}</p>
+                                <p>NIP: {order.commercial_brewery.nip}</p>
+                                <p>Email: {order.commercial_brewery.email}</p>
                                 <p>
                                     Numer telefonu:{' '}
-                                    {order.commercial_brewery_phone_number}
+                                    {order.commercial_brewery.phone_number}
                                 </p>
                             </div>
                             <div className={styles.detailBox}>
                                 <h3>Informacje</h3>
                                 <p>Typ piwa: {order.beer_type}</p>
                                 <p>Objętość: {order.beer_volume}L</p>
-                                <p>Całkowity koszt: {order.price} zł</p>
+                                <p>Całkowity koszt: {order.total_price} zł</p>
                             </div>
                             <div className={styles.detailBox}>
                                 <h3>Dodatkowe informacje</h3>
@@ -147,7 +147,7 @@ const ShowDeviceDetails = ({
                             <h3>Oś Czasu wynajmowanych urządzeń</h3>
                         </div>
                         <TimeSlotsTimeline
-                            timeSlots={order.timeSlots}
+                            timeSlots={order.time_slots}
                             orderStatus={order.status}
                         />
                         {order.status === 'R' && (
