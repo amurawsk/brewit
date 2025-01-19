@@ -480,7 +480,7 @@ class CommercialBreweryInfoView(APIView):
             )
             if not serializer.is_valid():
                 return Response(
-                    {serializer.errors},
+                    serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST
                 )
             if (
@@ -679,7 +679,7 @@ class RemoveCoworkerView(APIView):
         serializer = serializers.CoworkerSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
-                {serializer.errors},
+                serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
         try:
@@ -733,7 +733,7 @@ class AddCoworkerView(APIView):
         serializer = serializers.AccountCreationSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(
-                {serializer.errors},
+                serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
         try:
