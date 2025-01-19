@@ -3,6 +3,7 @@ import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 
 import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
+import RateModal from '../../utils/RateModal.jsx';
 import Notification from '../../utils/Notification.jsx';
 import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
@@ -17,9 +18,11 @@ const ShowDeviceDetails = ({
     setOrder,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isRateModalOpen, setIsRateModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [rate, setRate] = useState(null);
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -76,6 +79,25 @@ const ShowDeviceDetails = ({
         }
     };
 
+    const rateOrder = async () => {
+        setIsLoading(true);
+        try {
+            const response = await api.post(`orders/${order.id}/rate/`, {rate: rate} );
+            if (response.status === 200) {
+                setIsLoading(false);
+                showNotification('Pomyślnie oceniono!');
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
+            } else {
+                setIsLoading(false);
+                showNotification('Nie można ocenić!');
+            }
+        } catch (error) {
+            setIsLoading(false);
+            showNotification('Wystąpił błąd!');
+        }
+    }
+
     const confirmAction = () => {
         if (action === 'cancel') {
             cancelOrder();
@@ -91,9 +113,27 @@ const ShowDeviceDetails = ({
         setIsModalOpen(false);
     };
 
-    const rateOrder = () => {
-        // TODO mock
-    };
+    const ratePositive = () => {
+        setRate(true);
+        rateOrder();
+        setIsRateModalOpen(false);
+        closePanel();
+    }
+
+    const rateNegative = () => {
+        setRate(false);
+        rateOrder();
+        setIsRateModalOpen(false);
+        closePanel();
+    }
+
+    const cancelRate = () => {
+        setIsRateModalOpen(false);
+    }
+
+    const getRate = () => {
+        setIsRateModalOpen(true);
+    }
 
     return (
         <div>
@@ -239,7 +279,7 @@ const ShowDeviceDetails = ({
                             <div className={styles.currentOrderButtonGroup}>
                                 {order.rate === null && (
                                     <button
-                                        onClick={() => rateOrder}
+                                        onClick={() => getRate()}
                                         className={styles.rateOrderButton}>
                                         Oceń zlecenie
                                     </button>
@@ -270,6 +310,9 @@ const ShowDeviceDetails = ({
                     onConfirm={confirmAction}
                     onCancel={cancelAction}
                 />
+            )}
+            {isRateModalOpen && (
+                <RateModal message="Oceń zlecenie" onPositive={ratePositive} onNegative={rateNegative} onCancel={cancelRate}/>
             )}
             <Notification
                 message="Operacja zakończona sukcesem!"
