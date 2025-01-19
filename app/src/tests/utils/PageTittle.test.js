@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import PageTitle from '../../components/PageTitle';
+import PageTitle from '../../components/utils/PageTitle';
 
 describe('PageTitle', () => {
     it('should render the correct text', () => {
