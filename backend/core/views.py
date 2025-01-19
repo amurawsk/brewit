@@ -9,7 +9,8 @@ from .models import (
     TimeSlot,
     CommercialBrewery,
     ContractBrewery,
-    Recipe
+    Recipe,
+    Order
 )
 from .serializers import (
     CheckUsernameUniqueSerializer,
@@ -836,3 +837,38 @@ class RecipiesView(APIView):
         )
         serializer = serializers.RecipeSerializer(recipies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderView(APIView):
+    """View for orders based on provided recipe.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a response based on user data.
+
+    Responses:
+        - 200 OK: If recipies are successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, recipe_id):
+        profile = request.user.profile
+        try:
+            recipe = Recipe.objects.get(pk=recipe_id)
+            if profile.contract_brewery != recipe.contract_brewery:
+                return Response(
+                    {
+                        "error": ("Access denied! User is not a representative"
+                                  " of the company that owns this recipe!")
+                    }
+                )
+            orders = Order.objects.filter(recipe=recipe)
+            serializer = serializers.OrderSerializer(orders, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )

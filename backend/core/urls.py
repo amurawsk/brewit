@@ -57,5 +57,10 @@ urlpatterns = [
         "recipies/",
         views.RecipiesView.as_view(),
         name="recipies_list"
-    )
+    ),
+    path(
+        "recipies/<int:recipe_id>/orders/",
+        views.OrderView.as_view(),
+        name="recipies_orders_list"
+    ),
 ]
