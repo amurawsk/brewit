@@ -36,7 +36,7 @@ const CommercialBrewery = () => {
             }
         };
         getData();
-    }, []);
+    }, [isPanelOpen]);
 
     const editInfo = () => {
         setIsPanelOpen(true);

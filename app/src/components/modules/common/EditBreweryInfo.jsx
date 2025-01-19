@@ -36,7 +36,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                     name: currentBreweryData.name,
                     email: currentBreweryData.email,
                     phone_number: currentBreweryData.phone_number,
-                    owner_name: currentBreweryData.owner_name,
+                    owner_name: currentBreweryData.ceo,
                     description: currentBreweryData.description
                 });
                 if (response.status !== 200) {
