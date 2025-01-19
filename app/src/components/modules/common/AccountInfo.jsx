@@ -23,8 +23,6 @@ const AccountInfo = ({ accountInfo }) => {
             navigate('/commercial/brewery');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/brewery');
-        } else {
-            // TODO handle error
         }
     };
 

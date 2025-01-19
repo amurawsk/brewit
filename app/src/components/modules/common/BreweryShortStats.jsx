@@ -27,8 +27,6 @@ const BreweryShortStats = ({ statsData }) => {
             navigate('/commercial/orders');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/orders');
-        } else {
-            // TODO handle error
         }
     };
 

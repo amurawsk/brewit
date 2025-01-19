@@ -38,8 +38,6 @@ const AddCoworkerForm = () => {
             navigate('/commercial/coworkers');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/coworkers');
-        } else {
-            // TODO handle error
         }
     };
 

@@ -4,6 +4,7 @@ import { setHours, setMinutes, isToday } from 'date-fns';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import pl from 'date-fns/locale/pl';
 import api from '../../../api.js';
+import Notification from '../../utils/Notification.jsx';
 
 import styles from './AddTimeSlotForm.module.css';
 
@@ -13,6 +14,8 @@ registerLocale('pl', pl);
  * AddDeviceForm - gets timeslot start- and end-timestamp from user, picked from day calendar or hour calendar (depends on device_type), on submit sends request to api
  */
 const AddTimeSlotForm = () => {
+    const navigate = useNavigate();
+
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [devices, setDevices] = useState([]);
     const [formState, setFormState] = useState({
@@ -22,24 +25,31 @@ const AddTimeSlotForm = () => {
         timeRange: [null, null],
         specificDate: null,
     });
-    const navigate = useNavigate();
-    const timeSlots = () => navigate('/commercial/time_slots');
+    const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+    const [notificationText, setNotificationText] = useState(null);
 
-    const getData = async () => {
-        try {
-            const breweryId = localStorage.getItem('breweryId');
-            const response = await api.get(`devices/brewery/${breweryId}/`);
-            if (response.status === 200) {
-                setDevices(response.data);
-            } else {
-                console.log(response);
-            }
-        } catch (error) {
-            console.log('Error fetching devices:', error);
-        }
+    const showNotification = (text) => {
+        setNotificationText(text);
+        setIsNotificationVisible(true);
+        setTimeout(() => {
+            setIsNotificationVisible(false);
+        }, 2000);
     };
 
     useEffect(() => {
+        const getData = async () => {
+            try {
+                const breweryId = localStorage.getItem('breweryId');
+                const response = await api.get(`devices/brewery/${breweryId}/`);
+                if (response.status === 200) {
+                    setDevices(response.data);
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log('Error fetching devices:', error);
+            }
+        };
         getData();
     }, []);
 
@@ -78,12 +88,10 @@ const AddTimeSlotForm = () => {
             } else {
                 console.log('Both dateRange and timeRange are null');
             }
-            console.log(response);
             if (response.status === 201) {
-                timeSlots();
+                navigate('/commercial/time_slots');
             } else {
-                console.log(response);
-                // TODO: Handle error
+                showNotification('Dodawanie okna czasowego się nie powiodło!');
             }
         } catch (error) {
             console.log('Error fetching devices:', error);
@@ -306,7 +314,6 @@ const AddTimeSlotForm = () => {
                         </option>
                     ))}
                 </select>
-
                 {selectedDevice && (
                     <div>
                         <label className={styles.formLabel}>
@@ -321,13 +328,15 @@ const AddTimeSlotForm = () => {
                         />
                     </div>
                 )}
-
                 {renderPicker()}
-
                 <button className={styles.insertTimeSlotButton} type="submit">
                     Dodaj okno czasowe
                 </button>
             </form>
+            <Notification
+                message={notificationText}
+                isVisible={isNotificationVisible}
+            />
         </div>
     );
 };

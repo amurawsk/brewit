@@ -11,8 +11,6 @@ const DashboardHeader = () => {
             navigate('/commercial/dashboard');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/dashboard');
-        } else {
-            // TODO handle error
         }
     };
 
@@ -21,8 +19,6 @@ const DashboardHeader = () => {
             navigate('/commercial/account');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/account');
-        } else {
-            // TODO handle error
         }
     };
 
