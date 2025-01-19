@@ -5,7 +5,7 @@ import ShowOrderDetails from './ShowOrderDetails';
 
 import styles from './ShowOrders.module.css';
 
-const ShowOrders = ({ orders, isPanelOpen, setIsPanelOpen }) => {
+const ShowOrders = ({ orders, isPanelOpen, setIsPanelOpen, activeStatus, getData }) => {
     const [selectedOrder, setSelectedOrder] = useState(null);
 
     const openPanel = () => {
@@ -101,6 +101,8 @@ const ShowOrders = ({ orders, isPanelOpen, setIsPanelOpen }) => {
                 setIsPanelOpen={setIsPanelOpen}
                 order={selectedOrder}
                 setOrder={setSelectedOrder}
+                activeStatus={activeStatus}
+                getData={getData}
             />
         </div>
     );

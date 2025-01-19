@@ -17,7 +17,7 @@ import api from '../../../api.js';
  * @param order - chosen order data
  * @param setOrder - setter for order
  */
-const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
+const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder, activeStatus, getData }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
@@ -49,15 +49,18 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             if (response.status === 200) {
                 setIsLoading(false);
                 showNotification('Pomyślnie zaakceptowano!');
+                getData(activeStatus);
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło zostać zaakceptowane!');
+                getData(activeStatus);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
+            getData(activeStatus);
         }
     };
 
@@ -68,15 +71,18 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             if (response.status === 200) {
                 setIsLoading(false);
                 showNotification('Pomyślnie odrzucono!');
+                getData(activeStatus);
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło zostać odrzucone!');
+                getData(activeStatus);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
+            getData(activeStatus);
         }
     };
 
@@ -87,15 +93,18 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             if (response.status === 200) {
                 setIsLoading(false);
                 showNotification('Pomyślnie anulowano!');
+                getData(activeStatus);
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło być anulowane!');
+                getData(activeStatus);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
+            getData(activeStatus);
         }
     };
 

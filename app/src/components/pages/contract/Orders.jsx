@@ -23,27 +23,28 @@ const Orders = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const getData = async () => {
-            setIsLoading(true);
-            try {
-                const response = await api.get(
-                    `orders/contract/status/${activeStatus}/`
-                );
-                if (response.status === 200) {
-                    setIsLoading(false);
-                    setOrders(response.data);
-                } else {
-                    setIsLoading(false);
-                    alert('Błąd podczas pobierania zleceń! Odśwież stronę i spróbuj ponownie.');
-                }
-            } catch (error) {
+    const getData = async (activeStatus) => {
+        setIsLoading(true);
+        try {
+            const response = await api.get(
+                `orders/contract/status/${activeStatus}/`
+            );
+            if (response.status === 200) {
                 setIsLoading(false);
-                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+                setOrders(response.data);
+            } else {
+                setIsLoading(false);
+                alert('Błąd podczas pobierania zleceń! Odśwież stronę i spróbuj ponownie.');
             }
-        };
-        getData();
-    }, [activeStatus, isPanelOpen]);
+        } catch (error) {
+            setIsLoading(false);
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+        }
+    };
+
+    useEffect(() => {
+        getData(activeStatus);
+    }, [activeStatus]);
 
     return (
         <div>
@@ -63,6 +64,8 @@ const Orders = () => {
                         orders={orders}
                         isPanelOpen={isPanelOpen}
                         setIsPanelOpen={setIsPanelOpen}
+                        activeStatus={activeStatus}
+                        getData={getData}
                     />
                 </div>
             </div>

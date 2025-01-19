@@ -24,29 +24,28 @@ const Orders = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const response = await api.get(
-                    `orders/commercial/status/${activeStatus}/`
-                );
-                if (response.status === 200) {
-                    setOrders(response.data);
-                    setIsLoading(false);
-                } else {
-                    setIsLoading(false);
-                    alert('Błąd podczas pobierania zleceń! Odśwież stronę i spróbuj ponownie.');
-                }
-            } catch (error) {
+    const getData = async (activeStatus) => {
+        setIsLoading(true);
+        try {
+            const response = await api.get(
+                `orders/commercial/status/${activeStatus}/`
+            );
+            if (response.status === 200) {
+                setOrders(response.data);
                 setIsLoading(false);
-                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            } else {
+                setIsLoading(false);
+                alert('Błąd podczas pobierania zleceń! Odśwież stronę i spróbuj ponownie.');
             }
-        };
-        if (!isPanelOpen) {
-            setIsLoading(true);
-            getData();
+        } catch (error) {
+            setIsLoading(false);
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
         }
-    }, [activeStatus, isPanelOpen]);
+    };
+
+    useEffect(() => {
+        getData(activeStatus);
+    }, [activeStatus]);
 
     return (
         <div>
@@ -71,6 +70,8 @@ const Orders = () => {
                         orders={orders}
                         isPanelOpen={isPanelOpen}
                         setIsPanelOpen={setIsPanelOpen}
+                        activeStatus={activeStatus}
+                        getData={getData}
                     />
                 </div>
             </div>
