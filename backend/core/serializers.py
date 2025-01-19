@@ -69,6 +69,15 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
         return data
 
 
+class CommercialBreweryUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    phone_number = serializers.CharField()
+    nip = serializers.CharField()
+    address = serializers.CharField()
+    description = serializers.CharField()
+
+
 class ContractBreweryInfoSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='contract_email')
     ceo = serializers.CharField(source='owner_name')
@@ -149,12 +158,14 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
 
 
 class AccountInfoSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="user.pk")
     username = serializers.CharField(source="user.username")
     added_at = serializers.DateTimeField(source="user.date_joined")
 
     class Meta:
         model = Profile
         fields = [
+            "id",
             "username",
             "added_at"
         ]

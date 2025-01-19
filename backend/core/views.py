@@ -19,7 +19,7 @@ from .serializers import (
 )
 from . import serializers
 from django.contrib.auth.models import User
-from django.db.utils import IntegrityError
+from django.db.utils import IntegrityError, DataError
 from django.contrib.auth.hashers import make_password
 
 
@@ -998,6 +998,16 @@ class CommercialBreweryInfoView(APIView):
         - 200 OK: If the brewery is successfully retrieved
         - 403 Forbidden: If the user is not authorized
         - 404 Not Found: If the brewery was not found
+
+    - POST: Accept the brewery id, gets {name}, {email}, {phone_number},
+    {nip}, {address}, {description} from request body, validates them and
+    returns a response
+
+    Responses:
+        - 200 OK: If the brewery was updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery was not found
     """
     permission_classes = [IsAuthenticated]
 
@@ -1010,6 +1020,52 @@ class CommercialBreweryInfoView(APIView):
             return Response(
                 {"error": 'Commercial brewery not found.'},
                 status=404
+            )
+
+    def post(self, request, brewery_id):
+        profile = request.user.profile
+        try:
+            brewery = CommercialBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.CommercialBreweryUpdateSerializer(
+                data=request.data
+            )
+            if not serializer.is_valid():
+                return Response(
+                    {serializer.errors},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            if (
+                (profile.commercial_brewery != brewery
+                 and (profile.commercial_brewery is not None
+                      or profile.contract_brewery is not None)
+                 )
+            ):
+                return Response(
+                    {
+                        "error": ("User is not authorized to change this"
+                                  " brewery's informations")
+                    }
+                )
+            brewery.name = serializer.data["name"]
+            brewery.contract_email = serializer.data["email"]
+            brewery.contract_phone_number = serializer.data["phone_number"]
+            brewery.nip = serializer.data["nip"]
+            brewery.address = serializer.data["address"]
+            brewery.description = serializer.data["description"]
+            brewery.save()
+            return Response(
+                {"message": "Commercial brewery's info updated successfully"},
+                status=status.HTTP_200_OK
+            )
+        except CommercialBrewery.DoesNotExist:
+            return Response(
+                {"error": 'Commercial brewery not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except DataError:
+            return Response(
+                {"error": "Provided data did not match requirements."},
+                status=status.HTTP_403_FORBIDDEN
             )
 
 
@@ -1243,7 +1299,8 @@ class AddCoworkerView(APIView):
             )
             return Response(
                 {
-                    "message": f"Successfully added coworker {coworker.username}."
+                    "message": ("Successfully added coworker"
+                                f" {coworker.username}.")
                 },
                 status=status.HTTP_201_CREATED
             )
