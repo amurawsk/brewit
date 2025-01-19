@@ -818,7 +818,7 @@ class AddCoworkerView(APIView):
 
 
 class RecipiesView(APIView):
-    """View for listing recipies of user's brewery.
+    """View for recipies of user's brewery.
     Class allows only authenticated users to access this view.
 
     This view supports HTTP methods:
@@ -827,6 +827,14 @@ class RecipiesView(APIView):
     Responses:
         - 200 OK: If recipies are successfully retrieved
         - 403 Forbidden: If the user is not authorized
+
+    - POST: Accepts "name", "full_volume", validates it and returns a response.
+
+    Responses:
+        - 201 Created: If the recipe is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
     """
 
     permission_classes = [IsAuthenticated]
@@ -838,6 +846,30 @@ class RecipiesView(APIView):
         )
         serializer = serializers.RecipeSerializer(recipies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.RecipeCreationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        Recipe.objects.create(
+            name=serializer.data["name"],
+            full_volume=Volume(liter=serializer.data["full_volume"]),
+            contract_brewery=brewery
+        )
+        return Response(
+            {
+                "message": "Successfully added recipe."
+            },
+            status=status.HTTP_201_CREATED
+        )
 
 
 class OrderView(APIView):
@@ -873,44 +905,3 @@ class OrderView(APIView):
                 {"error": "Recipe not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
-
-
-class RecipeCreationView(APIView):
-    """View for creating a recipe assigned to the same brewery.
-    Class allows only authenticated users to access this view.
-
-    This view supports HTTP methods:
-    - POST: Accepts "name", "full_volume", validates it and returns a response.
-
-    Responses:
-        - 201 Created: If the recipe is successfully created
-        - 400 Bad Request: If the request body couldn't get properly serialized
-        - 403 Forbidden: If the user is not authorized or is not a contract
-        brewery employee
-    """
-
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        if (brewery := request.user.profile.contract_brewery) is None:
-            return Response(
-                {"errors": "User is not a contract brewery employee."},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        serializer = serializers.RecipeCreationSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        Recipe.objects.create(
-            name=serializer.data["name"],
-            full_volume=Volume(liter=serializer.data["full_volume"]),
-            contract_brewery=brewery
-        )
-        return Response(
-            {
-                "message": ("Successfully added recipe.")
-            },
-            status=status.HTTP_201_CREATED
-        )
