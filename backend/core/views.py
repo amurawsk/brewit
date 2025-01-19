@@ -15,6 +15,7 @@ from .serializers import (
     DeviceWithFreeTimeSlotsSerializer,
     DeviceWithTimeSlotsSerializer,
     LoginSerializer,
+    OrderRateSerializer,
     OrderSerializer,
     OrderWithTimeSlotsAndCommercialInfoSerializer,
     OrderWithTimeSlotsAndContractInfoSerializer,
@@ -1265,6 +1266,56 @@ class OrderCancelView(APIView):
             {"message": "Order successfully cancelled."},
             status=status.HTTP_200_OK
         )
+
+
+class OrderRateView(APIView):
+    """View for rating an order. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the order id and rating, validates the data and rates the order.
+            If the order rating is successful, it returns a success message.
+            If the order rating fails, it returns validation errors.
+
+    Responses:
+        - 200 OK: If the order is successfully rated, the response contains a success message.
+        - 400 Bad Request: If the order rating fails, the response contains error messages related to the rating data.
+        - 403 Forbidden: If the user is not authorized to rate this order, the response contains an error message.
+        - 404 Not Found: If the order or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        try:
+            order_id = request.data.get("order_id")
+            order = Order.objects.get(id=order_id)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery != order.contract_brewery:
+                return Response(
+                    {"error": "Unauthorized to rate this order."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        data = {"rate": request.data.get("rating")}
+
+        serializer = OrderRateSerializer(order, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Order successfully rated."},
+                status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderListCommercialView(APIView):
