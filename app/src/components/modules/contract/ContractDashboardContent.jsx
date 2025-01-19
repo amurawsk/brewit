@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import PageTitle from '../../utils/PageTitle';
-import ShowOrderDetails from '../commercial/ShowOrderDetails';
+import ShowOrderDetails from '../contract/ShowOrderDetails';
 import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './ContractDashboardContent.module.css';
@@ -25,7 +25,7 @@ const ContractDashboardContent = () => {
         const getData = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(`orders/contract/dashboard/`);
+                const response = await api.get('orders/contract/dashboard/');
                 if (response.status === 200) {
                     setIsLoading(false);
                     setNewOrders(response.data.new_orders);
@@ -76,32 +76,36 @@ const ContractDashboardContent = () => {
                 <div className={styles.section}>
                     <h3>Nowe zlecenia</h3>
                     <div className={styles.grid}>
-                        {newOrders.map((order, index) => (
-                            <div
-                                key={index}
-                                className={styles.card}
-                                onClick={() => handleOrderClicked(order)}>
-                                <h2>Zlecenie #{order.id}</h2>
-                                <p>
-                                    Zleceniobiorca:{' '}
-                                    <b>{order.contract_brewery_name}</b>
-                                </p>
-                                <p>
-                                    Utworzone dnia:{' '}
-                                    <b>
-                                        {new Date(
-                                            order.created_at
-                                        ).toLocaleString('pl-PL')}
-                                    </b>
-                                </p>
-                                <p>
-                                    Typ piwa: <b>{order.beer_type}</b>
-                                </p>
-                                <p>
-                                    Objętość piwa: <b>{order.beer_volume} L</b>
-                                </p>
-                            </div>
-                        ))}
+                        {newOrders && newOrders.length > 0 ? (
+                            newOrders.map((order, index) => (
+                                <div
+                                    key={index}
+                                    className={styles.card}
+                                    onClick={() => handleOrderClicked(order)}>
+                                    <h2>Zlecenie #{order.id}</h2>
+                                    <p>
+                                        Zleceniobiorca:{' '}
+                                        <b>{order.contract_brewery_name}</b>
+                                    </p>
+                                    <p>
+                                        Utworzone dnia:{' '}
+                                        <b>
+                                            {new Date(
+                                                order.created_at
+                                            ).toLocaleString('pl-PL')}
+                                        </b>
+                                    </p>
+                                    <p>
+                                        Typ piwa: <b>{order.beer_type}</b>
+                                    </p>
+                                    <p>
+                                        Objętość piwa: <b>{order.beer_volume} L</b>
+                                    </p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Brak nowych zleceń do wyświetlenia.</p>
+                        )}
                     </div>
                     <span
                         className={styles.viewAll}
@@ -113,29 +117,33 @@ const ContractDashboardContent = () => {
                 <div className={styles.section}>
                     <h3>Aktualne zlecenia</h3>
                     <div className={styles.grid}>
-                        {currentOrders.map((order, index) => (
-                            <div
-                                key={index}
-                                className={styles.card}
-                                onClick={() => handleOrderClicked(order)}>
-                                <h2>Zlecenie #{order.id}</h2>
-                                <p>
-                                    Zleceniobiorca:{' '}
-                                    <b>{order.contract_brewery_name}</b>
-                                </p>
-                                <p>
-                                    Utworzone dnia:{' '}
-                                    <b>
-                                        {new Date(
-                                            order.created_at
-                                        ).toLocaleString('pl-PL')}
-                                    </b>
-                                </p>
-                                <p>
-                                    Objętość piwa: <b>{order.beer_volume} L</b>
-                                </p>
-                            </div>
-                        ))}
+                        {currentOrders && currentOrders.length > 0 ? (
+                            currentOrders.map((order, index) => (
+                                <div
+                                    key={index}
+                                    className={styles.card}
+                                    onClick={() => handleOrderClicked(order)}>
+                                    <h2>Zlecenie #{order.id}</h2>
+                                    <p>
+                                        Zleceniobiorca:{' '}
+                                        <b>{order.contract_brewery_name}</b>
+                                    </p>
+                                    <p>
+                                        Utworzone dnia:{' '}
+                                        <b>
+                                            {new Date(
+                                                order.created_at
+                                            ).toLocaleString('pl-PL')}
+                                        </b>
+                                    </p>
+                                    <p>
+                                        Objętość piwa: <b>{order.beer_volume} L</b>
+                                    </p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Brak aktualnych zleceń do wyświetlenia.</p>
+                        )}
                     </div>
                     <span
                         className={styles.viewAll}
