@@ -1,27 +1,28 @@
 .timeline {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     max-height: 350px;
     overflow-y: auto;
     padding-right: 10px;
+    position: relative;
 }
 
 .event {
     display: flex;
     align-items: center;
     position: relative;
+    margin-left: 35%;
 }
 
 .event::before {
     content: '';
     position: absolute;
-    top: 50%;
+    top: 0;
+    bottom: 0;
     left: 5px;
     width: 1px;
-    height: 100%;
     background-color: #ccc;
-    transform: translateY(-50%);
 }
 
 .dot {
@@ -29,7 +30,9 @@
     height: 10px;
     border-radius: 50%;
     margin-right: 10px;
+    flex-shrink: 0;
     position: relative;
+    background-color: gray;
 }
 
 .upcoming {
@@ -51,10 +54,13 @@
 .details {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .status {
     font-weight: bold;
+    white-space: pre-wrap;
 }
 
 .time {
