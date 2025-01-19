@@ -976,6 +976,7 @@ class OrderAcceptView(APIView):
         order.status = "C"
         order.save()
         time_slot.status = "H"
+        time_slot.save()
         return Response({"message": "Order successfully accepted."}, status=status.HTTP_200_OK)
 
 
@@ -1199,7 +1200,7 @@ class OrderListCommercialView(APIView):
                 status=404
             )
 
-        orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status=status)
+        orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status=status).distinct()
         serializer = OrderWithTimeSlotsAndContractInfoSerializer(orders, many=True)
         return Response(serializer.data, status=200)
 

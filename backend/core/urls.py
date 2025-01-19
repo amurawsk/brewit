@@ -56,5 +56,9 @@ urlpatterns = [
         name="order_list_contract"
     ),
 
-    path("breweries/commercial/with-devices/", views.BreweryWithDevicesNumberView.as_view(), name="brewery_with_devices"),
+    path(
+        "breweries/commercial/with-devices/",
+        views.BreweryWithDevicesNumberView.as_view(),
+        name="brewery_with_devices"
+    ),
 ]
