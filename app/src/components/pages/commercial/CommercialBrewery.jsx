@@ -35,10 +35,11 @@ const CommercialBrewery = () => {
                 console.log('Error fetching devices:', error);
             }
         };
-        getData();
-    }, []);
+        if (!isPanelOpen) {
+            getData();
+        }
+    }, [isPanelOpen]);
 
-    // TODO
     const editInfo = () => {
         setIsPanelOpen(true);
     };

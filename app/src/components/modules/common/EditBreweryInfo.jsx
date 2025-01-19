@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styles from './EditBreweryInfo.module.css';
 
+import api from '../../../api.js';
+
 /**
  * EditBreweryInfo - enables editing brewery data
  * @param isPanelOpen - determines if panel is visible
@@ -15,8 +17,26 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
         setCurrentBreweryData(breweryData);
     };
 
-    const editData = () => {
-        console.log(currentBreweryData);
+    const editData = async () => {
+        try {
+            const response = await api.post(`commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`, {
+                name: currentBreweryData.name,
+                email: currentBreweryData.email,
+                phone_number: currentBreweryData.phone_number,
+                nip: currentBreweryData.nip,
+                address: currentBreweryData.address,
+                description: currentBreweryData.description
+            });
+            if (response.status === 200) {
+                
+            } else {
+                console.error('Error:', response);
+                alert('Błąd podczas dodawania pracownika!');
+            }
+        } catch (error) {
+            console.error('Error fetching devices:', error);
+            alert('Błąd sieci! Spróbuj ponownie później.');
+        }
         setIsPanelOpen(false);
         setCurrentBreweryData(breweryData);
     };
