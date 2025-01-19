@@ -28,7 +28,7 @@ const ShowOrders = ({ orders, isPanelOpen, setIsPanelOpen }) => {
                     {orders.map((order, index) => (
                         <div
                             key={index}
-                            className={styles.card}
+                            className={`${styles.card} ${styles[`status-${order.status}`]}`}
                             onClick={() => handleOrderClicked(order)}>
                             <h2>Zlecenie #{order.id}</h2>
                             <p>
