@@ -114,6 +114,9 @@ class LoginSerializer(serializers.Serializer):
             user_type = "contract_brewery"
             user_id = profile.id
             brewery_id = profile.contract_brewery.id
+        else:
+            user_type = "intermediary_company"
+            user_id = profile.id
 
         return {
             "user": user,
