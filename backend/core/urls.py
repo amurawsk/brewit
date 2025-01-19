@@ -56,11 +56,16 @@ urlpatterns = [
     path(
         "recipies/",
         views.RecipiesView.as_view(),
-        name="recipies_list"
+        name="recipies"
     ),
     path(
         "recipies/<int:recipe_id>/orders/",
         views.OrderView.as_view(),
         name="recipies_orders_list"
     ),
+    path(
+        "recipies/stages/",
+        views.StageView.as_view(),
+        name="stages"
+    )
 ]

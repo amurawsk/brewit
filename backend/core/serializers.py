@@ -247,6 +247,14 @@ class RecipeRemoveSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
 
+class StageCreationSerializer(serializers.Serializer):
+    recipe_id = serializers.IntegerField()
+    name = serializers.CharField()
+    device = serializers.CharField()    # kod
+    time = serializers.IntegerField()  # w minutach
+    description = serializers.CharField()
+
+
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     beer_volume = serializers.FloatField(source="beer_volume.l")

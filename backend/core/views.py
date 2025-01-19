@@ -11,7 +11,8 @@ from .models import (
     ContractBrewery,
     Recipe,
     Order,
-    Stage
+    Stage,
+    DeviceType
 )
 from .serializers import (
     CheckUsernameUniqueSerializer,
@@ -26,7 +27,7 @@ from . import serializers
 from django.contrib.auth.models import User
 from django.db.utils import IntegrityError, DataError
 from django.contrib.auth.hashers import make_password
-from measurement.measures import Volume
+from measurement.measures import Volume, Time
 
 
 class RegisterCommercialView(APIView):
@@ -941,4 +942,61 @@ class OrderView(APIView):
             return Response(
                 {"error": "Recipe not found"},
                 status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class StageView(APIView):
+    """View for stages of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    - POST: Accepts "recipe_id", "name", "device", "time" in minutes,
+    "description" validates it and returns a response.
+
+    Responses:
+        - 201 Created: If the stage is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If Recipe of provided id does not exist
+    """
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.StageCreationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            recipe = Recipe.objects.get(pk=serializer.data["recipe_id"])
+            if recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "User is not an employee of recipe's brewery."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            Stage.objects.create(
+                name=serializer.data["name"],
+                device_type=DeviceType(serializer.data["device"]),
+                time=Time(minute=serializer.data["time"]),
+                description=serializer.data["description"],
+                recipe=recipe
+            )
+            return Response(
+                {"message": "Successfully added stage."},
+                status=status.HTTP_201_CREATED
+            )
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except ValueError:
+            return Response(
+                {"error": "Illegal device code."},
+                status=status.HTTP_400_BAD_REQUEST
             )
