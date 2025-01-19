@@ -158,7 +158,7 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
 
 
 class AccountInfoSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source="user.pk")
+    id = serializers.IntegerField(source="pk")
     username = serializers.CharField(source="user.username")
     added_at = serializers.DateTimeField(source="user.date_joined")
 
