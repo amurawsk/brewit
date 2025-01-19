@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import styles from './ShowOrderDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+
 import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './ShowOrderDetails.module.css';
 
 import api from '../../../api.js';
 
@@ -16,6 +19,7 @@ const ShowDeviceDetails = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -35,36 +39,42 @@ const ShowDeviceDetails = ({
     };
 
     const cancelOrder = async () => {
+        setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/cancel/`);
-            console.log(response);
             if (response.status === 200) {
+                setIsLoading(false);
                 showNotification('Pomyślnie anulowano!');
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
+                setIsLoading(false);
                 showNotification('Zamówienie nie mogło być anulowane!');
                 console.log(response);
             }
         } catch (error) {
+            setIsLoading(false);
             showNotification('Wystąpił błąd!');
             console.log(error);
         }
     };
 
     const withdrawOrder = async () => {
+        setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/withdraw/`);
-            console.log(response);
             if (response.status === 200) {
+                setIsLoading(false);
                 showNotification('Pomyślnie wycofano!');
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
+                setIsLoading(false);
                 showNotification('Zamówienie nie mogło być wycofane!');
                 console.log(response);
             }
         } catch (error) {
+            setIsLoading(false);
             showNotification('Wystąpił błąd!');
             console.log(error);
         }
@@ -91,6 +101,7 @@ const ShowDeviceDetails = ({
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             {isPanelOpen && order && (
                 <div className={styles.overlay}>
                     <div className={styles.panel}>

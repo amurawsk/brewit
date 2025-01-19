@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
 import TimeSlotDetails from './TimeSlotDetails';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './TimeSlotsTable.module.css';
 
@@ -26,6 +28,7 @@ const TimeSlotsTable = ({
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [timetableData, setTimetableData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const hours = Array.from(
         { length: endHour - startHour },
         (_, i) => i + startHour
@@ -33,17 +36,21 @@ const TimeSlotsTable = ({
 
     useEffect(() => {
         const getData = async () => {
+            setIsLoading(true);
             try {
                 const breweryId = localStorage.getItem('breweryId');
                 const response = await api.get(
                     `devices/brewery/${breweryId}/with-time-slots/`
                 );
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setTimetableData(response.data);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log('Error fetching devices:', error);
             }
         };
@@ -57,17 +64,21 @@ const TimeSlotsTable = ({
     }, [isPanelOpen]);
 
     useEffect(() => {
+        setIsLoading(true);
         const getData = async () => {
             try {
                 const response = await api.get(
                     `devices/brewery/${selectedBreweryId}/with-time-slots/free/`
                 );
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setTimetableData(response.data);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log('Error fetching time slots:', error);
             }
         };
@@ -167,6 +178,7 @@ const TimeSlotsTable = ({
 
     return (
         <div className={styles.tableContainer}>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.scrollableTable}>
                 <table border="1" className={styles.table}>
                     <thead>

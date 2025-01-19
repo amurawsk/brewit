@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
-import styles from './ShowCoworkers.module.css';
-
 import ConfirmModal from '../../utils/ConfirmModal';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './ShowCoworkers.module.css';
 
 import api from '../../../api.js';
 
@@ -13,8 +14,8 @@ import api from '../../../api.js';
  * @param coworkers - coworkers list
  */
 const ShowCoworkers = ({ coworkers, isModalOpen, setIsModalOpen }) => {
-    // const [isModalOpen, setIsModalOpen] = useState(false);
     const [userId, setUserId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const closePanel = () => {
         setIsModalOpen(false);
@@ -27,16 +28,20 @@ const ShowCoworkers = ({ coworkers, isModalOpen, setIsModalOpen }) => {
     };
 
     const confirmAction = async () => {
+        setIsLoading(true);
         try {
             const response = await api.post(`coworkers/remove/`, {
                 coworker_id: userId,
             });
             if (response.status === 200) {
+                setIsLoading(false);
             } else {
+                setIsLoading(false);
                 console.error('Error:', response);
                 alert('Błąd podczas dodawania pracownika!');
             }
         } catch (error) {
+            setIsLoading(false);
             console.error('Error fetching devices:', error);
             alert('Błąd sieci! Spróbuj ponownie później.');
         }
@@ -49,6 +54,7 @@ const ShowCoworkers = ({ coworkers, isModalOpen, setIsModalOpen }) => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             {coworkers.length === 0 ? (
                 <p className={styles.noOrdersMessage}>Brak współpracowników.</p>
             ) : (

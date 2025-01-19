@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import ShowDevices from '../../modules/commercial/ShowDevices.jsx';
 import ShowDeviceDetails from '../../modules/commercial/ShowDeviceDetails.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
 import styles from './Devices.module.css';
+
 import api from '../../../api.js';
 
 /**
@@ -18,6 +22,7 @@ const Devices = () => {
     const [devices, setDevices] = useState([]);
     const [deviceFields, setDeviceFields] = useState({});
     const [isPanelOpen, setIsPanelOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const getData = async () => {
         try {
@@ -25,15 +30,19 @@ const Devices = () => {
             const response = await api.get(`devices/brewery/${breweryId}/`);
             if (response.status === 200) {
                 setDevices(response.data);
+                setIsLoading(false);
             } else {
                 console.log(response);
+                setIsLoading(false);
             }
         } catch (error) {
             console.log('Error fetching devices:', error);
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
+        setIsLoading(true);
         getData();
     }, []);
 
@@ -44,6 +53,7 @@ const Devices = () => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <DashboardHeader />
             <div className={styles.appContainer}>
                 <CommercialSidebar />

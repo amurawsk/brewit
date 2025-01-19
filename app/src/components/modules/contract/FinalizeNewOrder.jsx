@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import styles from './FinalizeNewOrder.module.css';
 import NewOrderTimeSlotsTimeline from './NewOrderTimeSlotsTimeline';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './FinalizeNewOrder.module.css';
 
 import api from '../../../api.js';
 
@@ -17,11 +19,11 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
     const [beerType, setBeerType] = useState('');
     const [beerVolume, setBeerVolume] = useState('');
     const [orderDescription, setOrderDescription] = useState('');
-
-    console.log(timeSlots);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = (e) => {
         const createOrder = async () => {
+            setIsLoading(true);
             try {
                 const response = await api.post(`orders/add/`, {
                     beer_type: beerType,
@@ -30,14 +32,17 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                     time_slot_ids: timeSlots.map((slot) => slot.timeSlotId),
                 });
                 if (response.status === 201) {
+                    setIsLoading(false);
                     navigate('/contract/orders', {
                         state: { orderType: 'N' },
                     });
                 } else {
+                    setIsLoading(false);
                     console.error('Error:', response);
                     alert('Błąd podczas dodawania urządzenia!');
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.error('Error fetching devices:', error);
                 alert('Błąd sieci! Spróbuj ponownie później.');
             }
@@ -58,6 +63,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
 
     return (
         <div className={styles.content}>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.section}>
                 <h3>Wybrany browar komercyjny</h3>
                 <p>

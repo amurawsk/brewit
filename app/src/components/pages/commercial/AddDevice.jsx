@@ -1,10 +1,11 @@
 import React from 'react';
 
-import styles from './AddDevice.module.css';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import AddDeviceForm from '../../modules/commercial/AddDeviceForm.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
+
+import styles from './AddDevice.module.css';
 
 /**
  * Add Device page - contains layout (Header, Sidebar, Title) and form which allows to add device

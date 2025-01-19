@@ -7,6 +7,7 @@ import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
 import EditBreweryInfo from '../../modules/common/EditBreweryInfo';
 import BreweryShortStats from '../../modules/common/BreweryShortStats.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './ContractBrewery.module.css';
 
@@ -18,20 +19,24 @@ import api from '../../../api.js';
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
+            setIsLoading(true);
             try {
-                console.log();
                 const response = await api.get(
                     `contract-brewery/${parseInt(localStorage.getItem('breweryId'))}/`
                 );
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setBreweryData(response.data);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log('Error fetching devices:', error);
             }
         };
@@ -44,6 +49,7 @@ const CommercialBrewery = () => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <DashboardHeader />
             <div className={styles.container}>
                 <ContractSidebar />

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Coworkers.module.css';
+
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import ShowCoworkers from '../../modules/common/ShowCoworkers.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './Coworkers.module.css';
 
 import api from '../../../api.js';
 
@@ -13,23 +16,26 @@ import api from '../../../api.js';
  */
 const Coworkers = () => {
     const navigate = useNavigate();
-
     const addCoworker = () => navigate('/contract/coworkers/add');
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [coworkers, setCoworkers] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
+            setIsLoading(true);
             try {
-                console.log();
                 const response = await api.get(`coworkers/`);
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setCoworkers(response.data);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log('Error fetching devices:', error);
             }
         };
@@ -40,6 +46,7 @@ const Coworkers = () => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <DashboardHeader />
             <div className={styles.container}>
                 <ContractSidebar />

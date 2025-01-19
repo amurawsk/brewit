@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
 import styles from './EditBreweryInfo.module.css';
 
 import api from '../../../api.js';
@@ -11,6 +14,7 @@ import api from '../../../api.js';
  */
 const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
     const [currentBreweryData, setCurrentBreweryData] = useState(breweryData);
+    const [isLoading, setIsLoading] = useState(false);
 
     const closePanel = () => {
         setIsPanelOpen(false);
@@ -18,6 +22,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
     };
 
     const editData = async () => {
+        setIsLoading(true);
         try {
             if (localStorage.getItem('userType') === 'commercial_brewery') {
                 const response = await api.post(
@@ -34,6 +39,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                 if (response.status !== 200) {
                     console.log('Wystąpił błąd', response);
                 }
+                setIsLoading(false);
             } else if (
                 localStorage.getItem('userType') === 'contract_brewery'
             ) {
@@ -50,8 +56,10 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                 if (response.status !== 200) {
                     console.log('Wystąpił błąd', response);
                 }
+                setIsLoading(false);
             }
         } catch (error) {
+            setIsLoading(false);
             console.error('Error fetching devices:', error);
             alert('Błąd sieci! Spróbuj ponownie później.');
         }
@@ -69,6 +77,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             {isPanelOpen && (
                 <div className={styles.overlay}>
                     <div className={styles.panel}>

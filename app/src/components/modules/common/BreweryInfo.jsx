@@ -6,6 +6,7 @@ import {
     FaIdCard,
     FaUserTie,
 } from 'react-icons/fa';
+
 import styles from './BreweryInfo.module.css';
 
 /**

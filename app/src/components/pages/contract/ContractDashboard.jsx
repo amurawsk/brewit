@@ -1,6 +1,8 @@
 import React from 'react';
+
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
+
 import styles from './ContractDashboard.module.css';
 
 /**

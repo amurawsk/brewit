@@ -4,9 +4,9 @@ import { useLocation } from 'react-router-dom';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
+import FinalizeNewOrder from '../../modules/contract/FinalizeNewOrder.jsx';
 
 import styles from './ChooseCommercial.module.css';
-import FinalizeNewOrder from '../../modules/contract/FinalizeNewOrder.jsx';
 
 /**
  * FinalizeOrder for Contract Brewery - contains layout (Header, Sidebar)

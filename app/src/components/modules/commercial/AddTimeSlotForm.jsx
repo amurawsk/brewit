@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { setHours, setMinutes, isToday } from 'date-fns';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import pl from 'date-fns/locale/pl';
-import api from '../../../api.js';
+
 import Notification from '../../utils/Notification.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './AddTimeSlotForm.module.css';
+
+import api from '../../../api.js';
 
 registerLocale('pl', pl);
 
@@ -27,6 +30,7 @@ const AddTimeSlotForm = () => {
     });
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [notificationText, setNotificationText] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const showNotification = (text) => {
         setNotificationText(text);
@@ -38,15 +42,19 @@ const AddTimeSlotForm = () => {
 
     useEffect(() => {
         const getData = async () => {
+            setIsLoading(true);
             try {
                 const breweryId = localStorage.getItem('breweryId');
                 const response = await api.get(`devices/brewery/${breweryId}/`);
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setDevices(response.data);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log('Error fetching devices:', error);
             }
         };
@@ -55,6 +63,7 @@ const AddTimeSlotForm = () => {
 
     const postData = async () => {
         try {
+            setIsLoading(true);
             let response;
             const id = selectedDevice.id;
 
@@ -90,11 +99,14 @@ const AddTimeSlotForm = () => {
                 console.log('Both dateRange and timeRange are null');
             }
             if (response.status === 201) {
+                setIsLoading(false);
                 navigate('/commercial/time_slots');
             } else {
+                setIsLoading(false);
                 showNotification('Dodawanie okna czasowego się nie powiodło!');
             }
         } catch (error) {
+            setIsLoading(false);
             console.log('Error fetching devices:', error);
         }
     };
@@ -298,6 +310,7 @@ const AddTimeSlotForm = () => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <form onSubmit={handleSubmit} className={styles.addTimeSlotForm}>
                 <label className={styles.formLabel}>
                     <b>Wybierz urządzenie</b>

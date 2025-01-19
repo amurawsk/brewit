@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import styles from './AddDeviceForm.module.css';
-import api from '../../../api.js';
 import { useNavigate } from 'react-router-dom';
+
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './AddDeviceForm.module.css';
+
+import api from '../../../api.js';
 
 /**
  * AddDeviceForm - gets all necessary data from user, different for each device_type, on submit sends request to api
  */
 const AddDeviceForm = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         name: '',
         device_type: '',
@@ -18,8 +24,8 @@ const AddDeviceForm = () => {
         carbonation: [],
         supported_containers: '',
     });
-
-    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const { device_type, carbonation } = formData;
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -42,6 +48,7 @@ const AddDeviceForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await api.post(`devices/add/`, {
                 ...formData,
@@ -51,21 +58,23 @@ const AddDeviceForm = () => {
                 carbonation: formData.carbonation.join(','),
             });
             if (response.status === 201) {
+                setIsLoading(false);
                 navigate('/commercial/devices');
             } else {
+                setIsLoading(false);
                 console.error('Error:', response);
                 alert('Błąd podczas dodawania urządzenia!');
             }
         } catch (error) {
+            setIsLoading(false);
             console.error('Error fetching devices:', error);
             alert('Błąd sieci! Spróbuj ponownie później.');
         }
     };
 
-    const { device_type, carbonation } = formData;
-
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.deviceTypeDropbox}>
                 <label
                     className={styles.addEquipmentLabel}

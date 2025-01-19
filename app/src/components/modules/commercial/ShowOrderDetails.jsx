@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import styles from './ShowOrderDetails.module.css';
+
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './ShowOrderDetails.module.css';
 
 import api from '../../../api.js';
 
@@ -19,6 +22,7 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [notificationText, setNotificationText] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const showNotification = (text) => {
         setNotificationText(text);
@@ -39,54 +43,66 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
     };
 
     const acceptOrder = async () => {
+        setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/accept/`);
             console.log(response);
             if (response.status === 200) {
+                setIsLoading(false);
                 showNotification('Pomyślnie zaakceptowano!');
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
+                setIsLoading(false);
                 showNotification('Zamówienie nie mogło zostać zaakceptowane!');
                 console.log(response);
             }
         } catch (error) {
+            setIsLoading(false);
             showNotification('Wystąpił błąd!');
             console.log(error);
         }
     };
 
     const rejectOrder = async () => {
+        setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/reject/`);
             console.log(response);
             if (response.status === 200) {
+                setIsLoading(false);
                 showNotification('Pomyślnie odrzucono!');
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
+                setIsLoading(false);
                 showNotification('Zamówienie nie mogło zostać odrzucone!');
                 console.log(response);
             }
         } catch (error) {
+            setIsLoading(false);
             showNotification('Wystąpił błąd!');
             console.log(error);
         }
     };
 
     const cancelOrder = async () => {
+        setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/cancel/`);
             console.log(response);
             if (response.status === 200) {
+                setIsLoading(false);
                 showNotification('Pomyślnie anulowano!');
                 setIsModalOpen(false);
                 setIsPanelOpen(false);
             } else {
+                setIsLoading(false);
                 showNotification('Zamówienie nie mogło być anulowane!');
                 console.log(response);
             }
         } catch (error) {
+            setIsLoading(false);
             showNotification('Wystąpił błąd!');
             console.log(error);
         }
@@ -111,6 +127,7 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             {isPanelOpen && order && (
                 <div className={styles.overlay}>
                     <div className={styles.panel}>

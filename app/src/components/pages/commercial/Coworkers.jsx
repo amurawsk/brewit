@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from './Coworkers.module.css';
+
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import ShowCoworkers from '../../modules/common/ShowCoworkers.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './Coworkers.module.css';
 
 import api from '../../../api.js';
 
@@ -18,6 +21,7 @@ const Coworkers = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [coworkers, setCoworkers] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -26,20 +30,25 @@ const Coworkers = () => {
                 const response = await api.get(`coworkers/`);
                 if (response.status === 200) {
                     setCoworkers(response.data);
+                    setIsLoading(false);
                 } else {
                     console.log(response);
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.log('Error fetching devices:', error);
+                setIsLoading(false);
             }
         };
         if (!isModalOpen) {
+            setIsLoading(true);
             getData();
         }
     }, [isModalOpen]);
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <DashboardHeader />
             <div className={styles.container}>
                 {localStorage.getItem('userType') === 'commercial_brewery' && (

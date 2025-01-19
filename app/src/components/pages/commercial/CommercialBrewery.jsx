@@ -7,6 +7,7 @@ import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
 import EditBreweryInfo from '../../modules/common/EditBreweryInfo';
 import BreweryShortStats from '../../modules/common/BreweryShortStats.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './CommercialBrewery.module.css';
 
@@ -18,6 +19,7 @@ import api from '../../../api.js';
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -28,14 +30,18 @@ const CommercialBrewery = () => {
                 );
                 if (response.status === 200) {
                     setBreweryData(response.data);
+                    setIsLoading(false);
                 } else {
                     console.log(response);
+                    setIsLoading(false);
                 }
             } catch (error) {
                 console.log('Error fetching devices:', error);
+                setIsLoading(false);
             }
         };
         if (!isPanelOpen) {
+            setIsLoading(true);
             getData();
         }
     }, [isPanelOpen]);
@@ -46,6 +52,7 @@ const CommercialBrewery = () => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <DashboardHeader />
             <div className={styles.container}>
                 <CommercialSidebar />

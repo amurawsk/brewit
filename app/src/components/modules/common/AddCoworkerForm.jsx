@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
 import styles from './AddCoworkerForm.module.css';
 
 import api from '../../../api.js';
@@ -15,20 +17,25 @@ const AddCoworkerForm = () => {
         username: '',
         password: '',
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await api.post(`coworkers/create/`, {
                 coworker_username: formData.username,
                 coworker_password: formData.password,
             });
             if (response.status === 201) {
+                setIsLoading(false);
             } else {
+                setIsLoading(false);
                 console.error('Error:', response);
                 alert('Błąd podczas dodawania pracownika!');
             }
         } catch (error) {
+            setIsLoading(false);
             console.error('Error fetching devices:', error);
             alert('Błąd sieci! Spróbuj ponownie później.');
         }
@@ -50,6 +57,7 @@ const AddCoworkerForm = () => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <form className={styles.addCoworkerForm} onSubmit={handleSubmit}>
                 <label className={styles.addCoworkerLabel} htmlFor="name">
                     <b>Nazwa użytkownika: </b>

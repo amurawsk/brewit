@@ -8,7 +8,8 @@ import {
     FaBarcode,
     FaUserTie,
     FaInfoCircle,
-} from 'react-icons/fa'; // Import ikon
+} from 'react-icons/fa';
+
 import styles from './AccountInfo.module.css';
 
 /**

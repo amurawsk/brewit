@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
-import styles from './ShowDevices.module.css';
-
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './ShowDevices.module.css';
 
 import api from '../../../api.js';
 
@@ -17,6 +18,7 @@ const ShowDevices = ({ devices, openPanel, getData }) => {
     const [deleteId, setDeleteId] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [notificationText, setNotificationText] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const showNotification = (text) => {
         setNotificationText(text);
@@ -38,15 +40,19 @@ const ShowDevices = ({ devices, openPanel, getData }) => {
 
     const confirmAction = () => {
         const removeDevice = async () => {
+            setIsLoading(true);
             try {
                 const response = await api.get(`devices/${deleteId}/delete/`);
                 console.log(response);
                 if (response.status === 200) {
+                    setIsLoading(false);
                     getData();
                 } else {
+                    setIsLoading(false);
                     showNotification('Nie można usunąć urządzenia!');
                 }
             } catch (error) {
+                setIsLoading(false);
                 showNotification('Nie można usunąć urządzenia!');
             }
         };
@@ -60,6 +66,7 @@ const ShowDevices = ({ devices, openPanel, getData }) => {
 
     return (
         <div className={styles.container}>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.allDevices}>
                 {devices.map((device, index) => (
                     <div

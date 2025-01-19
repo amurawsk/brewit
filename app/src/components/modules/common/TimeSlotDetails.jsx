@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import ConfirmModal from '../../utils/ConfirmModal';
 import ChangePriceModal from '../../utils/ChangePriceModal';
 import Notification from '../../utils/Notification.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './TimeSlotDetails.module.css';
 
@@ -31,6 +32,7 @@ const TimeSlotDetails = ({
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
     const [notificationText, setNotificationText] = useState(null);
     const [deviceDetails, setDeviceDetails] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const truncateDeviceName = (name) => {
         if (name && name.length > 25) {
@@ -49,17 +51,20 @@ const TimeSlotDetails = ({
 
     useEffect(() => {
         const getData = async () => {
+            setIsLoading(true);
             try {
                 const response = await api.get(
                     `orders/${selectedSlot.order}/contract-brewery/details/`
                 );
-                console.log(response);
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setContractBrewery(response.data);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log(error);
             }
         };
@@ -73,17 +78,20 @@ const TimeSlotDetails = ({
 
     useEffect(() => {
         const getData = async () => {
+            setIsLoading(true);
             try {
                 const response = await api.get(
                     `devices/${selectedDevice.id}/details/`
                 );
-                console.log(response);
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setDeviceDetails(response.data);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log(error);
             }
         };
@@ -105,18 +113,21 @@ const TimeSlotDetails = ({
     };
 
     const deleteTimeSlot = async () => {
+        setIsLoading(true);
         try {
             const response = await api.get(
                 `time-slots/delete/${selectedSlot.id}/`
             );
-            console.log(response);
             if (response.status === 200) {
+                setIsLoading(false);
                 showNotification('Pomyślnie usunięto!');
             } else {
+                setIsLoading(false);
                 showNotification('Wystąpił błąd!');
                 console.log(response);
             }
         } catch (error) {
+            setIsLoading(false);
             showNotification('Wystąpił błąd!');
             console.log(error);
         } finally {
@@ -130,6 +141,7 @@ const TimeSlotDetails = ({
     };
 
     const handleChangePrice = async (newPrice) => {
+        setIsLoading(true);
         try {
             const payload = {
                 time_slot_id: selectedSlot.id,
@@ -138,11 +150,14 @@ const TimeSlotDetails = ({
             const response = await api.post('time-slots/edit/price/', payload);
 
             if (response.status === 200) {
+                setIsLoading(false);
                 showNotification('Pomyślnie zmieniono cenę!');
             } else {
+                setIsLoading(false);
                 showNotification('Wystąpił błąd!');
             }
         } catch (error) {
+            setIsLoading(false);
             showNotification('Wystąpił błąd!');
             console.log(error);
         } finally {
@@ -182,6 +197,7 @@ const TimeSlotDetails = ({
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             {isPanelOpen && (
                 <div className={styles.overlay}>
                     <div className={styles.panel}>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import styles from './CommercialDashboardContent.module.css';
 import { useNavigate } from 'react-router-dom';
 
 import PageTitle from '../../utils/PageTitle';
 import ShowOrderDetails from './ShowOrderDetails';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './CommercialDashboardContent.module.css';
 
 import api from '../../../api.js';
 
@@ -21,18 +23,23 @@ const CommercialDashboardContent = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [newOrders, setNewOrders] = useState(null);
     const [currentOrders, setCurrentOrders] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
+            setIsLoading(true);
             try {
                 const response = await api.get(`orders/commercial/dashboard/`);
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setNewOrders(response.data.new_orders);
                     setCurrentOrders(response.data.confirmed_orders);
                 } else {
+                    setIsLoading(false);
                     console.log(response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.log('Error fetching orders:', error);
             }
         };
@@ -52,6 +59,7 @@ const CommercialDashboardContent = () => {
 
     return (
         <div className={styles.dashboard}>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.TitleButtonContainer}>
                 <PageTitle text="Szybki dostęp" />
                 <div className={styles.actionBar}>

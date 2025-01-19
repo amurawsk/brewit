@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import styles from './ContractDashboardContent.module.css';
 import { useNavigate } from 'react-router-dom';
 
 import PageTitle from '../../utils/PageTitle';
 import ShowOrderDetails from '../commercial/ShowOrderDetails';
+
+import styles from './ContractDashboardContent.module.css';
 
 const ContractDashboardContent = () => {
     const navigate = useNavigate();

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import styles from './Coworkers.module.css';
+
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import TimeSlotsDateNavigator from '../../modules/common/TimeSlotsDateNavigator.jsx';
 import TimeSlotsTable from '../../modules/common/TimeSlotsTable.jsx';
+
+import styles from './Coworkers.module.css';
 
 /**
  * SelectTimeslots page - contains layout (Header, Sidebar, Title, Button)

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
 import styles from './ShowDeviceDetails.module.css';
 
 import api from '../../../api.js';
@@ -10,8 +12,8 @@ const ShowDeviceDetails = ({
     deviceFields,
     getData,
 }) => {
-    const [currentDeviceFields, setCurrentDeviceFields] =
-        useState(deviceFields);
+    const [currentDeviceFields, setCurrentDeviceFields] = useState(deviceFields);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleFieldChange = (field, value, checked) => {
         if (field === 'carbonation') {
@@ -48,6 +50,7 @@ const ShowDeviceDetails = ({
 
     const editDevice = () => {
         const postData = async () => {
+            setIsLoading(true);
             try {
                 const response = await api.post(
                     `devices/${currentDeviceFields.id}/edit/`,
@@ -64,11 +67,14 @@ const ShowDeviceDetails = ({
                     }
                 );
                 if (response.status === 200) {
+                    setIsLoading(false);
                     getData();
                 } else {
+                    setIsLoading(false);
                     console.log('Wystąpił błąd', response);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.error('Error fetching devices:', error);
                 alert('Błąd sieci! Spróbuj ponownie później.');
             }
@@ -85,8 +91,8 @@ const ShowDeviceDetails = ({
     };
 
     return (
-        <div
-            className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
+        <div className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
+            <LoadingOverlay isLoading={isLoading} />
             <button
                 className={styles.closePanel}
                 onClick={() => setIsPanelOpen(false)}>
