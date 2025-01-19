@@ -57,50 +57,24 @@ const TimeSlotsTable = ({
     }, [isPanelOpen]);
 
     useEffect(() => {
-        // TODO mock
-        const timeSlotsData = [
-            {
-                id: 35,
-                name: 'Tank warzel',
-                device_type: 'BT',
-                timeSlots: [
-                    {
-                        id: 94,
-                        status: 'F',
-                        slot_type: 'H',
-                        price: '123.00',
-                        start_timestamp: '2025-01-19T13:00:00+01:00',
-                        end_timestamp: '2025-01-19T14:00:00+01:00',
-                        device: 35,
-                        order: null,
-                    },
-                    {
-                        id: 95,
-                        status: 'F',
-                        slot_type: 'H',
-                        price: '123.00',
-                        start_timestamp: '2025-01-19T15:00:00+01:00',
-                        end_timestamp: '2025-01-19T16:00:00+01:00',
-                        device: 35,
-                        order: null,
-                    },
-                ],
-            },
-            {
-                id: 36,
-                name: 'Nazwa',
-                device_type: 'BT',
-                timeSlots: [],
-            },
-        ];
-
-        const getAvailableTimeslots = async () => {
-            setTimetableData(timeSlotsData);
-            // console.log(selectedBreweryId)
+        const getData = async () => {
+            try {
+                const response = await api.get(
+                    // TODO change to proper url
+                    `devices/brewery/${selectedBreweryId}/with-time-slots/`
+                );
+                if (response.status === 200) {
+                    setTimetableData(response.data);
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log('Error fetching time slots:', error);
+            }
         };
 
         if (localStorage.getItem('userType') === 'contract_brewery') {
-            getAvailableTimeslots();
+            getData();
         }
     }, [selectedBreweryId]);
 
