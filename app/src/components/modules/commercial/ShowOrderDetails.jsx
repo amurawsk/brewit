@@ -131,23 +131,23 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
                             <div className={styles.detailBox}>
                                 <h3>Zleceniodawca</h3>
                                 <p>
-                                    Nazwa browaru: {order.contract_brewery_name}
+                                    Nazwa browaru: {order.contract_brewery.name}
                                 </p>
                                 <p>
                                     Właściciel:{' '}
-                                    {order.contract_brewery_owner_name}
+                                    {order.contract_brewery.owner_name}
                                 </p>
-                                <p>Email: {order.contract_brewery_email}</p>
+                                <p>Email: {order.contract_brewery.email}</p>
                                 <p>
                                     Numer telefonu:{' '}
-                                    {order.contract_brewery_phone_number}
+                                    {order.contract_brewery.phone_number}
                                 </p>
                             </div>
                             <div className={styles.detailBox}>
                                 <h3>Informacje</h3>
                                 <p>Typ piwa: {order.beer_type}</p>
                                 <p>Objętość: {order.beer_volume}L</p>
-                                <p>Całkowity koszt: {order.price} zł</p>
+                                <p>Całkowity koszt: {order.total_price} zł</p>
                             </div>
                             <div className={styles.detailBox}>
                                 <h3>Dodatkowe informacje</h3>
@@ -191,7 +191,7 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
                             <h3>Oś Czasu wynajmowanych urządzeń</h3>
                         </div>
                         <TimeSlotsTimeline
-                            timeSlots={order.timeSlots}
+                            timeSlots={order.time_slots}
                             orderStatus={order.status}
                         />
                         {order.status !== 'N' && order.status !== 'C' && (

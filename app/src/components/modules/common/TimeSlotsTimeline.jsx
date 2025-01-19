@@ -29,8 +29,8 @@ const TimeSlotsTimeline = ({ timeSlots, orderStatus }) => {
                     />
                     <div className={styles.details}>
                         <div className={styles.status}>
-                            {timeslot.device_name} -{' '}
-                            {timeslot.device_serial_number}
+                            {timeslot.device.name} -{' '}
+                            {timeslot.device.serial_number}
                         </div>
                         <div className={styles.time}>
                             {new Date(timeslot.start_timestamp).toLocaleString(
