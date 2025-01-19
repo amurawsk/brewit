@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone, datetime, timedelta
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -465,17 +466,23 @@ class TimeSlotCreateView(APIView):
                     {"error": "Invalid slot type for device type."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            start_timestamp = datetime(start_timestamp.year, start_timestamp.month, start_timestamp.day, 0, 0, 0)
-            end_timestamp = datetime(end_timestamp.year, end_timestamp.month, end_timestamp.day, 23, 59, 59)
-            while start_timestamp.date() <= end_timestamp.date():
+            local_tz = timezone.get_current_timezone()
+            if timezone.is_naive(start_timestamp):
+                start_timestamp = timezone.make_aware(start_timestamp, timezone.utc)
+            start_timestamp = timezone.localtime(start_timestamp, local_tz).replace(hour=0, minute=0, second=0)
+
+            if timezone.is_naive(end_timestamp):
+                end_timestamp = timezone.make_aware(end_timestamp, timezone.utc)
+            end_timestamp = timezone.localtime(end_timestamp, local_tz).replace(hour=23, minute=59, second=59)
+            end_timestamp -= timedelta(days=1)
+
+            while start_timestamp <= end_timestamp:
                 time_slot_data = {
                     "status": time_slot_status,
                     "slot_type": slot_type,
                     "price": price,
-                    "start_timestamp": start_timestamp,
-                    "end_timestamp": datetime(
-                        start_timestamp.year, start_timestamp.month, start_timestamp.day, 23, 59, 59
-                    ),
+                    "start_timestamp": start_timestamp.astimezone(dt_timezone.utc),
+                    "end_timestamp": start_timestamp.replace(hour=23, minute=59, second=59).astimezone(dt_timezone.utc),
                     "device": device.id,
                 }
                 serializer = TimeSlotSerializer(data=time_slot_data)
