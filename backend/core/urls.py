@@ -38,6 +38,7 @@ urlpatterns = [
         views.OrderListCommercialView.as_view(),
         name="order_list_commercial"
     ),
+    path("orders/commercial/dashboard/", views.OrderCommercialDashboardView.as_view(), name="commercial_dashboard"),
     path(
         "orders/contract/status/<str:status>/",
         views.OrderListContractView.as_view(),
