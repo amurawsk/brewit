@@ -33,6 +33,13 @@ import EditRecipe from './components/pages/contract/EditRecipe';
 import ChooseCommercial from './components/pages/contract/ChooseCommercial';
 import SelectTimeslots from './components/pages/contract/SelectTimeslots';
 import FinalizeOrder from './components/pages/contract/FinalizeOrder';
+import IntermediaryDashboard from './components/pages/intermediary/IntermediaryDashboard';
+import CommercialBreweries from './components/pages/intermediary/CommercialBreweries';
+import ContractBreweries from './components/pages/intermediary/ContractBreweries';
+import IntermediaryCoworkers from './components/pages/intermediary/Coworkers';
+import IntermediaryAccount from './components/pages/intermediary/MyAccount';
+import IntermediaryOrders from './components/pages/intermediary/Orders';
+import IntermediaryStatistics from './components/pages/intermediary/Statistics';
 
 import './App.css';
 
@@ -48,6 +55,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
 
                 {/* PROTECTED */}
+                {/* COMMERCIAL */}
                 <Route
                     path="/commercial/account"
                     element={
@@ -239,6 +247,64 @@ function App() {
                     element={
                         <ProtectedRoute requiredType="contract_brewery">
                             <Statistics />
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* INTERMEDIARY */}
+                <Route
+                    path="/intermediary/account"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <IntermediaryAccount />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/dashboard"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <IntermediaryDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/contract-breweries"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <ContractBreweries />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/commercial-breweries"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <CommercialBreweries />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/orders"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <IntermediaryOrders />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/coworkers"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <IntermediaryCoworkers />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/statistics"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <IntermediaryStatistics />
                         </ProtectedRoute>
                     }
                 />
