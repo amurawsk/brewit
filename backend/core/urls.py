@@ -63,4 +63,9 @@ urlpatterns = [
         views.OrderView.as_view(),
         name="recipies_orders_list"
     ),
+    path(
+        "recipies/add/",
+        views.RecipeCreationView.as_view(),
+        name="recipies_add"
+    )
 ]
