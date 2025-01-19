@@ -43,7 +43,6 @@ const ShowDevices = ({ devices, openPanel, getData }) => {
             setIsLoading(true);
             try {
                 const response = await api.get(`devices/${deleteId}/delete/`);
-                console.log(response);
                 if (response.status === 200) {
                     setIsLoading(false);
                     getData();

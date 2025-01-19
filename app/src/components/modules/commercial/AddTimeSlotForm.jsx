@@ -51,11 +51,11 @@ const AddTimeSlotForm = () => {
                     setDevices(response.data);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log('Error fetching devices:', error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         getData();
@@ -97,8 +97,6 @@ const AddTimeSlotForm = () => {
                     end_timestamp: formState.timeRange[1],
                     device: parseInt(id),
                 });
-            } else {
-                console.log('Both dateRange and timeRange are null');
             }
             if (response.status === 201) {
                 setIsLoading(false);
@@ -109,7 +107,7 @@ const AddTimeSlotForm = () => {
             }
         } catch (error) {
             setIsLoading(false);
-            console.log('Error fetching devices:', error);
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
         }
     };
 
@@ -244,6 +242,7 @@ const AddTimeSlotForm = () => {
                         locale="pl"
                         dateFormat="dd.MM.yyyy"
                         minDate={getMinDate()}
+                        required
                     />
                 </div>
             );
@@ -261,6 +260,7 @@ const AddTimeSlotForm = () => {
                         placeholderText="Wybierz dzień"
                         locale="pl"
                         minDate={getMinDate()}
+                        required
                     />
 
                     <DatePicker
@@ -277,6 +277,7 @@ const AddTimeSlotForm = () => {
                         minTime={getMinTime()}
                         maxTime={getMaxTime()}
                         disabled={!formState.specificDate}
+                        required
                     />
                     <DatePicker
                         className={styles.timepickerMaxTime}
@@ -302,6 +303,7 @@ const AddTimeSlotForm = () => {
                         disabled={
                             !formState.specificDate || !formState.timeRange[0]
                         }
+                        required
                     />
                 </div>
             );
@@ -342,6 +344,7 @@ const AddTimeSlotForm = () => {
                             value={formState.price}
                             onChange={handlePriceChange}
                             placeholder="Wpisz cenę (w zł)"
+                            required
                         />
                     </div>
                 )}

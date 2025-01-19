@@ -38,8 +38,8 @@ const Orders = () => {
                     setIsLoading(false);
                 }
             } catch (error) {
-                console.log('Error fetching devices:', error);
                 setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         if (!isPanelOpen) {

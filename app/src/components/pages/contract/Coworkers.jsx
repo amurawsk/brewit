@@ -32,11 +32,11 @@ const Coworkers = () => {
                     setCoworkers(response.data);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania współpracowników! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log('Error fetching devices:', error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         if (!isModalOpen) {

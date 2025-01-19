@@ -47,11 +47,11 @@ const TimeSlotsTable = ({
                     setTimetableData(response.data);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania okien czasowych! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log('Error fetching devices:', error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
 
@@ -75,11 +75,11 @@ const TimeSlotsTable = ({
                     setTimetableData(response.data);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania okien czasowych! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log('Error fetching time slots:', error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
 

@@ -26,18 +26,17 @@ const Coworkers = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                console.log();
                 const response = await api.get(`coworkers/`);
                 if (response.status === 200) {
                     setCoworkers(response.data);
                     setIsLoading(false);
                 } else {
-                    console.log(response);
+                    alert('Błąd podczas pobierania współpracowników! Odśwież stronę i spróbuj ponownie.');
                     setIsLoading(false);
                 }
             } catch (error) {
-                console.log('Error fetching devices:', error);
                 setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         if (!isModalOpen) {

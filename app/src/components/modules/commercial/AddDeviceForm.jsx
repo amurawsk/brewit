@@ -33,7 +33,6 @@ const AddDeviceForm = () => {
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
         }));
-        console.log(formData);
     };
 
     const handleCarbonationChange = (value, checked) => {
@@ -62,13 +61,11 @@ const AddDeviceForm = () => {
                 navigate('/commercial/devices');
             } else {
                 setIsLoading(false);
-                console.error('Error:', response);
-                alert('Błąd podczas dodawania urządzenia!');
+                alert('Błąd podczas dodawania urządzenia! Odśwież stronę i spróbuj ponownie.');
             }
         } catch (error) {
             setIsLoading(false);
-            console.error('Error fetching devices:', error);
-            alert('Błąd sieci! Spróbuj ponownie później.');
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
         }
     };
 

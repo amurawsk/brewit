@@ -36,11 +36,11 @@ const CommercialDashboardContent = () => {
                     setCurrentOrders(response.data.confirmed_orders);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania zamówień! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log('Error fetching orders:', error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         getData();

@@ -61,11 +61,11 @@ const TimeSlotDetails = ({
                     setContractBrewery(response.data);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania szczegółów! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log(error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
 
@@ -88,11 +88,11 @@ const TimeSlotDetails = ({
                     setDeviceDetails(response.data);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania szczegółów! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log(error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         if (selectedDevice !== null) {
@@ -124,12 +124,10 @@ const TimeSlotDetails = ({
             } else {
                 setIsLoading(false);
                 showNotification('Wystąpił błąd!');
-                console.log(response);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
-            console.log(error);
         } finally {
             setIsModalOpen(false);
             setIsPanelOpen(false);
@@ -159,7 +157,6 @@ const TimeSlotDetails = ({
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
-            console.log(error);
         } finally {
             setIsPriceDialogOpen(false);
             setIsPanelOpen(false);

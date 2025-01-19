@@ -38,13 +38,11 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                     });
                 } else {
                     setIsLoading(false);
-                    console.error('Error:', response);
                     alert('Błąd podczas dodawania urządzenia!');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.error('Error fetching devices:', error);
-                alert('Błąd sieci! Spróbuj ponownie później.');
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         e.preventDefault();

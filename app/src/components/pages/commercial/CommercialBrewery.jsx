@@ -24,7 +24,6 @@ const CommercialBrewery = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                console.log();
                 const response = await api.get(
                     `commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`
                 );
@@ -32,12 +31,12 @@ const CommercialBrewery = () => {
                     setBreweryData(response.data);
                     setIsLoading(false);
                 } else {
-                    console.log(response);
+                    alert('Błąd podczas pobierania informacji o browarze! Odśwież stronę i spróbuj ponownie.');
                     setIsLoading(false);
                 }
             } catch (error) {
-                console.log('Error fetching devices:', error);
                 setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         if (!isPanelOpen) {

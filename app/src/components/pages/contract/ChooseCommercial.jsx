@@ -29,11 +29,11 @@ const ChooseCommercial = () => {
                     setBreweries(response.data);
                 } else {
                     setIsLoading(false);
-                    console.log(response);
+                    alert('Błąd podczas pobierania browarów komercyjnych! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log('Error fetching commercial breweries:', error);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
         getData();

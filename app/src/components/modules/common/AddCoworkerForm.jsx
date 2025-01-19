@@ -31,13 +31,11 @@ const AddCoworkerForm = () => {
                 setIsLoading(false);
             } else {
                 setIsLoading(false);
-                console.error('Error:', response);
-                alert('Błąd podczas dodawania pracownika!');
+                alert('Błąd podczas dodawania pracownika! Odśwież stronę i spróbuj ponownie.');
             }
         } catch (error) {
             setIsLoading(false);
-            console.error('Error fetching devices:', error);
-            alert('Błąd sieci! Spróbuj ponownie później.');
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
         }
 
         if (localStorage.getItem('userType') === 'commercial_brewery') {

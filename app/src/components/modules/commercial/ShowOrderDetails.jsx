@@ -46,7 +46,6 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
         setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/accept/`);
-            console.log(response);
             if (response.status === 200) {
                 setIsLoading(false);
                 showNotification('Pomyślnie zaakceptowano!');
@@ -55,12 +54,10 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło zostać zaakceptowane!');
-                console.log(response);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
-            console.log(error);
         }
     };
 
@@ -68,7 +65,6 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
         setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/reject/`);
-            console.log(response);
             if (response.status === 200) {
                 setIsLoading(false);
                 showNotification('Pomyślnie odrzucono!');
@@ -77,12 +73,10 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło zostać odrzucone!');
-                console.log(response);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
-            console.log(error);
         }
     };
 
@@ -90,7 +84,6 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
         setIsLoading(true);
         try {
             const response = await api.get(`orders/${order.id}/cancel/`);
-            console.log(response);
             if (response.status === 200) {
                 setIsLoading(false);
                 showNotification('Pomyślnie anulowano!');
@@ -99,12 +92,10 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło być anulowane!');
-                console.log(response);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
-            console.log(error);
         }
     };
 

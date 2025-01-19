@@ -37,7 +37,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                     }
                 );
                 if (response.status !== 200) {
-                    console.log('Wystąpił błąd', response);
+                    alert('Błąd podczas edytowania informacji! Odśwież stronę i spróbuj ponownie.');
                 }
                 setIsLoading(false);
             } else if (
@@ -54,14 +54,13 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                     }
                 );
                 if (response.status !== 200) {
-                    console.log('Wystąpił błąd', response);
+                    alert('Błąd podczas edytowania informacji! Odśwież stronę i spróbuj ponownie.');
                 }
                 setIsLoading(false);
             }
         } catch (error) {
             setIsLoading(false);
-            console.error('Error fetching devices:', error);
-            alert('Błąd sieci! Spróbuj ponownie później.');
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
         }
         setIsPanelOpen(false);
         setCurrentBreweryData(breweryData);

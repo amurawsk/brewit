@@ -50,12 +50,10 @@ const ShowDeviceDetails = ({
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło być anulowane!');
-                console.log(response);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
-            console.log(error);
         }
     };
 
@@ -71,12 +69,10 @@ const ShowDeviceDetails = ({
             } else {
                 setIsLoading(false);
                 showNotification('Zamówienie nie mogło być wycofane!');
-                console.log(response);
             }
         } catch (error) {
             setIsLoading(false);
             showNotification('Wystąpił błąd!');
-            console.log(error);
         }
     };
 

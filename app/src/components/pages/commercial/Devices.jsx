@@ -32,12 +32,12 @@ const Devices = () => {
                 setDevices(response.data);
                 setIsLoading(false);
             } else {
-                console.log(response);
+                alert('Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.');
                 setIsLoading(false);
             }
         } catch (error) {
-            console.log('Error fetching devices:', error);
             setIsLoading(false);
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
         }
     };
 

@@ -72,12 +72,11 @@ const ShowDeviceDetails = ({
                     getData();
                 } else {
                     setIsLoading(false);
-                    console.log('Wystąpił błąd', response);
+                    alert('Błąd podczas pobierania szczegółów urządzenia! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.error('Error fetching devices:', error);
-                alert('Błąd sieci! Spróbuj ponownie później.');
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
             setIsPanelOpen(false);
         };
