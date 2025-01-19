@@ -87,7 +87,9 @@ const TimeSlotDetails = ({
                 console.log(error);
             }
         };
-        getData();
+        if (selectedDevice !== null) {
+            getData();
+        }
     }, [selectedDevice]);
 
     const resolveDeviceType = (type) => {

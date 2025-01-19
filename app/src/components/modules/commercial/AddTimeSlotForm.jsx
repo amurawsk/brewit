@@ -141,6 +141,7 @@ const AddTimeSlotForm = () => {
         if (formState.specificDate && isToday(formState.specificDate)) {
             const now = new Date();
             now.setMinutes(0, 0, 0);
+            now.setHours(now.getHours() + 1)
             return now;
         }
         return setHours(setMinutes(formState.specificDate, 0), 0);
