@@ -14,6 +14,8 @@ urlpatterns = [
 
     path("devices/add/", views.DeviceCreateView.as_view(), name="device_create"),
     path("devices/<int:device_id>/details/", views.DeviceDetailView.as_view(), name="device_detail"),
+    path("devices/<int:device_id>/edit/", views.DeviceEditView.as_view(), name="device_edit"),
+    path("devices/<int:device_id>/delete/", views.DeviceDeleteView.as_view(), name="device_delete"),
     path("devices/brewery/<int:brewery_id>/", views.DeviceListForBreweryView.as_view(), name="device_list_brewery"),
     path("devices/all/", views.DeviceListAllView.as_view(), name="device_list_all"),
     path(

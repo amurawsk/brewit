@@ -308,7 +308,7 @@ class DeviceListAllView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        devices = Device.objects.all()
+        devices = Device.objects.filter(is_deleted=False)
         serializer = DeviceSerializer(devices, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -352,6 +352,102 @@ class DeviceDetailView(APIView):
 
         serializer = DeviceSerializer(device)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DeviceEditView(APIView):
+    """View for editing a device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the device id and new data, validates it and updates the device.
+            If the device update is successful, it returns a success message.
+            If the device update fails, it returns validation errors.
+
+    Responses:
+        - 200 OK: If the device is successfully updated, the response contains a success message.
+        - 400 Bad Request: If the device update fails, the response contains error messages related to the device data.
+        - 403 Forbidden: If the user is not authorized to edit this device, the response contains an error message.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, device_id):
+        user = request.user
+
+        try:
+            device = Device.objects.get(id=device_id)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to edit this device."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Device.DoesNotExist:
+            return Response(
+                {"error": "Device not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = DeviceSerializer(device, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Device successfully updated."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeviceDeleteView(APIView):
+    """View for deleting a device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the device id, validates it and deletes the device.
+            If the device deletion is successful, it returns a success message.
+            If the device deletion fails, it returns an error message.
+
+    Responses:
+        - 200 OK: If the device is successfully deleted, the response contains a success message.
+        - 403 Forbidden: If the user is not authorized to delete this device, the response contains an error message.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, device_id):
+        user = request.user
+
+        try:
+            device = Device.objects.get(id=device_id, is_deleted=False)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to delete this device."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Device.DoesNotExist:
+            return Response(
+                {"error": "Device not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        # checking if all timeslots are in the past, status = U or soft deleted
+        # so reject if there are timeslots with status F R H that are not in the past
+        time_slots = TimeSlot.objects.filter(device=device, is_deleted=False)
+        for time_slot in time_slots:
+            if time_slot.status in ["F", "R", "H"] and time_slot.end_timestamp > timezone.now():
+                return Response(
+                    {"error": "Cannot delete device with active time slots. Delete the time slots first."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        device.delete()
+        return Response({"message": "Device successfully deleted."}, status=status.HTTP_200_OK)            
 
 
 class TimeSlotCreateView(APIView):
