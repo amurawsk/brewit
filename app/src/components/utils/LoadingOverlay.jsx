@@ -1,9 +1,22 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import styles from './LoadingOverlay.module.css';
 
 const LoadingOverlay = ({ isLoading }) => {
-    if (!isLoading) return null;
+    const [shouldShow, setShouldShow] = useState(false);
+
+    useEffect(() => {
+        let timeout;
+
+        if (isLoading) {
+            timeout = setTimeout(() => setShouldShow(true), 300);
+        } else {
+            setShouldShow(false);
+        }
+
+        return () => clearTimeout(timeout);
+    }, [isLoading]);
+
+    if (!shouldShow) return null;
 
     return (
         <div className={styles.loadingOverlay}>
