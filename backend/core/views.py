@@ -1124,9 +1124,10 @@ class OrderCancelView(APIView):
         try:
             order = Order.objects.get(id=order_id)
             profile = Profile.objects.get(user=user)
+            time_slot = TimeSlot.objects.filter(order=order).first()
             if (
                 profile.contract_brewery != order.contract_brewery and
-                profile.commercial_brewery != order.timeslot.device.commercial_brewery
+                profile.commercial_brewery != time_slot.device.commercial_brewery
             ):
                 return Response(
                     {"error": "Unauthorized to cancel this order."},
