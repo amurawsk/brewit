@@ -12,9 +12,9 @@ import api from '../../../api.js';
  * Devices page - contains layout (Header, Sidebar, Title, Button), displays devices for given brewery
  */
 const Devices = () => {
-    const navigate = useNavigate();
-
+    const navigate = useNavigate()
     const addDevice = () => navigate('/commercial/devices/add');
+    
     const [devices, setDevices] = useState([]);
     const [deviceFields, setDeviceFields] = useState({});
     const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -59,7 +59,7 @@ const Devices = () => {
                             Brak urządzeń. Dodaj nowe urządzenie.
                         </p>
                     ) : (
-                        <ShowDevices devices={devices} openPanel={openPanel} />
+                        <ShowDevices devices={devices} openPanel={openPanel} getData={getData} />
                     )}
                 </div>
             </div>
@@ -68,6 +68,7 @@ const Devices = () => {
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}
                 deviceFields={deviceFields}
+                getData={getData}
             />
         </div>
     );

@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 
 import styles from './ShowDeviceDetails.module.css';
 
-const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields }) => {
+import api from '../../../api.js';
+
+const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields, getData }) => {
     const [currentDeviceFields, setCurrentDeviceFields] =
         useState(deviceFields);
-
-    useEffect(() => {
-        setCurrentDeviceFields(deviceFields);
-    }, [deviceFields]);
 
     const handleFieldChange = (field, value, checked) => {
         if (field === 'carbonation') {
@@ -39,9 +37,35 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields }) => {
         }
     };
 
-    const changeDevice = () => {
-        // TODO
-        console.log(currentDeviceFields);
+    useEffect(() => {
+        setCurrentDeviceFields(deviceFields);
+    }, [deviceFields]);
+
+    const editDevice = () => {
+        const postData = async () => {
+            try {
+                const response = await api.post(`devices/${currentDeviceFields.id}/edit/`, {
+                    name: currentDeviceFields.name,
+                    serial_number: currentDeviceFields.serial_number,
+                    capacity: currentDeviceFields.capacity,
+                    temperature_min: currentDeviceFields.temperature_min,
+                    temperature_max: currentDeviceFields.temperature_max,
+                    sour_beers: currentDeviceFields.sour_beers,
+                    carbonation: currentDeviceFields.carbonation,
+                    supported_containers: currentDeviceFields.supported_containers
+                });
+                if (response.status === 200) {
+                    getData();
+                } else {
+                    console.log('Wystąpił błąd', response)
+                }
+            } catch (error) {
+                console.error('Error fetching devices:', error);
+                alert('Błąd sieci! Spróbuj ponownie później.');
+            }
+            setIsPanelOpen(false);
+        };
+        postData()
     };
 
     const resolveDeviceType = (type) => {
@@ -266,7 +290,7 @@ const ShowDeviceDetails = ({ isPanelOpen, setIsPanelOpen, deviceFields }) => {
                         <button
                             className={styles.applyButton}
                             onClick={() => {
-                                changeDevice();
+                                editDevice();
                                 setIsPanelOpen(false);
                             }}>
                             Zastosuj zmiany
