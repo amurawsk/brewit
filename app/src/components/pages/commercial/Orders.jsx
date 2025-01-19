@@ -34,8 +34,8 @@ const Orders = () => {
                     setOrders(response.data);
                     setIsLoading(false);
                 } else {
-                    console.log(response);
                     setIsLoading(false);
+                    alert('Błąd podczas pobierania zleceń! Odśwież stronę i spróbuj ponownie.');
                 }
             } catch (error) {
                 setIsLoading(false);
