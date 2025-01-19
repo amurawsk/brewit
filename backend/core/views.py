@@ -837,15 +837,6 @@ class RecipiesView(APIView):
         - 400 Bad Request: If the request body couldn't get properly serialized
         - 403 Forbidden: If the user is not authorized or is not a contract
         brewery employee
-
-    - DELETE: Accepts "id", validates and deletes
-
-    Response:
-        - 200 OK: If the recipe has been deleted
-        - 400 Bad Request: If the request body couldn't get properly serialized
-        - 403 Forbidden: If the user is not authorized or is not a contract
-        brewery employee
-        - 404 Not Found: If the recipe was not found
     """
 
     permission_classes = [IsAuthenticated]
@@ -882,36 +873,9 @@ class RecipiesView(APIView):
             status=status.HTTP_201_CREATED
         )
 
-    def delete(self, request):
-        if (brewery := request.user.profile.contract_brewery) is None:
-            return Response(
-                {"errors": "User is not a contract brewery employee."},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        serializer = serializers.RecipeRemoveSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        try:
-            recipe = Recipe.objects.get(pk=serializer.data["id"])
-            if recipe.contract_brewery != brewery:
-                return Response(
-                    {"error": "User is not an employee of recipe's brewery."},
-                    status=status.HTTP_403_FORBIDDEN
-                )
-            _, deleted = recipe.delete()
-            return Response(deleted, status.HTTP_200_OK)
-        except Recipe.DoesNotExist:
-            return Response(
-                {"error": "Recipe not found."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
 
 class RecipeUpdateView(APIView):
-    """View for recipies of user's brewery.
+    """View for updating recipies of user's brewery.
     Class allows only authenticated users to access this view.
 
     This view supports HTTP methods:
@@ -953,6 +917,51 @@ class RecipeUpdateView(APIView):
                 {"message": "Recipe updated successfully."},
                 status=status.HTTP_200_OK
             )
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class RecipeDeleteView(APIView):
+    """View for deleting recipies of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "id", validates and deletes
+
+    Response:
+        - 200 OK: If the recipe has been deleted
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the recipe was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.RecipeRemoveSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            recipe = Recipe.objects.get(pk=serializer.data["id"])
+            if recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "User is not an employee of recipe's brewery."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            _, deleted = recipe.delete()
+            return Response(deleted, status.HTTP_200_OK)
         except Recipe.DoesNotExist:
             return Response(
                 {"error": "Recipe not found."},
