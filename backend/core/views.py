@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone, datetime, timedelta
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from django.db.models import Count
 from .serializers import (
     BreweryWithDevicesNumberSerializer,
     CheckUsernameUniqueSerializer,
+    ContractBrewerySerializer,
     DeviceSerializer,
     DeviceWithFreeTimeSlotsSerializer,
     DeviceWithTimeSlotsSerializer,
@@ -469,17 +471,23 @@ class TimeSlotCreateView(APIView):
                     {"error": "Invalid slot type for device type."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            start_timestamp = datetime(start_timestamp.year, start_timestamp.month, start_timestamp.day, 0, 0, 0)
-            end_timestamp = datetime(end_timestamp.year, end_timestamp.month, end_timestamp.day, 23, 59, 59)
-            while start_timestamp.date() <= end_timestamp.date():
+            local_tz = timezone.get_current_timezone()
+            if timezone.is_naive(start_timestamp):
+                start_timestamp = timezone.make_aware(start_timestamp, timezone.utc)
+            start_timestamp = timezone.localtime(start_timestamp, local_tz).replace(hour=0, minute=0, second=0)
+
+            if timezone.is_naive(end_timestamp):
+                end_timestamp = timezone.make_aware(end_timestamp, timezone.utc)
+            end_timestamp = timezone.localtime(end_timestamp, local_tz).replace(hour=23, minute=59, second=59)
+            end_timestamp -= timedelta(days=1)
+
+            while start_timestamp <= end_timestamp:
                 time_slot_data = {
                     "status": time_slot_status,
                     "slot_type": slot_type,
                     "price": price,
-                    "start_timestamp": start_timestamp,
-                    "end_timestamp": datetime(
-                        start_timestamp.year, start_timestamp.month, start_timestamp.day, 23, 59, 59
-                    ),
+                    "start_timestamp": start_timestamp.astimezone(dt_timezone.utc),
+                    "end_timestamp": start_timestamp.replace(hour=23, minute=59, second=59).astimezone(dt_timezone.utc),
                     "device": device.id,
                 }
                 serializer = TimeSlotSerializer(data=time_slot_data)
@@ -846,6 +854,47 @@ class OrderDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class OrderContractBreweryDetailView(APIView):
+    """View for retrieving details of an order for a contract brewery. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the order id, validates it and returns the details of the order.
+
+    Responses:
+        - 200 OK: If the order details are successfully retrieved, the response contains
+          the details of the order.
+        - 403 Forbidden: If the user is not authorized to view the details of this order,
+          the response contains an error message.
+        - 404 Not Found: If the order or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, order_id):
+        user = request.user
+        try:
+            order = Order.objects.get(id=order_id)
+            profile = Profile.objects.get(user=user)
+            time_slot = TimeSlot.objects.filter(order=order).first()
+            if not profile.contract_brewery and profile.commercial_brewery != time_slot.device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to view this order."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = ContractBrewerySerializer(order.contract_brewery)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class OrderListForDeviceView(APIView):
     """View for listing orders for a specific device. Class allows only authenticated users to access this view.
 
@@ -931,6 +980,7 @@ class OrderAcceptView(APIView):
         order.status = "C"
         order.save()
         time_slot.status = "H"
+        time_slot.save()
         return Response({"message": "Order successfully accepted."}, status=status.HTTP_200_OK)
 
 
@@ -1154,7 +1204,7 @@ class OrderListCommercialView(APIView):
                 status=404
             )
 
-        orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status=status)
+        orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status=status).distinct()
         serializer = OrderWithTimeSlotsAndContractInfoSerializer(orders, many=True)
         return Response(serializer.data, status=200)
 

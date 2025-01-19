@@ -461,7 +461,6 @@ class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer)
         return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
 
     def get_commercial_brewery(self, obj):
-        # basically any time_slot.device.commercial_brewery
         brewery = obj.timeslot_set.first().device.commercial_brewery
         return {
             "id": brewery.id,
