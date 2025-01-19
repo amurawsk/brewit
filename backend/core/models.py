@@ -127,6 +127,11 @@ class Device(models.Model):
         CommercialBrewery,
         on_delete=models.CASCADE
     )
+    is_deleted = models.BooleanField(default=False)
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.save()
 
 
 class Recipe(models.Model):
