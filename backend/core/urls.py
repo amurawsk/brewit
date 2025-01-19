@@ -101,4 +101,9 @@ urlpatterns = [
         views.BreweryWithDevicesNumberView.as_view(),
         name="brewery_with_devices"
     ),
+    path(
+        "recipies/<int:recipe_id>/orders/",
+        views.OrderView.as_view(),
+        name="recipies_orders_list"
+    ),
 ]

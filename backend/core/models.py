@@ -168,6 +168,10 @@ class Order(models.Model):
     )
     recipe = models.ForeignKey(Recipe, on_delete=models.SET_NULL, null=True)
 
+    @property
+    def total_price(self):
+        return self.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
+
 
 class TimeSlot(models.Model):
     class Status(models.TextChoices):

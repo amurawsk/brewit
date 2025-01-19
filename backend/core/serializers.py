@@ -80,6 +80,14 @@ class CommercialBreweryUpdateSerializer(serializers.Serializer):
     description = serializers.CharField()
 
 
+class ContractBreweryUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    phone_number = serializers.CharField()
+    owner_name = serializers.CharField()
+    description = serializers.CharField()
+
+
 class ContractBreweryInfoSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='contract_email')
     ceo = serializers.CharField(source='owner_name')
@@ -217,6 +225,45 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ["pk", "name", "full_volume", "full_time", "steps"]
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk")
+    beer_volume = serializers.FloatField(source="beer_volume.l")
+    contract_brewery_name = serializers.CharField(
+        source="contract_brewery.name"
+    )
+    contract_brewery_owner_name = serializers.CharField(
+        source="contract_brewery.owner_name"
+    )
+    contract_brewery_email = serializers.CharField(
+        source="contract_brewery.contract_email"
+    )
+    contract_brewery_phone_number = serializers.CharField(
+        source="contract_brewery.contract_phone_number"
+    )
+    price = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        source="total_price"
+    )
+
+    class Meta:
+        model = Order
+        fields = [
+            "id",
+            "created_at",
+            "ended_at",
+            "beer_type",
+            "beer_volume",
+            "status",
+            "contract_brewery_name",
+            "contract_brewery_owner_name",
+            "contract_brewery_email",
+            "contract_brewery_phone_number",
+            "rate",
+            "price"
+        ]
 
 
 class ContractBrewerySerializer(serializers.ModelSerializer):
