@@ -310,6 +310,47 @@ class DeviceListAllView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class DeviceDetailView(APIView):
+    """View for retrieving details of a device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the device id, validates it and returns the details of the device.
+            If the user is not authorized to view this device, it returns an error message.
+
+    Responses:
+        - 200 OK: If the user is authorized to view this device, the response contains
+          the details of the device.
+        - 403 Forbidden: If the user is not authorized to view this device, the response contains an error message.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, device_id):
+        user = request.user
+
+        try:
+            device = Device.objects.get(id=device_id)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to view this device."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Device.DoesNotExist:
+            return Response(
+                {"error": "Device not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        serializer = DeviceSerializer(device)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class TimeSlotCreateView(APIView):
     """View for creating a new time slot. Class allows only authenticated users to access this view.
 
