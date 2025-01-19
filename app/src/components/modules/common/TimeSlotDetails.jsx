@@ -62,20 +62,22 @@ const TimeSlotDetails = ({
     }, [selectedSlot]);
 
     useEffect(() => {
-        // TODO mock - change to get_device_by_id(selectedDevice.id)
-        setDeviceDetails({
-            id: 35,
-            name: 'Tank warzel',
-            device_type: 'BT',
-            serial_number: '123',
-            capacity: 100.0,
-            temperature_min: 10.0,
-            temperature_max: 90.0,
-            sour_beers: false,
-            carbonation: 'N2',
-            supported_containers: '',
-            commercial_brewery: 34,
-        });
+        const getData = async () => {
+            try {
+                const response = await api.get(
+                    `devices/${selectedDevice.id}/details/`
+                );
+                console.log(response);
+                if (response.status === 200) {
+                    setDeviceDetails(response.data)
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getData();
     }, [selectedDevice]);
 
     const resolveDeviceType = (type) => {

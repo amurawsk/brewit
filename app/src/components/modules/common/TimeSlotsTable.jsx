@@ -195,8 +195,7 @@ const TimeSlotsTable = ({
                                                   selectedDate
                                               );
                                               const cellClass = getCellClass(
-                                                  timeSlot,
-                                                  styles
+                                                  timeSlot
                                               );
 
                                               return (
@@ -221,14 +220,9 @@ const TimeSlotsTable = ({
                                               null,
                                               day
                                           );
-                                          const cellClass =
-                                              timeSlot?.status === 'F'
-                                                  ? styles.activeAvailableSlot
-                                                  : timeSlot?.status === 'R'
-                                                    ? styles.activeReservedSlot
-                                                    : timeSlot?.status === 'H'
-                                                      ? styles.activeTakenSlot
-                                                      : styles.defaultSlot;
+                                          const cellClass = getCellClass(
+                                            timeSlot
+                                        );
 
                                           return (
                                               <td
