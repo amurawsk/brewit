@@ -1288,10 +1288,9 @@ class OrderRateView(APIView):
     """
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request, order_id):
         user = request.user
         try:
-            order_id = request.data.get("order_id")
             order = Order.objects.get(id=order_id)
             profile = Profile.objects.get(user=user)
             if profile.contract_brewery != order.contract_brewery:
