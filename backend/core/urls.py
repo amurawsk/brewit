@@ -83,7 +83,7 @@ urlpatterns = [
         "recipies/",
         views.RecipiesView.as_view(),
         name="recipies_list"
-    )
+    ),
 
     path("breweries/commercial/with-devices/", views.BreweryWithDevicesNumberView.as_view(), name="brewery_with_devices"),
 ]
