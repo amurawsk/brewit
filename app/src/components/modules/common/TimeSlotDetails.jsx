@@ -48,14 +48,24 @@ const TimeSlotDetails = ({
     };
 
     useEffect(() => {
-        if (selectedSlot && selectedSlot.order !== null) {
-            // TODO change to contract brewery info (from order_id)
-            setContractBrewery({
-                name: 'Mock browar 1',
-                owners_name: 'Jan Kowalski',
-                email: 'example@gmail.com',
-                phone_number: '123456789',
-            });
+        const getData = async () => {
+            try {
+                const response = await api.get(
+                    `orders/${selectedSlot.order}/contract-brewery/details/`
+                );
+                console.log(response);
+                if (response.status === 200) {
+                    setContractBrewery(response.data)
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        
+        if (selectedSlot && selectedSlot.order !== null) {    
+            getData();
         } else {
             setContractBrewery(null);
         }
@@ -245,15 +255,15 @@ const TimeSlotDetails = ({
                                             </p>
                                             <p>
                                                 <strong>Właściciel:</strong>{' '}
-                                                {contractBrewery.owners_name}
+                                                {contractBrewery.owner_name}
                                             </p>
                                             <p>
                                                 <strong>Email:</strong>{' '}
-                                                {contractBrewery.email}
+                                                {contractBrewery.contract_email}
                                             </p>
                                             <p>
                                                 <strong>Telefon:</strong>{' '}
-                                                {contractBrewery.phone_number}
+                                                {contractBrewery.contract_phone_number}
                                             </p>
                                         </>
                                     ) : (
