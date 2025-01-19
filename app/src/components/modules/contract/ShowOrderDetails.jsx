@@ -5,6 +5,8 @@ import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
 
+import api from '../../../api.js';
+
 const ShowDeviceDetails = ({
     isPanelOpen,
     setIsPanelOpen,
@@ -32,12 +34,47 @@ const ShowDeviceDetails = ({
         setIsModalOpen(true);
     };
 
+    const cancelOrder = async () => {
+        try {
+            const response = await api.get(`orders/${order.id}/cancel/`);
+            console.log(response);
+            if (response.status === 200) {
+                showNotification('Pomyślnie anulowano!');
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
+            } else {
+                showNotification('Zamówienie nie mogło być anulowane!');
+                console.log(response);
+            }
+        } catch (error) {
+            showNotification('Wystąpił błąd!');
+            console.log(error);
+        }
+    };
+
+    const withdrawOrder = async () => {
+        try {
+            const response = await api.get(`orders/${order.id}/withdraw/`);
+            console.log(response);
+            if (response.status === 200) {
+                showNotification('Pomyślnie wycofano!');
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
+            } else {
+                showNotification('Zamówienie nie mogło być wycofane!');
+                console.log(response);
+            }
+        } catch (error) {
+            showNotification('Wystąpił błąd!');
+            console.log(error);
+        }
+    };
+
     const confirmAction = () => {
-        // TODO mock
         if (action === 'cancel') {
-            console.log('Zlecenie anulowane', order.id);
+            cancelOrder();
         } else if (action === 'reject') {
-            console.log('Zlecenie wycofane', order.id);
+            withdrawOrder();
         }
         setIsModalOpen(false);
         closePanel();

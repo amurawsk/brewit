@@ -5,9 +5,8 @@ import ShowOrderDetails from './ShowOrderDetails';
 
 import styles from './ShowOrders.module.css';
 
-const ShowOrders = ({ orders }) => {
+const ShowOrders = ({ orders, isPanelOpen, setIsPanelOpen }) => {
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     const openPanel = () => {
         setIsPanelOpen(true);
@@ -34,7 +33,7 @@ const ShowOrders = ({ orders }) => {
                             <h2>Zlecenie #{order.id}</h2>
                             <p>
                                 Zleceniobiorca:{' '}
-                                <b>{order.commercial_brewery_name}</b>
+                                <b>{order.commercial_brewery.name}</b>
                             </p>
                             <p>
                                 Utworzone dnia:{' '}

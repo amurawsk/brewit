@@ -44,16 +44,15 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             console.log(response);
             if (response.status === 200) {
                 showNotification('Pomyślnie zaakceptowano!');
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
             } else {
-                showNotification('Wystąpił błąd!');
+                showNotification('Zamówienie nie mogło zostać zaakceptowane!');
                 console.log(response);
             }
         } catch (error) {
             showNotification('Wystąpił błąd!');
             console.log(error);
-        } finally {
-            setIsModalOpen(false);
-            setIsPanelOpen(false);
         }
     };
 
@@ -63,23 +62,39 @@ const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder }) => {
             console.log(response);
             if (response.status === 200) {
                 showNotification('Pomyślnie odrzucono!');
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
             } else {
-                showNotification('Wystąpił błąd!');
+                showNotification('Zamówienie nie mogło zostać odrzucone!');
                 console.log(response);
             }
         } catch (error) {
             showNotification('Wystąpił błąd!');
             console.log(error);
-        } finally {
-            setIsModalOpen(false);
-            setIsPanelOpen(false);
+        }
+    };
+
+    const cancelOrder = async () => {
+        try {
+            const response = await api.get(`orders/${order.id}/cancel/`);
+            console.log(response);
+            if (response.status === 200) {
+                showNotification('Pomyślnie anulowano!');
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
+            } else {
+                showNotification('Zamówienie nie mogło być anulowane!');
+                console.log(response);
+            }
+        } catch (error) {
+            showNotification('Wystąpił błąd!');
+            console.log(error);
         }
     };
 
     const confirmAction = () => {
         if (action === 'cancel') {
-            // TODO
-            console.log('Zlecenie anulowane', order.id);
+            cancelOrder();
         } else if (action === 'reject') {
             rejectOrder();
         } else if (action === 'accept') {

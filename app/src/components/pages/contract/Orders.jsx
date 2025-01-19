@@ -17,6 +17,7 @@ const Orders = () => {
     const status = location.state?.orderType || 'C';
     const [activeStatus, setActiveStatus] = useState(status);
     const [orders, setOrders] = useState([]);
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
 
     useEffect(() => {
         const getData = async () => {
@@ -34,7 +35,7 @@ const Orders = () => {
             }
         };
         getData();
-    }, [activeStatus]);
+    }, [activeStatus, isPanelOpen]);
 
     return (
         <div>
@@ -49,7 +50,11 @@ const Orders = () => {
                             setActiveStatus={setActiveStatus}
                         />
                     </div>
-                    <ShowOrders orders={orders} />
+                    <ShowOrders
+                        orders={orders}
+                        isPanelOpen={isPanelOpen}
+                        setIsPanelOpen={setIsPanelOpen}
+                    />
                 </div>
             </div>
         </div>
