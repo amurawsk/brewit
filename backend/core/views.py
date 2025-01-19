@@ -15,6 +15,7 @@ from .serializers import (
     DeviceWithFreeTimeSlotsSerializer,
     DeviceWithTimeSlotsSerializer,
     LoginSerializer,
+    OrderRateSerializer,
     OrderSerializer,
     OrderWithTimeSlotsAndCommercialInfoSerializer,
     OrderWithTimeSlotsAndContractInfoSerializer,
@@ -1271,6 +1272,62 @@ class OrderCancelView(APIView):
         )
 
 
+class OrderRateView(APIView):
+    """View for rating an order. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the order id and rating, validates the data and rates the order.
+            If the order rating is successful, it returns a success message.
+            If the order rating fails, it returns validation errors.
+
+    Responses:
+        - 200 OK: If the order is successfully rated, the response contains a success message.
+        - 400 Bad Request: If the order rating fails, the response contains error messages related to the rating data.
+        - 403 Forbidden: If the user is not authorized to rate this order, the response contains an error message.
+        - 404 Not Found: If the order or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        try:
+            order_id = request.data.get("order_id")
+            order = Order.objects.get(id=order_id)
+            profile = Profile.objects.get(user=user)
+            if profile.contract_brewery != order.contract_brewery:
+                return Response(
+                    {"error": "Unauthorized to rate this order."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if order.status != "P":
+            return Response(
+                {"error": "Order is not past. Cannot rate this order."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        data = {"rate": request.data.get("rate")}
+
+        serializer = OrderRateSerializer(order, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Order successfully rated."},
+                status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class OrderListCommercialView(APIView):
     """View for listing orders with specific status for a commercial brewery. Class allows only authenticated users to access this view.
 
@@ -1378,6 +1435,48 @@ class OrderListContractView(APIView):
         orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
         serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(orders, many=True)
         return Response(serializer.data, status=200)
+
+
+class OrderContractDashboardView(APIView):
+    """View for listing up to 3 newest N and C orders for a contract brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of up to 3 newest N and C orders for the brewery.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of 3 newest N and C orders for the brewery.
+        - 403 Forbidden: If the user is not authorized to view orders for this brewery, the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        try:
+            profile = user.profile
+            contract_brewery = profile.contract_brewery
+            if not contract_brewery:
+                return Response(
+                    {"error": "Unauthorized to view orders for this brewery."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        new_orders = Order.objects.filter(contract_brewery=contract_brewery, status="N").order_by("-created_at")[:3]
+        confirmed_orders = Order.objects.filter(contract_brewery=contract_brewery, status="C").order_by("-created_at")[:3]
+
+        new_serializer = OrderWithTimeSlotsSerializer(new_orders, many=True)
+        confirmed_serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(confirmed_orders, many=True)
+        data = {
+            "new_orders": new_serializer.data,
+            "confirmed_orders": confirmed_serializer.data
+        }
+        return Response(data, status=200)
 
 
 class BreweryWithDevicesNumberView(APIView):

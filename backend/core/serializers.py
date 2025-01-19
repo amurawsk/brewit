@@ -360,6 +360,9 @@ class LoginSerializer(serializers.Serializer):
             user_type = "contract_brewery"
             user_id = profile.id
             brewery_id = profile.contract_brewery.id
+        else:
+            user_type = "intermediary_company"
+            user_id = profile.id
 
         return {
             "user": user,
@@ -555,3 +558,14 @@ class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
         if representation['devices_number'] > 0:
             return representation
         return None
+
+
+class OrderRateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['rate']
+
+    def validate_rate(self, value):
+        if value not in [True, False]:
+            raise serializers.ValidationError("Rate must be a boolean value.")
+        return value

@@ -45,6 +45,7 @@ urlpatterns = [
     path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
     path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
     path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
+    path("orders/<int:order_id>/rate/", views.OrderRateView.as_view(), name="order_rate"),
     path("orders/device/<int:device_id>/all/", views.OrderListForDeviceView.as_view(), name="order_list_device"),
     path(
         "orders/commercial/status/<str:status>/",
@@ -57,6 +58,7 @@ urlpatterns = [
         views.OrderListContractView.as_view(),
         name="order_list_contract"
     ),
+    path("orders/contract/dashboard/", views.OrderContractDashboardView.as_view(), name="contract_dashboard"),
     path(
         "commercial-brewery/<int:brewery_id>/",
         views.CommercialBreweryInfoView.as_view(),
@@ -97,7 +99,6 @@ urlpatterns = [
         views.RecipiesView.as_view(),
         name="recipies_list"
     ),
-
     path(
         "breweries/commercial/with-devices/",
         views.BreweryWithDevicesNumberView.as_view(),
