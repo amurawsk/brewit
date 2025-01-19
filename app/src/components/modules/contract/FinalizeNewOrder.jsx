@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import NewOrderTimeSlotsTimeline from './NewOrderTimeSlotsTimeline';
@@ -20,6 +20,29 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
     const [beerVolume, setBeerVolume] = useState('');
     const [orderDescription, setOrderDescription] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [recipes, setRecipes] = useState([]);
+    const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+
+    useEffect(() => {
+        const getRecipes = async () => {
+            setIsLoading(true);
+            try { // TODO enter proper url
+                const response = await api.get(``);
+                if (response.status === 200) {
+                    setIsLoading(false);
+                    setRecipes(response.data);
+                } else {
+                    setIsLoading(false);
+                    alert('Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.');
+                }
+            } catch (error) {
+                setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            }
+        };
+        setRecipes([{id: 1, name: 'pierwza'}, { id: 2, name: 'druga'}])
+        // getRecipes();
+    }, [])
 
     const handleSubmit = (e) => {
         const createOrder = async () => {
@@ -30,6 +53,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                     beer_volume: beerVolume,
                     description: orderDescription,
                     time_slot_ids: timeSlots.map((slot) => slot.timeSlotId),
+                    recipe_id: selectedRecipeId
                 });
                 if (response.status === 201) {
                     setIsLoading(false);
@@ -38,7 +62,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                     });
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas dodawania urządzenia!');
+                    alert('Błąd podczas tworzenia zlecenia!');
                 }
             } catch (error) {
                 setIsLoading(false);
@@ -57,6 +81,11 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
         navigate('/contract/orders/add/select-timeslots', {
             state: { brewery: selectedBrewery, timeSlots: timeSlots },
         });
+    };
+
+    const handleInputChange = (e) => {
+        const id = e.target.value;
+        setSelectedRecipeId(id);
     };
 
     return (
@@ -140,6 +169,23 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                         value={orderDescription}
                         onChange={(e) => setOrderDescription(e.target.value)}
                     />
+                    <label className={styles.orderFormLabel} htmlFor="name">
+                        <b>Dodaj recepturę: </b>
+                    </label>
+                    <select
+                        className={styles.dropboxInput}
+                        onChange={handleInputChange}>
+                        <option value={null}>
+                            Brak receptury
+                        </option>
+                        {recipes.map((recipe) => (
+                            <option key={recipe.id} value={recipe.id}>
+                                {' '}
+                                {recipe.name}
+                            </option>
+                        ))}
+                    </select>
+
                     <div className={styles.newOrderButtonGroup}>
                         <button
                             type="button"
