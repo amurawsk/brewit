@@ -544,6 +544,51 @@ class ContractBreweryInfoView(APIView):
                 status=404
             )
 
+    def post(self, request, brewery_id):
+        profile = request.user.profile
+        try:
+            brewery = ContractBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.ContractBreweryUpdateSerializer(
+                data=request.data
+            )
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            if (
+                (profile.contract_brewery != brewery
+                 and (profile.commercial_brewery is not None
+                      or profile.contract_brewery is not None)
+                 )
+            ):
+                return Response(
+                    {
+                        "error": ("User is not authorized to change this"
+                                  " brewery's informations")
+                    }
+                )
+            brewery.name = serializer.data["name"]
+            brewery.contract_email = serializer.data["email"]
+            brewery.contract_phone_number = serializer.data["phone_number"]
+            brewery.owner_name = serializer.data["owner_name"]
+            brewery.description = serializer.data["description"]
+            brewery.save()
+            return Response(
+                {"message": "Contract brewery's info updated successfully"},
+                status=status.HTTP_200_OK
+            )
+        except ContractBrewery.DoesNotExist:
+            return Response(
+                {"error": 'Contract brewery not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except DataError:
+            return Response(
+                {"error": "Provided data did not match requirements."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
 
 class CommercialAccountInfoView(APIView):
     """View for listing commercial account's info.

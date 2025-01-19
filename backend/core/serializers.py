@@ -90,6 +90,14 @@ class CommercialBreweryUpdateSerializer(serializers.Serializer):
     description = serializers.CharField()
 
 
+class ContractBreweryUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    phone_number = serializers.CharField()
+    owner_name = serializers.CharField()
+    description = serializers.CharField()
+
+
 class ContractBreweryInfoSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='contract_email')
     ceo = serializers.CharField(source='owner_name')
