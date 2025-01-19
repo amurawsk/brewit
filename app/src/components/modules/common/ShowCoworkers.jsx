@@ -12,8 +12,8 @@ import api from '../../../api.js';
  * If coworkers list is empty, component displays proper info
  * @param coworkers - coworkers list
  */
-const ShowCoworkers = ({ coworkers }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+const ShowCoworkers = ({ coworkers, isModalOpen, setIsModalOpen }) => {
+    // const [isModalOpen, setIsModalOpen] = useState(false);
     const [userId, setUserId] = useState(null);
 
     const closePanel = () => {
@@ -31,7 +31,7 @@ const ShowCoworkers = ({ coworkers }) => {
             const response = await api.post(`coworkers/remove/`, {
                 coworker_id: userId
             });
-            if (response.status === 201) {
+            if (response.status === 200) {
                 
             } else {
                 console.error('Error:', response);

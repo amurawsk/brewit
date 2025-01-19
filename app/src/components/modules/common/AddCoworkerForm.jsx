@@ -72,7 +72,7 @@ const AddCoworkerForm = () => {
                 </label>
                 <input
                     className={styles.addCoworkerInput}
-                    type="text"
+                    type="password"
                     name="password"
                     maxLength={100}
                     value={formData.password}

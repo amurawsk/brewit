@@ -16,6 +16,7 @@ const Coworkers = () => {
     const navigate = useNavigate();
     const addCoworker = () => navigate('/commercial/coworkers/add');
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [coworkers, setCoworkers] = useState(null);
 
     useEffect(() => {
@@ -34,8 +35,10 @@ const Coworkers = () => {
                 console.log('Error fetching devices:', error);
             }
         };
-        getData();
-    }, []);
+        if (!isModalOpen) {
+            getData();
+        }
+    }, [isModalOpen]);
 
     return (
         <div>
@@ -54,7 +57,7 @@ const Coworkers = () => {
                         buttonFunction={addCoworker}
                     />
                     {coworkers !== null && (
-                        <ShowCoworkers coworkers={coworkers} />
+                        <ShowCoworkers coworkers={coworkers} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
                     )}
                 </div>
             </div>
