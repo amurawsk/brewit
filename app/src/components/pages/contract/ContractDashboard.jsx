@@ -2,6 +2,7 @@ import React from 'react';
 
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
+import ContractDashboardContent from '../../modules/contract/ContractDashboardContent.jsx';
 
 import styles from './ContractDashboard.module.css';
 
@@ -15,8 +16,7 @@ const ContractDashboard = () => {
             <div className={styles.appContainer}>
                 <ContractSidebar />
                 <div className={styles.content}>
-                    {/* TODO */}
-                    Witaj w aplikacji
+                    <ContractDashboardContent />
                 </div>
             </div>
         </div>

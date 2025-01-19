@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import PageTitle from '../../utils/PageTitle';
 import ShowOrderDetails from '../commercial/ShowOrderDetails';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './ContractDashboardContent.module.css';
+
+import api from '../../../api.js';
 
 const ContractDashboardContent = () => {
     const navigate = useNavigate();
@@ -14,6 +17,30 @@ const ContractDashboardContent = () => {
 
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
+    const [newOrders, setNewOrders] = useState(null);
+    const [currentOrders, setCurrentOrders] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const getData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await api.get(`orders/contract/dashboard/`);
+                if (response.status === 200) {
+                    setIsLoading(false);
+                    setNewOrders(response.data.new_orders);
+                    setCurrentOrders(response.data.confirmed_orders);
+                } else {
+                    setIsLoading(false);
+                    alert('Błąd podczas pobierania zamówień! Odśwież stronę i spróbuj ponownie.');
+                }
+            } catch (error) {
+                setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            }
+        };
+        getData();
+    }, []);
 
     const handleOrderClicked = (order) => {
         setSelectedOrder(order);
@@ -21,205 +48,14 @@ const ContractDashboardContent = () => {
     };
 
     const viewAllNewOrders = () => {
-        navigate('/commercial/orders', {
+        navigate('/contract/orders', {
             state: { orderType: 'N' },
         });
     };
 
-    // TODO mock
-    const newOrders = [
-        {
-            id: 13,
-            created_at: '2024-01-01T10:00:00.000Z',
-            ended_at: '2024-01-01T10:00:00.000Z',
-            beer_type: 'GHJ',
-            beer_volume: 120,
-            status: 'N',
-            contract_brewery_name: 'Januszex',
-            contract_brewery_owner_name: 'Jan Kowalski',
-            contract_brewery_email: 'example@gmail.com',
-            contract_brewery_phone_number: '123456789',
-            rate: null,
-            price: 500,
-            timeslots: [
-                {
-                    start_timestamp: '2026-01-04T08:00:00.000Z',
-                    end_timestamp: '2026-01-04T10:30:00.000Z',
-                    device_name: 'Maszyna Z',
-                    device_serial_number: 'SN-005',
-                },
-            ],
-        },
-        {
-            id: 13,
-            created_at: '2024-01-01T10:00:00.000Z',
-            ended_at: '2024-01-01T10:00:00.000Z',
-            beer_type: 'GHJ',
-            beer_volume: 120,
-            status: 'N',
-            contract_brewery_name: 'Januszex',
-            contract_brewery_owner_name: 'Jan Kowalski',
-            contract_brewery_email: 'example@gmail.com',
-            contract_brewery_phone_number: '123456789',
-            rate: null,
-            price: 500,
-            timeslots: [
-                {
-                    start_timestamp: '2026-01-04T08:00:00.000Z',
-                    end_timestamp: '2026-01-04T10:30:00.000Z',
-                    device_name: 'Maszyna Z',
-                    device_serial_number: 'SN-005',
-                },
-            ],
-        },
-        {
-            id: 13,
-            created_at: '2024-01-01T10:00:00.000Z',
-            ended_at: '2024-01-01T10:00:00.000Z',
-            beer_type: 'GHJ',
-            beer_volume: 120,
-            status: 'N',
-            contract_brewery_name: 'Januszex',
-            contract_brewery_owner_name: 'Jan Kowalski',
-            contract_brewery_email: 'example@gmail.com',
-            contract_brewery_phone_number: '123456789',
-            rate: null,
-            price: 500,
-            timeslots: [
-                {
-                    start_timestamp: '2026-01-04T08:00:00.000Z',
-                    end_timestamp: '2026-01-04T10:30:00.000Z',
-                    device_name: 'Maszyna Z',
-                    device_serial_number: 'SN-005',
-                },
-            ],
-        },
-    ];
-    const currentOrders = [
-        {
-            id: 1,
-            created_at: '2024-01-01T10:00:00.000Z',
-            ended_at: '2024-01-01T10:00:00.000Z',
-            beer_type: 'ABC',
-            beer_volume: 120,
-            status: 'C',
-            contract_brewery_name: 'TwojePiwoPL',
-            contract_brewery_owner_name: 'Jan Kowalski',
-            contract_brewery_email: 'example@gmail.com',
-            contract_brewery_phone_number: '123456789',
-            rate: null,
-            price: 500,
-            timeslots: [
-                {
-                    start_timestamp: '2025-01-01T08:00:00.000Z',
-                    end_timestamp: '2025-01-01T10:00:00.000Z',
-                    device_name: 'Maszyna A',
-                    device_serial_number: 'SN-001',
-                },
-                {
-                    start_timestamp: '2025-01-01T10:30:00.000Z',
-                    end_timestamp: '2025-01-01T12:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-01-01T10:30:00.000Z',
-                    end_timestamp: '2025-01-01T19:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-01-02T10:30:00.000Z',
-                    end_timestamp: '2025-01-02T12:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-01-03T10:30:00.000Z',
-                    end_timestamp: '2025-01-03T19:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-01-04T10:30:00.000Z',
-                    end_timestamp: '2025-01-04T19:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-01-04T10:30:00.000Z',
-                    end_timestamp: '2025-01-04T19:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-01-04T10:30:00.000Z',
-                    end_timestamp: '2025-01-04T19:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-01-04T10:30:00.000Z',
-                    end_timestamp: '2025-01-04T19:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-                {
-                    start_timestamp: '2025-03-04T10:00:00.000Z',
-                    end_timestamp: '2025-03-04T19:00:00.000Z',
-                    device_name: 'Maszyna B',
-                    device_serial_number: 'SN-002',
-                },
-            ],
-        },
-        {
-            id: 2,
-            created_at: '2024-01-01T10:00:00.000Z',
-            ended_at: '2024-01-01T10:00:00.000Z',
-            beer_type: 'DEF',
-            beer_volume: 120,
-            status: 'C',
-            contract_brewery_name: 'BeerCompany123',
-            contract_brewery_owner_name: 'Jan Kowalski',
-            contract_brewery_email: 'example@gmail.com',
-            contract_brewery_phone_number: '123456789',
-            rate: true,
-            price: 500,
-            timeslots: [
-                {
-                    start_timestamp: '2025-01-02T09:00:00.000Z',
-                    end_timestamp: '2025-03-02T11:00:00.000Z',
-                    device_name: 'Maszyna X',
-                    device_serial_number: 'SN-003',
-                },
-            ],
-        },
-        {
-            id: 2,
-            created_at: '2024-01-01T10:00:00.000Z',
-            ended_at: '2024-01-01T10:00:00.000Z',
-            beer_type: 'DEF',
-            beer_volume: 120,
-            status: 'C',
-            contract_brewery_name: 'BeerCompany123',
-            contract_brewery_owner_name: 'Jan Kowalski',
-            contract_brewery_email: 'example@gmail.com',
-            contract_brewery_phone_number: '123456789',
-            rate: true,
-            price: 500,
-            timeslots: [
-                {
-                    start_timestamp: '2025-01-02T09:00:00.000Z',
-                    end_timestamp: '2025-03-05T11:00:00.000Z',
-                    device_name: 'Maszyna X',
-                    device_serial_number: 'SN-003',
-                },
-            ],
-        },
-    ];
-
     return (
         <div className={styles.dashboard}>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.TitleButtonContainer}>
                 <PageTitle text="Szybki dostęp" />
                 <div className={styles.actionBar}>
