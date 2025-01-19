@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import styles from './FinalizeNewOrder.module.css';
 import NewOrderTimeSlotsTimeline from './NewOrderTimeSlotsTimeline';
 
+import api from '../../../api.js';
+
 /**
  * FinalizeNewOrder
  *
@@ -16,17 +18,32 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
     const [beerVolume, setBeerVolume] = useState('');
     const [orderDescription, setOrderDescription] = useState('');
 
+    console.log(timeSlots)
+
     const handleSubmit = (e) => {
-        // TODO connect
+        const createOrder = async () => {
+            try {
+                const response = await api.post(`orders/add/`, {
+                    "beer_type": beerType,
+                    "beer_volume": beerVolume,
+                    "description": orderDescription,
+                    "time_slot_ids": timeSlots.map(slot => slot.timeSlotId)
+                });
+                if (response.status === 201) {
+                    navigate('/contract/orders', {
+                        state: { orderType: 'N' },
+                    });
+                } else {
+                    console.error('Error:', response);
+                    alert('Błąd podczas dodawania urządzenia!');
+                }
+            } catch (error) {
+                console.error('Error fetching devices:', error);
+                alert('Błąd sieci! Spróbuj ponownie później.');
+            }
+        }
         e.preventDefault();
-        console.log({
-            beerType,
-            beerVolume,
-            orderDescription,
-            selectedBrewery,
-            timeSlots,
-        });
-        alert('Zamówienie zostało złożone!');
+        createOrder();        
     };
 
     const handleReset = () => {
@@ -47,10 +64,10 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                     Nazwa browaru: <b>{selectedBrewery.name}</b>
                 </p>
                 <p>
-                    Email kontaktowy: <b>{selectedBrewery.email}</b>
+                    Email kontaktowy: <b>{selectedBrewery.contract_email}</b>
                 </p>
                 <p>
-                    Telefon kontaktowy: <b>{selectedBrewery.phone_number}</b>
+                    Telefon kontaktowy: <b>{selectedBrewery.contract_phone_number}</b>
                 </p>
                 <p>
                     NIP: <b>{selectedBrewery.nip}</b>

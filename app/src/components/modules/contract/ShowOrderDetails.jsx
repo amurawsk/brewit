@@ -33,7 +33,7 @@ const ShowDeviceDetails = ({
     };
 
     const confirmAction = () => {
-        // TODO
+        // TODO mock
         if (action === 'cancel') {
             console.log('Zlecenie anulowane', order.id);
         } else if (action === 'reject') {
@@ -49,7 +49,7 @@ const ShowDeviceDetails = ({
     };
 
     const rateOrder = () => {
-        // TODO
+        // TODO mock
     };
 
     return (
@@ -93,10 +93,10 @@ const ShowDeviceDetails = ({
                                     {order.commercial_brewery.name}
                                 </p>
                                 <p>NIP: {order.commercial_brewery.nip}</p>
-                                <p>Email: {order.commercial_brewery.email}</p>
+                                <p>Email: {order.commercial_brewery.contract_email}</p>
                                 <p>
                                     Numer telefonu:{' '}
-                                    {order.commercial_brewery.phone_number}
+                                    {order.commercial_brewery.contract_phone_number}
                                 </p>
                             </div>
                             <div className={styles.detailBox}>
