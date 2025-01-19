@@ -298,8 +298,3 @@ class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
         if representation['devices_number'] > 0:
             return representation
         return None
-
-    @classmethod
-    def setup_eager_loading(cls, queryset):
-        queryset = queryset.annotate(devices_number=count('device')).order_by('-devices_number')
-        return queryset

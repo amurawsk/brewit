@@ -1150,6 +1150,6 @@ class BreweryWithDevicesNumberView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        breweries = CommercialBrewery.objects.all()
+        breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number')
         serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
         return Response(serializer.data, status=200)
