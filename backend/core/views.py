@@ -950,8 +950,8 @@ class OrderAcceptView(APIView):
         try:
             order = Order.objects.get(id=order_id)
             profile = Profile.objects.get(user=user)
-            time_slot = TimeSlot.objects.filter(order=order).first()
-            if profile.commercial_brewery != time_slot.device.commercial_brewery:
+            time_slots = TimeSlot.objects.filter(order=order)
+            if profile.commercial_brewery != time_slots.first().device.commercial_brewery:
                 return Response(
                     {"error": "Unauthorized to accept this order."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -975,8 +975,7 @@ class OrderAcceptView(APIView):
 
         order.status = "C"
         order.save()
-        time_slot.status = "H"
-        time_slot.save()
+        time_slots.update(status="H")
         return Response({"message": "Order successfully accepted."}, status=status.HTTP_200_OK)
 
 
