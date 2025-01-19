@@ -27,8 +27,8 @@ const CommercialDashboardContent = () => {
             try {
                 const response = await api.get(`orders/commercial/dashboard/`);
                 if (response.status === 200) {
-                    setNewOrders(response.data);
-                    setCurrentOrders(response.data);
+                    setNewOrders(response.data.new_orders);
+                    setCurrentOrders(response.data.confirmed_orders);
                 } else {
                     console.log(response);
                 }
