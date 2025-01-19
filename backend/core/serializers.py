@@ -158,12 +158,14 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
 
 
 class AccountInfoSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="user.pk")
     username = serializers.CharField(source="user.username")
     added_at = serializers.DateTimeField(source="user.date_joined")
 
     class Meta:
         model = Profile
         fields = [
+            "id",
             "username",
             "added_at"
         ]
