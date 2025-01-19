@@ -1306,7 +1306,13 @@ class OrderRateView(APIView):
                 status=status.HTTP_404_NOT_FOUND,
             )
 
-        data = {"rate": request.data.get("rating")}
+        if order.status != "P":
+            return Response(
+                {"error": "Order is not past. Cannot rate this order."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        data = {"rate": request.data.get("rate")}
 
         serializer = OrderRateSerializer(order, data=data, partial=True)
         if serializer.is_valid():
