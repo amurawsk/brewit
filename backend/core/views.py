@@ -5,12 +5,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Device, Order, Profile, TimeSlot, CommercialBrewery, ContractBrewery, Recipe
+from django.db.models import Count
 from .serializers import (
+    BreweryWithDevicesNumberSerializer,
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
     DeviceWithTimeSlotsSerializer,
     LoginSerializer,
     OrderSerializer,
+    OrderWithTimeSlotsAndCommercialInfoSerializer,
+    OrderWithTimeSlotsAndContractInfoSerializer,
     OrderWithTimeSlotsSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
@@ -750,6 +754,45 @@ class OrderDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class OrderListForDeviceView(APIView):
+    """View for listing orders for a specific device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the device id, validates it and returns a list of orders for the device.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of orders for the device.
+        - 403 Forbidden: If the user is not authorized to view orders for this device, the response contains an error message.
+        - 404 Not Found: If the device or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, device_id):
+        user = request.user
+        try:
+            device = Device.objects.get(id=device_id)
+            profile = Profile.objects.get(user=user)
+            if profile.commercial_brewery != device.commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to view orders for this device."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Device.DoesNotExist:
+            return Response(
+                {"error": "Device not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        orders = Order.objects.filter(timeslot__device=device)
+        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class OrderAcceptView(APIView):
     """View for accepting an order. Class allows only authenticated users to access this view.
 
@@ -857,7 +900,6 @@ class OrderRejectView(APIView):
                 order=None
             )
             new_time_slots.append(new_time_slot)
-        time_slots.update(is_deleted=True)
 
         time_slots.update(is_deleted=True)
         TimeSlot.objects.bulk_create(new_time_slots)
@@ -920,6 +962,77 @@ class OrderWithdrawView(APIView):
         )
 
 
+class OrderCancelView(APIView):
+    """View for cancelling an order. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the order id, validates it and cancels the order.
+            If the order cancellation is successful, it returns a success message.
+            If the order cancellation fails, it returns an error message.
+
+    Responses:
+        - 200 OK: If the order is successfully cancelled, the response contains a success message.
+        - 400 Bad Request: If the order is not confirmed, the response contains an error message.
+        - 403 Forbidden: If the user is not authorized to cancel this order, the response contains an error message.
+        - 404 Not Found: If the order or user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, order_id):
+        user = request.user
+        try:
+            order = Order.objects.get(id=order_id)
+            profile = Profile.objects.get(user=user)
+            if (
+                profile.contract_brewery != order.contract_brewery and
+                profile.commercial_brewery != order.timeslot.device.commercial_brewery
+            ):
+                return Response(
+                    {"error": "Unauthorized to cancel this order."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Order.DoesNotExist:
+            return Response(
+                {"error": "Order not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        if order.status != "C":
+            return Response(
+                {"error": "Order is not confirmed. Cannot cancel this order."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        order.status = "R"
+        order.ended_at = datetime.now()
+        order.save()
+
+        time_slots = TimeSlot.objects.filter(order=order)
+        new_time_slots = []
+        for time_slot in time_slots:
+            new_time_slot = TimeSlot(
+                price=time_slot.price,
+                start_timestamp=time_slot.start_timestamp,
+                end_timestamp=time_slot.end_timestamp,
+                device=time_slot.device,
+                order=None
+            )
+            new_time_slots.append(new_time_slot)
+
+        time_slots.update(is_deleted=True)
+        TimeSlot.objects.bulk_create(new_time_slots)
+
+        return Response(
+            {"message": "Order successfully cancelled."},
+            status=status.HTTP_200_OK
+        )
+
+
 class OrderListCommercialView(APIView):
     """View for listing orders with specific status for a commercial brewery. Class allows only authenticated users to access this view.
 
@@ -950,8 +1063,49 @@ class OrderListCommercialView(APIView):
             )
 
         orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status=status)
-        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
+        serializer = OrderWithTimeSlotsAndContractInfoSerializer(orders, many=True)
         return Response(serializer.data, status=200)
+
+
+class OrderCommercialDashboardView(APIView):
+    """View for listing up to 3 newest N and C orders for a commercial brewery. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of up to 3 newest N and C orders for the brewery.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of 3 newest N and C orders for the brewery.
+        - 403 Forbidden: If the user is not authorized to view orders for this brewery, the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        try:
+            profile = user.profile
+            commercial_brewery = profile.commercial_brewery
+            if not commercial_brewery:
+                return Response(
+                    {"error": "Unauthorized to view orders for this brewery."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        new_orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status="N").order_by("-created_at")[:3]
+        confirmed_orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status="C").order_by("-created_at")[:3]
+
+        new_serializer = OrderWithTimeSlotsSerializer(new_orders, many=True)
+        confirmed_serializer = OrderWithTimeSlotsAndContractInfoSerializer(confirmed_orders, many=True)
+        data = {
+            "new_orders": new_serializer.data,
+            "confirmed_orders": confirmed_serializer.data
+        }
+        return Response(data, status=200)
 
 
 class OrderListContractView(APIView):
@@ -984,7 +1138,24 @@ class OrderListContractView(APIView):
             )
 
         orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
-        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
+        serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(orders, many=True)
+        return Response(serializer.data, status=200)
+
+
+class BreweryWithDevicesNumberView(APIView):
+    """View for listing all breweries with the number of devices for each brewery with any device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all breweries with the number of devices for each brewery with any device.
+
+    Responses:
+        - 200 OK: If the breweries are successfully retrieved, the response contains a list of all breweries with the number of devices for each brewery.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number')
+        serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
         return Response(serializer.data, status=200)
 
 class CommercialBreweryInfoView(APIView):

@@ -1,3 +1,4 @@
+from itertools import count
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -398,7 +399,6 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
     beer_volume = MeasurementField()
     time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
-    contract_brewery = ContractBrewerySerializer()
     total_price = serializers.SerializerMethodField()
 
     class Meta:
@@ -411,3 +411,89 @@ class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
 
     def get_total_price(self, obj):
         return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
+
+
+class OrderWithTimeSlotsAndContractInfoSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    total_price = serializers.SerializerMethodField()
+    contract_brewery = ContractBrewerySerializer()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at', 'contract_brewery',
+            'recipe', 'time_slots', 'total_price'
+        ]
+
+    def get_total_price(self, obj):
+        return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
+
+
+class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    total_price = serializers.SerializerMethodField()
+    commercial_brewery = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at', 'commercial_brewery',
+            'recipe', 'time_slots', 'total_price'
+        ]
+
+    def get_total_price(self, obj):
+        return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
+
+    def get_commercial_brewery(self, obj):
+        # basically any time_slot.device.commercial_brewery
+        brewery = obj.timeslot_set.first().device.commercial_brewery
+        return {
+            "id": brewery.id,
+            "name": brewery.name,
+            "contract_phone_number": brewery.contract_phone_number,
+            "contract_email": brewery.contract_email,
+            "description": brewery.description,
+            "nip": brewery.nip,
+            "address": brewery.address
+        }
+
+
+class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
+    devices_number = serializers.SerializerMethodField()
+    bt_number = serializers.SerializerMethodField()
+    ft_number = serializers.SerializerMethodField()
+    ac_number = serializers.SerializerMethodField()
+    be_number = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CommercialBrewery
+        fields = [
+            'id', 'name', 'nip', 'address',
+            'contract_phone_number', 'contract_email', 'description',
+            'devices_number', 'bt_number', 'ft_number', 'ac_number', 'be_number'
+        ]
+
+    def get_devices_number(self, obj):
+        return obj.device_set.count()
+
+    def get_bt_number(self, obj):
+        return obj.device_set.filter(device_type='BT').count()
+
+    def get_ft_number(self, obj):
+        return obj.device_set.filter(device_type='FT').count()
+
+    def get_ac_number(self, obj):
+        return obj.device_set.filter(device_type='AC').count()
+
+    def get_be_number(self, obj):
+        return obj.device_set.filter(device_type='BE').count()
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if representation['devices_number'] > 0:
+            return representation
+        return None
