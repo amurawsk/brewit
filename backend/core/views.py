@@ -10,7 +10,8 @@ from .models import (
     CommercialBrewery,
     ContractBrewery,
     Recipe,
-    Order
+    Order,
+    Stage
 )
 from .serializers import (
     CheckUsernameUniqueSerializer,
@@ -835,6 +836,15 @@ class RecipiesView(APIView):
         - 400 Bad Request: If the request body couldn't get properly serialized
         - 403 Forbidden: If the user is not authorized or is not a contract
         brewery employee
+
+    - DELETE: Accepts "id", validates and deletes
+
+    Response:
+        - 200 OK: If the recipe has been deleted
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the recipe was not found
     """
 
     permission_classes = [IsAuthenticated]
