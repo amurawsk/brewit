@@ -7,42 +7,31 @@ import ShowCommercialBreweries from '../../modules/contract/ShowCommercialBrewer
 
 import styles from './ChooseCommercial.module.css';
 
+import api from '../../../api.js';
+
 /**
  * ChooseCommercial for Contract Brewery - contains layout (Header, Sidebar) and ShowCommercialBreweries
  */
 const ChooseCommercial = () => {
-    // TODO MOCK
     const [breweries, setBreweries] = useState();
 
     useEffect(() => {
-        setBreweries([
-            {
-                id: 1,
-                name: 'TestBrewery',
-                nip: '1234567890',
-                address: 'Szkolna 1',
-                phone_number: '123456789',
-                email: 'example@gmail.com',
-                description: 'Some description',
-                no_bt: 1,
-                no_ft: 1,
-                no_ac: 1,
-                no_be: 1,
-            },
-            {
-                id: 2,
-                name: 'TestBrewery2',
-                nip: '1234567890',
-                address: 'Szkolna 1',
-                phone_number: '123456789',
-                email: 'example@gmail.com',
-                description: 'Some description',
-                no_bt: 1,
-                no_ft: 1,
-                no_ac: 1,
-                no_be: 1,
-            },
-        ]);
+        const getData = async () => {
+            try {
+                console.log();
+                const response = await api.get(
+                    `breweries/commercial/with-devices/`
+                );
+                if (response.status === 200) {
+                    setBreweries(response.data);
+                } else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log('Error fetching commercial breweries:', error);
+            }
+        };
+        getData();
     }, []);
 
     return (

@@ -91,28 +91,28 @@ const ShowCommercialBreweries = ({ breweries }) => {
                                     className={styles.statBox}
                                     style={{ backgroundColor: '#f0a' }}>
                                     <span className={styles.statValue}>
-                                        {brewery.no_bt}
+                                        {brewery.bt_number}
                                     </span>
                                 </div>
                                 <div
                                     className={styles.statBox}
                                     style={{ backgroundColor: '#0af' }}>
                                     <span className={styles.statValue}>
-                                        {brewery.no_ft}
+                                        {brewery.ft_number}
                                     </span>
                                 </div>
                                 <div
                                     className={styles.statBox}
                                     style={{ backgroundColor: '#fa0' }}>
                                     <span className={styles.statValue}>
-                                        {brewery.no_ac}
+                                        {brewery.ac_number}
                                     </span>
                                 </div>
                                 <div
                                     className={styles.statBox}
                                     style={{ backgroundColor: '#0fa' }}>
                                     <span className={styles.statValue}>
-                                        {brewery.no_be}
+                                        {brewery.be_number}
                                     </span>
                                 </div>
                             </div>
