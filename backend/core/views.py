@@ -529,6 +529,16 @@ class ContractBreweryInfoView(APIView):
         - 200 OK: If the brewery is successfully retrieved
         - 403 Forbidden: If the user is not authorized
         - 404 Not Found: If the brewery was not found
+
+    - POST: Accept the brewery id, gets {name}, {email}, {phone_number},
+    {owner_name}, {description} from request body, validates them and
+    returns a response
+
+    Responses:
+        - 200 OK: If the brewery was updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery was not found
     """
 
     permission_classes = [IsAuthenticated]
