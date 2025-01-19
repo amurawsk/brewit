@@ -11,6 +11,8 @@ from .serializers import (
     DeviceWithTimeSlotsSerializer,
     LoginSerializer,
     OrderSerializer,
+    OrderWithTimeSlotsAndCommercialInfoSerializer,
+    OrderWithTimeSlotsAndContractInfoSerializer,
     OrderWithTimeSlotsSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
@@ -1055,7 +1057,7 @@ class OrderListCommercialView(APIView):
             )
 
         orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status=status)
-        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
+        serializer = OrderWithTimeSlotsAndContractInfoSerializer(orders, many=True)
         return Response(serializer.data, status=200)
 
 
@@ -1090,15 +1092,15 @@ class OrderCommercialDashboardView(APIView):
 
         new_orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status="N").order_by("-created_at")[:3]
         confirmed_orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status="C").order_by("-created_at")[:3]
-        
+
         new_serializer = OrderWithTimeSlotsSerializer(new_orders, many=True)
-        confirmed_serializer = OrderWithTimeSlotsSerializer(confirmed_orders, many=True)
+        confirmed_serializer = OrderWithTimeSlotsAndContractInfoSerializer(confirmed_orders, many=True)
         data = {
             "new_orders": new_serializer.data,
             "confirmed_orders": confirmed_serializer.data
         }
         return Response(data, status=200)
-    
+
 
 class OrderListContractView(APIView):
     """View for listing orders with specific status for a contract brewery. Class allows only authenticated users to access this view.
@@ -1130,5 +1132,5 @@ class OrderListContractView(APIView):
             )
 
         orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
-        serializer = OrderWithTimeSlotsSerializer(orders, many=True)
+        serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(orders, many=True)
         return Response(serializer.data, status=200)
