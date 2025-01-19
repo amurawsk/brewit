@@ -332,7 +332,7 @@ class DeviceDetailView(APIView):
         user = request.user
 
         try:
-            device = Device.objects.get(id=device_id)
+            device = Device.objects.get(id=device_id, is_deleted=False)
             profile = Profile.objects.get(user=user)
             if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
                 return Response(
@@ -374,7 +374,7 @@ class DeviceEditView(APIView):
         user = request.user
 
         try:
-            device = Device.objects.get(id=device_id)
+            device = Device.objects.get(id=device_id, is_deleted=False)
             profile = Profile.objects.get(user=user)
             if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
                 return Response(
@@ -473,7 +473,7 @@ class TimeSlotCreateView(APIView):
         user = request.user
 
         try:
-            device = Device.objects.get(id=device_id)
+            device = Device.objects.get(id=device_id, is_deleted=False)
             profile = Profile.objects.get(user=user)
             if profile.contract_brewery is not None:
                 return Response(
