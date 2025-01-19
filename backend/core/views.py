@@ -4,8 +4,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Order, Profile, TimeSlot
+from .models import CommercialBrewery, Device, Order, Profile, TimeSlot
+from django.db.models import Count
 from .serializers import (
+    BreweryWithDevicesNumberSerializer,
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
     DeviceWithTimeSlotsSerializer,
@@ -1063,10 +1065,10 @@ class OrderListCommercialView(APIView):
 
 class OrderCommercialDashboardView(APIView):
     """View for listing up to 3 newest N and C orders for a commercial brewery. Class allows only authenticated users to access this view.
-    
+
     This view supports HTTP methods:
     - GET: Returns a list of up to 3 newest N and C orders for the brewery.
-    
+
     Responses:
         - 200 OK: If the orders are successfully retrieved, the response contains a list of 3 newest N and C orders for the brewery.
         - 403 Forbidden: If the user is not authorized to view orders for this brewery, the response contains an error message.
@@ -1133,4 +1135,21 @@ class OrderListContractView(APIView):
 
         orders = Order.objects.filter(contract_brewery=contract_brewery, status=status)
         serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(orders, many=True)
+        return Response(serializer.data, status=200)
+
+
+class BreweryWithDevicesNumberView(APIView):
+    """View for listing all breweries with the number of devices for each brewery with any device. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all breweries with the number of devices for each brewery with any device.
+
+    Responses:
+        - 200 OK: If the breweries are successfully retrieved, the response contains a list of all breweries with the number of devices for each brewery.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        breweries = CommercialBrewery.objects.all()
+        serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
         return Response(serializer.data, status=200)

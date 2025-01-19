@@ -44,4 +44,6 @@ urlpatterns = [
         views.OrderListContractView.as_view(),
         name="order_list_contract"
     ),
+
+    path("breweries/commercial/with-devices/", views.BreweryWithDevicesNumberView.as_view(), name="brewery_with_devices"),
 ]

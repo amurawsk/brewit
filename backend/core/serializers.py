@@ -1,3 +1,4 @@
+from itertools import count
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -260,3 +261,45 @@ class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer)
             "nip": brewery.nip,
             "address": brewery.address
         }
+
+
+class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
+    devices_number = serializers.SerializerMethodField()
+    bt_number = serializers.SerializerMethodField()
+    ft_number = serializers.SerializerMethodField()
+    ac_number = serializers.SerializerMethodField()
+    be_number = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CommercialBrewery
+        fields = [
+            'id', 'name', 'nip', 'address',
+            'contract_phone_number', 'contract_email', 'description',
+            'devices_number', 'bt_number', 'ft_number', 'ac_number', 'be_number'
+        ]
+
+    def get_devices_number(self, obj):
+        return obj.device_set.count()
+
+    def get_bt_number(self, obj):
+        return obj.device_set.filter(device_type='BT').count()
+
+    def get_ft_number(self, obj):
+        return obj.device_set.filter(device_type='FT').count()
+
+    def get_ac_number(self, obj):
+        return obj.device_set.filter(device_type='AC').count()
+
+    def get_be_number(self, obj):
+        return obj.device_set.filter(device_type='BE').count()
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if representation['devices_number'] > 0:
+            return representation
+        return None
+
+    @classmethod
+    def setup_eager_loading(cls, queryset):
+        queryset = queryset.annotate(devices_number=count('device')).order_by('-devices_number')
+        return queryset
