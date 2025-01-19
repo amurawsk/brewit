@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Device, Order, Profile, TimeSlot, CommercialBrewery, ContractBrewery
+from .models import Device, Order, Profile, TimeSlot, CommercialBrewery, ContractBrewery, Recipe
 from .serializers import (
     CheckUsernameUniqueSerializer,
     DeviceSerializer,
@@ -1309,3 +1309,26 @@ class AddCoworkerView(APIView):
                 {"error": "User of provided username already exists."},
                 status=status.HTTP_409_CONFLICT
             )
+
+
+class RecipiesView(APIView):
+    """View for listing coworkers of given account.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a response based on user data.
+
+    Responses:
+        - 200 OK: If recipies are successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        recipies = Recipe.objects.filter(
+            contract_brewery=profile.contract_brewery
+        )
+        serializer = serializers.RecipeSerializer(recipies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
