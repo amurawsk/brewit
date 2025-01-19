@@ -75,7 +75,8 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
         data['no_past'] = orders.get("P", 0)
         data['no_rejected'] = orders.get("R", 0)
         data["no_employees"] = Profile.objects.filter(
-            commercial_brewery=instance
+            commercial_brewery=instance,
+            user__is_active=True
         ).count()
         return data
 
@@ -119,7 +120,8 @@ class ContractBreweryInfoSerializer(serializers.ModelSerializer):
         data['no_past'] = orders.get("P", 0)
         data['no_rejected'] = orders.get("R", 0)
         data['no_employees'] = Profile.objects.filter(
-            contract_brewery=instance
+            contract_brewery=instance,
+            user__is_active=True
         ).count()
         return data
 
