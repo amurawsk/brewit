@@ -12,7 +12,8 @@ const ShowDeviceDetails = ({
     deviceFields,
     getData,
 }) => {
-    const [currentDeviceFields, setCurrentDeviceFields] = useState(deviceFields);
+    const [currentDeviceFields, setCurrentDeviceFields] =
+        useState(deviceFields);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleFieldChange = (field, value, checked) => {
@@ -91,7 +92,8 @@ const ShowDeviceDetails = ({
     };
 
     return (
-        <div className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
+        <div
+            className={`${styles.sidePanel} ${isPanelOpen ? styles.sidePanelOpen : ''}`}>
             <LoadingOverlay isLoading={isLoading} />
             <button
                 className={styles.closePanel}

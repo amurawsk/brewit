@@ -73,7 +73,9 @@ const AddTimeSlotForm = () => {
                 formState.dateRange[1] !== null
             ) {
                 formState.dateRange[1].setHours(23, 59, 59);
-                formState.dateRange[1].setHours(formState.dateRange[1].getHours() + 24)
+                formState.dateRange[1].setHours(
+                    formState.dateRange[1].getHours() + 24
+                );
                 response = await api.post(`devices/${id}/time-slots/add/`, {
                     status: 'F',
                     slot_type: 'D',
@@ -154,7 +156,7 @@ const AddTimeSlotForm = () => {
         if (formState.specificDate && isToday(formState.specificDate)) {
             const now = new Date();
             now.setMinutes(0, 0, 0);
-            now.setHours(now.getHours() + 1)
+            now.setHours(now.getHours() + 1);
             return now;
         }
         return setHours(setMinutes(formState.specificDate, 0), 0);
