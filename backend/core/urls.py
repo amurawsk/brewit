@@ -42,15 +42,22 @@ urlpatterns = [
         views.ContractBreweryInfoView.as_view(),
         name="contract_brewery_info"
     ),
+
+    path("users/all/", views.UserListView.as_view(), name="user_list"),
     path(
-        "accounts/commercial/<int:profile_id>/",
+        "accounts/commercial/",
         views.CommercialAccountInfoView.as_view(),
         name="commercial_account_info"
     ),
     path(
-        "accounts/contract/<int:profile_id>/",
+        "accounts/contract/",
         views.ContractAccountInfoView.as_view(),
         name="contract_account_info"
+    ),
+    path(
+        "accounts/intermediary/",
+        views.IntermediaryAccountInfoView.as_view(),
+        name="intermediary_account_info"
     ),
     path(
         "coworkers/",
@@ -145,10 +152,21 @@ urlpatterns = [
         name="order_list_contract"
     ),
     path("orders/contract/dashboard/", views.OrderContractDashboardView.as_view(), name="contract_dashboard"),
+    path(
+        "orders/intermediary/status/<str:status>/",
+        views.OrderListIntermediaryView.as_view(),
+        name="order_list_intermediary"
+    ),
+    path(
+        "orders/intermediary/dashboard/",
+        views.OrderIntermediaryDashboardView.as_view(),
+        name="intermediary_dashboard"
+    ),
 
     path(
         "breweries/commercial/with-devices/",
         views.BreweryWithDevicesNumberView.as_view(),
         name="brewery_with_devices"
     ),
+    path("breweries/contract/all/", views.BreweryListContractView.as_view(), name="brewery_list_contract"),
 ]

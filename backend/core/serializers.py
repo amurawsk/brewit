@@ -178,18 +178,39 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    created_at = serializers.DateTimeField(source="user.date_joined")
+
+    class Meta:
+        model = Profile
+        fields = [
+            "username",
+            "created_at"
+        ]
+
+
 class AccountInfoSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     username = serializers.CharField(source="user.username")
     added_at = serializers.DateTimeField(source="user.date_joined")
+    username_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
         fields = [
             "id",
             "username",
-            "added_at"
+            "added_at",
+            "username_type"
         ]
+
+    def get_username_type(self, obj):
+        if obj.commercial_brewery:
+            return "Browar Kontraktowy"
+        elif obj.contract_brewery:
+            return "Browar Komercyjny"
+        return "Spółka Pośrednicząca"
 
 
 class CoworkerSerializer(serializers.Serializer):
@@ -334,6 +355,12 @@ class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery
         fields = ['name', 'contract_phone_number', 'contract_email', 'description', 'owner_name']
+
+
+class SimpleContractBrewerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContractBrewery
+        fields = ['id', 'name', 'owner_name']
 
 
 class RegisterCommercialSerializer(serializers.ModelSerializer):
@@ -543,7 +570,6 @@ class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
 class OrderWithTimeSlotsAndContractInfoSerializer(serializers.ModelSerializer):
     beer_volume = MeasurementField()
     time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
-    total_price = serializers.SerializerMethodField()
     contract_brewery = ContractBrewerySerializer()
 
     class Meta:
@@ -554,14 +580,10 @@ class OrderWithTimeSlotsAndContractInfoSerializer(serializers.ModelSerializer):
             'recipe', 'time_slots', 'total_price'
         ]
 
-    def get_total_price(self, obj):
-        return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
-
 
 class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer):
     beer_volume = MeasurementField()
     time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
-    total_price = serializers.SerializerMethodField()
     commercial_brewery = serializers.SerializerMethodField()
 
     class Meta:
@@ -572,8 +594,32 @@ class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer)
             'recipe', 'time_slots', 'total_price'
         ]
 
-    def get_total_price(self, obj):
-        return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
+    def get_commercial_brewery(self, obj):
+        brewery = obj.timeslot_set.first().device.commercial_brewery
+        return {
+            "id": brewery.id,
+            "name": brewery.name,
+            "contract_phone_number": brewery.contract_phone_number,
+            "contract_email": brewery.contract_email,
+            "description": brewery.description,
+            "nip": brewery.nip,
+            "address": brewery.address
+        }
+
+
+class OrderWithTimeSlotsAndAllBreweriesInfoSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    contract_brewery = ContractBrewerySerializer()
+    commercial_brewery = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at', 'contract_brewery',
+            'commercial_brewery', 'recipe', 'time_slots', 'total_price'
+        ]
 
     def get_commercial_brewery(self, obj):
         brewery = obj.timeslot_set.first().device.commercial_brewery
