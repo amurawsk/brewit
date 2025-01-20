@@ -39,7 +39,7 @@ const ShowContractBreweries = ({ breweries }) => {
                                     Imię i nazwisko właściciela:
                                     <span className={styles.descriptionValue}>
                                         {' '}
-                                        {brewery.nip}
+                                        {brewery.owner_name}
                                     </span>
                                 </span>
                             </div>
