@@ -24,7 +24,11 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
-        if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        if (
+            error.response &&
+            error.response.status === 401 &&
+            !originalRequest._retry
+        ) {
             originalRequest._retry = true;
             const refreshToken = localStorage.getItem('REFRESH_TOKEN');
             if (!refreshToken) {
@@ -32,12 +36,18 @@ api.interceptors.response.use(
                 return Promise.reject(error);
             }
             try {
-                const response = await api.post('token/refresh/', { refresh: refreshToken });
+                const response = await api.post('token/refresh/', {
+                    refresh: refreshToken,
+                });
                 localStorage.setItem('ACCESS_TOKEN', response.data.access);
                 originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
                 return api(originalRequest);
             } catch (refreshError) {
-                if (refreshError.response && (refreshError.response.status === 401 || refreshError.response.status === 403)) {
+                if (
+                    refreshError.response &&
+                    (refreshError.response.status === 401 ||
+                        refreshError.response.status === 403)
+                ) {
                     handleLogout();
                 }
                 return Promise.reject(refreshError);
