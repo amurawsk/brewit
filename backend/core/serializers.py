@@ -208,9 +208,9 @@ class AccountInfoSerializer(serializers.ModelSerializer):
 
     def get_username_type(self, obj):
         if obj.commercial_brewery:
-            return "Browar Kontraktowy"
-        elif obj.contract_brewery:
             return "Browar Komercyjny"
+        elif obj.contract_brewery:
+            return "Browar Kontraktowy"
         return "Spółka Pośrednicząca"
 
 
