@@ -25,6 +25,9 @@ const NewOrderTimeSlotsTimeline = ({ timeSlots }) => {
                                 'pl-PL'
                             )}
                         </div>
+                        <div className={styles.time}>
+                            Cena: {timeslot.price} zł
+                        </div>
                         <div className={styles.line} />
                     </div>
                 </div>

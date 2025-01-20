@@ -181,7 +181,8 @@ const TimeSlotDetails = ({
                 selectedSlot.id,
                 selectedDevice.name,
                 selectedSlot.start_timestamp,
-                selectedSlot.end_timestamp
+                selectedSlot.end_timestamp,
+                selectedSlot.price
             )
         ) {
             showNotification('Pomyślnie dodano!');

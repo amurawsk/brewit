@@ -115,12 +115,14 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                 <p>
                     Adres: <b>{selectedBrewery.address}</b>
                 </p>
-                <p>
-                    Opis:
-                    <p className={styles.descriptionText}>
-                        {selectedBrewery.description}
+                {selectedBrewery.description !== '' && 
+                    <p>
+                        Opis:
+                        <p className={styles.descriptionText}>
+                            {selectedBrewery.description}
+                        </p>
                     </p>
-                </p>
+                }
             </div>
             <div className={styles.section}>
                 <h3>Wybrane okna czasowe</h3>

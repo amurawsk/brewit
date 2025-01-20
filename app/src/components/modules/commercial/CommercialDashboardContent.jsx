@@ -25,26 +25,27 @@ const CommercialDashboardContent = () => {
     const [currentOrders, setCurrentOrders] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const getData = async () => {
-            setIsLoading(true);
-            try {
-                const response = await api.get(`orders/commercial/dashboard/`);
-                if (response.status === 200) {
-                    setIsLoading(false);
-                    setNewOrders(response.data.new_orders);
-                    setCurrentOrders(response.data.confirmed_orders);
-                } else {
-                    setIsLoading(false);
-                    alert(
-                        'Błąd podczas pobierania zamówień! Odśwież stronę i spróbuj ponownie.'
-                    );
-                }
-            } catch (error) {
+    const getData = async () => {
+        setIsLoading(true);
+        try {
+            const response = await api.get(`orders/commercial/dashboard/`);
+            if (response.status === 200) {
                 setIsLoading(false);
-                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+                setNewOrders(response.data.new_orders);
+                setCurrentOrders(response.data.confirmed_orders);
+            } else {
+                setIsLoading(false);
+                alert(
+                    'Błąd podczas pobierania zamówień! Odśwież stronę i spróbuj ponownie.'
+                );
             }
-        };
+        } catch (error) {
+            setIsLoading(false);
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+        }
+    };
+
+    useEffect(() => {
         getData();
     }, []);
 
@@ -170,6 +171,7 @@ const CommercialDashboardContent = () => {
                 setIsPanelOpen={setIsPanelOpen}
                 order={selectedOrder}
                 setOrder={setSelectedOrder}
+                getData={getData}
             />
         </div>
     );

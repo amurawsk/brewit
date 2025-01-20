@@ -35,13 +35,14 @@ const SelectTimeslots = () => {
         timeSlotId,
         deviceName,
         startTimestamp,
-        endTimestamp
+        endTimestamp,
+        price
     ) => {
         const exists = timeSlots.some((slot) => slot.timeSlotId === timeSlotId);
         if (!exists) {
             setTimeSlots((prevTimeSlots) => [
                 ...prevTimeSlots,
-                { timeSlotId, deviceName, startTimestamp, endTimestamp },
+                { timeSlotId, deviceName, startTimestamp, endTimestamp, price },
             ]);
             return true;
         }

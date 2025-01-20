@@ -227,7 +227,6 @@ const ShowOrderDetails = ({
                                         )}
                                     </p>
                                 )}
-
                                 <p>
                                     Utworzono:{' '}
                                     {new Date(
@@ -243,6 +242,7 @@ const ShowOrderDetails = ({
                                             ).toLocaleDateString()}
                                         </p>
                                     )}
+                                <p>Opis: {order.description}</p>
                             </div>
                         </div>
                         <div className={styles.timelineHeader}>

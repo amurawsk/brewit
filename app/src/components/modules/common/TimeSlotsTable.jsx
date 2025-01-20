@@ -210,39 +210,69 @@ const TimeSlotsTable = ({
     return (
         <div className={styles.tableContainer}>
             <LoadingOverlay isLoading={isLoading} />
-            <div className={styles.scrollableTable}>
-                <table border="1" className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th className={styles.tableTh}>Urządzenie</th>
-                            {tableHeaders()}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredTimetableData.map((row, rowIndex) => (
-                            <tr key={rowIndex}>
-                                <td className={styles.deviceTableTd}>
-                                    {row.name}
-                                </td>
-                                {view === 'daily'
-                                    ? hours
-                                          .filter(
-                                              (hour) =>
-                                                  hour >= startHour &&
-                                                  hour < endHour
-                                          )
-                                          .map((hour) => {
+            {filteredTimetableData.length === 0 ? (
+                <div className={styles.noDataMessage}>
+                    Brak dostępnych okien czasowych.
+                </div>
+            ) : (
+                <div className={styles.scrollableTable}>
+                    <table border="1" className={styles.table}>
+                        <thead>
+                            <tr>
+                                <th className={styles.tableTh}>Urządzenie</th>
+                                {tableHeaders()}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredTimetableData.map((row, rowIndex) => (
+                                <tr key={rowIndex}>
+                                    <td className={styles.deviceTableTd}>
+                                        {row.name}
+                                    </td>
+                                    {view === 'daily'
+                                        ? hours
+                                              .filter(
+                                                  (hour) =>
+                                                      hour >= startHour &&
+                                                      hour < endHour
+                                              )
+                                              .map((hour) => {
+                                                  const timeSlot = renderTimeSlots(
+                                                      row.timeSlots,
+                                                      hour,
+                                                      selectedDate
+                                                  );
+                                                  const cellClass =
+                                                      getCellClass(timeSlot);
+
+                                                  return (
+                                                      <td
+                                                          key={hour}
+                                                          className={cellClass}
+                                                          onClick={() =>
+                                                              handleSlotClick(
+                                                                  timeSlot,
+                                                                  row
+                                                              )
+                                                          }></td>
+                                                  );
+                                              })
+                                        : Array.from({ length: 7 }, (_, i) => {
+                                              const day = new Date(
+                                                  startOfWeek(selectedDate)
+                                              );
+                                              day.setDate(day.getDate() + i);
                                               const timeSlot = renderTimeSlots(
                                                   row.timeSlots,
-                                                  hour,
-                                                  selectedDate
+                                                  null,
+                                                  day
                                               );
                                               const cellClass =
                                                   getCellClass(timeSlot);
 
                                               return (
                                                   <td
-                                                      key={hour}
+                                                      key={i}
                                                       className={cellClass}
                                                       onClick={() =>
                                                           handleSlotClick(
@@ -251,38 +281,13 @@ const TimeSlotsTable = ({
                                                           )
                                                       }></td>
                                               );
-                                          })
-                                    : Array.from({ length: 7 }, (_, i) => {
-                                          const day = new Date(
-                                              startOfWeek(selectedDate)
-                                          );
-                                          day.setDate(day.getDate() + i);
-                                          const timeSlot = renderTimeSlots(
-                                              row.timeSlots,
-                                              null,
-                                              day
-                                          );
-                                          const cellClass =
-                                              getCellClass(timeSlot);
-
-                                          return (
-                                              <td
-                                                  key={i}
-                                                  className={cellClass}
-                                                  onClick={() =>
-                                                      handleSlotClick(
-                                                          timeSlot,
-                                                          row
-                                                      )
-                                                  }></td>
-                                          );
-                                      })}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
+                                          })}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
             <TimeSlotDetails
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}
