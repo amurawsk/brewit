@@ -577,8 +577,8 @@ class OrderWithTimeSlotsAndContractInfoSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             'id', 'created_at', 'status', 'beer_type', 'beer_volume',
-            'description', 'rate', 'ended_at', 'contract_brewery',
-            'recipe', 'time_slots', 'total_price'
+            'description', 'rate', 'ended_at',
+            'contract_brewery', 'time_slots', 'total_price'
         ]
 
 
