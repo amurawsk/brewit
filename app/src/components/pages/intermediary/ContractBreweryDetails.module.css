@@ -60,16 +60,6 @@
     color: #28a745;
 }
 
-.nip {
-    background-color: #fff4d4;
-    color: #ffc107;
-}
-
-.address {
-    background-color: #fce4ec;
-    color: #d81b60;
-}
-
 .employees {
     background-color: #e0e0e0;
     color: dark;
@@ -133,26 +123,6 @@
 .deviceValue,
 .orderValue {
     font-size: 16px;
-}
-
-.deviceStatBoxBt {
-    border: 1px solid #f0a;
-    color: #f0a;
-}
-
-.deviceStatBoxFt {
-    border: 1px solid #0af;
-    color: #0af;
-}
-
-.deviceStatBoxAc {
-    border: 1px solid #fa0;
-    color: #fa0;
-}
-
-.deviceStatBoxBe {
-    border: 1px solid #0fa;
-    color: #0fa;
 }
 
 .orderStatBoxGeneral {
