@@ -51,6 +51,7 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
             val['device_type']: val['no'] for val in list(
                 instance
                 .device_set
+                .filter(is_deleted=False)
                 .values('device_type')
                 .annotate(no=Count('device_type'))
             )
@@ -650,19 +651,19 @@ class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
         ]
 
     def get_devices_number(self, obj):
-        return obj.device_set.count()
+        return obj.device_set.filter(is_deleted=False).count()
 
     def get_bt_number(self, obj):
-        return obj.device_set.filter(device_type='BT').count()
+        return obj.device_set.filter(device_type='BT', is_deleted=False).count()
 
     def get_ft_number(self, obj):
-        return obj.device_set.filter(device_type='FT').count()
+        return obj.device_set.filter(device_type='FT', is_deleted=False).count()
 
     def get_ac_number(self, obj):
-        return obj.device_set.filter(device_type='AC').count()
+        return obj.device_set.filter(device_type='AC', is_deleted=False).count()
 
     def get_be_number(self, obj):
-        return obj.device_set.filter(device_type='BE').count()
+        return obj.device_set.filter(device_type='BE', is_deleted=False).count()
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
