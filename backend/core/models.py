@@ -91,6 +91,9 @@ class Profile(models.Model):
             )
         ]
 
+    def __str__(self):
+        return f"Profile of {self.user}"
+
 
 class DeviceType(models.TextChoices):
     BREWING_TANK = "BT", "Tank warzelny"
@@ -170,6 +173,10 @@ class Order(models.Model):
     )
     recipe = models.ForeignKey(Recipe, on_delete=models.SET_NULL, null=True)
 
+    @property
+    def total_price(self):
+        return self.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
+
 
 class TimeSlot(models.Model):
     class Status(models.TextChoices):
@@ -228,3 +235,6 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=100)
     amount = models.CharField(max_length=100)
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} ({self.amount}) - {self.stage}"

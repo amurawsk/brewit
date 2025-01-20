@@ -1,8 +1,18 @@
-from itertools import count
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CommercialBrewery, CommercialBrewery, ContractBrewery, Device, Order, Profile, TimeSlot
+from .models import (
+    CommercialBrewery,
+    ContractBrewery,
+    Device,
+    Profile,
+    TimeSlot,
+    Order,
+    Ingredient,
+    Stage,
+    Recipe,
+)
+from django.db.models import Count
 from django.db.models import Sum
 
 
@@ -18,6 +28,306 @@ class CommercialBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = CommercialBrewery
         fields = ['name', 'contract_phone_number', 'contract_email', 'description', 'nip', 'address']
+
+
+class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='contract_email')
+    phone_number = serializers.CharField(source="contract_phone_number")
+
+    class Meta:
+        model = CommercialBrewery
+        fields = [
+            'name',
+            'email',
+            'phone_number',
+            'nip',
+            'address',
+            'description'
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        devices = {
+            val['device_type']: val['no'] for val in list(
+                instance
+                .device_set
+                .values('device_type')
+                .annotate(no=Count('device_type'))
+            )
+        }
+        data['no_devices'] = sum(devices.values())
+        data['no_bt'] = devices.get("BT", 0)
+        data['no_ft'] = devices.get("FT", 0)
+        data['no_ac'] = devices.get("AC", 0)
+        data['no_be'] = devices.get("BE", 0)
+        orders = {
+            val["status"]: val["no"] for val in list(
+                Order.objects.filter(
+                    timeslot__device__commercial_brewery=instance
+                ).distinct()
+                .values('status')
+                .annotate(no=Count('status', distinct=True))
+            )
+        }
+        data['no_orders'] = sum(orders.values())
+        data['no_new'] = orders.get("N", 0)
+        data['no_current'] = orders.get("C", 0)
+        data['no_past'] = orders.get("P", 0)
+        data['no_rejected'] = orders.get("R", 0)
+        data["no_employees"] = Profile.objects.filter(
+            commercial_brewery=instance,
+            user__is_active=True
+        ).count()
+        return data
+
+
+class CommercialBreweryUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    phone_number = serializers.CharField()
+    nip = serializers.CharField()
+    address = serializers.CharField()
+    description = serializers.CharField()
+
+
+class ContractBreweryUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    phone_number = serializers.CharField()
+    owner_name = serializers.CharField()
+    description = serializers.CharField()
+
+
+class ContractBreweryInfoSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='contract_email')
+    ceo = serializers.CharField(source='owner_name')
+    phone_number = serializers.CharField(source="contract_phone_number")
+
+    class Meta:
+        model = CommercialBrewery
+        fields = [
+            'name',
+            'email',
+            'phone_number',
+            'ceo',
+            'description'
+        ]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        orders = {
+            val["status"]: val["no"] for val in list(
+                Order.objects.filter(contract_brewery=instance)
+                .values("status")
+                .annotate(no=Count('status'))
+            )
+        }
+        data['no_orders'] = sum(orders.values())
+        data['no_new'] = orders.get("N", 0)
+        data['no_current'] = orders.get("C", 0)
+        data['no_past'] = orders.get("P", 0)
+        data['no_rejected'] = orders.get("R", 0)
+        data['no_employees'] = Profile.objects.filter(
+            contract_brewery=instance,
+            user__is_active=True
+        ).count()
+        return data
+
+
+class CommercialAccountInfoSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    created_at = serializers.DateTimeField(source="user.date_joined")
+    brewery_name = serializers.CharField(source="commercial_brewery.name")
+    brewery_nip = serializers.CharField(source="commercial_brewery.nip")
+    brewery_address = serializers.CharField(
+        source="commercial_brewery.address"
+    )
+    brewery_description = serializers.CharField(
+        source="commercial_brewery.description"
+    )
+
+    class Meta:
+        model = Profile
+        fields = [
+            "username",
+            "created_at",
+            "brewery_name",
+            "brewery_nip",
+            "brewery_address",
+            "brewery_description"
+        ]
+
+
+class ContractAccountInfoSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    created_at = serializers.DateTimeField(source="user.date_joined")
+    brewery_name = serializers.CharField(source="contract_brewery.name")
+    brewery_ceo = serializers.CharField(source="contract_brewery.owner_name")
+    brewery_description = serializers.CharField(
+        source="contract_brewery.description"
+    )
+
+    class Meta:
+        model = Profile
+        fields = [
+            "username",
+            "created_at",
+            "brewery_name",
+            "brewery_ceo",
+            "brewery_description"
+        ]
+
+
+class AccountInfoSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk")
+    username = serializers.CharField(source="user.username")
+    added_at = serializers.DateTimeField(source="user.date_joined")
+
+    class Meta:
+        model = Profile
+        fields = [
+            "id",
+            "username",
+            "added_at"
+        ]
+
+
+class CoworkerSerializer(serializers.Serializer):
+    coworker_id = serializers.IntegerField()
+
+
+class AccountCreationSerializer(serializers.Serializer):
+    coworker_username = serializers.CharField()
+    coworker_password = serializers.CharField()
+
+
+class IngredientSerizalier(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ["pk", "name", "amount"]
+
+
+class StageSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerizalier(
+        many=True,
+        read_only=True,
+        source="ingredient_set"
+    )
+    time = serializers.FloatField(source="time.day")
+
+    class Meta:
+        model = Stage
+        fields = [
+            "pk",
+            "name",
+            "device_type",
+            "time",
+            "description",
+            "ingredients"
+        ]
+
+
+class RecipeSerializer(serializers.ModelSerializer):
+    steps = StageSerializer(many=True, read_only=True, source="stage_set")
+    full_volume = serializers.FloatField(source="full_volume.l")
+    full_time = serializers.FloatField(source="full_time.day")
+
+    class Meta:
+        model = Recipe
+        fields = ["pk", "name", "full_volume", "full_time", "steps"]
+
+
+class RecipeCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ["name", "full_volume"]
+
+
+class RecipeUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk")
+
+    class Meta:
+        model = Recipe
+        fields = ["id", "name", "full_volume"]
+
+
+class RecipeRemoveSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
+class StageCreationSerializer(serializers.Serializer):
+    recipe_id = serializers.IntegerField()
+    name = serializers.CharField()
+    device = serializers.CharField()    # kod
+    time = serializers.IntegerField()  # w minutach
+    description = serializers.CharField()
+
+
+class StageDeleteSerializer(serializers.Serializer):
+    stage_id = serializers.IntegerField()
+
+
+class StageUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    device = serializers.CharField()
+    time = serializers.IntegerField()
+    description = serializers.CharField()
+
+
+class IngredientCreationSerializer(serializers.Serializer):
+    stage_id = serializers.IntegerField()
+    name = serializers.CharField()
+    quantity = serializers.CharField()
+
+
+class IngredientDeleteSerializer(serializers.Serializer):
+    ingredient_id = serializers.IntegerField()
+
+
+class IngredientUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    quantity = serializers.CharField()
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk")
+    beer_volume = serializers.FloatField(source="beer_volume.l")
+    contract_brewery_name = serializers.CharField(
+        source="contract_brewery.name"
+    )
+    contract_brewery_owner_name = serializers.CharField(
+        source="contract_brewery.owner_name"
+    )
+    contract_brewery_email = serializers.CharField(
+        source="contract_brewery.contract_email"
+    )
+    contract_brewery_phone_number = serializers.CharField(
+        source="contract_brewery.contract_phone_number"
+    )
+    price = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        source="total_price"
+    )
+
+    class Meta:
+        model = Order
+        fields = [
+            "id",
+            "created_at",
+            "ended_at",
+            "beer_type",
+            "beer_volume",
+            "status",
+            "contract_brewery_name",
+            "contract_brewery_owner_name",
+            "contract_brewery_email",
+            "contract_brewery_phone_number",
+            "rate",
+            "price"
+        ]
 
 
 class ContractBrewerySerializer(serializers.ModelSerializer):
@@ -220,7 +530,7 @@ class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            'id', 'created_at', 'status', 'beer_type', 'beer_volume', 
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
             'description', 'rate', 'ended_at', 'contract_brewery',
             'recipe', 'time_slots', 'total_price'
         ]

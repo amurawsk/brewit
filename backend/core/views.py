@@ -5,7 +5,18 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import CommercialBrewery, Device, Order, Profile, TimeSlot
+from .models import (
+    Device,
+    Profile,
+    TimeSlot,
+    CommercialBrewery,
+    ContractBrewery,
+    Recipe,
+    Order,
+    Stage,
+    DeviceType,
+    Ingredient
+)
 from django.db.models import Count
 from .serializers import (
     BreweryWithDevicesNumberSerializer,
@@ -25,6 +36,11 @@ from .serializers import (
     TimeSlotEditPriceSerializer,
     TimeSlotSerializer,
 )
+from . import serializers
+from django.contrib.auth.models import User
+from django.db.utils import IntegrityError, DataError
+from django.contrib.auth.hashers import make_password
+from measurement.measures import Volume, Time
 
 
 class RegisterCommercialView(APIView):
@@ -448,7 +464,7 @@ class DeviceDeleteView(APIView):
                 )
 
         device.delete()
-        return Response({"message": "Device successfully deleted."}, status=status.HTTP_200_OK)            
+        return Response({"message": "Device successfully deleted."}, status=status.HTTP_200_OK)
 
 
 class TimeSlotCreateView(APIView):
@@ -755,6 +771,900 @@ class DevicesWithTimeSlotsView(APIView):
         devices = Device.objects.filter(commercial_brewery_id=brewery_id, is_deleted=False)
         serializer = DeviceWithTimeSlotsSerializer(devices, many=True)
         return Response(serializer.data, status=200)
+
+
+class CommercialBreweryInfoView(APIView):
+    """View for listing commercial brewery's info with orders and devices.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the brewery is successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery was not found
+
+    - POST: Accept the brewery id, gets {name}, {email}, {phone_number},
+    {nip}, {address}, {description} from request body, validates them and
+    returns a response
+
+    Responses:
+        - 200 OK: If the brewery was updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery was not found
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, brewery_id):
+        try:
+            brewery = CommercialBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.CommercialBreweryInfoSerializer(brewery)
+            return Response(serializer.data, status=200)
+        except CommercialBrewery.DoesNotExist:
+            return Response(
+                {"error": 'Commercial brewery not found.'},
+                status=404
+            )
+
+    def post(self, request, brewery_id):
+        profile = request.user.profile
+        try:
+            brewery = CommercialBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.CommercialBreweryUpdateSerializer(
+                data=request.data
+            )
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            if (
+                (profile.commercial_brewery != brewery
+                 and (profile.commercial_brewery is not None
+                      or profile.contract_brewery is not None)
+                 )
+            ):
+                return Response(
+                    {
+                        "error": ("User is not authorized to change this"
+                                  " brewery's informations")
+                    }
+                )
+            brewery.name = serializer.data["name"]
+            brewery.contract_email = serializer.data["email"]
+            brewery.contract_phone_number = serializer.data["phone_number"]
+            brewery.nip = serializer.data["nip"]
+            brewery.address = serializer.data["address"]
+            brewery.description = serializer.data["description"]
+            brewery.save()
+            return Response(
+                {"message": "Commercial brewery's info updated successfully"},
+                status=status.HTTP_200_OK
+            )
+        except CommercialBrewery.DoesNotExist:
+            return Response(
+                {"error": 'Commercial brewery not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except DataError:
+            return Response(
+                {"error": "Provided data did not match requirements."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+
+class ContractBreweryInfoView(APIView):
+    """View for listing contract brewery's info with orders.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the brewery id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the brewery is successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery was not found
+
+    - POST: Accept the brewery id, gets {name}, {email}, {phone_number},
+    {owner_name}, {description} from request body, validates them and
+    returns a response
+
+    Responses:
+        - 200 OK: If the brewery was updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the brewery was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, brewery_id):
+        try:
+            brewery = ContractBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.ContractBreweryInfoSerializer(brewery)
+            return Response(serializer.data, status=200)
+        except ContractBrewery.DoesNotExist:
+            return Response(
+                {"error": "Contract brewery not found."},
+                status=404
+            )
+
+    def post(self, request, brewery_id):
+        profile = request.user.profile
+        try:
+            brewery = ContractBrewery.objects.get(pk=brewery_id)
+            serializer = serializers.ContractBreweryUpdateSerializer(
+                data=request.data
+            )
+            if not serializer.is_valid():
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            if (
+                (profile.contract_brewery != brewery
+                 and (profile.commercial_brewery is not None
+                      or profile.contract_brewery is not None)
+                 )
+            ):
+                return Response(
+                    {
+                        "error": ("User is not authorized to change this"
+                                  " brewery's informations")
+                    }
+                )
+            brewery.name = serializer.data["name"]
+            brewery.contract_email = serializer.data["email"]
+            brewery.contract_phone_number = serializer.data["phone_number"]
+            brewery.owner_name = serializer.data["owner_name"]
+            brewery.description = serializer.data["description"]
+            brewery.save()
+            return Response(
+                {"message": "Contract brewery's info updated successfully"},
+                status=status.HTTP_200_OK
+            )
+        except ContractBrewery.DoesNotExist:
+            return Response(
+                {"error": 'Contract brewery not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except DataError:
+            return Response(
+                {"error": "Provided data did not match requirements."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+
+class CommercialAccountInfoView(APIView):
+    """View for listing commercial account's info.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully retrieved
+        - 400 Bad Request: If the account is not a commercial account
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, profile_id):
+        try:
+            profile = Profile.objects.get(pk=profile_id)
+            if profile.commercial_brewery is None:
+                return Response(
+                    {
+                        "error": ("Requested account is not a commercial "
+                                  "brewery account.")
+                    },
+                    status=400
+                )
+            serializer = serializers.CommercialAccountInfoSerializer(profile)
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."},
+                status=404
+            )
+
+
+class ContractAccountInfoView(APIView):
+    """View for listing contract account's info.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully retrieved
+        - 400 Bad Request: If the account is not a contract account
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, _, profile_id):
+        try:
+            profile = Profile.objects.get(pk=profile_id)
+            if profile.contract_brewery is None:
+                return Response(
+                    {
+                        "error": ("Requested account is not a contract "
+                                  "brewery account.")
+                    },
+                    status=400
+                )
+            serializer = serializers.ContractAccountInfoSerializer(profile)
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."},
+                status=404
+            )
+
+
+class CoworkersView(APIView):
+    """View for listing coworkers of given account.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the coworkers are successfully retrieved
+        - 400 Bad Request: If the account is neither commercial nor contract
+        - 403 Forbidden: If the user is not authorized
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        coworkers = None
+        if (brewery := profile.commercial_brewery) is not None:
+            coworkers = Profile.objects.filter(
+                commercial_brewery=profile.commercial_brewery,
+                user__is_active=True
+            ).exclude(pk=profile.pk)
+        elif (brewery := profile.contract_brewery) is not None:
+            coworkers = Profile.objects.filter(
+                contract_brewery=brewery,
+                user__is_active=True
+            ).exclude(pk=profile.pk)
+        else:
+            return Response(
+                {"error": "Improper account type."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = serializers.AccountInfoSerializer(
+            coworkers,
+            many=True
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class RemoveCoworkerView(APIView):
+    """View for deactivating given account.
+    Class allows only authenticated users to access this view.
+    Only users from the same brewery or users can deactivate accounts.
+
+    This view supports HTTP methods:
+    - POST: Accepts the "coworker_id", validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully deactivated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        profile = request.user.profile
+        serializer = serializers.CoworkerSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            coworker = Profile.objects.get(pk=serializer.data['coworker_id'])
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Specified account not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        if (
+            (profile.commercial_brewery == coworker.commercial_brewery
+                and profile.commercial_brewery is not None)
+            or (profile.contract_brewery == coworker.contract_brewery
+                and profile.contract_brewery is not None)
+            or (profile.contract_brewery is None
+                and profile.commercial_brewery is None)
+        ):
+            coworker_user = coworker.user
+            coworker_user.is_active = False
+            coworker_user.save()
+            return Response(
+                f"Successfilly deactivated user of id={coworker.pk}",
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"error": "The user cannot remove specified account."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+
+class AddCoworkerView(APIView):
+    """View for creating an account assigned to the same brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts the "coworker_username", "coworker_password", validates it
+    and returns a response.
+
+    Responses:
+        - 201 Created: If the account is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized
+        - 409 Not Found: If the provided username is taken
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        profile = request.user.profile
+        serializer = serializers.AccountCreationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            coworker = User.objects.create(
+                username=serializer.data["coworker_username"],
+                password=make_password(serializer.data["coworker_password"])
+            )
+            Profile.objects.create(
+                user=coworker,
+                contract_brewery=profile.contract_brewery,
+                commercial_brewery=profile.commercial_brewery
+            )
+            return Response(
+                {
+                    "message": ("Successfully added coworker"
+                                f" {coworker.username}.")
+                },
+                status=status.HTTP_201_CREATED
+            )
+        except IntegrityError:
+            return Response(
+                {"error": "User of provided username already exists."},
+                status=status.HTTP_409_CONFLICT
+            )
+
+
+class RecipiesView(APIView):
+    """View for recipies of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a response based on user data.
+
+    Responses:
+        - 200 OK: If recipies are successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+
+    - POST: Accepts "name", "full_volume", validates it and returns a response.
+
+    Responses:
+        - 201 Created: If the recipe is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        recipies = Recipe.objects.filter(
+            contract_brewery=profile.contract_brewery
+        )
+        serializer = serializers.RecipeSerializer(recipies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.RecipeCreationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        Recipe.objects.create(
+            name=serializer.data["name"],
+            full_volume=Volume(liter=serializer.data["full_volume"]),
+            contract_brewery=brewery
+        )
+        return Response(
+            {
+                "message": "Successfully added recipe."
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+
+class RecipeUpdateView(APIView):
+    """View for updating recipies of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "name", "full_volume", validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the recipe is successfully updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the recipe was not found.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.RecipeUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            recipe = Recipe.objects.get(pk=serializer.data["id"])
+            if recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "User is not an employee of recipe's brewery."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            recipe.name = serializer.data["name"]
+            recipe.full_volume = Volume(liter=serializer.data["full_volume"])
+            recipe.save()
+            return Response(
+                {"message": "Recipe updated successfully."},
+                status=status.HTTP_200_OK
+            )
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class RecipeDeleteView(APIView):
+    """View for deleting recipies of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "id", validates and deletes
+
+    Response:
+        - 200 OK: If the recipe has been deleted
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the recipe was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"errors": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.RecipeRemoveSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            recipe = Recipe.objects.get(pk=serializer.data["id"])
+            if recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "User is not an employee of recipe's brewery."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            _, deleted = recipe.delete()
+            return Response(deleted, status.HTTP_200_OK)
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class OrderView(APIView):
+    """View for orders based on provided recipe.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a response based on user data.
+
+    Responses:
+        - 200 OK: If recipies are successfully retrieved
+        - 403 Forbidden: If the user is not authorized
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, recipe_id):
+        profile = request.user.profile
+        try:
+            recipe = Recipe.objects.get(pk=recipe_id)
+            if profile.contract_brewery != recipe.contract_brewery:
+                return Response(
+                    {
+                        "error": ("Access denied! User is not a representative"
+                                  " of the company that owns this recipe!")
+                    }
+                )
+            orders = Order.objects.filter(recipe=recipe)
+            serializer = serializers.OrderSerializer(orders, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class StageView(APIView):
+    """View for stages of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    - POST: Accepts "recipe_id", "name", "device", "time" in minutes,
+    "description" validates it and returns a response.
+
+    Responses:
+        - 201 Created: If the stage is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If Recipe of provided id does not exist
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.StageCreationSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            recipe = Recipe.objects.get(pk=serializer.data["recipe_id"])
+            if recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "User is not an employee of recipe's brewery."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            Stage.objects.create(
+                name=serializer.data["name"],
+                device_type=DeviceType(serializer.data["device"]),
+                time=Time(minute=serializer.data["time"]),
+                description=serializer.data["description"],
+                recipe=recipe
+            )
+            return Response(
+                {"message": "Successfully added stage."},
+                status=status.HTTP_201_CREATED
+            )
+        except Recipe.DoesNotExist:
+            return Response(
+                {"error": "Recipe not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except ValueError:
+            return Response(
+                {"error": "Illegal device code."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class StageDeleteView(APIView):
+    """View for deleting stages of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "stage_id", validates and deletes
+
+    Response:
+        - 200 OK: If the stage has been deleted
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the recipe was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.StageDeleteSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            stage = Stage.objects.get(pk=serializer.data["stage_id"])
+            if stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            _, deleted = stage.delete()
+            return Response(deleted, status.HTTP_200_OK)
+        except Stage.DoesNotExist:
+            return Response(
+                {"error": "Stage not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class StageUpdateView(APIView):
+    """View for updating stages of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "id", "name", "device", "time" (in minutes), "description"
+    validates, updates and returns response
+
+    Response:
+        - 200 OK: If the stage has been updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the stage was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.StageUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            stage = Stage.objects.get(pk=serializer.data["id"])
+            if stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            stage.name = serializer.data["name"]
+            stage.device_type = DeviceType(serializer.data["device"])
+            stage.time = Time(minute=serializer.data["time"])
+            stage.description = serializer.data["description"]
+            stage.save()
+            return Response(
+                {"message": "Stage updated successfully"},
+                status.HTTP_200_OK
+            )
+        except Stage.DoesNotExist:
+            return Response(
+                {"error": "Stage not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except ValueError:
+            return Response(
+                {"error": "Illegal device code."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class IngredientCreateView(APIView):
+    """View for creating ingredients of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    - POST: Accepts "stage_id", "name", "quantity" validates data and returns
+    a response.
+
+    Responses:
+        - 201 Created: If the ingredient is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If stage of provided id does not exist
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.IngredientCreationSerializer(
+            data=request.data
+        )
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            stage = Stage.objects.get(pk=serializer.data["stage_id"])
+            if stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            Ingredient.objects.create(
+                name=serializer.data["name"],
+                amount=serializer.data["quantity"],
+                stage=stage
+            )
+            return Response(
+                {"message": "Ingredient created successfully"},
+                status.HTTP_201_CREATED
+            )
+        except Stage.DoesNotExist:
+            return Response(
+                {"error": "Stage not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class IngredientDeleteView(APIView):
+    """View for deleting ingredients of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    - POST: Accepts "ingredient_id" validates data, deletes object and returns
+    a response.
+
+    Responses:
+        - 200 OK: If the ingredient has been successfully deleted
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If ingredient of provided id does not exist
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.IngredientDeleteSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            ingredient = Ingredient.objects.get(
+                pk=serializer.data["ingredient_id"]
+            )
+            if ingredient.stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            _, deleted = ingredient.delete()
+            return Response(deleted, status.HTTP_200_OK)
+        except Ingredient.DoesNotExist:
+            return Response(
+                {"error": "Ingredient not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class IngredientUpdateView(APIView):
+    """View for updating ingredients of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    - POST: Accepts "id", "name", "quantity" validates data and returns
+    a response.
+
+    Responses:
+        - 200 OK: If the ingredient has been successfully updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If ingredient of provided id does not exist
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.IngredientUpdateSerializer(
+            data=request.data
+        )
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            ingredient = Ingredient.objects.get(pk=serializer.data["id"])
+            if ingredient.stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            ingredient.name = serializer.data["name"]
+            ingredient.amount = serializer.data["quantity"]
+            ingredient.save()
+            return Response(
+                {"message": "Ingredient updated successfully"},
+                status.HTTP_200_OK
+            )
+        except Ingredient.DoesNotExist:
+            return Response(
+                {"error": "Ingredient not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 class DevicesWithFreeTimeSlotsView(APIView):
