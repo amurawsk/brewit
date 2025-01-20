@@ -88,7 +88,7 @@ const ContractDashboardContent = () => {
                                     <h2>Zlecenie #{order.id}</h2>
                                     <p>
                                         Zleceniobiorca:{' '}
-                                        <b>{order.contract_brewery_name}</b>
+                                        <b>{order.commercial_brewery.name}</b>
                                     </p>
                                     <p>
                                         Utworzone dnia:{' '}
@@ -130,7 +130,7 @@ const ContractDashboardContent = () => {
                                     <h2>Zlecenie #{order.id}</h2>
                                     <p>
                                         Zleceniobiorca:{' '}
-                                        <b>{order.contract_brewery_name}</b>
+                                        <b>{order.commercial_brewery.name}</b>
                                     </p>
                                     <p>
                                         Utworzone dnia:{' '}
