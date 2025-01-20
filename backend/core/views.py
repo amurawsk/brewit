@@ -28,6 +28,7 @@ from .serializers import (
     LoginSerializer,
     OrderRateSerializer,
     OrderSerializer,
+    OrderWithTimeSlotsAndAllBreweriesInfoSerializer,
     OrderWithTimeSlotsAndCommercialInfoSerializer,
     OrderWithTimeSlotsAndContractInfoSerializer,
     OrderWithTimeSlotsSerializer,
@@ -2377,6 +2378,79 @@ class OrderContractDashboardView(APIView):
 
         new_serializer = OrderWithTimeSlotsSerializer(new_orders, many=True)
         confirmed_serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(confirmed_orders, many=True)
+        data = {
+            "new_orders": new_serializer.data,
+            "confirmed_orders": confirmed_serializer.data
+        }
+        return Response(data, status=200)
+
+
+class OrderListIntermediaryView(APIView):
+    """View for listing all orders with specific status. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the status, validates them and returns a list of orders with the specific status.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of orders with the specific status.
+        - 403 Forbidden: If the user is not authorized to view orders, the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, status):
+        user = request.user
+        try:
+            profile = user.profile
+            if not profile.is_intermediary:
+                return Response(
+                    {"error": "Unauthorized to view orders for this intermediary."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        orders = Order.objects.filter(status=status)
+        serializer = OrderWithTimeSlotsAndAllBreweriesInfoSerializer(orders, many=True)
+        return Response(serializer.data, status=200)
+
+
+class OrderIntermediaryDashboardView(APIView):
+    """View for listing up to 3 newest N and C orders in a system. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of up to 3 newest N and C orders in the system.
+
+    Responses:
+        - 200 OK: If the orders are successfully retrieved, the response contains a list of 3 newest N and C orders.
+        - 403 Forbidden: If the user is not authorized to view orders for this intermediary, the response contains an error message.
+        - 404 Not Found: If the user profile is not found, the response contains an error message.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        try:
+            profile = user.profile
+            if not profile.is_intermediary:
+                return Response(
+                    {"error": "Unauthorized to view orders for this intermediary."},
+                    status=403
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=404
+            )
+
+        new_orders = Order.objects.filter(status="N").order_by("-created_at")[:3]
+        confirmed_orders = Order.objects.filter(status="C").order_by("-created_at")[:3]
+
+        new_serializer = OrderWithTimeSlotsAndAllBreweriesInfoSerializer(new_orders, many=True)
+        confirmed_serializer = OrderWithTimeSlotsAndAllBreweriesInfoSerializer(confirmed_orders, many=True)
         data = {
             "new_orders": new_serializer.data,
             "confirmed_orders": confirmed_serializer.data
