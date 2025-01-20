@@ -353,7 +353,11 @@ class DeviceDetailView(APIView):
         try:
             device = Device.objects.get(id=device_id, is_deleted=False)
             profile = Profile.objects.get(user=user)
-            if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
+            if (
+                profile.contract_brewery is None and
+                profile.commercial_brewery != device.commercial_brewery and
+                not profile.is_intermediary
+            ):
                 return Response(
                     {"error": "Unauthorized to view this device."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -1957,7 +1961,11 @@ class OrderContractBreweryDetailView(APIView):
             order = Order.objects.get(id=order_id)
             profile = Profile.objects.get(user=user)
             time_slot = TimeSlot.objects.filter(order=order).first()
-            if not profile.contract_brewery and profile.commercial_brewery != time_slot.device.commercial_brewery:
+            if (
+                not profile.contract_brewery and
+                profile.commercial_brewery != time_slot.device.commercial_brewery and
+                not profile.is_intermediary
+            ):
                 return Response(
                     {"error": "Unauthorized to view this order."},
                     status=status.HTTP_403_FORBIDDEN,
