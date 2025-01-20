@@ -4,11 +4,11 @@ import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import IntermediarySidebar from '../../modules/intermediary/IntermediarySidebar.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
 import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+import ShowUsers from '../../modules/intermediary/ShowUsers.jsx';
 
 import styles from './Users.module.css';
 
 import api from '../../../api.js';
-import ShowUsers from '../../modules/intermediary/ShowUsers.jsx';
 
 const Users = () => {
     const [users, setUsers] = useState(null);
@@ -18,7 +18,7 @@ const Users = () => {
         const getData = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(`users/`);
+                const response = await api.get(`users/all/`);
                 if (response.status === 200) {
                     setIsLoading(false);
                     setUsers(response.data);
