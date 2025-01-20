@@ -87,5 +87,10 @@ urlpatterns = [
         "recipies/delete/",
         views.RecipeDeleteView.as_view(),
         name="recipe_delete"
-    )
+    ),
+    path(
+        "recipies/stages/ingredients/",
+        views.IngredientCreateView.as_view(),
+        name="ingredient_add"
+    ),
 ]

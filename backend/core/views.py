@@ -12,7 +12,8 @@ from .models import (
     Recipe,
     Order,
     Stage,
-    DeviceType
+    DeviceType,
+    Ingredient
 )
 from .serializers import (
     CheckUsernameUniqueSerializer,
@@ -1169,4 +1170,61 @@ class StageUpdateView(APIView):
             return Response(
                 {"error": "Illegal device code."},
                 status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class IngredientCreateView(APIView):
+    """View for creating ingredients of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    - POST: Accepts "stage_id", "name", "quantity" validates data and returns
+    a response.
+
+    Responses:
+        - 201 Created: If the ingredient is successfully created
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If stage of provided id does not exist
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.IngredientCreationSerializer(
+            data=request.data
+        )
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            stage = Stage.objects.get(pk=serializer.data["stage_id"])
+            if stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            Ingredient.objects.create(
+                name=serializer.data["name"],
+                amount=serializer.data["quantity"],
+                stage=stage
+            )
+            return Response(
+                {"message": "Ingredient created successfully"},
+                status.HTTP_201_CREATED
+            )
+        except Stage.DoesNotExist:
+            return Response(
+                {"error": "Stage not found."},
+                status=status.HTTP_404_NOT_FOUND
             )
