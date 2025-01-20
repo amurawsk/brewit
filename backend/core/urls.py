@@ -98,4 +98,9 @@ urlpatterns = [
         views.IngredientDeleteView.as_view(),
         name="ingredient_delete"
     ),
+    path(
+        "recipies/stages/ingredients/update",
+        views.IngredientUpdateView.as_view(),
+        name="ingredient_update"
+    ),
 ]
