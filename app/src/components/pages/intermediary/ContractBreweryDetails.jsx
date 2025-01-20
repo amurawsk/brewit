@@ -27,6 +27,8 @@ import api from '../../../api.js';
 const ContractBreweryDetails = () => {
     const navigate = useNavigate();
 
+    const goToContractBreweries = () => navigate('/intermediary/contract-breweries');
+
     const location = useLocation();
     const breweryId = location.state?.breweryId || null;
 
@@ -203,6 +205,14 @@ const ContractBreweryDetails = () => {
                             </div>
                         </>
                     )}
+                    <div className={styles.buttonContainer}>
+                        <button
+                            onClick={() => goToContractBreweries()}
+                            className={styles.backButton}
+                        >
+                            Cofnij
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

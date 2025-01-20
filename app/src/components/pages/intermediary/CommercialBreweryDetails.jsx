@@ -43,7 +43,8 @@ const CommercialBreweryDetails = () => {
             state: { breweryId: breweryId },
         });
     };
-
+    const goToList = () => navigate('/intermediary/commercial-breweries')
+    
     useEffect(() => {
         const getData = async () => {
             try {
@@ -270,6 +271,14 @@ const CommercialBreweryDetails = () => {
                             </div>
                         </>
                     )}
+                    <div className={styles.buttonContainer}>
+                        <button
+                            onClick={() => goToList()}
+                            className={styles.backButton}
+                        >
+                            Cofnij
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

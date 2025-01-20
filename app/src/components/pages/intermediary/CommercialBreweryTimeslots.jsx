@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import IntermediarySidebar from '../../modules/intermediary/IntermediarySidebar.jsx';
@@ -12,6 +12,14 @@ import styles from './CommercialBreweryTimeslots.module.css';
 const CommercialBreweryTimeslots = () => {
     const location = useLocation();
     const breweryId = location.state?.breweryId || null;
+
+    const navigate = useNavigate();
+
+    const goToDetails = () => {
+        navigate('/intermediary/commercial-breweries/brewery-details', {
+            state: { breweryId: breweryId },
+        });
+    };
 
     const [startHour, setStartHour] = useState(8);
     const [endHour, setEndHour] = useState(16);
@@ -43,6 +51,14 @@ const CommercialBreweryTimeslots = () => {
                         endHour={endHour}
                         selectedBreweryId={breweryId}
                     />
+                    <div className={styles.buttonContainer}>
+                        <button
+                            onClick={() => goToDetails()}
+                            className={styles.backButton}
+                        >
+                            Cofnij
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
