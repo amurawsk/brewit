@@ -16,7 +16,7 @@ class Brewery(models.Model):
     name = models.CharField(max_length=255, unique=True)
     contract_phone_number = models.CharField(max_length=30)
     contract_email = models.EmailField(max_length=100)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -80,6 +80,10 @@ class Profile(models.Model):
         blank=True
     )
 
+    @property
+    def is_intermediary(self):
+        return self.contract_brewery is None and self.commercial_brewery is None
+
     class Meta:
         constraints = [
             models.CheckConstraint(
@@ -127,6 +131,11 @@ class Device(models.Model):
         CommercialBrewery,
         on_delete=models.CASCADE
     )
+    is_deleted = models.BooleanField(default=False)
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.save()
 
 
 class Recipe(models.Model):
@@ -159,7 +168,7 @@ class Order(models.Model):
     )
     beer_type = models.CharField(max_length=100)
     beer_volume = MeasurementField(measurement=Volume)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
     rate = models.BooleanField(blank=True, null=True)
     ended_at = models.DateTimeField(null=True, blank=True)
     contract_brewery = models.ForeignKey(
@@ -200,6 +209,11 @@ class TimeSlot(models.Model):
         null=True,
         blank=True
     )
+    is_deleted = models.BooleanField(default=False)
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.save()
 
     class Meta:
         constraints = [
@@ -214,7 +228,7 @@ class Stage(models.Model):
     name = models.CharField(max_length=100)
     device_type = models.CharField(max_length=50, choices=DeviceType)
     time = MeasurementField(measurement=Time)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
     def __str__(self) -> str:

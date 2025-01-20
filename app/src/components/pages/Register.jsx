@@ -9,7 +9,8 @@ import styles from './Register.module.css';
 const Register = () => {
     const navigate = useNavigate();
 
-    const goToAboutUs = () => navigate('/');
+    const goToCommercialDashboard = () => navigate('/commercial/dashboard');
+    const goToContractBrewery = () => navigate('/contract/dashboard');
 
     const [activeSection, setActiveSection] = useState('NamePassword');
     const [isChecked, setCheckbox] = useState(false);
@@ -26,10 +27,27 @@ const Register = () => {
     });
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleRegister = () => {
+    const handleRegister = async (event) => {
         console.log('Dane rejestracyjne:', formData);
-        goToAboutUs();
-    };
+		const response = await api.post('login/', { username: formData.username, password: formData.password });
+
+        if (response.status === 200) {
+			const { refresh, access, user_type, user_id, brewery_id } =
+				response.data;
+
+			localStorage.setItem('ACCESS_TOKEN', access);
+			localStorage.setItem('REFRESH_TOKEN', refresh);
+			localStorage.setItem('userType', user_type);
+			localStorage.setItem('userId', user_id);
+			localStorage.setItem('breweryId', brewery_id);
+
+			if (user_type === 'commercial_brewery') {
+				goToCommercialDashboard();
+			} else if (user_type === 'contract_brewery') {
+				goToContractBrewery();
+			}
+    	}
+	};
 
     const updateFormData = (field, value) => {
         setFormData((prevState) => ({ ...prevState, [field]: value }));

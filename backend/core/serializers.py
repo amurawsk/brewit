@@ -3,7 +3,6 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import (
     CommercialBrewery,
-    CommercialBrewery,
     ContractBrewery,
     Device,
     Profile,
@@ -14,6 +13,7 @@ from .models import (
     Recipe,
 )
 from django.db.models import Count
+from django.db.models import Sum
 
 
 class MeasurementField(serializers.Field):
@@ -51,6 +51,7 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
             val['device_type']: val['no'] for val in list(
                 instance
                 .device_set
+                .filter(is_deleted=False)
                 .values('device_type')
                 .annotate(no=Count('device_type'))
             )
@@ -64,9 +65,9 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
             val["status"]: val["no"] for val in list(
                 Order.objects.filter(
                     timeslot__device__commercial_brewery=instance
-                ).distinct()
+                )
                 .values('status')
-                .annotate(no=Count('status', distinct=True))
+                .annotate(no=Count('status'))
             )
         }
         data['no_orders'] = sum(orders.values())
@@ -178,18 +179,39 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    created_at = serializers.DateTimeField(source="user.date_joined")
+
+    class Meta:
+        model = Profile
+        fields = [
+            "username",
+            "created_at"
+        ]
+
+
 class AccountInfoSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     username = serializers.CharField(source="user.username")
     added_at = serializers.DateTimeField(source="user.date_joined")
+    username_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
         fields = [
             "id",
             "username",
-            "added_at"
+            "added_at",
+            "username_type"
         ]
+
+    def get_username_type(self, obj):
+        if obj.commercial_brewery:
+            return "Browar Komercyjny"
+        elif obj.contract_brewery:
+            return "Browar Kontraktowy"
+        return "Spółka Pośrednicząca"
 
 
 class CoworkerSerializer(serializers.Serializer):
@@ -292,41 +314,13 @@ class IngredientUpdateSerializer(serializers.Serializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source="pk")
-    beer_volume = serializers.FloatField(source="beer_volume.l")
-    contract_brewery_name = serializers.CharField(
-        source="contract_brewery.name"
-    )
-    contract_brewery_owner_name = serializers.CharField(
-        source="contract_brewery.owner_name"
-    )
-    contract_brewery_email = serializers.CharField(
-        source="contract_brewery.contract_email"
-    )
-    contract_brewery_phone_number = serializers.CharField(
-        source="contract_brewery.contract_phone_number"
-    )
-    price = serializers.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        source="total_price"
-    )
+    beer_volume = MeasurementField()
 
     class Meta:
         model = Order
         fields = [
-            "id",
-            "created_at",
-            "ended_at",
-            "beer_type",
-            "beer_volume",
-            "status",
-            "contract_brewery_name",
-            "contract_brewery_owner_name",
-            "contract_brewery_email",
-            "contract_brewery_phone_number",
-            "rate",
-            "price"
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at', 'contract_brewery', 'recipe'
         ]
 
 
@@ -334,6 +328,12 @@ class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery
         fields = ['name', 'contract_phone_number', 'contract_email', 'description', 'owner_name']
+
+
+class SimpleContractBrewerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContractBrewery
+        fields = ['id', 'name', 'owner_name']
 
 
 class RegisterCommercialSerializer(serializers.ModelSerializer):
@@ -416,6 +416,7 @@ class LoginSerializer(serializers.Serializer):
         except Profile.DoesNotExist:
             raise serializers.ValidationError("User profile not found.")
         user_type = None
+        brewery_id = None
         if profile.commercial_brewery:
             user_type = "commercial_brewery"
             user_id = profile.id
@@ -424,6 +425,9 @@ class LoginSerializer(serializers.Serializer):
             user_type = "contract_brewery"
             user_id = profile.id
             brewery_id = profile.contract_brewery.id
+        else:
+            user_type = "intermediary_company"
+            user_id = profile.id
 
         return {
             "user": user,
@@ -457,9 +461,18 @@ class DeviceSerializer(serializers.ModelSerializer):
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
+    device = serializers.SerializerMethodField()
+
     class Meta:
         model = TimeSlot
         fields = ['id', 'status', 'slot_type', 'price', 'start_timestamp', 'end_timestamp', 'device', 'order']
+
+    def get_device(self, obj):
+        return {
+            "id": obj.device.id,
+            "name": obj.device.name,
+            "serial_number": obj.device.serial_number
+        }
 
     def validate(self, data):
         if data['start_timestamp'] >= data['end_timestamp']:
@@ -467,9 +480,168 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         return data
 
 
+class TimeSlotEditPriceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = ['price']
+
+    def validate_price(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Price must be a positive number.")
+        return value
+
+
 class DeviceWithTimeSlotsSerializer(serializers.ModelSerializer):
-    timeSlots = TimeSlotSerializer(source='timeslot_set', many=True)
+    timeSlots = serializers.SerializerMethodField()
 
     class Meta:
         model = Device
         fields = ['id', 'name', 'device_type', 'timeSlots']
+
+    def get_timeSlots(self, obj):
+        time_slots = obj.timeslot_set.filter(is_deleted=False)
+        return TimeSlotSerializer(time_slots, many=True).data
+
+
+class DeviceWithFreeTimeSlotsSerializer(serializers.ModelSerializer):
+    timeSlots = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Device
+        fields = ['id', 'name', 'device_type', 'timeSlots']
+
+    def get_timeSlots(self, obj):
+        time_slots = obj.timeslot_set.filter(status='F', is_deleted=False)
+        return TimeSlotSerializer(time_slots, many=True).data
+
+
+class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    total_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at', 'contract_brewery',
+            'recipe', 'time_slots', 'total_price'
+        ]
+
+    def get_total_price(self, obj):
+        return obj.timeslot_set.aggregate(sum=Sum("price"))['sum'] or 0
+
+
+class OrderWithTimeSlotsAndContractInfoSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    contract_brewery = ContractBrewerySerializer()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at',
+            'contract_brewery', 'time_slots', 'total_price'
+        ]
+
+
+class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    commercial_brewery = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at', 'commercial_brewery',
+            'recipe', 'time_slots', 'total_price'
+        ]
+
+    def get_commercial_brewery(self, obj):
+        brewery = obj.timeslot_set.first().device.commercial_brewery
+        return {
+            "id": brewery.id,
+            "name": brewery.name,
+            "contract_phone_number": brewery.contract_phone_number,
+            "contract_email": brewery.contract_email,
+            "description": brewery.description,
+            "nip": brewery.nip,
+            "address": brewery.address
+        }
+
+
+class OrderWithTimeSlotsAndAllBreweriesInfoSerializer(serializers.ModelSerializer):
+    beer_volume = MeasurementField()
+    time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
+    contract_brewery = ContractBrewerySerializer()
+    commercial_brewery = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Order
+        fields = [
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
+            'description', 'rate', 'ended_at', 'contract_brewery',
+            'commercial_brewery', 'recipe', 'time_slots', 'total_price'
+        ]
+
+    def get_commercial_brewery(self, obj):
+        brewery = obj.timeslot_set.first().device.commercial_brewery
+        return {
+            "id": brewery.id,
+            "name": brewery.name,
+            "contract_phone_number": brewery.contract_phone_number,
+            "contract_email": brewery.contract_email,
+            "description": brewery.description,
+            "nip": brewery.nip,
+            "address": brewery.address
+        }
+
+
+class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
+    devices_number = serializers.SerializerMethodField()
+    bt_number = serializers.SerializerMethodField()
+    ft_number = serializers.SerializerMethodField()
+    ac_number = serializers.SerializerMethodField()
+    be_number = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CommercialBrewery
+        fields = [
+            'id', 'name', 'nip', 'address',
+            'contract_phone_number', 'contract_email', 'description',
+            'devices_number', 'bt_number', 'ft_number', 'ac_number', 'be_number'
+        ]
+
+    def get_devices_number(self, obj):
+        return obj.device_set.filter(is_deleted=False).count()
+
+    def get_bt_number(self, obj):
+        return obj.device_set.filter(device_type='BT', is_deleted=False).count()
+
+    def get_ft_number(self, obj):
+        return obj.device_set.filter(device_type='FT', is_deleted=False).count()
+
+    def get_ac_number(self, obj):
+        return obj.device_set.filter(device_type='AC', is_deleted=False).count()
+
+    def get_be_number(self, obj):
+        return obj.device_set.filter(device_type='BE', is_deleted=False).count()
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if representation['devices_number'] > 0:
+            return representation
+        return None
+
+
+class OrderRateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['rate']
+
+    def validate_rate(self, value):
+        if value not in [True, False]:
+            raise serializers.ValidationError("Rate must be a boolean value.")
+        return value
