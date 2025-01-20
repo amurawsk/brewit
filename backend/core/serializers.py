@@ -64,9 +64,9 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
             val["status"]: val["no"] for val in list(
                 Order.objects.filter(
                     timeslot__device__commercial_brewery=instance
-                ).distinct()
+                )
                 .values('status')
-                .annotate(no=Count('status', distinct=True))
+                .annotate(no=Count('status'))
             )
         }
         data['no_orders'] = sum(orders.values())
