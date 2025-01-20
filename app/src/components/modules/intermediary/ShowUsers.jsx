@@ -33,7 +33,9 @@ const ShowUsers = ({ users }) => {
                             className={styles.coworker}
                             key={index}
                             style={{
-                                borderColor: getBorderColor(person.username_type),
+                                borderColor: getBorderColor(
+                                    person.username_type
+                                ),
                             }}>
                             <div className={styles.deviceText}>
                                 <span className={styles.textTitle}>
@@ -51,7 +53,8 @@ const ShowUsers = ({ users }) => {
                                 <span className={styles.description}>
                                     Typ konta:
                                     <span className={styles.descriptionValue}>
-                                        {' '} {person.username_type}
+                                        {' '}
+                                        {person.username_type}
                                     </span>
                                 </span>
                             </div>
