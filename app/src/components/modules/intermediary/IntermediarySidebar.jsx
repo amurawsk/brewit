@@ -16,8 +16,10 @@ import styles from './IntermediarySidebar.module.css';
 const IntermediarySidebar = () => {
     const navigate = useNavigate();
 
-    const goToContractBreweries = () => navigate('/intermediary/contract-breweries');
-    const goToCommercialBreweries = () => navigate('/intermediary/commercial-breweries');
+    const goToContractBreweries = () =>
+        navigate('/intermediary/contract-breweries');
+    const goToCommercialBreweries = () =>
+        navigate('/intermediary/commercial-breweries');
     const goToOrders = () => navigate('/intermediary/orders');
     const goToCoworkers = () => navigate('/intermediary/coworkers');
     const goToStatistics = () => navigate('/intermediary/statistics');
@@ -32,7 +34,9 @@ const IntermediarySidebar = () => {
             </div>
             <div className={styles.sidebarMenu}>
                 <hr className={styles.separator}></hr>
-                <div onClick={goToContractBreweries} className={styles.sidebarItem}>
+                <div
+                    onClick={goToContractBreweries}
+                    className={styles.sidebarItem}>
                     <FaBeer className={styles.icon} />
                     <div className={styles.sidebarText}>
                         <span>Browary kontraktowe</span>
@@ -41,7 +45,9 @@ const IntermediarySidebar = () => {
                         </span>
                     </div>
                 </div>
-                <div onClick={goToCommercialBreweries} className={styles.sidebarItem}>
+                <div
+                    onClick={goToCommercialBreweries}
+                    className={styles.sidebarItem}>
                     <FaGlassCheers className={styles.icon} />
                     <div className={styles.sidebarText}>
                         <span>Browary komercyjne</span>

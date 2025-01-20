@@ -22,14 +22,16 @@ const MyAccount = () => {
             setIsLoading(true);
             try {
                 const response = await api.get(
-                    `accounts/contract/${parseInt(localStorage.getItem('userId'))}/`
+                    `accounts/intermediary/${parseInt(localStorage.getItem('userId'))}/`
                 );
                 if (response.status === 200) {
                     setIsLoading(false);
                     setAccountInfo(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania szczegółów konta! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania szczegółów konta! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);
