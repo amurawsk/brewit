@@ -176,21 +176,23 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                         />
                                     </div>
                                 )}
-
-                                <div>
-                                    <label className={styles.dataLabel}>
-                                        Adres
-                                    </label>
-                                    <input
-                                        className={styles.dataInput}
-                                        type="text"
-                                        placeholder="Podaj adres"
-                                        name="address"
-                                        value={currentBreweryData.address}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                </div>
+                                {localStorage.getItem('userType') ===
+                                    'commercial_brewery' && (
+                                    <div>
+                                        <label className={styles.dataLabel}>
+                                            Adres
+                                        </label>
+                                        <input
+                                            className={styles.dataInput}
+                                            type="text"
+                                            placeholder="Podaj adres"
+                                            name="address"
+                                            value={currentBreweryData.address}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </form>
                         <div className={styles.buttonsContainer}>
