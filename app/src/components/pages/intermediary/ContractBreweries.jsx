@@ -4,6 +4,7 @@ import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import IntermediarySidebar from '../../modules/intermediary/IntermediarySidebar.jsx';
 import ShowContractBreweries from '../../modules/intermediary/ShowContractBreweries.jsx';
 import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
 
 import styles from './ContractBreweries.module.css';
 
@@ -17,7 +18,7 @@ const ContractBreweries = () => {
         const getData = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(`breweries/contract/`);
+                const response = await api.get(`breweries/contract/all/`);
                 if (response.status === 200) {
                     setIsLoading(false);
                     setBreweries(response.data);
@@ -42,6 +43,7 @@ const ContractBreweries = () => {
             <div className={styles.container}>
                 <IntermediarySidebar />
                 <div className={styles.content}>
+                    <PageTitle text="Browary kontraktowe" />
                     <ShowContractBreweries breweries={breweries} />
                 </div>
             </div>
