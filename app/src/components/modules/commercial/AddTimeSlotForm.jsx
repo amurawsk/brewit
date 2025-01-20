@@ -51,7 +51,9 @@ const AddTimeSlotForm = () => {
                     setDevices(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);

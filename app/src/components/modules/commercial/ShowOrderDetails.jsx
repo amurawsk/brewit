@@ -17,7 +17,14 @@ import api from '../../../api.js';
  * @param order - chosen order data
  * @param setOrder - setter for order
  */
-const ShowOrderDetails = ({ isPanelOpen, setIsPanelOpen, order, setOrder, activeStatus, getData }) => {
+const ShowOrderDetails = ({
+    isPanelOpen,
+    setIsPanelOpen,
+    order,
+    setOrder,
+    activeStatus,
+    getData,
+}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);

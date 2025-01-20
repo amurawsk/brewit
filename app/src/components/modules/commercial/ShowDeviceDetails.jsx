@@ -72,7 +72,9 @@ const ShowDeviceDetails = ({
                     getData();
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania szczegółów urządzenia! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania szczegółów urządzenia! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);

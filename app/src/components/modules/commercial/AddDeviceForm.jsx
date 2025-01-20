@@ -61,7 +61,9 @@ const AddDeviceForm = () => {
                 navigate('/commercial/devices');
             } else {
                 setIsLoading(false);
-                alert('Błąd podczas dodawania urządzenia! Odśwież stronę i spróbuj ponownie.');
+                alert(
+                    'Błąd podczas dodawania urządzenia! Odśwież stronę i spróbuj ponownie.'
+                );
             }
         } catch (error) {
             setIsLoading(false);

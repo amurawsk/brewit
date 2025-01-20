@@ -36,7 +36,9 @@ const CommercialDashboardContent = () => {
                     setCurrentOrders(response.data.confirmed_orders);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania zamówień! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania zamówień! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);
