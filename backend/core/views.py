@@ -1096,7 +1096,10 @@ class StageDeleteView(APIView):
             stage = Stage.objects.get(pk=serializer.data["stage_id"])
             if stage.recipe.contract_brewery != brewery:
                 return Response(
-                    {"error": "Permission denied: user is an employee of other brewery"},
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
                     status=status.HTTP_403_FORBIDDEN
                 )
             _, deleted = stage.delete()
@@ -1105,4 +1108,65 @@ class StageDeleteView(APIView):
             return Response(
                 {"error": "Stage not found."},
                 status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class StageUpdateView(APIView):
+    """View for updating stages of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "id", "name", "device", "time" (in minutes), "description"
+    validates, updates and returns response
+
+    Response:
+        - 200 OK: If the stage has been updated
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the stage was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.StageUpdateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            stage = Stage.objects.get(pk=serializer.data["id"])
+            if stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            stage.name = serializer.data["name"]
+            stage.device_type = DeviceType(serializer.data["device"])
+            stage.time = Time(minute=serializer.data["time"])
+            stage.description = serializer.data["description"]
+            stage.save()
+            return Response(
+                {"message": "Stage updated successfully"},
+                status.HTTP_200_OK
+            )
+        except Stage.DoesNotExist:
+            return Response(
+                {"error": "Stage not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except ValueError:
+            return Response(
+                {"error": "Illegal device code."},
+                status=status.HTTP_400_BAD_REQUEST
             )

@@ -71,7 +71,12 @@ urlpatterns = [
     path(
         "recipies/stages/delete",
         views.StageDeleteView.as_view(),
-        name="staged_delete"
+        name="stages_delete"
+    ),
+    path(
+        "recipies/stages/update",
+        views.StageUpdateView.as_view(),
+        name="stages_update"
     ),
     path(
         "recipies/update/",

@@ -267,6 +267,14 @@ class StageDeleteSerializer(serializers.Serializer):
     stage_id = serializers.IntegerField()
 
 
+class StageUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    device = serializers.CharField()
+    time = serializers.IntegerField()
+    description = serializers.CharField()
+
+
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     beer_volume = serializers.FloatField(source="beer_volume.l")
