@@ -66,6 +66,7 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
                 Order.objects.filter(
                     timeslot__device__commercial_brewery=instance
                 )
+                .distinct()
                 .values('status')
                 .annotate(no=Count('status'))
             )
