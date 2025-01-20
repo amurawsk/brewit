@@ -42,11 +42,11 @@ import IntermediaryOrders from './components/pages/intermediary/Orders';
 import IntermediaryStatistics from './components/pages/intermediary/Statistics';
 import IntermediaryAddCoworker from './components/pages/intermediary/AddCoworker';
 import CommercialBreweryDetails from './components/pages/intermediary/CommercialBreweryDetails';
+import ContractBreweryDetails from './components/pages/intermediary/ContractBreweryDetails';
 import CommercialBreweryTimeslots from './components/pages/intermediary/CommercialBreweryTimeslots';
 import Users from './components/pages/intermediary/Users';
 
 import './App.css';
-import ContractBreweryDetails from './components/pages/intermediary/ContractBreweryDetails';
 
 function App() {
     return (
