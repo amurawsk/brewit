@@ -758,7 +758,7 @@ class DevicesWithTimeSlotsView(APIView):
         try:
             profile = user.profile
             commercial_brewery = profile.commercial_brewery
-            if not profile.contract_brewery and commercial_brewery.id != brewery_id:
+            if not profile.contract_brewery and not profile.is_intermediary and commercial_brewery.id != brewery_id:
                 return Response(
                     {"error": "Unauthorized to view devices with time slots for this brewery."},
                     status=403
@@ -1072,6 +1072,12 @@ class CoworkersView(APIView):
         elif (brewery := profile.contract_brewery) is not None:
             coworkers = Profile.objects.filter(
                 contract_brewery=brewery,
+                user__is_active=True
+            ).exclude(pk=profile.pk)
+        elif (profile.is_intermediary):
+            coworkers = Profile.objects.filter(
+                contract_brewery__isnull=True,
+                commercial_brewery__isnull=True,
                 user__is_active=True
             ).exclude(pk=profile.pk)
         else:
