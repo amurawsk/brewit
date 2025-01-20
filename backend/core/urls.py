@@ -69,6 +69,16 @@ urlpatterns = [
         name="stages"
     ),
     path(
+        "recipies/stages/delete",
+        views.StageDeleteView.as_view(),
+        name="stages_delete"
+    ),
+    path(
+        "recipies/stages/update",
+        views.StageUpdateView.as_view(),
+        name="stages_update"
+    ),
+    path(
         "recipies/update/",
         views.RecipeUpdateView.as_view(),
         name="recipe_update"
@@ -77,5 +87,20 @@ urlpatterns = [
         "recipies/delete/",
         views.RecipeDeleteView.as_view(),
         name="recipe_delete"
-    )
+    ),
+    path(
+        "recipies/stages/ingredients/",
+        views.IngredientCreateView.as_view(),
+        name="ingredient_add"
+    ),
+    path(
+        "recipies/stages/ingredients/delete",
+        views.IngredientDeleteView.as_view(),
+        name="ingredient_delete"
+    ),
+    path(
+        "recipies/stages/ingredients/update",
+        views.IngredientUpdateView.as_view(),
+        name="ingredient_update"
+    ),
 ]

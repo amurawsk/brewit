@@ -225,3 +225,6 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=100)
     amount = models.CharField(max_length=100)
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} ({self.amount}) - {self.stage}"

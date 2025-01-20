@@ -263,6 +263,34 @@ class StageCreationSerializer(serializers.Serializer):
     description = serializers.CharField()
 
 
+class StageDeleteSerializer(serializers.Serializer):
+    stage_id = serializers.IntegerField()
+
+
+class StageUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    device = serializers.CharField()
+    time = serializers.IntegerField()
+    description = serializers.CharField()
+
+
+class IngredientCreationSerializer(serializers.Serializer):
+    stage_id = serializers.IntegerField()
+    name = serializers.CharField()
+    quantity = serializers.CharField()
+
+
+class IngredientDeleteSerializer(serializers.Serializer):
+    ingredient_id = serializers.IntegerField()
+
+
+class IngredientUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    quantity = serializers.CharField()
+
+
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     beer_volume = serializers.FloatField(source="beer_volume.l")
