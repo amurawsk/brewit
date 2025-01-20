@@ -2336,7 +2336,7 @@ class OrderCommercialDashboardView(APIView):
         new_orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status="N").distinct().order_by("-created_at")[:3]
         confirmed_orders = Order.objects.filter(timeslot__device__commercial_brewery=commercial_brewery, status="C").distinct().order_by("-created_at")[:3]
 
-        new_serializer = OrderWithTimeSlotsSerializer(new_orders, many=True)
+        new_serializer = OrderWithTimeSlotsAndContractInfoSerializer(new_orders, many=True)
         confirmed_serializer = OrderWithTimeSlotsAndContractInfoSerializer(confirmed_orders, many=True)
         data = {
             "new_orders": new_serializer.data,
@@ -2412,7 +2412,7 @@ class OrderContractDashboardView(APIView):
         new_orders = Order.objects.filter(contract_brewery=contract_brewery, status="N").order_by("-created_at")[:3]
         confirmed_orders = Order.objects.filter(contract_brewery=contract_brewery, status="C").order_by("-created_at")[:3]
 
-        new_serializer = OrderWithTimeSlotsSerializer(new_orders, many=True)
+        new_serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(new_orders, many=True)
         confirmed_serializer = OrderWithTimeSlotsAndCommercialInfoSerializer(confirmed_orders, many=True)
         data = {
             "new_orders": new_serializer.data,
