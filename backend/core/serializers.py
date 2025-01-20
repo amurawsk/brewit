@@ -1,9 +1,19 @@
-from itertools import count
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CommercialBrewery, ContractBrewery, Device, Profile, TimeSlot, Order, Ingredient, Stage, Recipe
-from django.db.models import Count, Sum
+from .models import (
+    CommercialBrewery,
+    ContractBrewery,
+    Device,
+    Profile,
+    TimeSlot,
+    Order,
+    Ingredient,
+    Stage,
+    Recipe,
+)
+from django.db.models import Count
+from django.db.models import Sum
 
 
 class MeasurementField(serializers.Field):
@@ -225,6 +235,60 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ["pk", "name", "full_volume", "full_time", "steps"]
+
+
+class RecipeCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ["name", "full_volume"]
+
+
+class RecipeUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk")
+
+    class Meta:
+        model = Recipe
+        fields = ["id", "name", "full_volume"]
+
+
+class RecipeRemoveSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
+class StageCreationSerializer(serializers.Serializer):
+    recipe_id = serializers.IntegerField()
+    name = serializers.CharField()
+    device = serializers.CharField()    # kod
+    time = serializers.IntegerField()  # w minutach
+    description = serializers.CharField()
+
+
+class StageDeleteSerializer(serializers.Serializer):
+    stage_id = serializers.IntegerField()
+
+
+class StageUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    device = serializers.CharField()
+    time = serializers.IntegerField()
+    description = serializers.CharField()
+
+
+class IngredientCreationSerializer(serializers.Serializer):
+    stage_id = serializers.IntegerField()
+    name = serializers.CharField()
+    quantity = serializers.CharField()
+
+
+class IngredientDeleteSerializer(serializers.Serializer):
+    ingredient_id = serializers.IntegerField()
+
+
+class IngredientUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    quantity = serializers.CharField()
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -466,7 +530,7 @@ class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = [
-            'id', 'created_at', 'status', 'beer_type', 'beer_volume', 
+            'id', 'created_at', 'status', 'beer_type', 'beer_volume',
             'description', 'rate', 'ended_at', 'contract_brewery',
             'recipe', 'time_slots', 'total_price'
         ]

@@ -31,34 +31,7 @@ urlpatterns = [
 
     path("devices/<int:device_id>/time-slots/all/", views.TimeSlotListView.as_view(), name="time_slot_list_all"),
     path("devices/<int:device_id>/time-slots/add/", views.TimeSlotCreateView.as_view(), name="time_slot_create"),
-    path("time-slots/edit/price/", views.TimeSlotEditPriceView.as_view(), name="time_slot_edit_price"),
-    path("time-slots/delete/<int:time_slot_id>/", views.TimeSlotDeleteView.as_view(), name="time_slot_delete"),
-
-    path("orders/add/", views.OrderCreateView.as_view(), name="order_create"),
-    path("orders/<int:order_id>/details/", views.OrderDetailView.as_view(), name="order_detail"),
-    path(
-        "orders/<int:order_id>/contract-brewery/details/",
-        views.OrderContractBreweryDetailView.as_view(),
-        name="order_contract_brewery_detail"
-    ),
-    path("orders/<int:order_id>/accept/", views.OrderAcceptView.as_view(), name="order_accept"),
-    path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
-    path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
-    path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
-    path("orders/<int:order_id>/rate/", views.OrderRateView.as_view(), name="order_rate"),
-    path("orders/device/<int:device_id>/all/", views.OrderListForDeviceView.as_view(), name="order_list_device"),
-    path(
-        "orders/commercial/status/<str:status>/",
-        views.OrderListCommercialView.as_view(),
-        name="order_list_commercial"
-    ),
-    path("orders/commercial/dashboard/", views.OrderCommercialDashboardView.as_view(), name="commercial_dashboard"),
-    path(
-        "orders/contract/status/<str:status>/",
-        views.OrderListContractView.as_view(),
-        name="order_list_contract"
-    ),
-    path("orders/contract/dashboard/", views.OrderContractDashboardView.as_view(), name="contract_dashboard"),
+    path("devices/brewery/<int:brewery_id>/with-time-slots/", views.DevicesWithTimeSlotsView.as_view(), name="time_slot_list_brewery"),
     path(
         "commercial-brewery/<int:brewery_id>/",
         views.CommercialBreweryInfoView.as_view(),
@@ -97,16 +70,85 @@ urlpatterns = [
     path(
         "recipies/",
         views.RecipiesView.as_view(),
-        name="recipies_list"
-    ),
-    path(
-        "breweries/commercial/with-devices/",
-        views.BreweryWithDevicesNumberView.as_view(),
-        name="brewery_with_devices"
+        name="recipies"
     ),
     path(
         "recipies/<int:recipe_id>/orders/",
         views.OrderView.as_view(),
         name="recipies_orders_list"
+    ),
+    path(
+        "recipies/stages/",
+        views.StageView.as_view(),
+        name="stages"
+    ),
+    path(
+        "recipies/stages/delete",
+        views.StageDeleteView.as_view(),
+        name="stages_delete"
+    ),
+    path(
+        "recipies/stages/update",
+        views.StageUpdateView.as_view(),
+        name="stages_update"
+    ),
+    path(
+        "recipies/update/",
+        views.RecipeUpdateView.as_view(),
+        name="recipe_update"
+    ),
+    path(
+        "recipies/delete/",
+        views.RecipeDeleteView.as_view(),
+        name="recipe_delete"
+    ),
+    path(
+        "recipies/stages/ingredients/",
+        views.IngredientCreateView.as_view(),
+        name="ingredient_add"
+    ),
+    path(
+        "recipies/stages/ingredients/delete",
+        views.IngredientDeleteView.as_view(),
+        name="ingredient_delete"
+    ),
+    path(
+        "recipies/stages/ingredients/update",
+        views.IngredientUpdateView.as_view(),
+        name="ingredient_update"
+    ),
+    path("time-slots/edit/price/", views.TimeSlotEditPriceView.as_view(), name="time_slot_edit_price"),
+    path("time-slots/delete/<int:time_slot_id>/", views.TimeSlotDeleteView.as_view(), name="time_slot_delete"),
+
+    path("orders/add/", views.OrderCreateView.as_view(), name="order_create"),
+    path("orders/<int:order_id>/details/", views.OrderDetailView.as_view(), name="order_detail"),
+    path(
+        "orders/<int:order_id>/contract-brewery/details/",
+        views.OrderContractBreweryDetailView.as_view(),
+        name="order_contract_brewery_detail"
+    ),
+    path("orders/<int:order_id>/accept/", views.OrderAcceptView.as_view(), name="order_accept"),
+    path("orders/<int:order_id>/reject/", views.OrderRejectView.as_view(), name="order_reject"),
+    path("orders/<int:order_id>/withdraw/", views.OrderWithdrawView.as_view(), name="order_withdraw"),
+    path("orders/<int:order_id>/cancel/", views.OrderCancelView.as_view(), name="order_cancel"),
+    path("orders/<int:order_id>/rate/", views.OrderRateView.as_view(), name="order_rate"),
+    path("orders/device/<int:device_id>/all/", views.OrderListForDeviceView.as_view(), name="order_list_device"),
+    path(
+        "orders/commercial/status/<str:status>/",
+        views.OrderListCommercialView.as_view(),
+        name="order_list_commercial"
+    ),
+    path("orders/commercial/dashboard/", views.OrderCommercialDashboardView.as_view(), name="commercial_dashboard"),
+    path(
+        "orders/contract/status/<str:status>/",
+        views.OrderListContractView.as_view(),
+        name="order_list_contract"
+    ),
+    path("orders/contract/dashboard/", views.OrderContractDashboardView.as_view(), name="contract_dashboard"),
+
+    path(
+        "breweries/commercial/with-devices/",
+        views.BreweryWithDevicesNumberView.as_view(),
+        name="brewery_with_devices"
     ),
 ]
