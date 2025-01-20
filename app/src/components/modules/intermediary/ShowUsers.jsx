@@ -9,6 +9,19 @@ import styles from './ShowUsers.module.css';
  * @param users - users list
  */
 const ShowUsers = ({ users }) => {
+    const getBorderColor = (usernameType) => {
+        switch (usernameType) {
+            case 'Browar Kontraktowy':
+                return '#1E90FF';
+            case 'Browar Komercyjny':
+                return '#32CD32';
+            case 'Spółka Pośrednicząca':
+                return '#FFA500';
+            default:
+                return '#000';
+        }
+    };
+
     return (
         <div>
             {users.length === 0 ? (
@@ -16,7 +29,12 @@ const ShowUsers = ({ users }) => {
             ) : (
                 <div className={styles.allCoworkers}>
                     {users.map((person, index) => (
-                        <div className={styles.coworker} key={index}>
+                        <div
+                            className={styles.coworker}
+                            key={index}
+                            style={{
+                                borderColor: getBorderColor(person.username_type),
+                            }}>
                             <div className={styles.deviceText}>
                                 <span className={styles.textTitle}>
                                     {person.username}
@@ -30,6 +48,12 @@ const ShowUsers = ({ users }) => {
                                         ).toLocaleString('pl-PL')}
                                     </span>
                                 </span>
+                                <span className={styles.description}>
+                                    Typ konta:
+                                    <span className={styles.descriptionValue}>
+                                        {' '} {person.username_type}
+                                    </span>
+                                </span>
                             </div>
                         </div>
                     ))}
@@ -38,4 +62,5 @@ const ShowUsers = ({ users }) => {
         </div>
     );
 };
+
 export default ShowUsers;
