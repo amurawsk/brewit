@@ -15,6 +15,8 @@ urlpatterns = [
     path("devices/add/", views.DeviceCreateView.as_view(), name="device_create"),
     path("devices/brewery/<int:brewery_id>/", views.DeviceListForBreweryView.as_view(), name="device_list_brewery"),
     path("devices/all/", views.DeviceListAllView.as_view(), name="device_list_all"),
+    path("devices/brewery/<int:brewery_id>/with-time-slots/", views.DevicesWithTimeSlotsView.as_view(), name="time_slot_list_brewery"),
+
     path("devices/<int:device_id>/time-slots/all/", views.TimeSlotListView.as_view(), name="time_slot_list_all"),
     path("devices/<int:device_id>/time-slots/add/", views.TimeSlotCreateView.as_view(), name="time_slot_create"),
     path("devices/brewery/<int:brewery_id>/with-time-slots/", views.DevicesWithTimeSlotsView.as_view(), name="time_slot_list_brewery"),
@@ -103,4 +105,6 @@ urlpatterns = [
         views.IngredientUpdateView.as_view(),
         name="ingredient_update"
     ),
+    path("time-slots/edit/price/", views.TimeSlotEditPriceView.as_view(), name="time_slot_edit_price"),
+    path("time-slots/delete/<int:time_slot_id>/", views.TimeSlotDeleteView.as_view(), name="time_slot_delete"),
 ]
