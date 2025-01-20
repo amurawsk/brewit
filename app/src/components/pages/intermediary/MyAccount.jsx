@@ -22,7 +22,7 @@ const MyAccount = () => {
             setIsLoading(true);
             try {
                 const response = await api.get(
-                    `accounts/intermediary/${parseInt(localStorage.getItem('userId'))}/`
+                    `accounts/intermediary/`
                 );
                 if (response.status === 200) {
                     setIsLoading(false);
