@@ -43,20 +43,20 @@ urlpatterns = [
         name="contract_brewery_info"
     ),
     path(
-        "accounts/commercial/<int:profile_id>/",
+        "accounts/commercial/",
         views.CommercialAccountInfoView.as_view(),
         name="commercial_account_info"
     ),
     path(
-        "accounts/contract/<int:profile_id>/",
+        "accounts/contract/",
         views.ContractAccountInfoView.as_view(),
         name="contract_account_info"
     ),
-    # path(
-    #     "accounts/intermediary/<int:profile_id>/",
-    #     views.IntermediaryAccountInfoView.as_view(),
-    #     name="intermediary_account_info"
-    # ),
+    path(
+        "accounts/intermediary/",
+        views.IntermediaryAccountInfoView.as_view(),
+        name="intermediary_account_info"
+    ),
     path(
         "coworkers/",
         views.CoworkersView.as_view(),
