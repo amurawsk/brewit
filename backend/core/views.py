@@ -1277,14 +1277,15 @@ class RecipiesView(APIView):
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST
             )
-        Recipe.objects.create(
+        recipe = Recipe.objects.create(
             name=serializer.data["name"],
             full_volume=Volume(liter=serializer.data["full_volume"]),
             contract_brewery=brewery
         )
         return Response(
             {
-                "message": "Successfully added recipe."
+                "message": "Successfully added recipe.",
+                "id": recipe.pk
             },
             status=status.HTTP_201_CREATED
         )
@@ -1456,7 +1457,7 @@ class StageView(APIView):
                     {"error": "User is not an employee of recipe's brewery."},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            Stage.objects.create(
+            stage = Stage.objects.create(
                 name=serializer.data["name"],
                 device_type=DeviceType(serializer.data["device"]),
                 time=Time(minute=serializer.data["time"]),
@@ -1464,7 +1465,7 @@ class StageView(APIView):
                 recipe=recipe
             )
             return Response(
-                {"message": "Successfully added stage."},
+                {"message": "Successfully added stage.", "id": stage.id},
                 status=status.HTTP_201_CREATED
             )
         except Recipe.DoesNotExist:
@@ -1629,13 +1630,13 @@ class IngredientCreateView(APIView):
                     },
                     status=status.HTTP_403_FORBIDDEN
                 )
-            Ingredient.objects.create(
+            ingredient = Ingredient.objects.create(
                 name=serializer.data["name"],
                 amount=serializer.data["quantity"],
                 stage=stage
             )
             return Response(
-                {"message": "Ingredient created successfully"},
+                {"message": "Ingredient created successfully", "id": ingredient.id},
                 status.HTTP_201_CREATED
             )
         except Stage.DoesNotExist:
