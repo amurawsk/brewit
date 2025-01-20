@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import IntermediarySidebar from '../../modules/intermediary/IntermediarySidebar.jsx';
@@ -12,14 +12,12 @@ import api from '../../../api.js';
 const ContractBreweries = () => {
     const [breweries, setBreweries] = useState();
     const [isLoading, setIsLoading] = useState(false);
-    
+
     useEffect(() => {
         const getData = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(
-                    `breweries/contract/`
-                );
+                const response = await api.get(`breweries/contract/`);
                 if (response.status === 200) {
                     setIsLoading(false);
                     setBreweries(response.data);
@@ -44,7 +42,7 @@ const ContractBreweries = () => {
             <div className={styles.container}>
                 <IntermediarySidebar />
                 <div className={styles.content}>
-                    <ShowContractBreweries breweries={breweries}/>
+                    <ShowContractBreweries breweries={breweries} />
                 </div>
             </div>
         </div>

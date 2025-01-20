@@ -64,9 +64,7 @@ const ContractBreweryDetails = () => {
             <div className={styles.container}>
                 <IntermediarySidebar />
                 <div className={styles.content}>
-                    <PageTitle
-                        text="Informacje o browarze"
-                    />
+                    <PageTitle text="Informacje o browarze" />
                     {breweryData !== null && (
                         <>
                             <div className={styles.section}>
@@ -85,9 +83,12 @@ const ContractBreweryDetails = () => {
                                     <span>Telefon kontaktowy:</span>{' '}
                                     <b>{breweryData.phone_number}</b>
                                 </div>
-                                <div className={`${styles.infoCard} ${styles.ceo}`}>
+                                <div
+                                    className={`${styles.infoCard} ${styles.ceo}`}>
                                     <FaUserAlt className={styles.icon} />
-                                    <span>Imię i nazwisko właściciela:</span>{' '}
+                                    <span>
+                                        Imię i nazwisko właściciela:
+                                    </span>{' '}
                                     <b>{breweryData.ceo}</b>
                                 </div>
                                 <div
