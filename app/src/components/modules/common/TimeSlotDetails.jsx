@@ -99,7 +99,7 @@ const TimeSlotDetails = ({
                 alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
-        if (selectedDevice !== null) {
+        if (selectedDevice !== null && (localStorage.getItem('userType') === 'contract_brewery' || localStorage.getItem('userType') === 'intermediary_company')) {
             getData();
         }
     }, [selectedDevice]);

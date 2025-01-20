@@ -5,6 +5,7 @@ import {
     FaMapMarkerAlt,
     FaIdCard,
     FaUserTie,
+    FaUserAlt,
 } from 'react-icons/fa';
 
 import styles from './BreweryInfo.module.css';
@@ -43,7 +44,7 @@ const BreweryInfo = ({ breweryData }) => {
                 )}
                 {localStorage.getItem('userType') === 'contract_brewery' && (
                     <div className={`${styles.infoCard} ${styles.ceo}`}>
-                        <FaUserTie className={styles.icon} />
+                        <FaUserAlt className={styles.icon} />
                         <span>Imię i nazwisko właściciela:</span>{' '}
                         <b>{breweryData.ceo}</b>
                     </div>
