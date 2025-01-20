@@ -7,9 +7,13 @@ import styles from './NewOrderTimeSlotsTimeline.module.css';
  * @param timeSlots - chosen order timeSlots
  */
 const NewOrderTimeSlotsTimeline = ({ timeSlots }) => {
+    const sortedTimeSlots = [...timeSlots].sort(
+        (a, b) => new Date(a.startTimestamp) - new Date(b.startTimestamp)
+    );
+
     return (
         <div className={styles.timeline}>
-            {timeSlots.map((timeslot, index) => (
+            {sortedTimeSlots.map((timeslot, index) => (
                 <div key={index} className={styles.event}>
                     <div className={`${styles.dot} ${styles.upcoming}`} />
                     <div className={styles.details}>
