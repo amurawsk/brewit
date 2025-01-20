@@ -974,7 +974,7 @@ class UserListView(APIView):
             )
 
         users = Profile.objects.all()
-        serializer = serializers.UserSerializer(users, many=True)
+        serializer = serializers.AccountInfoSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

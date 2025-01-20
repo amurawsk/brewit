@@ -194,14 +194,23 @@ class AccountInfoSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     username = serializers.CharField(source="user.username")
     added_at = serializers.DateTimeField(source="user.date_joined")
+    username_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
         fields = [
             "id",
             "username",
-            "added_at"
+            "added_at",
+            "username_type"
         ]
+
+    def get_username_type(self, obj):
+        if obj.commercial_brewery:
+            return "Browar Kontraktowy"
+        elif obj.contract_brewery:
+            return "Browar Komercyjny"
+        return "Spółka Pośrednicząca"
 
 
 class CoworkerSerializer(serializers.Serializer):
