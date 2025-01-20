@@ -1228,3 +1228,53 @@ class IngredientCreateView(APIView):
                 {"error": "Stage not found."},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+
+class IngredientDeleteView(APIView):
+    """View for deleting ingredients of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    - POST: Accepts "ingredient_id" validates data, deletes object and returns
+    a response.
+
+    Responses:
+        - 200 OK: If the ingredient has been successfully deleted
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If ingredient of provided id does not exist
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.IngredientDeleteSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            ingredient = Ingredient.objects.get(
+                pk=serializer.data["ingredient_id"]
+            )
+            if ingredient.stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {
+                        "error": ("Permission denied: user is an employee of"
+                                  " other brewery")
+                    },
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            _, deleted = ingredient.delete()
+            return Response(deleted, status.HTTP_200_OK)
+        except Ingredient.DoesNotExist:
+            return Response(
+                {"error": "Ingredient not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )

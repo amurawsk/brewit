@@ -281,6 +281,10 @@ class IngredientCreationSerializer(serializers.Serializer):
     quantity = serializers.CharField()
 
 
+class IngredientDeleteSerializer(serializers.Serializer):
+    ingredient_id = serializers.IntegerField()
+
+
 class OrderSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     beer_volume = serializers.FloatField(source="beer_volume.l")
