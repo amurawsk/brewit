@@ -416,6 +416,7 @@ class LoginSerializer(serializers.Serializer):
         except Profile.DoesNotExist:
             raise serializers.ValidationError("User profile not found.")
         user_type = None
+        brewery_id = None
         if profile.commercial_brewery:
             user_type = "commercial_brewery"
             user_id = profile.id
