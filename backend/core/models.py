@@ -82,7 +82,7 @@ class Profile(models.Model):
 
     @property
     def is_intermediary(self):
-        return self.contract_brewery is not None and self.commercial_brewery is not None
+        return self.contract_brewery is None and self.commercial_brewery is None
 
     class Meta:
         constraints = [
