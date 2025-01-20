@@ -69,6 +69,11 @@ urlpatterns = [
         name="stages"
     ),
     path(
+        "recipies/stages/delete",
+        views.StageDeleteView.as_view(),
+        name="staged_delete"
+    ),
+    path(
         "recipies/update/",
         views.RecipeUpdateView.as_view(),
         name="recipe_update"

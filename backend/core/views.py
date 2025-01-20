@@ -1019,10 +1019,12 @@ class StageView(APIView):
         - 404 Not Found: If Recipe of provided id does not exist
     """
 
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         if (brewery := request.user.profile.contract_brewery) is None:
             return Response(
-                {"errors": "User is not a contract brewery employee."},
+                {"error": "User is not a contract brewery employee."},
                 status=status.HTTP_403_FORBIDDEN
             )
         serializer = serializers.StageCreationSerializer(data=request.data)
@@ -1058,4 +1060,49 @@ class StageView(APIView):
             return Response(
                 {"error": "Illegal device code."},
                 status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class StageDeleteView(APIView):
+    """View for deleting stages of user's brewery.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - POST: Accepts "stage_id", validates and deletes
+
+    Response:
+        - 200 OK: If the stage has been deleted
+        - 400 Bad Request: If the request body couldn't get properly serialized
+        - 403 Forbidden: If the user is not authorized or is not a contract
+        brewery employee
+        - 404 Not Found: If the recipe was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if (brewery := request.user.profile.contract_brewery) is None:
+            return Response(
+                {"error": "User is not a contract brewery employee."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        serializer = serializers.StageDeleteSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            stage = Stage.objects.get(pk=serializer.data["stage_id"])
+            if stage.recipe.contract_brewery != brewery:
+                return Response(
+                    {"error": "Permission denied: user is an employee of other brewery"},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            _, deleted = stage.delete()
+            return Response(deleted, status.HTTP_200_OK)
+        except Stage.DoesNotExist:
+            return Response(
+                {"error": "Stage not found."},
+                status=status.HTTP_404_NOT_FOUND
             )
