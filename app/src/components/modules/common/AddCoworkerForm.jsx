@@ -31,7 +31,9 @@ const AddCoworkerForm = () => {
                 setIsLoading(false);
             } else {
                 setIsLoading(false);
-                alert('Błąd podczas dodawania pracownika! Odśwież stronę i spróbuj ponownie.');
+                alert(
+                    'Błąd podczas dodawania pracownika! Odśwież stronę i spróbuj ponownie.'
+                );
             }
         } catch (error) {
             setIsLoading(false);
@@ -42,6 +44,10 @@ const AddCoworkerForm = () => {
             navigate('/commercial/coworkers');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/coworkers');
+        } else if (
+            localStorage.getItem('userType') === 'intermediary_company'
+        ) {
+            navigate('/intermediary/coworkers');
         }
     };
 

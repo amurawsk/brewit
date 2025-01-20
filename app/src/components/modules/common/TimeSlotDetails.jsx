@@ -61,7 +61,9 @@ const TimeSlotDetails = ({
                     setContractBrewery(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania szczegółów! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania szczegółów! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);
@@ -88,7 +90,9 @@ const TimeSlotDetails = ({
                     setDeviceDetails(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania szczegółów! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania szczegółów! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);
@@ -239,8 +243,10 @@ const TimeSlotDetails = ({
                                     zł
                                 </p>
                             </div>
-                            {localStorage.getItem('userType') ===
-                                'commercial_brewery' && (
+                            {(localStorage.getItem('userType') ===
+                                'commercial_brewery' ||
+                                localStorage.getItem('userType') ===
+                                    'intermediary_company') && (
                                 <div className={styles.detailBox}>
                                     <h3>Zlecenie</h3>
                                     {contractBrewery ? (
@@ -258,8 +264,10 @@ const TimeSlotDetails = ({
                                     )}
                                 </div>
                             )}
-                            {localStorage.getItem('userType') ===
-                                'commercial_brewery' && (
+                            {(localStorage.getItem('userType') ===
+                                'commercial_brewery' ||
+                                localStorage.getItem('userType') ===
+                                    'intermediary_company') && (
                                 <div className={styles.detailBox}>
                                     <h3>Browar kontraktowy</h3>
                                     {contractBrewery ? (
@@ -292,8 +300,10 @@ const TimeSlotDetails = ({
                                     )}
                                 </div>
                             )}
-                            {localStorage.getItem('userType') ===
-                                'contract_brewery' &&
+                            {(localStorage.getItem('userType') ===
+                                'contract_brewery' ||
+                                localStorage.getItem('userType') ===
+                                    'intermediary_company') &&
                                 deviceDetails && (
                                     <div className={styles.detailBox}>
                                         <h3>Szczegóły urządzenia</h3>
@@ -429,6 +439,16 @@ const TimeSlotDetails = ({
                                             Usuń ze zlecenia
                                         </button>
                                     )}
+                            </div>
+                        )}
+                        {localStorage.getItem('userType') ===
+                            'intermediary_company' && (
+                            <div className={styles.newOrderButtonGroup}>
+                                <button
+                                    onClick={() => setIsPanelOpen(false)}
+                                    className={styles.backButton}>
+                                    Zamknij
+                                </button>
                             </div>
                         )}
                     </div>

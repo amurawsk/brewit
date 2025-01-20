@@ -47,7 +47,9 @@ const TimeSlotsTable = ({
                     setTimetableData(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania okien czasowych! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania okien czasowych! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);
@@ -75,7 +77,9 @@ const TimeSlotsTable = ({
                     setTimetableData(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania okien czasowych! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania okien czasowych! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);
@@ -84,6 +88,33 @@ const TimeSlotsTable = ({
         };
 
         if (localStorage.getItem('userType') === 'contract_brewery') {
+            getData();
+        }
+    }, [selectedBreweryId]);
+
+    useEffect(() => {
+        setIsLoading(true);
+        const getData = async () => {
+            try {
+                const response = await api.get(
+                    `devices/brewery/${selectedBreweryId}/with-time-slots/`
+                );
+                if (response.status === 200) {
+                    setIsLoading(false);
+                    setTimetableData(response.data);
+                } else {
+                    setIsLoading(false);
+                    alert(
+                        'Błąd podczas pobierania okien czasowych! Odśwież stronę i spróbuj ponownie.'
+                    );
+                }
+            } catch (error) {
+                setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            }
+        };
+
+        if (localStorage.getItem('userType') === 'intermediary_company') {
             getData();
         }
     }, [selectedBreweryId]);
