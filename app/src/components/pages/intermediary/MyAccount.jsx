@@ -21,9 +21,7 @@ const MyAccount = () => {
         const getData = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(
-                    `accounts/intermediary/`
-                );
+                const response = await api.get(`accounts/intermediary/`);
                 if (response.status === 200) {
                     setIsLoading(false);
                     setAccountInfo(response.data);

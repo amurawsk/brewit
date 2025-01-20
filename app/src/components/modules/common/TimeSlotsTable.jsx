@@ -237,11 +237,12 @@ const TimeSlotsTable = ({
                                                       hour < endHour
                                               )
                                               .map((hour) => {
-                                                  const timeSlot = renderTimeSlots(
-                                                      row.timeSlots,
-                                                      hour,
-                                                      selectedDate
-                                                  );
+                                                  const timeSlot =
+                                                      renderTimeSlots(
+                                                          row.timeSlots,
+                                                          hour,
+                                                          selectedDate
+                                                      );
                                                   const cellClass =
                                                       getCellClass(timeSlot);
 

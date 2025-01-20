@@ -9,7 +9,7 @@ const Login = () => {
 
     const goToCommercialDashboard = () => navigate('/commercial/dashboard');
     const goToContractBrewery = () => navigate('/contract/dashboard');
-    const goToIntermediaryCompany = () => navigate('/intermediary/dashboard')
+    const goToIntermediaryCompany = () => navigate('/intermediary/dashboard');
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

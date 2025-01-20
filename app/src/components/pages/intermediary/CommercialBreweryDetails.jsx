@@ -43,8 +43,8 @@ const CommercialBreweryDetails = () => {
             state: { breweryId: breweryId },
         });
     };
-    const goToList = () => navigate('/intermediary/commercial-breweries')
-    
+    const goToList = () => navigate('/intermediary/commercial-breweries');
+
     useEffect(() => {
         const getData = async () => {
             try {
@@ -66,7 +66,7 @@ const CommercialBreweryDetails = () => {
             }
         };
         if (breweryId === null) {
-            navigate('/intermediary/commercial-breweries')
+            navigate('/intermediary/commercial-breweries');
         } else {
             setIsLoading(true);
             getData();
@@ -278,8 +278,7 @@ const CommercialBreweryDetails = () => {
                     <div className={styles.buttonContainer}>
                         <button
                             onClick={() => goToList()}
-                            className={styles.backButton}
-                        >
+                            className={styles.backButton}>
                             Cofnij
                         </button>
                     </div>

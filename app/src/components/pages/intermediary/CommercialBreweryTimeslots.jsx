@@ -28,9 +28,9 @@ const CommercialBreweryTimeslots = () => {
 
     useEffect(() => {
         if (breweryId === null) {
-            navigate('/intermediary/commercial-breweries')
+            navigate('/intermediary/commercial-breweries');
         }
-    }, [breweryId, navigate])
+    }, [breweryId, navigate]);
 
     if (breweryId === null) {
         return null;
@@ -64,8 +64,7 @@ const CommercialBreweryTimeslots = () => {
                     <div className={styles.buttonContainer}>
                         <button
                             onClick={() => goToDetails()}
-                            className={styles.backButton}
-                        >
+                            className={styles.backButton}>
                             Cofnij
                         </button>
                     </div>

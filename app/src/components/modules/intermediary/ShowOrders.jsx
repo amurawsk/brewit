@@ -36,6 +36,10 @@ const ShowOrders = ({ orders, isPanelOpen, setIsPanelOpen }) => {
                                 <b>{order.commercial_brewery.name}</b>
                             </p>
                             <p>
+                                Zleceniodawca:{' '}
+                                <b>{order.contract_brewery.name}</b>
+                            </p>
+                            <p>
                                 Utworzone dnia:{' '}
                                 <b>
                                     {new Date(order.created_at).toLocaleString(

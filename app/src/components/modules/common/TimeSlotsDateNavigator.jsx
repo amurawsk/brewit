@@ -89,15 +89,38 @@ const TimeSlotsDateNavigator = ({
     };
 
     const handlePrevDate = () => {
-        if (view === 'daily') {
-            setSelectedDate(
-                new Date(selectedDate.setDate(selectedDate.getDate() - 1))
-            );
-        } else if (view === 'weekly') {
-            const startDate = startOfWeek(new Date(selectedDate));
-            setSelectedDate(
-                new Date(startDate.setDate(startDate.getDate() - 7))
-            );
+        const userType = localStorage.getItem('userType');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (userType === 'contract_brewery') {
+            if (view === 'daily') {
+                const prevDate = new Date(selectedDate);
+                prevDate.setDate(prevDate.getDate() - 1);
+
+                if (prevDate >= today) {
+                    setSelectedDate(prevDate);
+                }
+            } else if (view === 'weekly') {
+                const startDate = startOfWeek(new Date(selectedDate));
+                const prevWeek = new Date(startDate);
+                prevWeek.setDate(startDate.getDate() - 7);
+
+                if (prevWeek >= today) {
+                    setSelectedDate(prevWeek);
+                }
+            }
+        } else {
+            if (view === 'daily') {
+                setSelectedDate(
+                    new Date(selectedDate.setDate(selectedDate.getDate() - 1))
+                );
+            } else if (view === 'weekly') {
+                const startDate = startOfWeek(new Date(selectedDate));
+                setSelectedDate(
+                    new Date(startDate.setDate(startDate.getDate() - 7))
+                );
+            }
         }
     };
 

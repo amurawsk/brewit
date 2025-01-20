@@ -41,7 +41,7 @@ const ContractDashboardContent = () => {
         }
     };
 
-    useEffect(() => {  
+    useEffect(() => {
         getData();
     }, []);
 

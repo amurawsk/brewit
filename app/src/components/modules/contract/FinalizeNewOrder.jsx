@@ -27,7 +27,6 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
         const getRecipes = async () => {
             setIsLoading(true);
             try {
-                // TODO enter proper url
                 const response = await api.get(`recipies/`);
                 if (response.status === 200) {
                     setIsLoading(false);
@@ -111,14 +110,14 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                 <p>
                     Adres: <b>{selectedBrewery.address}</b>
                 </p>
-                {selectedBrewery.description !== '' && 
+                {selectedBrewery.description !== '' && (
                     <p>
                         Opis:
                         <p className={styles.descriptionText}>
                             {selectedBrewery.description}
                         </p>
                     </p>
-                }
+                )}
             </div>
             <div className={styles.section}>
                 <h3>Wybrane okna czasowe</h3>
