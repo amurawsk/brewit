@@ -34,6 +34,7 @@ from .serializers import (
     OrderWithTimeSlotsSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
+    SimpleContractBrewerySerializer,
     TimeSlotEditPriceSerializer,
     TimeSlotSerializer,
 )
@@ -352,7 +353,11 @@ class DeviceDetailView(APIView):
         try:
             device = Device.objects.get(id=device_id, is_deleted=False)
             profile = Profile.objects.get(user=user)
-            if profile.contract_brewery is None and profile.commercial_brewery != device.commercial_brewery:
+            if (
+                profile.contract_brewery is None and
+                profile.commercial_brewery != device.commercial_brewery and
+                not profile.is_intermediary
+            ):
                 return Response(
                     {"error": "Unauthorized to view this device."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -938,6 +943,41 @@ class ContractBreweryInfoView(APIView):
             )
 
 
+class UserListView(APIView):
+    """View for listing all users.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all users.
+
+    Responses:
+        - 200 OK: If the users are successfully retrieved, the response contains
+          a list of all users.
+        - 403 Forbidden: If the user is not authorized to view all users,
+          the response contains an error message.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        try:
+            if not profile.is_intermediary:
+                return Response(
+                    {"error": "Unauthorized to view all users."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        users = Profile.objects.all()
+        serializer = serializers.UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class CommercialAccountInfoView(APIView):
     """View for listing commercial account's info.
     Class allows only authenticated users to access this view.
@@ -1037,7 +1077,7 @@ class IntermediaryAccountInfoView(APIView):
                     },
                     status=400
                 )
-            serializer = serializers.IntermediaryAccountInfoSerializer(profile)
+            serializer = serializers.UserSerializer(profile)
             return Response(serializer.data, status=200)
         except Profile.DoesNotExist:
             return Response(
@@ -1921,7 +1961,11 @@ class OrderContractBreweryDetailView(APIView):
             order = Order.objects.get(id=order_id)
             profile = Profile.objects.get(user=user)
             time_slot = TimeSlot.objects.filter(order=order).first()
-            if not profile.contract_brewery and profile.commercial_brewery != time_slot.device.commercial_brewery:
+            if (
+                not profile.contract_brewery and
+                profile.commercial_brewery != time_slot.device.commercial_brewery and
+                not profile.is_intermediary
+            ):
                 return Response(
                     {"error": "Unauthorized to view this order."},
                     status=status.HTTP_403_FORBIDDEN,
@@ -2514,4 +2558,29 @@ class BreweryWithDevicesNumberView(APIView):
     def get(self, request):
         breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number')
         serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
+        return Response(serializer.data, status=200)
+
+
+class BreweryListContractView(APIView):
+    """View for listing all contract breweries. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all contract breweries.
+
+    Responses:
+        - 200 OK: If the contract breweries are successfully retrieved, the response contains a list of all contract breweries.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if not profile.is_intermediary:
+            return Response(
+                {"error": "Unauthorized to view all contract breweries."},
+                status=403
+            )
+
+        breweries = ContractBrewery.objects.all()
+        serializer = SimpleContractBrewerySerializer(breweries, many=True)
         return Response(serializer.data, status=200)

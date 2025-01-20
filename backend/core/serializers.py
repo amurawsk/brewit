@@ -178,7 +178,7 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
         ]
 
 
-class IntermediaryAccountInfoSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username")
     created_at = serializers.DateTimeField(source="user.date_joined")
 
@@ -346,6 +346,12 @@ class ContractBrewerySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContractBrewery
         fields = ['name', 'contract_phone_number', 'contract_email', 'description', 'owner_name']
+
+
+class SimpleContractBrewerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContractBrewery
+        fields = ['id', 'name', 'owner_name']
 
 
 class RegisterCommercialSerializer(serializers.ModelSerializer):
