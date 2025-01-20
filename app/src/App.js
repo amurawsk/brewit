@@ -40,8 +40,13 @@ import IntermediaryCoworkers from './components/pages/intermediary/Coworkers';
 import IntermediaryAccount from './components/pages/intermediary/MyAccount';
 import IntermediaryOrders from './components/pages/intermediary/Orders';
 import IntermediaryStatistics from './components/pages/intermediary/Statistics';
+import IntermediaryAddCoworker from './components/pages/intermediary/AddCoworker';
+import CommercialBreweryDetails from './components/pages/intermediary/CommercialBreweryDetails';
+import CommercialBreweryTimeslots from './components/pages/intermediary/CommercialBreweryTimeslots';
+import Users from './components/pages/intermediary/Users';
 
 import './App.css';
+import ContractBreweryDetails from './components/pages/intermediary/ContractBreweryDetails';
 
 function App() {
     return (
@@ -277,10 +282,34 @@ function App() {
                     }
                 />
                 <Route
+                    path="/intermediary/contract-breweries/brewery-details"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <ContractBreweryDetails />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
                     path="/intermediary/commercial-breweries"
                     element={
                         <ProtectedRoute requiredType="intermediary_company">
                             <CommercialBreweries />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/commercial-breweries/brewery-details"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <CommercialBreweryDetails />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/commercial-breweries/brewery-timeslots"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <CommercialBreweryTimeslots />
                         </ProtectedRoute>
                     }
                 />
@@ -297,6 +326,22 @@ function App() {
                     element={
                         <ProtectedRoute requiredType="intermediary_company">
                             <IntermediaryCoworkers />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/coworkers/add"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <IntermediaryAddCoworker />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/intermediary/users"
+                    element={
+                        <ProtectedRoute requiredType="intermediary_company">
+                            <Users />
                         </ProtectedRoute>
                     }
                 />
