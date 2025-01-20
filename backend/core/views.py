@@ -2559,7 +2559,7 @@ class BreweryWithDevicesNumberView(APIView):
     def get(self, request):
         breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number')
         serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
-        return Response(serializer.data, status=200)
+        return Response(serializer.data or [], status=200)
 
 
 class BreweryListContractView(APIView):
