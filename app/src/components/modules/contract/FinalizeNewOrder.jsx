@@ -28,7 +28,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
             setIsLoading(true);
             try {
                 // TODO enter proper url
-                const response = await api.get(``);
+                const response = await api.get(`recipies/`);
                 if (response.status === 200) {
                     setIsLoading(false);
                     setRecipes(response.data);
@@ -43,11 +43,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                 alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
-        setRecipes([
-            { id: 1, name: 'pierwza' },
-            { id: 2, name: 'druga' },
-        ]);
-        // getRecipes();
+        getRecipes();
     }, []);
 
     const handleSubmit = (e) => {
