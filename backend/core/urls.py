@@ -42,6 +42,8 @@ urlpatterns = [
         views.ContractBreweryInfoView.as_view(),
         name="contract_brewery_info"
     ),
+
+    path("users/all/", views.UserListView.as_view(), name="user_list"),
     path(
         "accounts/commercial/",
         views.CommercialAccountInfoView.as_view(),

@@ -178,7 +178,7 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
         ]
 
 
-class IntermediaryAccountInfoSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username")
     created_at = serializers.DateTimeField(source="user.date_joined")
 

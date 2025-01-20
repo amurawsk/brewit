@@ -938,6 +938,41 @@ class ContractBreweryInfoView(APIView):
             )
 
 
+class UserListView(APIView):
+    """View for listing all users.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all users.
+
+    Responses:
+        - 200 OK: If the users are successfully retrieved, the response contains
+          a list of all users.
+        - 403 Forbidden: If the user is not authorized to view all users,
+          the response contains an error message.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        try:
+            if not profile.is_intermediary:
+                return Response(
+                    {"error": "Unauthorized to view all users."},
+                    status=status.HTTP_403_FORBIDDEN,
+                )
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "User profile not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        users = Profile.objects.all()
+        serializer = serializers.UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class CommercialAccountInfoView(APIView):
     """View for listing commercial account's info.
     Class allows only authenticated users to access this view.
@@ -1037,7 +1072,7 @@ class IntermediaryAccountInfoView(APIView):
                     },
                     status=400
                 )
-            serializer = serializers.IntermediaryAccountInfoSerializer(profile)
+            serializer = serializers.UserSerializer(profile)
             return Response(serializer.data, status=200)
         except Profile.DoesNotExist:
             return Response(
