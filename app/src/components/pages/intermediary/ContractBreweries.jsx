@@ -10,7 +10,7 @@ import styles from './ContractBreweries.module.css';
 import api from '../../../api.js';
 
 const ContractBreweries = () => {
-    const [breweries, setBreweries] = useState();
+    const [breweries, setBreweries] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {

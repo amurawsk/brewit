@@ -65,9 +65,13 @@ const CommercialBreweryDetails = () => {
                 alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
-        setIsLoading(true);
-        getData();
-    }, [breweryId]);
+        if (breweryId === null) {
+            navigate('/intermediary/commercial-breweries')
+        } else {
+            setIsLoading(true);
+            getData();
+        }
+    }, [breweryId, navigate]);
 
     return (
         <div>

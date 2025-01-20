@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
@@ -25,6 +25,16 @@ const CommercialBreweryTimeslots = () => {
     const [endHour, setEndHour] = useState(16);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [view, setView] = useState('daily');
+
+    useEffect(() => {
+        if (breweryId === null) {
+            navigate('/intermediary/commercial-breweries')
+        }
+    }, [breweryId, navigate])
+
+    if (breweryId === null) {
+        return null;
+    }
 
     return (
         <div>

@@ -11,7 +11,7 @@ import styles from './CommercialBreweries.module.css';
 import api from '../../../api.js';
 
 const CommercialBreweries = () => {
-    const [breweries, setBreweries] = useState();
+    const [breweries, setBreweries] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
