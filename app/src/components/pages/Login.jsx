@@ -9,6 +9,7 @@ const Login = () => {
 
     const goToCommercialDashboard = () => navigate('/commercial/dashboard');
     const goToContractBrewery = () => navigate('/contract/dashboard');
+    const goToIntermediaryCompany = () => navigate('/intermediary/dashboard')
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -34,6 +35,8 @@ const Login = () => {
                     goToCommercialDashboard();
                 } else if (user_type === 'contract_brewery') {
                     goToContractBrewery();
+                } else if (user_type === 'intermediary_company') {
+                    goToIntermediaryCompany();
                 } else {
                     console.log('ERROR');
                     //GoToSuperuser
