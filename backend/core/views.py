@@ -954,9 +954,9 @@ class CommercialAccountInfoView(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    def get(self, _, profile_id):
+    def get(self, request):
         try:
-            profile = Profile.objects.get(pk=profile_id)
+            profile = request.user.profile
             if profile.commercial_brewery is None:
                 return Response(
                     {
@@ -990,9 +990,9 @@ class ContractAccountInfoView(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    def get(self, _, profile_id):
+    def get(self, request):
         try:
-            profile = Profile.objects.get(pk=profile_id)
+            profile = request.user.profile
             if profile.contract_brewery is None:
                 return Response(
                     {
@@ -1002,6 +1002,42 @@ class ContractAccountInfoView(APIView):
                     status=400
                 )
             serializer = serializers.ContractAccountInfoSerializer(profile)
+            return Response(serializer.data, status=200)
+        except Profile.DoesNotExist:
+            return Response(
+                {"error": "Account not found."},
+                status=404
+            )
+
+
+class IntermediaryAccountInfoView(APIView):
+    """View for listing intermediary account's info.
+    Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Accepts the account id, validates it and returns a response.
+
+    Responses:
+        - 200 OK: If the account is successfully retrieved
+        - 400 Bad Request: If the account is not an intermediary account
+        - 403 Forbidden: If the user is not authorized
+        - 404 Not Found: If the account was not found
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = request.user.profile
+            if not profile.is_intermediary:
+                return Response(
+                    {
+                        "error": ("Requested account is not an intermediary "
+                                  "account.")
+                    },
+                    status=400
+                )
+            serializer = serializers.IntermediaryAccountInfoSerializer(profile)
             return Response(serializer.data, status=200)
         except Profile.DoesNotExist:
             return Response(

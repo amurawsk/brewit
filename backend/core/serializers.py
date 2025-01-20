@@ -178,6 +178,18 @@ class ContractAccountInfoSerializer(serializers.ModelSerializer):
         ]
 
 
+class IntermediaryAccountInfoSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username")
+    created_at = serializers.DateTimeField(source="user.date_joined")
+
+    class Meta:
+        model = Profile
+        fields = [
+            "username",
+            "created_at"
+        ]
+
+
 class AccountInfoSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="pk")
     username = serializers.CharField(source="user.username")
