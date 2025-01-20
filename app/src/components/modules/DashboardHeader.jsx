@@ -12,6 +12,8 @@ const DashboardHeader = () => {
             navigate('/commercial/dashboard');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/dashboard');
+        } else if (localStorage.getItem('userType') === 'intermediary_company') {
+            navigate('/intermediary/dashboard');
         }
     };
 
@@ -20,6 +22,8 @@ const DashboardHeader = () => {
             navigate('/commercial/account');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/account');
+        } else if (localStorage.getItem('userType') === 'intermediary_company') {
+            navigate('/intermediary/account');
         }
     };
 
