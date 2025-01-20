@@ -7,7 +7,7 @@ import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import TimeSlotsDateNavigator from '../../modules/common/TimeSlotsDateNavigator.jsx';
 import TimeSlotsTable from '../../modules/common/TimeSlotsTable.jsx';
 
-import styles from './Coworkers.module.css';
+import styles from './SelectTimeslots.module.css';
 
 /**
  * SelectTimeslots page - contains layout (Header, Sidebar, Title, Button)

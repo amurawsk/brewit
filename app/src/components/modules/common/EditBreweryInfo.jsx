@@ -37,7 +37,9 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                     }
                 );
                 if (response.status !== 200) {
-                    alert('Błąd podczas edytowania informacji! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas edytowania informacji! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
                 setIsLoading(false);
             } else if (
@@ -54,7 +56,9 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                     }
                 );
                 if (response.status !== 200) {
-                    alert('Błąd podczas edytowania informacji! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas edytowania informacji! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
                 setIsLoading(false);
             }

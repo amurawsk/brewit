@@ -32,7 +32,9 @@ const Devices = () => {
                 setDevices(response.data);
                 setIsLoading(false);
             } else {
-                alert('Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.');
+                alert(
+                    'Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.'
+                );
                 setIsLoading(false);
             }
         } catch (error) {

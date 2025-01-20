@@ -37,7 +37,9 @@ const ShowCoworkers = ({ coworkers, isModalOpen, setIsModalOpen }) => {
                 setIsLoading(false);
             } else {
                 setIsLoading(false);
-                alert('Błąd podczas dodawania pracownika! Odśwież stronę i spróbuj ponownie');
+                alert(
+                    'Błąd podczas dodawania pracownika! Odśwież stronę i spróbuj ponownie'
+                );
             }
         } catch (error) {
             setIsLoading(false);

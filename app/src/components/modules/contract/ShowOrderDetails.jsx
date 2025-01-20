@@ -91,7 +91,9 @@ const ShowOrderDetails = ({
     const rateOrder = async (rate) => {
         setIsLoading(true);
         try {
-            const response = await api.post(`orders/${order.id}/rate/`, {rate: rate} );
+            const response = await api.post(`orders/${order.id}/rate/`, {
+                rate: rate,
+            });
             if (response.status === 200) {
                 setIsLoading(false);
                 showNotification('Pomyślnie oceniono!');
@@ -108,7 +110,7 @@ const ShowOrderDetails = ({
             showNotification('Wystąpił błąd!');
             getData(activeStatus);
         }
-    }
+    };
 
     const confirmAction = () => {
         if (action === 'cancel') {
@@ -129,21 +131,21 @@ const ShowOrderDetails = ({
         rateOrder(true);
         setIsRateModalOpen(false);
         closePanel();
-    }
+    };
 
     const rateNegative = () => {
         rateOrder(false);
         setIsRateModalOpen(false);
         closePanel();
-    }
+    };
 
     const cancelRate = () => {
         setIsRateModalOpen(false);
-    }
+    };
 
     const getRate = () => {
         setIsRateModalOpen(true);
-    }
+    };
 
     return (
         <div>
@@ -322,7 +324,12 @@ const ShowOrderDetails = ({
                 />
             )}
             {isRateModalOpen && (
-                <RateModal message="Oceń zlecenie" onPositive={ratePositive} onNegative={rateNegative} onCancel={cancelRate}/>
+                <RateModal
+                    message="Oceń zlecenie"
+                    onPositive={ratePositive}
+                    onNegative={rateNegative}
+                    onCancel={cancelRate}
+                />
             )}
             <Notification
                 message={notificationText}

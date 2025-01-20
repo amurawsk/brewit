@@ -31,7 +31,9 @@ const Coworkers = () => {
                     setCoworkers(response.data);
                     setIsLoading(false);
                 } else {
-                    alert('Błąd podczas pobierania współpracowników! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania współpracowników! Odśwież stronę i spróbuj ponownie.'
+                    );
                     setIsLoading(false);
                 }
             } catch (error) {

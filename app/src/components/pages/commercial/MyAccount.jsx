@@ -28,7 +28,9 @@ const MyAccount = () => {
                     setAccountInfo(response.data);
                     setIsLoading(false);
                 } else {
-                    alert('Błąd podczas pobierania szczegółów konta! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania szczegółów konta! Odśwież stronę i spróbuj ponownie.'
+                    );
                     setIsLoading(false);
                 }
             } catch (error) {

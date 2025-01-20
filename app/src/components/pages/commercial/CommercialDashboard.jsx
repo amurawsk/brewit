@@ -5,7 +5,6 @@ import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import CommercialDashboardContent from '../../modules/commercial/CommercialDashboardContent.jsx';
 
-
 import styles from './CommercialDashboard.module.css';
 
 /**

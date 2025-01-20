@@ -29,7 +29,9 @@ const ChooseCommercial = () => {
                     setBreweries(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania browarów komercyjnych! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania browarów komercyjnych! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);

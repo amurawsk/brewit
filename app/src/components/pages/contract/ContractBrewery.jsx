@@ -33,7 +33,9 @@ const CommercialBrewery = () => {
                     setBreweryData(response.data);
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas pobierania informacji o browarze! Odśwież stronę i spróbuj ponownie.');
+                    alert(
+                        'Błąd podczas pobierania informacji o browarze! Odśwież stronę i spróbuj ponownie.'
+                    );
                 }
             } catch (error) {
                 setIsLoading(false);
