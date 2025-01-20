@@ -168,7 +168,5 @@ urlpatterns = [
         views.BreweryWithDevicesNumberView.as_view(),
         name="brewery_with_devices"
     ),
-    # path("breweries/contract/all/", views.BreweryListContractView.as_view(), name="brewery_list_contract"),
-
-    # path("users/all/", views.UserListView.as_view(), name="user_list"),
+    path("breweries/contract/all/", views.BreweryListContractView.as_view(), name="brewery_list_contract"),
 ]

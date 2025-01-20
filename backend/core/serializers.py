@@ -348,6 +348,12 @@ class ContractBrewerySerializer(serializers.ModelSerializer):
         fields = ['name', 'contract_phone_number', 'contract_email', 'description', 'owner_name']
 
 
+class SimpleContractBrewerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContractBrewery
+        fields = ['id', 'name', 'owner_name']
+
+
 class RegisterCommercialSerializer(serializers.ModelSerializer):
     commercial_brewery = serializers.DictField()
 

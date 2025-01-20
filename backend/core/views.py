@@ -34,6 +34,7 @@ from .serializers import (
     OrderWithTimeSlotsSerializer,
     RegisterCommercialSerializer,
     RegisterContractSerializer,
+    SimpleContractBrewerySerializer,
     TimeSlotEditPriceSerializer,
     TimeSlotSerializer,
 )
@@ -2549,4 +2550,29 @@ class BreweryWithDevicesNumberView(APIView):
     def get(self, request):
         breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number')
         serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
+        return Response(serializer.data, status=200)
+
+
+class BreweryListContractView(APIView):
+    """View for listing all contract breweries. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all contract breweries.
+
+    Responses:
+        - 200 OK: If the contract breweries are successfully retrieved, the response contains a list of all contract breweries.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+
+        if not profile.is_intermediary:
+            return Response(
+                {"error": "Unauthorized to view all contract breweries."},
+                status=403
+            )
+
+        breweries = ContractBrewery.objects.all()
+        serializer = SimpleContractBrewerySerializer(breweries, many=True)
         return Response(serializer.data, status=200)
