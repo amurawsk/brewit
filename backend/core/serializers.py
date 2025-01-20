@@ -51,6 +51,7 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
             val['device_type']: val['no'] for val in list(
                 instance
                 .device_set
+                .filter(is_deleted=False)
                 .values('device_type')
                 .annotate(no=Count('device_type'))
             )
@@ -64,9 +65,9 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
             val["status"]: val["no"] for val in list(
                 Order.objects.filter(
                     timeslot__device__commercial_brewery=instance
-                ).distinct()
+                )
                 .values('status')
-                .annotate(no=Count('status', distinct=True))
+                .annotate(no=Count('status'))
             )
         }
         data['no_orders'] = sum(orders.values())
@@ -347,7 +348,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "contract_brewery_email",
             "contract_brewery_phone_number",
             "rate",
-            "price"
+            "price",
+            "recipe"
         ]
 
 
@@ -542,14 +544,6 @@ class DeviceWithFreeTimeSlotsSerializer(serializers.ModelSerializer):
         return TimeSlotSerializer(time_slots, many=True).data
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    beer_volume = MeasurementField()
-
-    class Meta:
-        model = Order
-        fields = ['id', 'created_at', 'status', 'beer_type', 'beer_volume', 'description', 'rate', 'ended_at', 'contract_brewery', 'recipe']
-
-
 class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):
     beer_volume = MeasurementField()
     time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
@@ -576,8 +570,8 @@ class OrderWithTimeSlotsAndContractInfoSerializer(serializers.ModelSerializer):
         model = Order
         fields = [
             'id', 'created_at', 'status', 'beer_type', 'beer_volume',
-            'description', 'rate', 'ended_at', 'contract_brewery',
-            'recipe', 'time_slots', 'total_price'
+            'description', 'rate', 'ended_at',
+            'contract_brewery', 'time_slots', 'total_price'
         ]
 
 
@@ -650,19 +644,19 @@ class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
         ]
 
     def get_devices_number(self, obj):
-        return obj.device_set.count()
+        return obj.device_set.filter(is_deleted=False).count()
 
     def get_bt_number(self, obj):
-        return obj.device_set.filter(device_type='BT').count()
+        return obj.device_set.filter(device_type='BT', is_deleted=False).count()
 
     def get_ft_number(self, obj):
-        return obj.device_set.filter(device_type='FT').count()
+        return obj.device_set.filter(device_type='FT', is_deleted=False).count()
 
     def get_ac_number(self, obj):
-        return obj.device_set.filter(device_type='AC').count()
+        return obj.device_set.filter(device_type='AC', is_deleted=False).count()
 
     def get_be_number(self, obj):
-        return obj.device_set.filter(device_type='BE').count()
+        return obj.device_set.filter(device_type='BE', is_deleted=False).count()
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
