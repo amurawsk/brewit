@@ -348,7 +348,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "contract_brewery_email",
             "contract_brewery_phone_number",
             "rate",
-            "price"
+            "price",
+            "recipe"
         ]
 
 
@@ -541,14 +542,6 @@ class DeviceWithFreeTimeSlotsSerializer(serializers.ModelSerializer):
     def get_timeSlots(self, obj):
         time_slots = obj.timeslot_set.filter(status='F', is_deleted=False)
         return TimeSlotSerializer(time_slots, many=True).data
-
-
-class OrderSerializer(serializers.ModelSerializer):
-    beer_volume = MeasurementField()
-
-    class Meta:
-        model = Order
-        fields = ['id', 'created_at', 'status', 'beer_type', 'beer_volume', 'description', 'rate', 'ended_at', 'contract_brewery', 'recipe']
 
 
 class OrderWithTimeSlotsSerializer(serializers.ModelSerializer):

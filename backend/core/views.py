@@ -1883,6 +1883,7 @@ class OrderCreateView(APIView):
             "beer_volume": request.data.get("beer_volume"),
             "description": request.data.get("description"),
             "contract_brewery": profile.contract_brewery.id,
+            "recipe": request.data.get("recipe_id"),
         }
 
         serializer = OrderSerializer(data=data)
