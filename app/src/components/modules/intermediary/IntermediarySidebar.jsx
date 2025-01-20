@@ -23,6 +23,7 @@ const IntermediarySidebar = () => {
     const goToOrders = () => navigate('/intermediary/orders');
     const goToCoworkers = () => navigate('/intermediary/coworkers');
     const goToStatistics = () => navigate('/intermediary/statistics');
+    const goToUsers = () => navigate('/intermediary/users');
 
     return (
         <div className={styles.sidebar}>
@@ -33,6 +34,16 @@ const IntermediarySidebar = () => {
                 </span>
             </div>
             <div className={styles.sidebarMenu}>
+                <hr className={styles.separator}></hr>
+                <div onClick={goToUsers} className={styles.sidebarItem}>
+                    <FaUsers className={styles.icon} />
+                    <div className={styles.sidebarText}>
+                        <span>Użytkownicy</span>
+                        <span className={styles.sidebarDescription}>
+                            Przejdź do użytkowników
+                        </span>
+                    </div>
+                </div>
                 <hr className={styles.separator}></hr>
                 <div
                     onClick={goToContractBreweries}
