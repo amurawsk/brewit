@@ -1425,7 +1425,7 @@ class StageView(APIView):
     """View for stages of user's brewery.
     Class allows only authenticated users to access this view.
 
-    - POST: Accepts "recipe_id", "name", "device", "time" in minutes,
+    - POST: Accepts "recipe_id", "name", "device", "time" in days,
     "description" validates it and returns a response.
 
     Responses:
@@ -1460,7 +1460,7 @@ class StageView(APIView):
             stage = Stage.objects.create(
                 name=serializer.data["name"],
                 device_type=DeviceType(serializer.data["device"]),
-                time=Time(minute=serializer.data["time"]),
+                time=Time(day=serializer.data["time"]),
                 description=serializer.data["description"],
                 recipe=recipe
             )
@@ -1533,7 +1533,7 @@ class StageUpdateView(APIView):
     Class allows only authenticated users to access this view.
 
     This view supports HTTP methods:
-    - POST: Accepts "id", "name", "device", "time" (in minutes), "description"
+    - POST: Accepts "id", "name", "device", "time" (in days), "description"
     validates, updates and returns response
 
     Response:
@@ -1570,7 +1570,7 @@ class StageUpdateView(APIView):
                 )
             stage.name = serializer.data["name"]
             stage.device_type = DeviceType(serializer.data["device"])
-            stage.time = Time(minute=serializer.data["time"])
+            stage.time = Time(day=serializer.data["time"])
             stage.description = serializer.data["description"]
             stage.save()
             return Response(
