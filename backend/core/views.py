@@ -2562,6 +2562,23 @@ class BreweryWithDevicesNumberView(APIView):
         return Response(serializer.data or [], status=200)
 
 
+class BreweryListCommercialView(APIView):
+    """View for listing all commercial breweries. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all commercial breweries.
+
+    Responses:
+        - 200 OK: If the commercial breweries are successfully retrieved, the response contains a list of all commercial breweries.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        breweries = CommercialBrewery.objects.all()
+        serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
+        return Response(serializer.data, status=200)
+
+
 class BreweryListContractView(APIView):
     """View for listing all contract breweries. Class allows only authenticated users to access this view.
 
