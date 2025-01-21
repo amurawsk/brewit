@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import styles from './ShowRecipes.module.css';
 
 import ConfirmModal from '../../utils/ConfirmModal';
+import api from '../../../api.js';
 
 const ShowRecipes = ({ recipes, openPanel }) => {
+	console.log(recipes)
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [ingredientId, setIngredientId] = useState(null);
+    const [deleteId, setDeleteId] = useState(null);
 
     const navigate = useNavigate();
 
@@ -15,18 +17,34 @@ const ShowRecipes = ({ recipes, openPanel }) => {
         navigate('/contract/recipes/edit', { state: { recipe } });
     };
 
+    const goToRecipes = () => navigate('/contract/recipes');
+
     const closePanel = () => {
         setIsModalOpen(false);
-        setIngredientId(null);
+        setDeleteId(null);
     };
 
     const handleAction = (id) => {
-        setIngredientId(id);
+        setDeleteId(id);
         setIsModalOpen(true);
     };
 
-    const confirmAction = () => {
-        console.log(ingredientId);
+    const confirmAction = async () => {
+		const removeRecipe = async () => {
+            try {
+				const response = await api.post(`recipies/delete/`, {
+					id: deleteId,
+				});
+                if (response.status === 200) {
+                    goToRecipes();
+                } else {
+                    console.log("Nie usunieto");
+                }
+            } catch (error) {
+				console.log(error);
+            }
+        };
+		removeRecipe();
         closePanel();
     };
 
@@ -73,7 +91,7 @@ const ShowRecipes = ({ recipes, openPanel }) => {
                             className={styles.removeButton}
                             onClick={(event) => {
                                 event.stopPropagation();
-                                handleAction(recipe.id);
+                                handleAction(recipe.pk);
                             }}>
                             Usuń
                         </button>
@@ -83,7 +101,6 @@ const ShowRecipes = ({ recipes, openPanel }) => {
             {isModalOpen && (
                 <ConfirmModal
                     message="Czy na pewno chcesz usunąć ten przepis?"
-                    description="Spowoduje to usunięcie przypisanych zleceń" /*TODO what then */
                     onConfirm={confirmAction}
                     onCancel={cancelAction}
                 />

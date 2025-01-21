@@ -1,49 +1,30 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './AddRecipeForm.module.css';
 import Recipe from './Recipe';
 import AddEditRecipe from './AddEditRecipe';
 import AddEditStep from './AddEditStep';
 import StepsList from './StepsList';
+import { useNavigate } from 'react-router-dom';
 
-const AddRecipeForm = ({ recipe, isEditing }) => {
-    const navigate = useNavigate();
+const AddRecipeForm = ({ recipe }) => {
 
-    const goToAddRecipe = () => {
-        navigate('/contract/recipes/add');
-    };
+	const navigate = useNavigate();
+    const goToRecipes = () => navigate('/contract/recipes');
 
-    const [formData, setformData] = useState(
+    const [formData, setFormData] = useState(
         recipe || {
             name: '',
-            full_time: '',
             full_volume: '',
             steps: [],
         }
     );
 
-    const [isEditingRecipe, setIsEditingRecipe] = useState(isEditing);
-
-    const handleEditRecipe = () => {
-        setIsEditingRecipe(true);
-    };
-
-    const handleAddEditRecipe = (newRecipe) => {
-        setformData(newRecipe);
-        setIsEditingRecipe(false);
-    };
-
-    const handleCancelAddEditRecipe = () => {
-        setIsEditingRecipe(false);
-    };
-
-    const handleDeleteRecipe = () => {
-        goToAddRecipe();
-    };
+    const [isEditingRecipe, setIsEditingRecipe] = useState(!recipe?.name);
 
     const [step, setStep] = useState({
+		pk: '',
         name: '',
-        device: '',
+        device_type: '',
         time: '',
         description: '',
         ingredients: [],
@@ -60,22 +41,23 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
 
     const handleAddEditStep = (newStep, stepIndex) => {
         if (stepIndex === null) {
-            setformData((prevState) => ({
+            setFormData((prevState) => ({
                 ...prevState,
                 steps: [...prevState.steps, newStep],
             }));
         } else {
             const updatedSteps = [...formData.steps];
             updatedSteps[stepIndex] = newStep;
-            setformData((prevState) => ({
+            setFormData((prevState) => ({
                 ...prevState,
                 steps: updatedSteps,
             }));
         }
 
         setStep({
+			pk: '',
             name: '',
-            device: '',
+            device_type: '',
             time: '',
             description: '',
             ingredients: [],
@@ -88,19 +70,13 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
         setIsEditingStep(false);
         setStepIndex(null);
         setStep({
+			pk: '',
             name: '',
-            device: '',
+            devic_type: '',
             time: '',
             description: '',
             ingredients: [],
         });
-    };
-
-    const handleDeleteStep = (stepIndex) => {
-        setformData((prevState) => ({
-            ...prevState,
-            steps: prevState.steps.filter((_, index) => index !== stepIndex),
-        }));
     };
 
     const [isEditingIngredient, setIsEditingIngredient] = useState(false);
@@ -108,7 +84,7 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
 
     const [ingredient, setIngredient] = useState({
         name: '',
-        quantity: '',
+        amount: '',
     });
 
     const handleEditIngredient = (index, idx) => {
@@ -116,11 +92,13 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
         setStepIndex(index);
         setIngredientId(idx);
         setIngredient(formData.steps[index].ingredients[idx]);
+        setStep(formData.steps[stepIndex]);
     };
 
     const handleAddIngredient = (index) => {
         setIsEditingIngredient(true);
         setStepIndex(index);
+        setStep(formData.steps[stepIndex]);
     };
 
     const handleAddEditIngredient = (
@@ -135,8 +113,9 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
         }
         setIngredient({
             name: '',
-            quantity: '',
+            amount: '',
         });
+        setStep(formData.steps[stepIndex]);
         setIsEditingIngredient(false);
         setIngredientId(null);
     };
@@ -147,20 +126,7 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
         setIngredientId(null);
         setIngredient({
             name: '',
-            quantity: '',
-        });
-    };
-
-    const handleDeleteIngredient = (stepIndex, ingredientId) => {
-        setformData((prevState) => {
-            const updatedSteps = [...prevState.steps];
-            updatedSteps[stepIndex].ingredients = updatedSteps[
-                stepIndex
-            ].ingredients.filter((_, index) => index !== ingredientId);
-            return {
-                ...prevState,
-                steps: updatedSteps,
-            };
+            amount: '',
         });
     };
 
@@ -169,16 +135,15 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
             {!isEditingRecipe && (
                 <Recipe
                     recipe={formData}
-                    handleEditRecipe={handleEditRecipe}
-                    handleDeleteRecipe={handleDeleteRecipe}
+                    handleEditRecipe={() => setIsEditingRecipe(true)}
                 />
             )}
 
             {isEditingRecipe && (
                 <AddEditRecipe
                     recipe={formData}
-                    handleSubmit={handleAddEditRecipe}
-                    handleCancel={handleCancelAddEditRecipe}
+                    setRecipe={setFormData}
+					handleCancel={() => setIsEditingRecipe(false)}
                 />
             )}
 
@@ -197,9 +162,10 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
 
             {isEditingStep && stepIndex === null && (
                 <AddEditStep
-                    stepIndex={stepIndex}
+					recipe_id={recipe.pk}
                     step={step}
-                    handleSubmit={handleAddEditStep}
+					setStep={setStep}
+					handleAddEditStep={handleAddEditStep}
                     handleCancel={handleCancelAddEditStep}
                 />
             )}
@@ -207,14 +173,16 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
             {formData.steps.length > 0 && (
                 <StepsList
                     steps={formData.steps}
+					Step={step}
+					setStep={setStep}
+					handleEditStep={handleEditStep}
+					handleCancel={handleCancelAddEditStep}
                     stepIndex={stepIndex}
                     ingredient={ingredient}
-                    ingredientId={ingredientId}
+                    setIngredient={setIngredient}
                     isEditingStep={isEditingStep}
-                    handleEditStep={handleEditStep}
                     handleAddEditStep={handleAddEditStep}
                     handleCancelAddEditStep={handleCancelAddEditStep}
-                    handleDeleteStep={handleDeleteStep}
                     isEditingIngredient={isEditingIngredient}
                     handleAddIngredient={handleAddIngredient}
                     handleAddEditIngredient={handleAddEditIngredient}
@@ -222,7 +190,6 @@ const AddRecipeForm = ({ recipe, isEditing }) => {
                         handleCancelAddEditIngredient
                     }
                     handleEditIngredient={handleEditIngredient}
-                    handleDeleteIngredient={handleDeleteIngredient}
                     isEditingRecipe={isEditingRecipe}
                 />
             )}

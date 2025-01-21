@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import styles from './IngredientsList.module.css';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
+import api from '../../../api.js';
+import { useNavigate } from 'react-router-dom';
 
 function IngredientsList({
     ingredients,
     handleEditIngredient,
     stepIndex,
-    handleDeleteIngredient,
 }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const [ingredientIndexToDelete, setIngredientIndexToDelete] =
-        useState(null);
+	const [deleteId, setDeleteId] = useState(null);
+		const navigate = useNavigate();
+		const goToRecipes = () => navigate('/contract/recipes');
+
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -21,19 +24,32 @@ function IngredientsList({
         }, 2000);
     };
 
-    const confirmDelete = () => {
-        setIsModalOpen(false);
-        handleDeleteIngredient(stepIndex, ingredientIndexToDelete);
-        showNotification();
-    };
-
-    const cancelDelete = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleDeleteButton = (idx) => {
-        setIngredientIndexToDelete(idx);
+    const handleAction = (id) => {
+        setDeleteId(id);
         setIsModalOpen(true);
+    };
+
+    const confirmAction = async () => {
+		const removeRecipe = async () => {
+            try {
+				const response = await api.post(`recipies/stages/ingredients/delete`, {
+					ingredient_id: deleteId,
+				});
+                if (response.status === 200) {
+                    goToRecipes();
+                }
+            } catch (error) {
+				console.log(error);
+            }
+        };
+		removeRecipe();
+        cancelAction();
+		showNotification();
+    };
+
+    const cancelAction = () => {
+        setIsModalOpen(false);
+        setDeleteId(null);
     };
 
     return (
@@ -48,7 +64,7 @@ function IngredientsList({
                         <span className={styles.recipeDescription}>
                             Ilość:{' '}
                             <span className={styles.recipeDescriptionValue}>
-                                {ingredient.quantity}
+                                {ingredient.amount}
                             </span>
                         </span>
                     </div>
@@ -62,7 +78,7 @@ function IngredientsList({
                         </button>
                         <button
                             className={styles.removeButton}
-                            onClick={() => handleDeleteButton(idx)}>
+                            onClick={() => handleAction(ingredient.pk)}>
                             Usuń
                         </button>
                     </div>
@@ -70,10 +86,10 @@ function IngredientsList({
             ))}
             {isModalOpen && (
                 <ConfirmModal
-                    message="Czy na pewno chcesz usunąć ten etap?"
-                    description="Spowoduje to usunięcie przypisanych składników."
-                    onConfirm={confirmDelete}
-                    onCancel={cancelDelete}
+                    message="Czy na pewno chcesz usunąć ten składnik?"
+                    description=""
+                    onConfirm={confirmAction}
+                    onCancel={cancelAction}
                 />
             )}
             <Notification
