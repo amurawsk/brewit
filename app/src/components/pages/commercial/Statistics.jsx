@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import DashboardHeader from '../modules/DashboardHeader.jsx';
-import CommercialSidebar from '../modules/commercial/CommercialSidebar.jsx';
-import ContractSidebar from '../modules/contract/ContractSidebar.jsx';
-import PageTitle from '../utils/PageTitle.jsx';
-import StatisticsTypes from '../modules/StatisticsTypes.jsx';
+import DashboardHeader from '../../modules/DashboardHeader.jsx';
+import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
+import PageTitle from '../../utils/PageTitle.jsx';
+import StatisticsTypes from '../../modules/StatisticsTypes.jsx';
 import styles from './Statistics.module.css';
-import PieChart from '../modules/PieChart.jsx';
-import BatchOrQuantity from '../modules/BatchOrQuantity.jsx';
-import Histogram from '../modules/Histogram.jsx';
-import TimeResolution from '../modules/TimeResolution.jsx';
+import PieChart from '../../modules/commercial/PieChart.jsx';
+import BatchOrQuantity from '../../modules/BatchOrQuantity.jsx';
+import Histogram from '../../modules/commercial/Histogram.jsx';
+import TimeResolution from '../../modules/TimeResolution.jsx';
 
 const Statistics = () => {
     const status = 'TB';

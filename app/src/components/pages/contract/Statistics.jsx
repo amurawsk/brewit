@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
-import IntermediarySidebar from '../../modules/intermediary/IntermediarySidebar.jsx';
+import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
+import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
 import StatisticsTypes from '../../modules/StatisticsTypes.jsx';
 import styles from './Statistics.module.css';
-import PieChart from '../../modules/intermediary/PieChart.jsx';
+import PieChart from '../../modules/contract/PieChart.jsx';
 import BatchOrQuantity from '../../modules/BatchOrQuantity.jsx';
-import Histogram from '../../modules/intermediary/Histogram.jsx';
+import Histogram from '../../modules/contract/Histogram.jsx';
 import TimeResolution from '../../modules/TimeResolution.jsx';
 
 const Statistics = () => {
@@ -17,7 +18,12 @@ const Statistics = () => {
         <div>
             <DashboardHeader />
             <div className={styles.appContainer}>
-                <IntermediarySidebar/>
+                {localStorage.getItem('userType') === 'commercial_brewery' && (
+                    <CommercialSidebar />
+                )}
+                {localStorage.getItem('userType') === 'contract_brewery' && (
+                    <ContractSidebar />
+                )}
                 <div className={styles.content}>
                     <div className={styles.TitleButtonContainer}>
                         <PageTitle text="Statystyki" />

@@ -26,7 +26,8 @@ import CommercialBrewery from './components/pages/commercial/CommercialBrewery';
 import ContractBrewery from './components/pages/contract/ContractBrewery';
 import MyAccount from './components/pages/commercial/MyAccount';
 import ContractAccount from './components/pages/contract/MyAccount';
-import Statistics from './components/pages/Statistics';
+import ContractStatistics from './components/pages/contract/Statistics';
+import CommercialStatistics from './components/pages/commercial/Statistics';
 import Recipes from './components/pages/contract/Recipes';
 import AddRecipe from './components/pages/contract/AddRecipe';
 import EditRecipe from './components/pages/contract/EditRecipe';
@@ -145,7 +146,7 @@ function App() {
                     path="/commercial/statistics"
                     element={
                         <ProtectedRoute requiredType="commercial_brewery">
-                            <Statistics />
+                            <CommercialStatistics />
                         </ProtectedRoute>
                     }
                 />
@@ -251,7 +252,7 @@ function App() {
                     path="/contract/statistics"
                     element={
                         <ProtectedRoute requiredType="contract_brewery">
-                            <Statistics />
+                            <ContractStatistics />
                         </ProtectedRoute>
                     }
                 />

@@ -1,0 +1,11 @@
+.pieChartContainer {
+    width: 100%;
+    max-width: 50rem;
+    margin: auto;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
