@@ -168,5 +168,6 @@ urlpatterns = [
         views.BreweryWithDevicesNumberView.as_view(),
         name="brewery_with_devices"
     ),
+    path("breweries/commercial/all/", views.BreweryListCommercialView.as_view(), name="brewery_list_commercial"),
     path("breweries/contract/all/", views.BreweryListContractView.as_view(), name="brewery_list_contract"),
 ]
