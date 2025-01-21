@@ -14,6 +14,7 @@ from .models import (
 )
 from django.db.models import Count
 from django.db.models import Sum
+from django.utils import timezone
 
 
 class MeasurementField(serializers.Field):
@@ -637,9 +638,15 @@ class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
 class OrderRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['rate']
+        fields = ['rate', 'ended_at']
 
     def validate_rate(self, value):
         if value not in [True, False]:
             raise serializers.ValidationError("Rate must be a boolean value.")
         return value
+
+    def update(self, instance, validated_data):
+        instance.rate = validated_data.get('rate', instance.rate)
+        instance.ended_at = timezone.now()
+        instance.save()
+        return instance
