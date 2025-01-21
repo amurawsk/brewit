@@ -1,27 +1,50 @@
-import React from 'react';
-import styles from './MyAccount.module.css';
+import React, { useState, useEffect } from 'react';
+
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
 import AccountInfo from '../../modules/common/AccountInfo.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './MyAccount.module.css';
+
+import api from '../../../api.js';
 
 /**
  * Account page - contains layout (Dashboard, Sidebar, Title), displays account details and most important brewery info
  */
 const MyAccount = () => {
-    const accountInfo = {
-        username: 'testowy',
-        created_at: '2024-01-01T10:00:00.000Z',
-        brewery_name: 'ABC',
-        brewery_nip: '12345678901',
-        brewery_address: 'Szkolna 1',
-        brewery_description:
-            'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem, tenetur facilis deserunt, dicta dolores, sint at quisquam cumque voluptas inventore vero doloribus. Voluptatem voluptatum deleniti veniam unde fugiat pariatur fuga!',
-    };
+    const [accountInfo, setAccountInfo] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await api.get(
+                    `accounts/commercial/`
+                );
+                if (response.status === 200) {
+                    setAccountInfo(response.data);
+                    setIsLoading(false);
+                } else {
+                    alert(
+                        'Błąd podczas pobierania szczegółów konta! Odśwież stronę i spróbuj ponownie.'
+                    );
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            }
+        };
+        setIsLoading(true);
+        getData();
+    }, []);
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <DashboardHeader />
             <div className={styles.container}>
                 {localStorage.getItem('userType') === 'commercial_brewery' && (
@@ -32,7 +55,9 @@ const MyAccount = () => {
                 )}
                 <div className={styles.content}>
                     <PageTitle text="Moje konto" />
-                    <AccountInfo accountInfo={accountInfo} />
+                    {accountInfo !== null && (
+                        <AccountInfo accountInfo={accountInfo} />
+                    )}
                 </div>
             </div>
         </div>

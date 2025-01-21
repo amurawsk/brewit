@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import styles from './DashboardHeader.module.css';
 
 const DashboardHeader = () => {
@@ -11,8 +12,10 @@ const DashboardHeader = () => {
             navigate('/commercial/dashboard');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/dashboard');
-        } else {
-            // TODO handle error
+        } else if (
+            localStorage.getItem('userType') === 'intermediary_company'
+        ) {
+            navigate('/intermediary/dashboard');
         }
     };
 
@@ -21,8 +24,10 @@ const DashboardHeader = () => {
             navigate('/commercial/account');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/account');
-        } else {
-            // TODO handle error
+        } else if (
+            localStorage.getItem('userType') === 'intermediary_company'
+        ) {
+            navigate('/intermediary/account');
         }
     };
 

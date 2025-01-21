@@ -1,32 +1,50 @@
 import React, { useState } from 'react';
 
+import ConfirmModal from '../../utils/ConfirmModal';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
 import styles from './ShowCoworkers.module.css';
 
-import ConfirmModal from '../../utils/ConfirmModal';
+import api from '../../../api.js';
 
 /**
  * ShowCoworkers - displays coworkers styled list, shows username, created_at
- * 
- * If coworkers list is empty, component displays proper info 
- * @param coworkers - coworkers list 
+ *
+ * If coworkers list is empty, component displays proper info
+ * @param coworkers - coworkers list
  */
-const ShowCoworkers = ({ coworkers }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [username, setUsername] = useState(null);
+const ShowCoworkers = ({ coworkers, isModalOpen, setIsModalOpen }) => {
+    const [userId, setUserId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const closePanel = () => {
         setIsModalOpen(false);
-        setUsername(null);
+        setUserId(null);
     };
 
-    const handleAction = (username) => {
-        setUsername(username);
+    const handleAction = (id) => {
+        setUserId(id);
         setIsModalOpen(true);
     };
 
-    const confirmAction = () => {
-        // TODO mock
-        console.log('Usuwam:', username);
+    const confirmAction = async () => {
+        setIsLoading(true);
+        try {
+            const response = await api.post(`coworkers/remove/`, {
+                coworker_id: userId,
+            });
+            if (response.status === 200) {
+                setIsLoading(false);
+            } else {
+                setIsLoading(false);
+                alert(
+                    'Błąd podczas dodawania pracownika! Odśwież stronę i spróbuj ponownie'
+                );
+            }
+        } catch (error) {
+            setIsLoading(false);
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+        }
         closePanel();
     };
 
@@ -36,6 +54,7 @@ const ShowCoworkers = ({ coworkers }) => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             {coworkers.length === 0 ? (
                 <p className={styles.noOrdersMessage}>Brak współpracowników.</p>
             ) : (
@@ -58,7 +77,7 @@ const ShowCoworkers = ({ coworkers }) => {
                             </div>
                             <button
                                 className={styles.removeButton}
-                                onClick={() => handleAction(person.username)}>
+                                onClick={() => handleAction(person.id)}>
                                 Usuń
                             </button>
                         </div>

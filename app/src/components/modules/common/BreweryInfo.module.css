@@ -26,11 +26,77 @@
     white-space: nowrap;
 }
 
-.section p {
-    margin: 0;
-    padding: 3px 0;
+.descriptionText {
+    color: black;
+}
+
+.infoCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.icon {
+    font-size: 1.5rem;
+}
+
+.email {
+    background-color: #e0f3ff;
+    color: #007bff;
+}
+
+.phone {
+    background-color: #d4f4e0;
+    color: #28a745;
+}
+
+.nip {
+    background-color: #fff4d4;
+    color: #ffc107;
+}
+
+.address {
+    background-color: #fce4ec;
+    color: #d81b60;
+}
+
+.ceo {
+    background-color: #f4e4ff;
+    color: #6f42c1;
+}
+
+.employees {
+    background-color: #e0e0e0;
+    color: dark;
+}
+
+.breweryName {
+    font-size: 2rem;
+    font-weight: bold;
+    color: blue;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.descriptionSection {
+    background-color: #e8f5e9;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.descriptionSection h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #388e3c;
 }
 
 .descriptionText {
-    color: black;
+    color: #1b5e20;
+    line-height: 1.5;
 }

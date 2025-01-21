@@ -26,13 +26,38 @@
     white-space: nowrap;
 }
 
-.section p {
-    margin: 0;
-    padding: 3px 0;
+.deviceStats,
+.orderStats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
-.indentText {
-    text-indent: 20px;
+.deviceStatBox,
+.orderStatBox {
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: bold;
+}
+
+.deviceIcon,
+.orderIcon {
+    font-size: 2rem;
+}
+
+.deviceLabel,
+.orderLabel {
+    font-size: 14px;
+}
+
+.deviceValue,
+.orderValue {
+    font-size: 16px;
 }
 
 .viewAll {
@@ -48,4 +73,66 @@
 
 .viewAll:hover {
     text-decoration: underline;
+}
+
+.deviceStatBoxBt {
+    border: 1px solid #f0a;
+    color: #f0a;
+}
+
+.deviceStatBoxFt {
+    border: 1px solid #0af;
+    color: #0af;
+}
+
+.deviceStatBoxAc {
+    border: 1px solid #fa0;
+    color: #fa0;
+}
+
+.deviceStatBoxBe {
+    border: 1px solid #0fa;
+    color: #0fa;
+}
+
+.orderStatBoxGeneral {
+    padding: 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-weight: bold;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #000;
+}
+
+.orderStatBoxNew {
+    border: 2px solid #ff6f00;
+    color: #ff6f00;
+}
+
+.orderStatBoxCurrent {
+    border: 2px solid green;
+    color: green;
+}
+
+.orderStatBoxPast {
+    border: 2px solid #3f79ff;
+    color: #3f79ff;
+}
+
+.orderStatBoxRejected {
+    border: 2px solid #d60000;
+    color: #d60000;
+}
+
+.orderSection {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.orderStatsContainer {
+    flex: 3;
 }

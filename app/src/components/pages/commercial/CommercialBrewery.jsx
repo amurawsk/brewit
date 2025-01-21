@@ -7,8 +7,11 @@ import PageTitleWithButton from '../../utils/PageTitleWithButton.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
 import EditBreweryInfo from '../../modules/common/EditBreweryInfo';
 import BreweryShortStats from '../../modules/common/BreweryShortStats.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './CommercialBrewery.module.css';
+
+import api from '../../../api.js';
 
 /**
  * Commercial Brewery page - allows to view or edit brewery data, contains layout (Header, Sidebar, Title, Button) and BreweryInfo, BreweryShortStats components
@@ -16,48 +19,41 @@ import styles from './CommercialBrewery.module.css';
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
-    const [statsData, setStatsData] = useState(null);
-
-    // TODO mock
-    const getData = () => {
-        const brewery_info = {
-            name: 'Przykład',
-            email: 'example@gmail.com',
-            phone_number: '123456789',
-            nip: '12345678901',
-            address: 'Szkolna 1',
-            description:
-                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate mollitia velit corrupti harum possimus ipsam nisi odit explicabo fugiat ea, tempora facilis accusantium perferendis voluptas minima, nam ratione numquam aliquid.',
-        };
-        const stats_info = {
-            no_devices: 1,
-            no_bt: 1,
-            no_ft: 0,
-            no_ac: 0,
-            no_be: 0,
-            no_orders: 3,
-            no_new: 1,
-            no_current: 1,
-            no_past: 1,
-            no_rejected: 0,
-            no_employees: 1,
-        };
-
-        setBreweryData(brewery_info);
-        setStatsData(stats_info);
-    };
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        getData();
-    }, []);
+        const getData = async () => {
+            try {
+                const response = await api.get(
+                    `commercial-brewery/${parseInt(localStorage.getItem('breweryId'))}/`
+                );
+                if (response.status === 200) {
+                    setBreweryData(response.data);
+                    setIsLoading(false);
+                } else {
+                    alert(
+                        'Błąd podczas pobierania informacji o browarze! Odśwież stronę i spróbuj ponownie.'
+                    );
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            }
+        };
+        if (!isPanelOpen) {
+            setIsLoading(true);
+            getData();
+        }
+    }, [isPanelOpen]);
 
-    // TODO
     const editInfo = () => {
         setIsPanelOpen(true);
     };
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <DashboardHeader />
             <div className={styles.container}>
                 <CommercialSidebar />
@@ -78,8 +74,8 @@ const CommercialBrewery = () => {
                         />
                     )}
                     <PageTitle text="Statystyki" />
-                    {statsData !== null && (
-                        <BreweryShortStats statsData={statsData} />
+                    {breweryData !== null && (
+                        <BreweryShortStats statsData={breweryData} />
                     )}
                 </div>
             </div>

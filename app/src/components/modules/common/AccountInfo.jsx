@@ -1,6 +1,16 @@
 import React from 'react';
-import styles from './AccountInfo.module.css';
 import { useNavigate } from 'react-router-dom';
+import {
+    FaUser,
+    FaCalendarAlt,
+    FaBuilding,
+    FaMapMarkerAlt,
+    FaBarcode,
+    FaUserTie,
+    FaInfoCircle,
+} from 'react-icons/fa';
+
+import styles from './AccountInfo.module.css';
 
 /**
  * AccountInfo - shows account details - username, created_at and some important brewery info
@@ -14,20 +24,22 @@ const AccountInfo = ({ accountInfo }) => {
             navigate('/commercial/brewery');
         } else if (localStorage.getItem('userType') === 'contract_brewery') {
             navigate('/contract/brewery');
-        } else {
-            // TODO handle error
         }
     };
 
     return (
         <div className={styles.content}>
             <div className={styles.section}>
-                <h3>Dane konta</h3>
+                <h3 className={styles.header}>
+                    <FaUser className={styles.icon} /> Dane konta
+                </h3>
                 <p>
-                    Nazwa użytkownika: <b>{accountInfo.username}</b>
+                    <FaUserTie className={styles.icon} /> Nazwa użytkownika:{' '}
+                    <b>{accountInfo.username}</b>
                 </p>
                 <p>
-                    Data utworzenia konta:{' '}
+                    <FaCalendarAlt className={styles.icon} /> Data utworzenia
+                    konta:{' '}
                     <b>
                         {new Date(accountInfo.created_at).toLocaleString(
                             'pl-PL'
@@ -35,38 +47,52 @@ const AccountInfo = ({ accountInfo }) => {
                     </b>
                 </p>
             </div>
-            <div className={styles.section}>
-                <h3>Przypisany browar</h3>
-                <p>
-                    Nazwa browaru: <b>{accountInfo.brewery_name}</b>
-                </p>
-                {localStorage.getItem('userType') === 'commercial_brewery' && (
-                    <>
-                        <p>
-                            NIP: <b>{accountInfo.brewery_nip}</b>
-                        </p>
-                        <p>
-                            Adres: <b>{accountInfo.brewery_address}</b>
-                        </p>
-                    </>
-                )}
-                {localStorage.getItem('userType') === 'contract_brewery' && (
-                    <>
-                        <p>
-                            CEO: <b>{accountInfo.brewery_ceo}</b>
-                        </p>
-                    </>
-                )}
-                <p>
-                    Opis:
-                    <p className={styles.descriptionText}>
-                        {accountInfo.brewery_description}
+            {localStorage.getItem('userType') !== 'intermediary_company' && (
+                <div className={styles.section}>
+                    <h3 className={styles.header}>
+                        <FaBuilding className={styles.icon} /> Przypisany browar
+                    </h3>
+                    <p>
+                        <FaBuilding className={styles.icon} /> Nazwa browaru:{' '}
+                        <b>{accountInfo.brewery_name}</b>
                     </p>
-                </p>
-                <span className={styles.viewAll} onClick={() => goToBrewery()}>
-                    Wyświetl stronę browaru...
-                </span>
-            </div>
+                    {localStorage.getItem('userType') ===
+                        'commercial_brewery' && (
+                        <>
+                            <p>
+                                <FaBarcode className={styles.icon} /> NIP:{' '}
+                                <b>{accountInfo.brewery_nip}</b>
+                            </p>
+                            <p>
+                                <FaMapMarkerAlt className={styles.icon} />{' '}
+                                Adres: <b>{accountInfo.brewery_address}</b>
+                            </p>
+                        </>
+                    )}
+                    {localStorage.getItem('userType') ===
+                        'contract_brewery' && (
+                        <>
+                            <p>
+                                <FaUserTie className={styles.icon} /> CEO:{' '}
+                                <b>{accountInfo.brewery_ceo}</b>
+                            </p>
+                        </>
+                    )}
+                    {accountInfo.brewery_description !== '' && (
+                        <p>
+                            <FaInfoCircle className={styles.icon} /> Opis:
+                            <p className={styles.descriptionText}>
+                                {accountInfo.brewery_description}
+                            </p>
+                        </p>
+                    )}
+                    <span
+                        className={styles.viewAll}
+                        onClick={() => goToBrewery()}>
+                        Wyświetl stronę browaru...
+                    </span>
+                </div>
+            )}
         </div>
     );
 };

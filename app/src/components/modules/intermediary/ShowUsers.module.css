@@ -1,0 +1,51 @@
+.allCoworkers {
+    max-height: 100vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.coworker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: black;
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.deviceText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.textTitle {
+    font-weight: normal;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.description {
+    font-size: 12px;
+    color: gray;
+    margin-top: 4px;
+}
+
+.descriptionValue {
+    color: black;
+}
+
+.noOrdersMessage {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
+}

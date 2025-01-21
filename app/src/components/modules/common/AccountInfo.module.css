@@ -3,13 +3,14 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 20px;
+    font-family: 'Arial', sans-serif;
 }
 
 .section {
     flex: 1;
-    background-color: #f9f9f9;
+    background-color: #f4f8fb;
     border: 1px solid black;
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
     text-align: left;
     display: flex;
@@ -20,19 +21,42 @@
 }
 
 .section h3 {
-    margin: 0 0 10px 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    margin: 0 0 15px 0;
+    color: black;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .section p {
     margin: 0;
-    padding: 3px 0;
+    padding: 5px 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header {
+    border-bottom: 1px solid black;
+    color: white;
+    padding: 5px 10px;
+    font-size: 16px;
+    display: inline-block;
+    margin-bottom: 15px;
 }
 
 .descriptionText {
-    color: black;
+    color: #333;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.icon {
+    color: #4a90e2;
+    font-size: 16px;
+    vertical-align: middle;
 }
 
 .viewAll {
@@ -43,9 +67,13 @@
     font-weight: bold;
     text-align: right;
     display: block;
-    margin-left: 80%;
+    margin-top: 10px;
 }
 
 .viewAll:hover {
     text-decoration: underline;
+}
+
+.viewAll:active {
+    color: #0056b3;
 }

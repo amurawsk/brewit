@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { setHours, setMinutes, isToday } from 'date-fns';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import pl from 'date-fns/locale/pl';
-import api from '../../../api.js';
+
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './AddTimeSlotForm.module.css';
+
+import api from '../../../api.js';
 
 registerLocale('pl', pl);
 
@@ -13,6 +16,8 @@ registerLocale('pl', pl);
  * AddDeviceForm - gets timeslot start- and end-timestamp from user, picked from day calendar or hour calendar (depends on device_type), on submit sends request to api
  */
 const AddTimeSlotForm = () => {
+    const navigate = useNavigate();
+
     const [selectedDevice, setSelectedDevice] = useState(null);
     const [devices, setDevices] = useState([]);
     const [formState, setFormState] = useState({
@@ -22,29 +27,35 @@ const AddTimeSlotForm = () => {
         timeRange: [null, null],
         specificDate: null,
     });
-    const navigate = useNavigate();
-    const timeSlots = () => navigate('/commercial/time_slots');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const getData = async () => {
-        try {
-            const breweryId = localStorage.getItem('breweryId');
-            const response = await api.get(`devices/brewery/${breweryId}/`);
-            if (response.status === 200) {
-                setDevices(response.data);
-            } else {
-                console.log(response);
-            }
-        } catch (error) {
-            console.log('Error fetching devices:', error);
-        }
-    };
 
     useEffect(() => {
+        const getData = async () => {
+            setIsLoading(true);
+            try {
+                const breweryId = localStorage.getItem('breweryId');
+                const response = await api.get(`devices/brewery/${breweryId}/`);
+                if (response.status === 200) {
+                    setIsLoading(false);
+                    setDevices(response.data);
+                } else {
+                    setIsLoading(false);
+                    alert(
+                        'Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.'
+                    );
+                }
+            } catch (error) {
+                setIsLoading(false);
+                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            }
+        };
         getData();
     }, []);
 
     const postData = async () => {
         try {
+            setIsLoading(true);
             let response;
             const id = selectedDevice.id;
 
@@ -54,6 +65,9 @@ const AddTimeSlotForm = () => {
                 formState.dateRange[1] !== null
             ) {
                 formState.dateRange[1].setHours(23, 59, 59);
+                formState.dateRange[1].setHours(
+                    formState.dateRange[1].getHours() + 24
+                );
                 response = await api.post(`devices/${id}/time-slots/add/`, {
                     status: 'F',
                     slot_type: 'D',
@@ -75,18 +89,17 @@ const AddTimeSlotForm = () => {
                     end_timestamp: formState.timeRange[1],
                     device: parseInt(id),
                 });
-            } else {
-                console.log('Both dateRange and timeRange are null');
             }
-            console.log(response);
             if (response.status === 201) {
-                timeSlots();
+                setIsLoading(false);
+                navigate('/commercial/time_slots');
             } else {
-                console.log(response);
-                // TODO: Handle error
+                setIsLoading(false);
+                alert('Dodawanie okna czasowego się nie powiodło!');
             }
         } catch (error) {
-            console.log('Error fetching devices:', error);
+            setIsLoading(false);
+            alert('Dodawanie okna czasowego się nie powiodło');
         }
     };
 
@@ -133,6 +146,7 @@ const AddTimeSlotForm = () => {
         if (formState.specificDate && isToday(formState.specificDate)) {
             const now = new Date();
             now.setMinutes(0, 0, 0);
+            now.setHours(now.getHours() + 1);
             return now;
         }
         return setHours(setMinutes(formState.specificDate, 0), 0);
@@ -220,6 +234,7 @@ const AddTimeSlotForm = () => {
                         locale="pl"
                         dateFormat="dd.MM.yyyy"
                         minDate={getMinDate()}
+                        required
                     />
                 </div>
             );
@@ -237,6 +252,7 @@ const AddTimeSlotForm = () => {
                         placeholderText="Wybierz dzień"
                         locale="pl"
                         minDate={getMinDate()}
+                        required
                     />
 
                     <DatePicker
@@ -253,6 +269,7 @@ const AddTimeSlotForm = () => {
                         minTime={getMinTime()}
                         maxTime={getMaxTime()}
                         disabled={!formState.specificDate}
+                        required
                     />
                     <DatePicker
                         className={styles.timepickerMaxTime}
@@ -278,6 +295,7 @@ const AddTimeSlotForm = () => {
                         disabled={
                             !formState.specificDate || !formState.timeRange[0]
                         }
+                        required
                     />
                 </div>
             );
@@ -288,6 +306,7 @@ const AddTimeSlotForm = () => {
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <form onSubmit={handleSubmit} className={styles.addTimeSlotForm}>
                 <label className={styles.formLabel}>
                     <b>Wybierz urządzenie</b>
@@ -306,7 +325,6 @@ const AddTimeSlotForm = () => {
                         </option>
                     ))}
                 </select>
-
                 {selectedDevice && (
                     <div>
                         <label className={styles.formLabel}>
@@ -318,12 +336,11 @@ const AddTimeSlotForm = () => {
                             value={formState.price}
                             onChange={handlePriceChange}
                             placeholder="Wpisz cenę (w zł)"
+                            required
                         />
                     </div>
                 )}
-
                 {renderPicker()}
-
                 <button className={styles.insertTimeSlotButton} type="submit">
                     Dodaj okno czasowe
                 </button>

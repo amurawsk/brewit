@@ -67,7 +67,7 @@ class CommercialBreweryInfoSerializer(serializers.ModelSerializer):
                     timeslot__device__commercial_brewery=instance
                 )
                 .values('status')
-                .annotate(no=Count('status'))
+                .annotate(no=Count('id', distinct=True))
             )
         }
         data['no_orders'] = sum(orders.values())
@@ -88,7 +88,7 @@ class CommercialBreweryUpdateSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     nip = serializers.CharField()
     address = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class ContractBreweryUpdateSerializer(serializers.Serializer):
@@ -96,7 +96,7 @@ class ContractBreweryUpdateSerializer(serializers.Serializer):
     email = serializers.EmailField()
     phone_number = serializers.CharField()
     owner_name = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class ContractBreweryInfoSerializer(serializers.ModelSerializer):
@@ -282,7 +282,7 @@ class StageCreationSerializer(serializers.Serializer):
     name = serializers.CharField()
     device = serializers.CharField()    # kod
     time = serializers.IntegerField()  # w minutach
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class StageDeleteSerializer(serializers.Serializer):
@@ -294,7 +294,7 @@ class StageUpdateSerializer(serializers.Serializer):
     name = serializers.CharField()
     device = serializers.CharField()
     time = serializers.IntegerField()
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class IngredientCreationSerializer(serializers.Serializer):
@@ -550,14 +550,18 @@ class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer)
     beer_volume = MeasurementField()
     time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
     commercial_brewery = serializers.SerializerMethodField()
+    recipe_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = [
             'id', 'created_at', 'status', 'beer_type', 'beer_volume',
             'description', 'rate', 'ended_at', 'commercial_brewery',
-            'recipe', 'time_slots', 'total_price'
+            'recipe_name', 'time_slots', 'total_price'
         ]
+
+    def get_recipe_name(self, obj):
+        return obj.recipe.name if obj.recipe else None
 
     def get_commercial_brewery(self, obj):
         brewery = obj.timeslot_set.first().device.commercial_brewery
@@ -615,25 +619,19 @@ class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
         ]
 
     def get_devices_number(self, obj):
-        return obj.device_set.filter(is_deleted=False).count()
+        return obj.device_set.count()
 
     def get_bt_number(self, obj):
-        return obj.device_set.filter(device_type='BT', is_deleted=False).count()
+        return obj.device_set.filter(device_type='BT').count()
 
     def get_ft_number(self, obj):
-        return obj.device_set.filter(device_type='FT', is_deleted=False).count()
+        return obj.device_set.filter(device_type='FT').count()
 
     def get_ac_number(self, obj):
-        return obj.device_set.filter(device_type='AC', is_deleted=False).count()
+        return obj.device_set.filter(device_type='AC').count()
 
     def get_be_number(self, obj):
-        return obj.device_set.filter(device_type='BE', is_deleted=False).count()
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        if representation['devices_number'] > 0:
-            return representation
-        return None
+        return obj.device_set.filter(device_type='BE').count()
 
 
 class OrderRateSerializer(serializers.ModelSerializer):

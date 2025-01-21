@@ -1,19 +1,22 @@
 import React from 'react';
+
 import styles from './TimeSlotsTimeline.module.css';
 
 /**
  * TimeSlotsTimeline - displays all timeslots in aesthetic way (as a timeline)
- * @param order - chosen order details
+ * @param timeSlots - chosen order timeSlots
  */
-const TimeSlotsTimeline = ({ order }) => {
+const TimeSlotsTimeline = ({ timeSlots, orderStatus }) => {
     const getDotColor = (start, end, status) => {
-        const currentTime = new Date().toISOString();
+        const currentTime = new Date()
+        const startDate = new Date(start);
+        const endDate = new Date(end);
         if (status === 'R') {
             return styles.cancelled;
         }
-        if (currentTime < start) {
+        if (currentTime < startDate) {
             return styles.upcoming;
-        } else if (currentTime > end) {
+        } else if (currentTime > endDate) {
             return styles.completed;
         } else {
             return styles.inProgress;
@@ -22,15 +25,15 @@ const TimeSlotsTimeline = ({ order }) => {
 
     return (
         <div className={styles.timeline}>
-            {order.timeslots.map((timeslot, index) => (
+            {timeSlots.map((timeslot, index) => (
                 <div key={index} className={styles.event}>
                     <div
-                        className={`${styles.dot} ${getDotColor(timeslot.start_timestamp, timeslot.end_timestamp, order.status)}`}
+                        className={`${styles.dot} ${getDotColor(timeslot.start_timestamp, timeslot.end_timestamp, orderStatus)}`}
                     />
                     <div className={styles.details}>
                         <div className={styles.status}>
-                            {timeslot.device_name} -{' '}
-                            {timeslot.device_serial_number}
+                            {timeslot.device.name} -{' '}
+                            {timeslot.device.serial_number}
                         </div>
                         <div className={styles.time}>
                             {new Date(timeslot.start_timestamp).toLocaleString(
@@ -40,6 +43,9 @@ const TimeSlotsTimeline = ({ order }) => {
                             {new Date(timeslot.end_timestamp).toLocaleString(
                                 'pl-PL'
                             )}
+                        </div>
+                        <div className={styles.time}>
+                            Cena: {timeslot.price} zł
                         </div>
                         <div className={styles.line} />
                     </div>
