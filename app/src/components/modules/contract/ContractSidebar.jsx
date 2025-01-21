@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './ContractSidebar.module.css';
 import { useNavigate } from 'react-router-dom';
 import {
     FaBeer,
@@ -10,6 +9,8 @@ import {
     FaChartLine,
 } from 'react-icons/fa';
 
+import styles from './ContractSidebar.module.css';
+
 const ContractSidebar = () => {
     const navigate = useNavigate();
 
@@ -17,7 +18,7 @@ const ContractSidebar = () => {
     const goToCoworkers = () => navigate('/contract/coworkers');
     const goToBrewery = () => navigate('/contract/brewery');
 
-    const goToNewOrder = () => {}; // TODO
+    const goToNewOrder = () => navigate('/contract/orders/add/choose-brewery');
     const goToRecipes = () => navigate('/contract/recipes');
     const goToStatistics = () => navigate('/contract/statistics');
 

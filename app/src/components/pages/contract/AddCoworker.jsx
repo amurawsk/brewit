@@ -3,9 +3,9 @@ import React from 'react';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
 import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
+import AddCoworkerForm from '../../modules/common/AddCoworkerForm.jsx';
 
 import styles from './AddCoworker.module.css';
-import AddCoworkerForm from '../../modules/common/AddCoworkerForm.jsx';
 
 /**
  * Add Coworker page - contains layout (Header, Sidebar, Title) and form which allows to add coworker

@@ -8,12 +8,15 @@ import styles from './ShowOrders.module.css';
 /**
  * ShowOrders - displays all orders as an styled list, displays id, brewery_name, created_on, ...
  * @param orders - orders data that will be displayed
- * @param status - defines which orders will be displayed (shows order only if order.status = status)
  */
-const ShowOrders = ({ orders, status }) => {
+const ShowOrders = ({
+    orders,
+    isPanelOpen,
+    setIsPanelOpen,
+    activeStatus,
+    getData,
+}) => {
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [isPanelOpen, setIsPanelOpen] = useState(false);
-    const filteredOrders = orders.filter((order) => order.status === status);
 
     const openPanel = () => {
         setIsPanelOpen(true);
@@ -26,21 +29,21 @@ const ShowOrders = ({ orders, status }) => {
 
     return (
         <div>
-            {filteredOrders.length === 0 ? (
+            {orders.length === 0 ? (
                 <p className={styles.noOrdersMessage}>
                     Brak zleceń o tym statusie.
                 </p>
             ) : (
                 <div className={styles.grid}>
-                    {filteredOrders.map((order, index) => (
+                    {orders.map((order, index) => (
                         <div
                             key={index}
-                            className={styles.card}
+                            className={`${styles.card} ${styles[`status-${order.status}`]}`}
                             onClick={() => handleOrderClicked(order)}>
                             <h2>Zlecenie #{order.id}</h2>
                             <p>
                                 Zleceniodawca:{' '}
-                                <b>{order.contract_brewery_name}</b>
+                                <b>{order.contract_brewery.name}</b>
                             </p>
                             <p>
                                 Utworzone dnia:{' '}
@@ -108,6 +111,8 @@ const ShowOrders = ({ orders, status }) => {
                 setIsPanelOpen={setIsPanelOpen}
                 order={selectedOrder}
                 setOrder={setSelectedOrder}
+                activeStatus={activeStatus}
+                getData={getData}
             />
         </div>
     );

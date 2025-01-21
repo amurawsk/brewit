@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
 
+import ConfirmModal from '../../utils/ConfirmModal';
+import Notification from '../../utils/Notification.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
 import styles from './ShowDevices.module.css';
 
-import ConfirmModal from '../../utils/ConfirmModal';
+import api from '../../../api.js';
 
 /**
  * ShowDevices - displays all devices as an styled list, displays name, type, serial number
  * @param devices - data, all devices that will be displayed
  * @param openPanel - function which opens panel with device details
  */
-const ShowDevices = ({ devices, openPanel }) => {
+const ShowDevices = ({ devices, openPanel, getData }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+    const [notificationText, setNotificationText] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const showNotification = (text) => {
+        setNotificationText(text);
+        setIsNotificationVisible(true);
+        setTimeout(() => {
+            setIsNotificationVisible(false);
+        }, 2000);
+    };
 
     const closePanel = () => {
         setIsModalOpen(false);
@@ -24,7 +39,23 @@ const ShowDevices = ({ devices, openPanel }) => {
     };
 
     const confirmAction = () => {
-        console.log(deleteId);
+        const removeDevice = async () => {
+            setIsLoading(true);
+            try {
+                const response = await api.get(`devices/${deleteId}/delete/`);
+                if (response.status === 200) {
+                    setIsLoading(false);
+                    getData();
+                } else {
+                    setIsLoading(false);
+                    showNotification('Nie można usunąć urządzenia!');
+                }
+            } catch (error) {
+                setIsLoading(false);
+                showNotification('Nie można usunąć urządzenia!');
+            }
+        };
+        removeDevice();
         closePanel();
     };
 
@@ -34,10 +65,11 @@ const ShowDevices = ({ devices, openPanel }) => {
 
     return (
         <div className={styles.container}>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.allDevices}>
                 {devices.map((device, index) => (
                     <div
-                        className={styles.device}
+                        className={`${styles.device} ${styles[device.device_type]}`}
                         key={index}
                         onClick={() => openPanel(device)}>
                         <div className={styles.deviceText}>
@@ -73,11 +105,15 @@ const ShowDevices = ({ devices, openPanel }) => {
             {isModalOpen && (
                 <ConfirmModal
                     message="Czy na pewno chcesz usunąć to urządzenie?"
-                    description="Spowoduje to usunięcie przypisanych okien czasowych i anulowanie potencjalnych zleceń"
+                    description="Jeśli jakieś okna czasowe dla tego urządzenia są zajęte, to najpierw je anuluj"
                     onConfirm={confirmAction}
                     onCancel={cancelAction}
                 />
             )}
+            <Notification
+                message={notificationText}
+                isVisible={isNotificationVisible}
+            />
         </div>
     );
 };

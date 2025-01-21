@@ -38,7 +38,8 @@
 .defaultSlot,
 .activeAvailableSlot,
 .activeReservedSlot,
-.activeTakenSlot {
+.activeTakenSlot,
+.currentlyAdded {
     height: 60px;
     border-radius: 5px;
     min-width: 100px;
@@ -59,4 +60,16 @@
 .activeTakenSlot {
     cursor: pointer;
     background-color: red;
+}
+
+.currentlyAdded {
+    cursor: pointer;
+    background-color: #0af;
+}
+
+.noDataMessage {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
 }

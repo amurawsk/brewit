@@ -20,6 +20,7 @@
     max-width: 90%;
     max-height: 700px;
     text-align: center;
+    overflow-y: auto;
 }
 
 .header {
@@ -96,7 +97,6 @@
     transition: background-color 0.3s;
     margin-left: auto;
     margin-top: 20px;
-    margin-bottom: 20px;
     cursor: pointer;
     padding: 0.4rem 1.2rem;
     font-size: 14px;
@@ -150,7 +150,6 @@
     transition: background-color 0.3s;
     margin-left: auto;
     margin-top: 20px;
-    margin-bottom: 20px;
     cursor: pointer;
     padding: 0.4rem 1.2rem;
     font-size: 14px;

@@ -29,25 +29,28 @@ const Register = () => {
 
     const handleRegister = async (event) => {
         console.log('Dane rejestracyjne:', formData);
-		const response = await api.post('login/', { username: formData.username, password: formData.password });
+        const response = await api.post('login/', {
+            username: formData.username,
+            password: formData.password,
+        });
 
         if (response.status === 200) {
-			const { refresh, access, user_type, user_id, brewery_id } =
-				response.data;
+            const { refresh, access, user_type, user_id, brewery_id } =
+                response.data;
 
-			localStorage.setItem('ACCESS_TOKEN', access);
-			localStorage.setItem('REFRESH_TOKEN', refresh);
-			localStorage.setItem('userType', user_type);
-			localStorage.setItem('userId', user_id);
-			localStorage.setItem('breweryId', brewery_id);
+            localStorage.setItem('ACCESS_TOKEN', access);
+            localStorage.setItem('REFRESH_TOKEN', refresh);
+            localStorage.setItem('userType', user_type);
+            localStorage.setItem('userId', user_id);
+            localStorage.setItem('breweryId', brewery_id);
 
-			if (user_type === 'commercial_brewery') {
-				goToCommercialDashboard();
-			} else if (user_type === 'contract_brewery') {
-				goToContractBrewery();
-			}
-    	}
-	};
+            if (user_type === 'commercial_brewery') {
+                goToCommercialDashboard();
+            } else if (user_type === 'contract_brewery') {
+                goToContractBrewery();
+            }
+        }
+    };
 
     const updateFormData = (field, value) => {
         setFormData((prevState) => ({ ...prevState, [field]: value }));

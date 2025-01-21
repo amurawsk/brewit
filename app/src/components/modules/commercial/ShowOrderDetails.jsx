@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import styles from './ShowOrderDetails.module.css';
+
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import TimeSlotsTimeline from '../common/TimeSlotsTimeline.jsx';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './ShowOrderDetails.module.css';
+
+import api from '../../../api.js';
 
 /**
  * ShowOrderDetails - pop-up window which is visible after clicking on chosen order, displays all order details, allows to accept / reject / cancel order
@@ -12,17 +17,22 @@ import Notification from '../../utils/Notification.jsx';
  * @param order - chosen order data
  * @param setOrder - setter for order
  */
-const ShowDeviceDetails = ({
+const ShowOrderDetails = ({
     isPanelOpen,
     setIsPanelOpen,
     order,
     setOrder,
+    activeStatus,
+    getData,
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [action, setAction] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+    const [notificationText, setNotificationText] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const showNotification = () => {
+    const showNotification = (text) => {
+        setNotificationText(text);
         setIsNotificationVisible(true);
         setTimeout(() => {
             setIsNotificationVisible(false);
@@ -39,13 +49,79 @@ const ShowDeviceDetails = ({
         setIsModalOpen(true);
     };
 
+    const acceptOrder = async () => {
+        setIsLoading(true);
+        try {
+            const response = await api.get(`orders/${order.id}/accept/`);
+            if (response.status === 200) {
+                setIsLoading(false);
+                showNotification('Pomyślnie zaakceptowano!');
+                getData(activeStatus);
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
+            } else {
+                setIsLoading(false);
+                showNotification('Zamówienie nie mogło zostać zaakceptowane!');
+                getData(activeStatus);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            showNotification('Wystąpił błąd!');
+            getData(activeStatus);
+        }
+    };
+
+    const rejectOrder = async () => {
+        setIsLoading(true);
+        try {
+            const response = await api.get(`orders/${order.id}/reject/`);
+            if (response.status === 200) {
+                setIsLoading(false);
+                showNotification('Pomyślnie odrzucono!');
+                getData(activeStatus);
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
+            } else {
+                setIsLoading(false);
+                showNotification('Zamówienie nie mogło zostać odrzucone!');
+                getData(activeStatus);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            showNotification('Wystąpił błąd!');
+            getData(activeStatus);
+        }
+    };
+
+    const cancelOrder = async () => {
+        setIsLoading(true);
+        try {
+            const response = await api.get(`orders/${order.id}/cancel/`);
+            if (response.status === 200) {
+                setIsLoading(false);
+                showNotification('Pomyślnie anulowano!');
+                getData(activeStatus);
+                setIsModalOpen(false);
+                setIsPanelOpen(false);
+            } else {
+                setIsLoading(false);
+                showNotification('Zamówienie nie mogło być anulowane!');
+                getData(activeStatus);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            showNotification('Wystąpił błąd!');
+            getData(activeStatus);
+        }
+    };
+
     const confirmAction = () => {
         if (action === 'cancel') {
-            console.log('Zlecenie anulowane', order.id);
+            cancelOrder();
         } else if (action === 'reject') {
-            console.log('Zlecenie odrzucone', order.id);
+            rejectOrder();
         } else if (action === 'accept') {
-            console.log('Zlecenie zaakceptowane', order.id);
+            acceptOrder();
         }
         setIsModalOpen(false);
         closePanel();
@@ -58,6 +134,7 @@ const ShowDeviceDetails = ({
 
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             {isPanelOpen && order && (
                 <div className={styles.overlay}>
                     <div className={styles.panel}>
@@ -93,23 +170,29 @@ const ShowDeviceDetails = ({
                             <div className={styles.detailBox}>
                                 <h3>Zleceniodawca</h3>
                                 <p>
-                                    Nazwa browaru: {order.contract_brewery_name}
+                                    Nazwa browaru: {order.contract_brewery.name}
                                 </p>
                                 <p>
                                     Właściciel:{' '}
-                                    {order.contract_brewery_owner_name}
+                                    {order.contract_brewery.owner_name}
                                 </p>
-                                <p>Email: {order.contract_brewery_email}</p>
+                                <p>
+                                    Email:{' '}
+                                    {order.contract_brewery.contract_email}
+                                </p>
                                 <p>
                                     Numer telefonu:{' '}
-                                    {order.contract_brewery_phone_number}
+                                    {
+                                        order.contract_brewery
+                                            .contract_phone_number
+                                    }
                                 </p>
                             </div>
                             <div className={styles.detailBox}>
                                 <h3>Informacje</h3>
                                 <p>Typ piwa: {order.beer_type}</p>
                                 <p>Objętość: {order.beer_volume}L</p>
-                                <p>Całkowity koszt: {order.price} zł</p>
+                                <p>Całkowity koszt: {order.total_price} zł</p>
                             </div>
                             <div className={styles.detailBox}>
                                 <h3>Dodatkowe informacje</h3>
@@ -152,7 +235,10 @@ const ShowDeviceDetails = ({
                         <div className={styles.timelineHeader}>
                             <h3>Oś Czasu wynajmowanych urządzeń</h3>
                         </div>
-                        <TimeSlotsTimeline order={order} />
+                        <TimeSlotsTimeline
+                            timeSlots={order.time_slots}
+                            orderStatus={order.status}
+                        />
                         {order.status !== 'N' && order.status !== 'C' && (
                             <button
                                 onClick={closePanel}
@@ -218,11 +304,11 @@ const ShowDeviceDetails = ({
                 />
             )}
             <Notification
-                message="Operacja zakończona sukcesem!"
+                message={notificationText}
                 isVisible={isNotificationVisible}
             />
         </div>
     );
 };
 
-export default ShowDeviceDetails;
+export default ShowOrderDetails;

@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './CommercialSidebar.module.css';
 import { useNavigate } from 'react-router-dom';
 import {
     FaBeer,
@@ -9,6 +8,8 @@ import {
     FaUsers,
     FaChartLine,
 } from 'react-icons/fa';
+
+import styles from './CommercialSidebar.module.css';
 
 /**
  * Defines sidebar for commercial_brewery, allows to navigate through the pages

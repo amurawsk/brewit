@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
-import styles from './AddDeviceForm.module.css';
-import api from '../../../api.js';
 import { useNavigate } from 'react-router-dom';
+
+import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
+
+import styles from './AddDeviceForm.module.css';
+
+import api from '../../../api.js';
 
 /**
  * AddDeviceForm - gets all necessary data from user, different for each device_type, on submit sends request to api
  */
 const AddDeviceForm = () => {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         name: '',
         device_type: '',
         serial_number: '',
-        capacity: '',
+        capacity: '0',
         temperature_min: 0,
         temperature_max: 0,
         sour_beers: false,
         carbonation: [],
         supported_containers: '',
     });
-
-    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const { device_type, carbonation } = formData;
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -27,7 +33,6 @@ const AddDeviceForm = () => {
             ...prevData,
             [name]: type === 'checkbox' ? checked : value,
         }));
-        console.log(formData);
     };
 
     const handleCarbonationChange = (value, checked) => {
@@ -42,6 +47,7 @@ const AddDeviceForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const response = await api.post(`devices/add/`, {
                 ...formData,
@@ -51,21 +57,23 @@ const AddDeviceForm = () => {
                 carbonation: formData.carbonation.join(','),
             });
             if (response.status === 201) {
+                setIsLoading(false);
                 navigate('/commercial/devices');
             } else {
-                console.error('Error:', response);
-                alert('Błąd podczas dodawania urządzenia!');
+                setIsLoading(false);
+                alert(
+                    'Błąd podczas dodawania urządzenia! Odśwież stronę i spróbuj ponownie.'
+                );
             }
         } catch (error) {
-            console.error('Error fetching devices:', error);
-            alert('Błąd sieci! Spróbuj ponownie później.');
+            setIsLoading(false);
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
         }
     };
 
-    const { device_type, carbonation } = formData;
-
     return (
         <div>
+            <LoadingOverlay isLoading={isLoading} />
             <div className={styles.deviceTypeDropbox}>
                 <label
                     className={styles.addEquipmentLabel}
@@ -121,23 +129,25 @@ const AddDeviceForm = () => {
                                 required
                             />
                         </div>
-                        <div>
-                            <label
-                                className={styles.addEquipmentLabel}
-                                htmlFor="capacity">
-                                <b>Pojemność (L): </b>
-                            </label>
-                            <input
-                                className={styles.addEquipmentInput}
-                                type="number"
-                                name="capacity"
-                                min="0"
-                                step="0.1"
-                                placeholder="Wpisz pojemność"
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                        {device_type !== 'BE' && (
+                            <div>
+                                <label
+                                    className={styles.addEquipmentLabel}
+                                    htmlFor="capacity">
+                                    <b>Pojemność (L): </b>
+                                </label>
+                                <input
+                                    className={styles.addEquipmentInput}
+                                    type="number"
+                                    name="capacity"
+                                    min="0"
+                                    step="0.1"
+                                    placeholder="Wpisz pojemność"
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                        )}
                     </>
                 )}
                 {device_type !== 'BE' && device_type && (
@@ -193,7 +203,7 @@ const AddDeviceForm = () => {
                         />
                     </div>
                 )}
-                {(device_type === 'BT' || device_type === 'BE') && (
+                {(device_type === 'AC' || device_type === 'BE') && (
                     <div className={styles.sourBeerCheckbox}>
                         <label
                             className={styles.addEquipmentLabel}

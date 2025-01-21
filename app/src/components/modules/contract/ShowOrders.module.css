@@ -28,6 +28,27 @@
     overflow: hidden;
 }
 
+.status-N {
+    border-color: #ff6f00;
+}
+
+.status-C {
+    border-color: green;
+}
+
+.status-P {
+    border-color: #3f79ff;
+}
+
+.status-R {
+    border-color: #d60000;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
