@@ -550,7 +550,7 @@ class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer)
     beer_volume = MeasurementField()
     time_slots = TimeSlotSerializer(many=True, source='timeslot_set')
     commercial_brewery = serializers.SerializerMethodField()
-    recipe_name = serializers.CharField(source='recipe.name')
+    recipe_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
@@ -559,6 +559,9 @@ class OrderWithTimeSlotsAndCommercialInfoSerializer(serializers.ModelSerializer)
             'description', 'rate', 'ended_at', 'commercial_brewery',
             'recipe_name', 'time_slots', 'total_price'
         ]
+
+    def get_recipe_name(self, obj):
+        return obj.recipe.name if obj.recipe else None
 
     def get_commercial_brewery(self, obj):
         brewery = obj.timeslot_set.first().device.commercial_brewery
