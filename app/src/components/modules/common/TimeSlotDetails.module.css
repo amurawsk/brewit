@@ -20,7 +20,7 @@
     max-width: 90%;
     max-height: 700px;
     text-align: center;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .header {
