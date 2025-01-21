@@ -20,6 +20,7 @@ from .models import (
 from django.db.models import Count
 from .serializers import (
     BreweryWithDevicesNumberSerializer,
+    BreweryWithNonZeroDevicesNumberSerializer,
     CheckUsernameUniqueSerializer,
     ContractBrewerySerializer,
     DeviceSerializer,
