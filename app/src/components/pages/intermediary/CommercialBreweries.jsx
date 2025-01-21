@@ -18,9 +18,7 @@ const CommercialBreweries = () => {
         const getData = async () => {
             setIsLoading(true);
             try {
-                const response = await api.get(
-                    `breweries/commercial/all/`
-                );
+                const response = await api.get(`breweries/commercial/all/`);
                 if (response.status === 200) {
                     setIsLoading(false);
                     setBreweries(response.data);
