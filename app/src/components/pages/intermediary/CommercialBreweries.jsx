@@ -19,7 +19,7 @@ const CommercialBreweries = () => {
             setIsLoading(true);
             try {
                 const response = await api.get(
-                    `breweries/commercial/with-devices/`
+                    `breweries/commercial/all/`
                 );
                 if (response.status === 200) {
                     setIsLoading(false);
