@@ -20,7 +20,6 @@ from .models import (
 from django.db.models import Count
 from .serializers import (
     BreweryWithDevicesNumberSerializer,
-    BreweryWithNonZeroDevicesNumberSerializer,
     CheckUsernameUniqueSerializer,
     ContractBrewerySerializer,
     DeviceSerializer,
@@ -2558,8 +2557,8 @@ class BreweryWithDevicesNumberView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number')
-        serializer = BreweryWithNonZeroDevicesNumberSerializer(breweries, many=True)
+        breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number').filter(devices_number__gt=0)
+        serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
         return Response(serializer.data, status=200)
 
 
