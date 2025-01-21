@@ -105,11 +105,11 @@ const AddTimeSlotForm = () => {
                 navigate('/commercial/time_slots');
             } else {
                 setIsLoading(false);
-                showNotification('Dodawanie okna czasowego się nie powiodło!');
+                alert('Dodawanie okna czasowego się nie powiodło!');
             }
         } catch (error) {
             setIsLoading(false);
-            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            alert('Dodawanie okna czasowego się nie powiodło');
         }
     };
 

@@ -8,13 +8,15 @@ import styles from './TimeSlotsTimeline.module.css';
  */
 const TimeSlotsTimeline = ({ timeSlots, orderStatus }) => {
     const getDotColor = (start, end, status) => {
-        const currentTime = new Date().toISOString();
+        const currentTime = new Date()
+        const startDate = new Date(start);
+        const endDate = new Date(end);
         if (status === 'R') {
             return styles.cancelled;
         }
-        if (currentTime < start) {
+        if (currentTime < startDate) {
             return styles.upcoming;
-        } else if (currentTime > end) {
+        } else if (currentTime > endDate) {
             return styles.completed;
         } else {
             return styles.inProgress;
