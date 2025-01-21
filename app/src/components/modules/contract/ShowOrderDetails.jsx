@@ -244,7 +244,7 @@ const ShowOrderDetails = ({
                                     )}
                                 <p>
                                     Receptura:{' '}
-                                    {order.recipe
+                                    {order.recipe_name
                                         ? order.recipe_name
                                         : 'Brak'}
                                 </p>

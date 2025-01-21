@@ -180,7 +180,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                         onChange={handleInputChange}>
                         <option value={null}>Brak receptury</option>
                         {recipes.map((recipe) => (
-                            <option key={recipe.id} value={recipe.id}>
+                            <option key={recipe.pk} value={recipe.pk}>
                                 {' '}
                                 {recipe.name}
                             </option>
