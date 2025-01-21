@@ -89,7 +89,7 @@ class CommercialBreweryUpdateSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     nip = serializers.CharField()
     address = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class ContractBreweryUpdateSerializer(serializers.Serializer):
@@ -97,7 +97,7 @@ class ContractBreweryUpdateSerializer(serializers.Serializer):
     email = serializers.EmailField()
     phone_number = serializers.CharField()
     owner_name = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class ContractBreweryInfoSerializer(serializers.ModelSerializer):
@@ -283,7 +283,7 @@ class StageCreationSerializer(serializers.Serializer):
     name = serializers.CharField()
     device = serializers.CharField()    # kod
     time = serializers.IntegerField()  # w minutach
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class StageDeleteSerializer(serializers.Serializer):
@@ -295,7 +295,7 @@ class StageUpdateSerializer(serializers.Serializer):
     name = serializers.CharField()
     device = serializers.CharField()
     time = serializers.IntegerField()
-    description = serializers.CharField()
+    description = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class IngredientCreationSerializer(serializers.Serializer):
