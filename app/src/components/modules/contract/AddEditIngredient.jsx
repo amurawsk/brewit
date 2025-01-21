@@ -1,17 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AddEditIngredient.module.css';
+import api from '../../../api.js';
+import { useNavigate } from 'react-router-dom';
 
-function AddEditIngredient({
-    ingredientId,
-    ingredient,
-    stepIndex,
-    handleSubmit,
-    handleCancel,
-}) {
+function AddEditIngredient({ stage_id, ingredient, setIngredient, handleCancel }) {
+
+	const navigate = useNavigate();
+	const goToRecipes = () => navigate('/contract/recipes');
+
+	console.log(stage_id);
     const [localIngredientData, setLocalIngredientData] = useState({
         name: '',
-        quantity: '',
+        amount: '',
     });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+		if (ingredient?.name) {
+	        try {
+    	        const response = await api.post(`recipies/stages/ingredients/update`, {
+					id: ingredient.pk,
+					name: localIngredientData.name,
+					quantity: localIngredientData.amount
+            	});
+	            if (response.status === 200) {
+					setIngredient(localIngredientData);
+					handleCancel();
+					goToRecipes();
+        	    }
+	        } catch (error) {
+    	        console.error('Error editing:', error);
+        	}
+		} else {
+			try {
+    	        const response = await api.post(`recipies/stages/ingredients/`, {
+					stage_id: stage_id,
+					name: localIngredientData.name,
+					quantity: localIngredientData.amount
+            	});
+	            if (response.status === 201) {
+					setIngredient(localIngredientData);
+					handleCancel();
+					goToRecipes();
+        	    }
+	        } catch (error) {
+    	        console.error('Error adding', error);
+        	}
+		}
+    };
 
     useEffect(() => {
         if (ingredient) {
@@ -27,19 +63,10 @@ function AddEditIngredient({
         }));
     };
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        handleSubmit(localIngredientData, ingredientId, stepIndex);
-    };
-
-    const onCancel = () => {
-        handleCancel();
-    };
-
     return (
-        <form onSubmit={onSubmit} className={styles.addDeviceForm}>
+        <form onSubmit={handleSubmit} className={styles.addDeviceForm}>
             <h4>
-                {ingredientId !== null ? 'Edytuj składnik' : 'Dodaj składnik'}
+                {ingredient?.name ? 'Edytuj składnik' : 'Dodaj składnik'}
             </h4>
             <div>
                 <label className={styles.addEquipmentLabel} htmlFor="name">
@@ -56,29 +83,29 @@ function AddEditIngredient({
                 />
             </div>
             <div>
-                <label className={styles.addEquipmentLabel} htmlFor="quantity">
+                <label className={styles.addEquipmentLabel} htmlFor="amount">
                     <b>Ilość: </b>
                 </label>
                 <input
                     className={styles.addEquipmentInput}
                     type="text"
-                    name="quantity"
+                    name="amount"
                     placeholder="Ilość"
-                    value={localIngredientData.quantity}
+                    value={localIngredientData.amount}
                     onChange={handleChange}
                     required
                 />
             </div>
             <div className={styles.buttonGroup}>
                 <button type="submit" className={styles.insertDeviceButton}>
-                    {ingredientId !== null
+                    {ingredient?.name
                         ? 'Zaktualizuj składnik'
                         : 'Dodaj składnik'}
                 </button>
                 <button
                     type="button"
                     className={styles.insertDeviceButton}
-                    onClick={onCancel}>
+                    onClick={() => handleCancel()}>
                     Anuluj
                 </button>
             </div>

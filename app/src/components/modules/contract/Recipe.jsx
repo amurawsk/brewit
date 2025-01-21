@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Recipe.module.css';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
+import api from '../../../api.js';
 
-function Recipe({ recipe, handleEditRecipe, handleDeleteRecipe }) {
+function Recipe({ recipe, handleEditRecipe }) {
+
+	const navigate = useNavigate();
+	
+	const goToRecipes = () => navigate('/contract/recipes');
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+	const [deleteId, setDeleteId] = useState(null);
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -15,9 +23,29 @@ function Recipe({ recipe, handleEditRecipe, handleDeleteRecipe }) {
     };
 
     const confirmDelete = () => {
-        setIsModalOpen(false);
-        handleDeleteRecipe();
-        showNotification();
+		const removeRecipe = async () => {
+			try {
+				const response = await api.post(`recipies/delete/`, {
+					id: deleteId,
+				});
+				if (response.status === 200) {
+					setIsModalOpen(false);
+					setDeleteId(null);
+					showNotification();
+					goToRecipes();
+				} else {
+					console.log("Nie usunieto");
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		removeRecipe();
+    };
+
+    const handleAction = (id) => {
+        setDeleteId(id);
+        setIsModalOpen(true);
     };
 
     const cancelDelete = () => {
@@ -54,7 +82,7 @@ function Recipe({ recipe, handleEditRecipe, handleDeleteRecipe }) {
                     </button>
                     <button
                         className={styles.removeButton}
-                        onClick={() => setIsModalOpen(true)}>
+                        onClick={() => handleAction(recipe.pk)}>
                         Usuń
                     </button>
                 </div>

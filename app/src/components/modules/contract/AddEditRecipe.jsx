@@ -1,13 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import styles from './AddEditRecipe.module.css';
+import api from '../../../api.js';
+import { useNavigate } from 'react-router-dom';
 
-function AddEditRecipe({ recipe, handleSubmit, handleCancel }) {
+function AddEditRecipe({ recipe, setRecipe, handleCancel }) {
+
+	const navigate = useNavigate();
+	const goToRecipes = () => navigate('/contract/recipes');
+
     const [localFormData, setLocalFormData] = useState({
         name: '',
-        full_time: '',
         full_volume: '',
         steps: [],
     });
+
+	const handleSubmit = async (e) => {
+        e.preventDefault();
+		if (recipe?.name) {
+	        try {
+    	        const response = await api.post(`recipies/update/`, {
+					id: recipe.pk,
+					name: localFormData.name,
+					full_volume: localFormData.full_volume,
+            	});
+	            if (response.status === 201) {
+					setRecipe(localFormData);
+					handleCancel();
+					goToRecipes();
+        	    }
+	        } catch (error) {
+    	        console.error('Error fetching devices:', error);
+        	}
+		} else {
+			try {
+    	        const response = await api.post(`recipies/`, {
+					name: localFormData.name,
+					full_volume: localFormData.full_volume,
+            	});
+	            if (response.status === 201) {
+					setRecipe(localFormData);
+					handleCancel();
+					goToRecipes();
+        	    }
+	        } catch (error) {
+    	        console.error('Error fetching devices:', error);
+        	}
+		}
+    };
 
     useEffect(() => {
         if (recipe) {
@@ -26,17 +65,8 @@ function AddEditRecipe({ recipe, handleSubmit, handleCancel }) {
         }));
     };
 
-    const onSubmit = (e) => {
-        e.preventDefault();
-        handleSubmit(localFormData);
-    };
-
-    const onCancel = () => {
-        handleCancel();
-    };
-
     return (
-        <form onSubmit={onSubmit} className={styles.addDeviceForm}>
+        <form onSubmit={handleSubmit} className={styles.addDeviceForm}>
             <div>
                 <label className={styles.addEquipmentLabel} htmlFor="name">
                     <b>Nazwa przepisu: </b>
@@ -48,21 +78,6 @@ function AddEditRecipe({ recipe, handleSubmit, handleCancel }) {
                     maxLength={100}
                     placeholder="Wpisz nazwę przepisu"
                     value={localFormData.name}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div>
-                <label className={styles.addEquipmentLabel} htmlFor="full_time">
-                    <b>Całkowity czas: </b>
-                </label>
-                <input
-                    className={styles.addEquipmentInput}
-                    type="text"
-                    name="full_time"
-                    maxLength={100}
-                    placeholder="Wpisz całkowity czas"
-                    value={localFormData.full_time}
                     onChange={handleChange}
                     required
                 />
@@ -93,7 +108,7 @@ function AddEditRecipe({ recipe, handleSubmit, handleCancel }) {
                     <button
                         type="button"
                         className={styles.insertDeviceButton}
-                        onClick={onCancel}>
+                        onClick={() => handleCancel()}>
                         Anuluj
                     </button>
                 )}

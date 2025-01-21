@@ -5,28 +5,33 @@ import AddEditStep from './AddEditStep';
 import ConfirmModal from '../../utils/ConfirmModal';
 import Notification from '../../utils/Notification.jsx';
 import IngredientsList from './IngredientsList';
+import api from '../../../api.js';
+import { useNavigate } from 'react-router-dom';
 
 function StepsList({
     steps,
+	Step,
+	setStep,
     stepIndex,
     ingredient,
-    ingredientId,
+    setIngredient,
     handleEditStep,
     handleAddEditIngredient,
     handleCancelAddEditIngredient,
     handleAddEditStep,
     handleCancelAddEditStep,
-    handleDeleteStep,
     isEditingStep,
     isEditingIngredient,
     handleAddIngredient,
     handleEditIngredient,
-    handleDeleteIngredient,
     isEditingRecipe,
 }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const [stepIndexToDelete, setStepIndexToDelete] = useState(null);
+    const [deleteId, setDeleteId] = useState(null);
+	const navigate = useNavigate();
+	const goToRecipes = () => navigate('/contract/recipes');
+
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -35,20 +40,34 @@ function StepsList({
         }, 2000);
     };
 
-    const confirmDelete = () => {
-        setIsModalOpen(false);
-        handleDeleteStep(stepIndexToDelete);
-        showNotification();
-    };
-
-    const cancelDelete = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleDeleteButton = (index) => {
-        setStepIndexToDelete(index);
+    const handleAction = (id) => {
+        setDeleteId(id);
         setIsModalOpen(true);
     };
+
+    const confirmAction = async () => {
+		const removeRecipe = async () => {
+            try {
+				const response = await api.post(`recipies/stages/delete`, {
+					stage_id: deleteId,
+				});
+                if (response.status === 200) {
+                    goToRecipes();
+                }
+            } catch (error) {
+				console.log(error);
+            }
+        };
+		removeRecipe();
+        cancelAction();
+		showNotification();
+    };
+
+    const cancelAction = () => {
+        setIsModalOpen(false);
+        setDeleteId(null);
+    };
+
 
     return (
         <div>
@@ -67,7 +86,7 @@ function StepsList({
                                         className={
                                             styles.recipeDescriptionValue
                                         }>
-                                        {step.device}
+                                        {step.device_type}
                                     </span>
                                 </span>
                                 <span className={styles.recipeDescription}>
@@ -92,9 +111,6 @@ function StepsList({
                                     ingredients={step.ingredients}
                                     handleEditIngredient={handleEditIngredient}
                                     stepIndex={index}
-                                    handleDeleteIngredient={
-                                        handleDeleteIngredient
-                                    }
                                 />
                             </div>
                             <div className={styles.addStepContainer}>
@@ -105,7 +121,7 @@ function StepsList({
                                 </button>
                                 <button
                                     className={styles.removeButton}
-                                    onClick={() => handleDeleteButton(index)}>
+                                    onClick={() => handleAction(step.pk)}>
                                     Usuń
                                 </button>
                             </div>
@@ -121,20 +137,18 @@ function StepsList({
                             )}
                         {isEditingStep && stepIndex === index && (
                             <AddEditStep
-                                stepIndex={stepIndex}
-                                step={step}
-                                handleSubmit={handleAddEditStep}
-                                handleCancel={handleCancelAddEditStep}
+							step={step}
+							setStep={setStep}
+							handleAddEditStep={handleAddEditStep}
+							handleCancel={handleCancelAddEditStep}
                             />
                         )}
                         {isEditingIngredient && stepIndex === index && (
                             <AddEditIngredient
-                                ingredientId={ingredientId}
-                                ingredient={ingredient}
-                                stepIndex={index}
-                                step={step}
-                                handleSubmit={handleAddEditIngredient}
-                                handleCancel={handleCancelAddEditIngredient}
+								stage_id={step.pk}
+								ingredient={ingredient}
+								setIngredient={setIngredient}
+								handleCancel={handleCancelAddEditIngredient}
                             />
                         )}
                     </div>
@@ -145,8 +159,8 @@ function StepsList({
                 <ConfirmModal
                     message="Czy na pewno chcesz usunąć ten etap?"
                     description="Spowoduje to usunięcie przypisanych składników."
-                    onConfirm={confirmDelete}
-                    onCancel={cancelDelete}
+                    onConfirm={confirmAction}
+                    onCancel={cancelAction}
                 />
             )}
 
