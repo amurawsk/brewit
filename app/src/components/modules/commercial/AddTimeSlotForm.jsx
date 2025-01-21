@@ -4,7 +4,6 @@ import { setHours, setMinutes, isToday } from 'date-fns';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import pl from 'date-fns/locale/pl';
 
-import Notification from '../../utils/Notification.jsx';
 import LoadingOverlay from '../../utils/LoadingOverlay.jsx';
 
 import styles from './AddTimeSlotForm.module.css';
@@ -28,17 +27,8 @@ const AddTimeSlotForm = () => {
         timeRange: [null, null],
         specificDate: null,
     });
-    const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const [notificationText, setNotificationText] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const showNotification = (text) => {
-        setNotificationText(text);
-        setIsNotificationVisible(true);
-        setTimeout(() => {
-            setIsNotificationVisible(false);
-        }, 2000);
-    };
 
     useEffect(() => {
         const getData = async () => {
@@ -105,11 +95,11 @@ const AddTimeSlotForm = () => {
                 navigate('/commercial/time_slots');
             } else {
                 setIsLoading(false);
-                showNotification('Dodawanie okna czasowego się nie powiodło!');
+                alert('Dodawanie okna czasowego się nie powiodło!');
             }
         } catch (error) {
             setIsLoading(false);
-            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+            alert('Dodawanie okna czasowego się nie powiodło');
         }
     };
 
@@ -355,10 +345,6 @@ const AddTimeSlotForm = () => {
                     Dodaj okno czasowe
                 </button>
             </form>
-            <Notification
-                message={notificationText}
-                isVisible={isNotificationVisible}
-            />
         </div>
     );
 };

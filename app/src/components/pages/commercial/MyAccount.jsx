@@ -22,7 +22,7 @@ const MyAccount = () => {
         const getData = async () => {
             try {
                 const response = await api.get(
-                    `accounts/commercial/${parseInt(localStorage.getItem('userId'))}/`
+                    `accounts/commercial/`
                 );
                 if (response.status === 200) {
                     setAccountInfo(response.data);

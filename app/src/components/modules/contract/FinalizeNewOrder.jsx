@@ -63,11 +63,11 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                     });
                 } else {
                     setIsLoading(false);
-                    alert('Błąd podczas tworzenia zlecenia!');
+                    alert('Błąd podczas tworzenia zlecenia! Odśwież i spróbuj ponownie');
                 }
             } catch (error) {
                 setIsLoading(false);
-                alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+                alert('Błąd podczas tworzenia zlecenia! Odśwież i spróbuj ponownie');
             }
         };
         e.preventDefault();
@@ -180,7 +180,7 @@ const FinalizeNewOrder = ({ selectedBrewery, timeSlots }) => {
                         onChange={handleInputChange}>
                         <option value={null}>Brak receptury</option>
                         {recipes.map((recipe) => (
-                            <option key={recipe.id} value={recipe.id}>
+                            <option key={recipe.pk} value={recipe.pk}>
                                 {' '}
                                 {recipe.name}
                             </option>
