@@ -600,42 +600,6 @@ class OrderWithTimeSlotsAndAllBreweriesInfoSerializer(serializers.ModelSerialize
         }
 
 
-class BreweryWithNonZeroDevicesNumberSerializer(serializers.ModelSerializer):
-    devices_number = serializers.SerializerMethodField()
-    bt_number = serializers.SerializerMethodField()
-    ft_number = serializers.SerializerMethodField()
-    ac_number = serializers.SerializerMethodField()
-    be_number = serializers.SerializerMethodField()
-
-    class Meta:
-        model = CommercialBrewery
-        fields = [
-            'id', 'name', 'nip', 'address',
-            'contract_phone_number', 'contract_email', 'description',
-            'devices_number', 'bt_number', 'ft_number', 'ac_number', 'be_number'
-        ]
-
-    def get_devices_number(self, obj):
-        return obj.device_set.filter(is_deleted=False).count()
-
-    def get_bt_number(self, obj):
-        return obj.device_set.filter(device_type='BT', is_deleted=False).count()
-
-    def get_ft_number(self, obj):
-        return obj.device_set.filter(device_type='FT', is_deleted=False).count()
-
-    def get_ac_number(self, obj):
-        return obj.device_set.filter(device_type='AC', is_deleted=False).count()
-
-    def get_be_number(self, obj):
-        return obj.device_set.filter(device_type='BE', is_deleted=False).count()
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        if representation['devices_number'] > 0:
-            return representation
-
-
 class BreweryWithDevicesNumberSerializer(serializers.ModelSerializer):
     devices_number = serializers.SerializerMethodField()
     bt_number = serializers.SerializerMethodField()
