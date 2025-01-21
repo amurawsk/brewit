@@ -169,7 +169,7 @@ const EditBreweryInfo = ({ isPanelOpen, setIsPanelOpen, breweryData }) => {
                                             className={styles.dataInput}
                                             type="text"
                                             placeholder="Podaj imię i nazwisko właściciela"
-                                            name="owner_name"
+                                            name="ceo"
                                             value={currentBreweryData.ceo}
                                             onChange={handleChange}
                                             required

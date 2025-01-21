@@ -242,7 +242,7 @@ const ShowOrderDetails = ({
                                             ).toLocaleDateString()}
                                         </p>
                                     )}
-                                <p>Opis: {order.description}</p>
+                                <p>Opis: {order.description ? order.description : "Brak"}</p>
                             </div>
                         </div>
                         <div className={styles.timelineHeader}>
