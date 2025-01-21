@@ -1883,6 +1883,7 @@ class OrderCreateView(APIView):
             "beer_volume": request.data.get("beer_volume"),
             "description": request.data.get("description"),
             "contract_brewery": profile.contract_brewery.id,
+            "recipe": request.data.get("recipe_id"),
         }
 
         serializer = OrderSerializer(data=data)
@@ -2552,6 +2553,23 @@ class BreweryWithDevicesNumberView(APIView):
 
     Responses:
         - 200 OK: If the breweries are successfully retrieved, the response contains a list of all breweries with the number of devices for each brewery.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        breweries = CommercialBrewery.objects.annotate(devices_number=Count('device')).order_by('-devices_number').filter(devices_number__gt=0)
+        serializer = BreweryWithDevicesNumberSerializer(breweries, many=True)
+        return Response(serializer.data, status=200)
+
+
+class BreweryListCommercialView(APIView):
+    """View for listing all commercial breweries. Class allows only authenticated users to access this view.
+
+    This view supports HTTP methods:
+    - GET: Returns a list of all commercial breweries.
+
+    Responses:
+        - 200 OK: If the commercial breweries are successfully retrieved, the response contains a list of all commercial breweries.
     """
     permission_classes = [IsAuthenticated]
 

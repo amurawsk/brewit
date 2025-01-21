@@ -16,7 +16,7 @@ class Brewery(models.Model):
     name = models.CharField(max_length=255, unique=True)
     contract_phone_number = models.CharField(max_length=30)
     contract_email = models.EmailField(max_length=100)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -168,7 +168,7 @@ class Order(models.Model):
     )
     beer_type = models.CharField(max_length=100)
     beer_volume = MeasurementField(measurement=Volume)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
     rate = models.BooleanField(blank=True, null=True)
     ended_at = models.DateTimeField(null=True, blank=True)
     contract_brewery = models.ForeignKey(
@@ -228,7 +228,7 @@ class Stage(models.Model):
     name = models.CharField(max_length=100)
     device_type = models.CharField(max_length=50, choices=DeviceType)
     time = MeasurementField(measurement=Time)
-    description = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
