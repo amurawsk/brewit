@@ -243,6 +243,12 @@ const ShowOrderDetails = ({
                                         </p>
                                     )}
                                 <p>
+                                    Receptura:{' '}
+                                    {order.description
+                                        ? order.description
+                                        : 'Brak'}
+                                </p>
+                                <p>
                                     Opis:{' '}
                                     {order.description
                                         ? order.description
