@@ -30,7 +30,7 @@ const BreweryShortStats = ({ statsData }) => {
         }
     };
 
-    const viewRecipes = () => navigate('/contract/recipes');
+    // const viewRecipes = () => navigate('/contract/recipes');
 
     return (
         <div className={styles.content}>
