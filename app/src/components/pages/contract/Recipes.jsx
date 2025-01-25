@@ -15,6 +15,7 @@ const Recipes = () => {
     const [recipes, setRecipes] = useState([]);
     const [recipe, setRecipe] = useState(null);
     const [isPanelOpen, setIsPanelOpen] = useState(false);
+	const [orders, setOrders] = useState([]);
 
 	const getData = async () => {
         try {
@@ -22,7 +23,7 @@ const Recipes = () => {
             if (response.status === 200) {
                 setRecipes(response.data);
             } else {
-                console.log(response);
+                console.log(response.status, response);
             }
         } catch (error) {
             console.log('Error fetching recipes:', error);
@@ -32,6 +33,26 @@ const Recipes = () => {
     useEffect(() => {
         getData();
     }, []);
+
+	const getRecipeData = async () => {
+		try {
+			const response = await api.get(`/recipies/${recipe.pk}/orders`);
+			if (response.status === 200) {
+				console.log("udało się");
+				setOrders(response.data);
+			} else {
+				console.log("error: ", response);
+			}
+		} catch (error) {
+			console.log('Error fetching recipes:', error);
+		}
+	};
+	
+	useEffect(() => {
+		if (recipe) {
+			getRecipeData();
+		}
+	}, [recipe]);
 
     const openPanel = (recipe) => {
         setRecipe(recipe);
@@ -63,6 +84,7 @@ const Recipes = () => {
             <ShowRecipeDetails
                 isPanelOpen={isPanelOpen}
                 setIsPanelOpen={setIsPanelOpen}
+				orders={orders}
                 recipe={recipe}
                 setRecipe={setRecipe}
             />

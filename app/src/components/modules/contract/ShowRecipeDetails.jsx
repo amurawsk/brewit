@@ -9,19 +9,27 @@ import api from '../../../api.js';
 const ShowRecipeDetails = ({
     isPanelOpen,
     setIsPanelOpen,
+	orders,
     recipe,
     setRecipe,
 }) => {
+	console.log("orders: ", orders);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const [orders, setOrders] = useState([]);
 
     const navigate = useNavigate();
 
     const handleEdit = () => {
         navigate('/contract/recipes/edit', { state: { recipe } });
     };
+
+	const deviceTypes = {
+		BT: 'Tank Warzelny',
+		FT: 'Pojemnik fermentacyjny',
+		AC: 'Kocioł do leżakowania',
+		BE: 'Urządzenie do rozlewania',
+	};
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -65,23 +73,6 @@ const ShowRecipeDetails = ({
         setIsModalOpen(false);
     };
 
-	const getData = async () => {
-        try {
-            const response = await api.get(`/recipies/${recipe.pk}/orders`);
-            if (response.status === 200) {
-                setOrders(response.data);
-            } else {
-                console.log(response);
-            }
-        } catch (error) {
-            console.log('Error fetching recipes:', error);
-        }
-    };
-
-	useEffect(() => {
-			getData();
-		}, []);
-
     return (
         <div>
             {isPanelOpen && recipe && (
@@ -97,7 +88,7 @@ const ShowRecipeDetails = ({
                             <div className={styles.detailBox}>
                                 <h3>Szczegóły przepisu</h3>
                                 <p>Nazwa przepisu: {recipe.name}</p>
-                                <p>Całkowity czas: {recipe.full_time}</p>
+                                <p>Całkowity czas: {recipe.full_time} dni</p>
                                 <p>
                                     Całkowita objętość: {recipe.full_volume} L
                                 </p>
@@ -117,8 +108,8 @@ const ShowRecipeDetails = ({
                                             className={styles.detailBox}>
                                             <h4>Etap {index + 1}</h4>
                                             <p>Nazwa etapu: {step.name}</p>
-                                            <p>Typ urządzenia: {step.device}</p>
-                                            <p>Czas: {step.time}</p>
+                                            <p>Typ urządzenia: {deviceTypes[step.device_type]}</p>
+                                            <p>Czas: {step.time} dni</p>
                                             <p>Opis: {step.description}</p>
                                             {step.ingredients &&
                                                 step.ingredients.length > 0 && (

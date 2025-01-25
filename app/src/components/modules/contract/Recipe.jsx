@@ -63,7 +63,7 @@ function Recipe({ recipe, handleEditRecipe }) {
                         Całkowity czas:
                         <span className={styles.recipeDescriptionValue}>
                             {' '}
-                            {recipe.full_time}
+                            {recipe.full_time} dni
                         </span>
                     </span>
                     <span className={styles.recipeDescription}>

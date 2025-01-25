@@ -32,6 +32,12 @@ function StepsList({
 	const navigate = useNavigate();
 	const goToRecipes = () => navigate('/contract/recipes');
 
+	const deviceTypes = {
+		BT: 'Tank Warzelny',
+		FT: 'Pojemnik fermentacyjny',
+		AC: 'Kocioł do leżakowania',
+		BE: 'Urządzenie do rozlewania',
+	};
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -86,7 +92,7 @@ function StepsList({
                                         className={
                                             styles.recipeDescriptionValue
                                         }>
-                                        {step.device_type}
+                                        {deviceTypes[step.device_type]}
                                     </span>
                                 </span>
                                 <span className={styles.recipeDescription}>
@@ -95,7 +101,7 @@ function StepsList({
                                         className={
                                             styles.recipeDescriptionValue
                                         }>
-                                        {step.time}
+                                        {step.time} dni
                                     </span>
                                 </span>
                                 <span className={styles.recipeDescription}>
