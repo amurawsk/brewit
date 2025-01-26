@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ShowRecipeDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
