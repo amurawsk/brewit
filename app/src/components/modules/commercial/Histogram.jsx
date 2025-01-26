@@ -11,6 +11,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -52,6 +53,7 @@ const Histogram = ({ status }) => {
     let chartTitle = '';
 
 	const [orders, setOrders] = useState([]);
+	const [timetableData, setTimetableData] = useState([]);
 
     const getData = async () => {
         try {
@@ -59,7 +61,6 @@ const Histogram = ({ status }) => {
                 `orders/commercial/status/P/`
             );
             if (response.status === 200) {
-				console.log(response);
                 setOrders(response.data);
             } else {
                 alert(
@@ -71,8 +72,26 @@ const Histogram = ({ status }) => {
         }
     };
 
+	
+    const getDeviceData = async () => {
+        try {
+            const breweryId = localStorage.getItem('breweryId');
+            const response = await api.get(
+                `devices/brewery/${breweryId}/with-time-slots/`
+            );
+            if (response.status === 200) {
+                setTimetableData(response.data);
+            } else {
+                alert('Błąd podczas pobierania urządzeń! Odśwież stronę i spróbuj ponownie.');
+            }
+        } catch (error) {
+            alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
+        }
+    };
+
 	useEffect(() => {
 		getData();
+		getDeviceData();
 	}, []);
 
     const filteredOrders = orders.filter((order) => order.status === 'P');
@@ -90,7 +109,66 @@ const Histogram = ({ status }) => {
         }
     });
 
-    if (status === 'TQ') {
+    if (status === 'D') {
+        const filteredDevices = timetableData;
+        const groupedByDate = {};
+
+        filteredDevices.forEach(device => {
+            device.timeSlots.forEach(slot => {
+                if (slot.status === 'F') {
+                    const dateKey = slot.start_timestamp.split('T')[0]; // Extract date part
+                    if (!groupedByDate[dateKey]) {
+                        groupedByDate[dateKey] = { BT: 0, FT: 0, AC: 0, BE: 0 }; // Initialize device type counts
+                    }
+                    // Group by device type
+                    groupedByDate[dateKey][device.device_type] += 1;
+                }
+            });
+        });
+
+        const labels = Object.keys(groupedByDate);
+        const datasetData = Object.values(groupedByDate).map(dateData => [
+            dateData.BT,
+            dateData.FT,
+            dateData.AC,
+            dateData.BE
+        ]);
+
+        chartTitle = 'Dzienna liczba dostępnych okien czasowych dla urządzeń typu BT, FT, AC, BE';
+        chartData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'BT',
+                    data: datasetData.map(data => data[0]),
+                    backgroundColor: "#f0a",
+                    borderColor: "#f0a",
+                    borderWidth: 1,
+                },
+                {
+                    label: 'FT',
+                    data: datasetData.map(data => data[1]),
+                    backgroundColor: "#0af",
+                    borderColor: "#0af",
+                    borderWidth: 1,
+                },
+                {
+                    label: 'AC',
+                    data: datasetData.map(data => data[2]),
+                    backgroundColor: "#fa0",
+                    borderColor: "#fa0",
+                    borderWidth: 1,
+                },
+                {
+                    label: 'BE',
+                    data: datasetData.map(data => data[3]),
+                    backgroundColor: "#0fa",
+                    borderColor: "#0fa",
+                    borderWidth: 1,
+                },
+            ],
+        };
+    } else if (status === 'TQ') {
         const labels = Object.keys(beerTypes);
         const datasetData = Object.values(beerTypes).map((beer) => beer.volume);
 

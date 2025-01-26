@@ -36,7 +36,7 @@ const Recipes = () => {
 
 	const getRecipeData = async () => {
 		try {
-			const response = await api.get(`/recipies/${recipe.pk}/orders`);
+			const response = await api.get(`/recipies/${recipe.pk}/orders/`);
 			if (response.status === 200) {
 				console.log("udało się");
 				setOrders(response.data);
