@@ -55,12 +55,13 @@ const ShowRecipeDetails = ({
 					id: deleteId,
 				});
                 if (response.status === 200) {
+					console.log();
 					setIsModalOpen(false);
 					setIsPanelOpen(false);
 					setDeleteId(null);
 					showNotification();
                 } else {
-                    console.log("Nie usunieto");
+                    console.log(response);
                 }
             } catch (error) {
 				console.log(error);
@@ -161,7 +162,7 @@ const ShowRecipeDetails = ({
                                             <h4>Zlecenie #{order.id}</h4>
                                             <p>
                                                 Zleceniobiorca:{' '}
-                                                {order.contract_brewery_name}
+                                                {order.commercial_brewery.name}
                                             </p>
                                             <p>
                                                 Utworzone dnia:{' '}
