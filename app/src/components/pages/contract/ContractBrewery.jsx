@@ -19,6 +19,7 @@ import api from '../../../api.js';
 const CommercialBrewery = () => {
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [breweryData, setBreweryData] = useState(null);
+    const [recipes, setRecipes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -42,8 +43,23 @@ const CommercialBrewery = () => {
                 alert('Błąd sieci! Odśwież stronę i spróbuj ponownie.');
             }
         };
+		const getRecipeData = async () => {
+			try {
+				const response = await api.get('recipies/');
+				if (response.status === 200) {
+					setRecipes(response.data);
+				} else {
+					console.log(response);
+				}
+			} catch (error) {
+				console.log('Error fetching recipes:', error);
+			}
+		};
         getData();
+        getRecipeData();
     }, [isPanelOpen]);
+
+    const noRecipes = recipes.length;
 
     const editInfo = () => {
         setIsPanelOpen(true);
@@ -73,7 +89,7 @@ const CommercialBrewery = () => {
                     )}
                     <PageTitle text="Statystyki" />
                     {breweryData !== null && (
-                        <BreweryShortStats statsData={breweryData} />
+                        <BreweryShortStats statsData={{ ...breweryData, no_recipes: noRecipes }} />
                     )}
                 </div>
             </div>

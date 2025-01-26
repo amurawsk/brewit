@@ -11,6 +11,7 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -59,7 +60,6 @@ const Histogram = ({ status }) => {
                 `orders/contract/status/P/`
             );
             if (response.status === 200) {
-				console.log(response);
                 setOrders(response.data);
             } else {
                 alert(
@@ -75,9 +75,7 @@ const Histogram = ({ status }) => {
 		getData();
 	}, []);
 
-    const filteredOrders = orders.filter((order) => order.status === 'P');
-
-    filteredOrders.forEach((order) => {
+    orders.forEach((order) => {
         const beerType = order.beer_type;
         if (!beerTypes[beerType]) {
             beerTypes[beerType] = { volume: 0, batches: 0 };
@@ -90,13 +88,51 @@ const Histogram = ({ status }) => {
         }
     });
 
-    if (status === 'TQ') {
+    if (status === 'B') {
+		const groupedByDateAndBeerType = {};
+
+		orders.forEach((order) => {
+			const beerType = order.beer_type;
+			const orderDate = new Date(order.ended_at).toISOString().split('T')[0];
+		
+			if (!groupedByDateAndBeerType[orderDate]) {
+				groupedByDateAndBeerType[orderDate] = {};
+			}
+		
+			if (!groupedByDateAndBeerType[orderDate][beerType]) {
+				groupedByDateAndBeerType[orderDate][beerType] = 0;
+			}
+		
+			groupedByDateAndBeerType[orderDate][beerType] += order.beer_volume;
+		});
+		
+		const labels = Object.keys(groupedByDateAndBeerType);
+		const beerTypes = Array.from(new Set(orders.map(order => order.beer_type)));
+		
+		const datasetData = beerTypes.map(beerType =>
+			labels.map(date => groupedByDateAndBeerType[date][beerType] || 0)
+		);
+		
+		const backgroundColors = colorPalette.slice(0, beerTypes.length);
+		
+		chartTitle = 'Dzienna objętość wyprodukowanego piwa różnego typu (L)';
+		chartData = {
+			labels: labels,
+			datasets: beerTypes.map((beerType, index) => ({
+				label: beerType,
+				data: datasetData[index],
+				backgroundColor: backgroundColors[index],
+				borderColor: backgroundColors[index],
+				borderWidth: 1,
+			})),
+		};
+    } else if (status === 'TQ') {
         const labels = Object.keys(beerTypes);
         const datasetData = Object.values(beerTypes).map((beer) => beer.volume);
 
         const backgroundColors = colorPalette.slice(0, labels.length);
 
-        chartTitle = 'Ilość wyprodukowanego piwa';
+        chartTitle = 'Ilość wyprodukowanego piwa (L)';
         chartData = {
             labels: labels,
             datasets: [
@@ -111,7 +147,7 @@ const Histogram = ({ status }) => {
     } else if (status === 'QD') {
         const groupedByDate = {};
 
-        filteredOrders.forEach((order) => {
+        orders.forEach((order) => {
             const endedDate = new Date(order.ended_at);
             const dateKey = endedDate.toISOString().split('T')[0];
 
@@ -143,7 +179,7 @@ const Histogram = ({ status }) => {
     } else if (status === 'QM') {
         const groupedByMonth = {};
 
-        filteredOrders.forEach((order) => {
+        orders.forEach((order) => {
             const endedDate = new Date(order.ended_at);
             const monthKey = `${endedDate.getFullYear()}-${(endedDate.getMonth() + 1).toString().padStart(2, '0')}`;
 
@@ -175,7 +211,7 @@ const Histogram = ({ status }) => {
     } else if (status === 'QY') {
         const groupedByYear = {};
 
-        filteredOrders.forEach((order) => {
+        orders.forEach((order) => {
             const endedDate = new Date(order.ended_at);
             const yearKey = endedDate.getFullYear().toString();
 

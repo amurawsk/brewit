@@ -30,12 +30,12 @@ const BreweryShortStats = ({ statsData }) => {
         }
     };
 
-    // const viewRecipes = () => navigate('/contract/recipes');
+    const viewRecipes = () => navigate('/contract/recipes');
 
     return (
         <div className={styles.content}>
-            {localStorage.getItem('userType') === 'commercial_brewery' && (
-                <div className={styles.section}>
+            <div className={styles.section}>
+            	{localStorage.getItem('userType') === 'commercial_brewery' && (
                     <>
                         <h3>Urządzenia</h3>
                         <div className={styles.deviceStats}>
@@ -88,22 +88,22 @@ const BreweryShortStats = ({ statsData }) => {
                             Wyświetl wszystkie urządzenia...
                         </span>
                     </>
-                {/* {localStorage.getItem('userType') === 'contract_brewery' && (
-                    <>
-                        <p>
-                            Przepisy: <b>{statsData.no_recipes}</b>
-                        </p>
-                        <span
-                            className={styles.viewAll}
-                            onClick={() => viewRecipes()}>
-                            Wyświetl wszystkie przepisy...
-                        </span>
-                    </>
-                )} */}
-            </div>
-            )}            
-            <div className={styles.section}>
-                <h3>Zlecenia</h3>
+				)}
+            	{localStorage.getItem('userType') === 'contract_brewery' && (
+                	<>
+                    	<p>
+                        	Przepisy: <b>{statsData.no_recipes}</b>
+	                    </p>
+    	                <span
+        	                className={styles.viewAll}
+            	            onClick={() => viewRecipes()}>
+                	        Wyświetl wszystkie przepisy...
+                    	</span>
+	                </>	
+        		)}
+		</div>           
+        <div className={styles.section}>
+        	<h3>Zlecenia</h3>
                 <div className={styles.orderSection}>
                     <div className={styles.orderStatsContainer}>
                         <div className={styles.orderStatBoxGeneral}>

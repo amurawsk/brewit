@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import DashboardHeader from '../../modules/DashboardHeader.jsx';
-import CommercialSidebar from '../../modules/commercial/CommercialSidebar.jsx';
-import ContractSidebar from '../../modules/contract/ContractSidebar.jsx';
+import CommercialSidebar from '../../modules/contract/ContractSidebar.jsx';
 import PageTitle from '../../utils/PageTitle.jsx';
-import StatisticsTypes from '../../modules/StatisticsTypes.jsx';
+import StatisticsTypes from '../../modules/contract/StatisticsTypes.jsx';
 import styles from './Statistics.module.css';
 import PieChart from '../../modules/contract/PieChart.jsx';
-import BatchOrQuantity from '../../modules/BatchOrQuantity.jsx';
+import BatchOrQuantity from '../../modules/contract/BatchOrQuantity.jsx';
 import Histogram from '../../modules/contract/Histogram.jsx';
-import TimeResolution from '../../modules/TimeResolution.jsx';
+import TimeResolution from '../../modules/contract/TimeResolution.jsx';
 
 const Statistics = () => {
     const status = 'TB';
@@ -18,12 +17,7 @@ const Statistics = () => {
         <div>
             <DashboardHeader />
             <div className={styles.appContainer}>
-                {localStorage.getItem('userType') === 'commercial_brewery' && (
-                    <CommercialSidebar />
-                )}
-                {localStorage.getItem('userType') === 'contract_brewery' && (
-                    <ContractSidebar />
-                )}
+                <CommercialSidebar />
                 <div className={styles.content}>
                     <div className={styles.TitleButtonContainer}>
                         <PageTitle text="Statystyki" />
@@ -32,6 +26,11 @@ const Statistics = () => {
                             setActiveStatus={setActiveStatus}
                         />
                     </div>
+					{(activeStatus === 'B') && (
+                        <div>
+                            <Histogram status={activeStatus} />
+                        </div>
+                    )}
 
                     {(activeStatus === 'TB' || activeStatus === 'TQ') && (
                         <div>
