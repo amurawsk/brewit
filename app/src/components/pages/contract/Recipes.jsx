@@ -33,22 +33,21 @@ const Recipes = () => {
     useEffect(() => {
         getData();
     }, []);
-
-	const getRecipeData = async () => {
-		try {
-			const response = await api.get(`/recipies/${recipe.pk}/orders/`);
-			if (response.status === 200) {
-				console.log("udało się");
-				setOrders(response.data);
-			} else {
-				console.log("error: ", response);
-			}
-		} catch (error) {
-			console.log('Error fetching recipes:', error);
-		}
-	};
 	
 	useEffect(() => {
+        const getRecipeData = async () => {
+            try {
+                const response = await api.get(`/recipies/${recipe.pk}/orders/`);
+                if (response.status === 200) {
+                    console.log("udało się");
+                    setOrders(response.data);
+                } else {
+                    console.log("error: ", response);
+                }
+            } catch (error) {
+                console.log('Error fetching recipes:', error);
+            }
+        };
 		if (recipe) {
 			getRecipeData();
 		}
