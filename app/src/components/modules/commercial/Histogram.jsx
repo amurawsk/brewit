@@ -116,11 +116,10 @@ const Histogram = ({ status }) => {
         filteredDevices.forEach(device => {
             device.timeSlots.forEach(slot => {
                 if (slot.status === 'F') {
-                    const dateKey = slot.start_timestamp.split('T')[0]; // Extract date part
+                    const dateKey = slot.start_timestamp.split('T')[0];
                     if (!groupedByDate[dateKey]) {
-                        groupedByDate[dateKey] = { BT: 0, FT: 0, AC: 0, BE: 0 }; // Initialize device type counts
+                        groupedByDate[dateKey] = { BT: 0, FT: 0, AC: 0, BE: 0 };
                     }
-                    // Group by device type
                     groupedByDate[dateKey][device.device_type] += 1;
                 }
             });
