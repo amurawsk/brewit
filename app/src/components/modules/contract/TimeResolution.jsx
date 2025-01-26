@@ -1,12 +1,11 @@
 import React from 'react';
-import styles from './StatisticsTypes.module.css';
+import styles from './TimeResolution.module.css';
 
-const StatisticsTypes = ({ activeStatus, setActiveStatus }) => {
+const BatchOrQuantity = ({ activeStatus, setActiveStatus }) => {
     const buttons = [
-        ['wolne okna czasowe w czasie', 'D'],
-        ['typy produkowanych piw', 'TB'],
-        ['ilość wyprodukowanego piwa', 'QD'],
-        ['udane/ nieudane warki', 'R'],
+        ['dziennie', 'QD'],
+        ['miesięcznie', 'QM'],
+        ['rocznie', 'QY'],
     ];
 
     return (
@@ -25,4 +24,4 @@ const StatisticsTypes = ({ activeStatus, setActiveStatus }) => {
     );
 };
 
-export default StatisticsTypes;
+export default BatchOrQuantity;

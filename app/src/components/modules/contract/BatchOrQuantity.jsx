@@ -1,12 +1,10 @@
 import React from 'react';
-import styles from './StatisticsTypes.module.css';
+import styles from './BatchOrQuantity.module.css';
 
-const StatisticsTypes = ({ activeStatus, setActiveStatus }) => {
+const BatchOrQuantity = ({ activeStatus, setActiveStatus }) => {
     const buttons = [
-        ['wolne okna czasowe w czasie', 'D'],
-        ['typy produkowanych piw', 'TB'],
-        ['ilość wyprodukowanego piwa', 'QD'],
-        ['udane/ nieudane warki', 'R'],
+        ['liczba warek', 'TB'],
+        ['objętość', 'TQ'],
     ];
 
     return (
@@ -25,4 +23,4 @@ const StatisticsTypes = ({ activeStatus, setActiveStatus }) => {
     );
 };
 
-export default StatisticsTypes;
+export default BatchOrQuantity;

@@ -3,7 +3,7 @@ import styles from './StatisticsTypes.module.css';
 
 const StatisticsTypes = ({ activeStatus, setActiveStatus }) => {
     const buttons = [
-        ['wolne okna czasowe w czasie', 'D'],
+        ['typy piw w czasie', 'B'],
         ['typy produkowanych piw', 'TB'],
         ['ilość wyprodukowanego piwa', 'QD'],
         ['udane/ nieudane warki', 'R'],

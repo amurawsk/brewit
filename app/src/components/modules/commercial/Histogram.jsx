@@ -94,9 +94,7 @@ const Histogram = ({ status }) => {
 		getDeviceData();
 	}, []);
 
-    const filteredOrders = orders.filter((order) => order.status === 'P');
-
-    filteredOrders.forEach((order) => {
+    orders.forEach((order) => {
         const beerType = order.beer_type;
         if (!beerTypes[beerType]) {
             beerTypes[beerType] = { volume: 0, batches: 0 };
@@ -110,10 +108,9 @@ const Histogram = ({ status }) => {
     });
 
     if (status === 'D') {
-        const filteredDevices = timetableData;
         const groupedByDate = {};
 
-        filteredDevices.forEach(device => {
+        timetableData.forEach(device => {
             device.timeSlots.forEach(slot => {
                 if (slot.status === 'F') {
                     const dateKey = slot.start_timestamp.split('T')[0];
@@ -173,7 +170,7 @@ const Histogram = ({ status }) => {
 
         const backgroundColors = colorPalette.slice(0, labels.length);
 
-        chartTitle = 'Ilość wyprodukowanego piwa';
+        chartTitle = 'Ilość wyprodukowanego piwa (L)';
         chartData = {
             labels: labels,
             datasets: [
@@ -188,7 +185,7 @@ const Histogram = ({ status }) => {
     } else if (status === 'QD') {
         const groupedByDate = {};
 
-        filteredOrders.forEach((order) => {
+        orders.forEach((order) => {
             const endedDate = new Date(order.ended_at);
             const dateKey = endedDate.toISOString().split('T')[0];
 
@@ -220,7 +217,7 @@ const Histogram = ({ status }) => {
     } else if (status === 'QM') {
         const groupedByMonth = {};
 
-        filteredOrders.forEach((order) => {
+        orders.forEach((order) => {
             const endedDate = new Date(order.ended_at);
             const monthKey = `${endedDate.getFullYear()}-${(endedDate.getMonth() + 1).toString().padStart(2, '0')}`;
 
@@ -252,7 +249,7 @@ const Histogram = ({ status }) => {
     } else if (status === 'QY') {
         const groupedByYear = {};
 
-        filteredOrders.forEach((order) => {
+        orders.forEach((order) => {
             const endedDate = new Date(order.ended_at);
             const yearKey = endedDate.getFullYear().toString();
 
