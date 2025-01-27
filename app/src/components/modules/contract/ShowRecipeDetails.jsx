@@ -98,7 +98,7 @@ const ShowRecipeDetails = ({
 
                         <div className={styles.stages_orders_titles}>
                             <h3>Etapy przepisu</h3>
-                            {/* <h3>Powiązane zlecenia</h3> */}
+                            <h3>Powiązane zlecenia</h3>
                         </div>
                         <div className={styles.stages_orders}>
                             <div className={styles.stages}>
@@ -153,17 +153,17 @@ const ShowRecipeDetails = ({
                                 )}
                             </div>
 
-                            {/* <div className={styles.orders}>
+                            <div className={styles.orders}>
                                 {orders && orders.length > 0 ? (
                                     orders.map((order, index) => (
                                         <div
                                             key={index}
                                             className={styles.detailBox}>
                                             <h4>Zlecenie #{order.id}</h4>
-                                            <p>
+                                            {/* <p>
                                                 Zleceniobiorca:{' '}
                                                 {order.commercial_brewery.name}
-                                            </p>
+                                            </p> */}
                                             <p>
                                                 Utworzone dnia:{' '}
                                                 {new Date(
@@ -199,7 +199,7 @@ const ShowRecipeDetails = ({
                                 ) : (
                                     <p>Brak powiązanych zleceń</p>
                                 )}
-                            </div> */}
+                            </div>
                         </div>
 
                         <div className={styles.buttonGroup}>
