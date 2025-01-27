@@ -1,11 +1,10 @@
 import React from 'react';
-import styles from './TimeResolution.module.css';
+import styles from './BatchOrQuantity.module.css';
 
 const BatchOrQuantity = ({ activeStatus, setActiveStatus }) => {
     const buttons = [
-        ['dziennie', 'QD'],
-        ['miesięcznie', 'QM'],
-        ['rocznie', 'QY'],
+        ['liczba warek', 'TB'],
+        ['objętość', 'TQ'],
     ];
 
     return (

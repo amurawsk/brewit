@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ShowRecipeDetails.module.css';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
@@ -9,19 +9,27 @@ import api from '../../../api.js';
 const ShowRecipeDetails = ({
     isPanelOpen,
     setIsPanelOpen,
+	orders,
     recipe,
     setRecipe,
 }) => {
+	console.log("orders: ", orders);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-    const [orders, setOrders] = useState([]);
 
     const navigate = useNavigate();
 
     const handleEdit = () => {
         navigate('/contract/recipes/edit', { state: { recipe } });
     };
+
+	const deviceTypes = {
+		BT: 'Tank Warzelny',
+		FT: 'Pojemnik fermentacyjny',
+		AC: 'Kocioł do leżakowania',
+		BE: 'Urządzenie do rozlewania',
+	};
 
     const showNotification = () => {
         setIsNotificationVisible(true);
@@ -47,12 +55,13 @@ const ShowRecipeDetails = ({
 					id: deleteId,
 				});
                 if (response.status === 200) {
+					console.log();
 					setIsModalOpen(false);
 					setIsPanelOpen(false);
 					setDeleteId(null);
 					showNotification();
                 } else {
-                    console.log("Nie usunieto");
+                    console.log(response);
                 }
             } catch (error) {
 				console.log(error);
@@ -64,23 +73,6 @@ const ShowRecipeDetails = ({
     const cancelAction = () => {
         setIsModalOpen(false);
     };
-
-	const getData = async () => {
-        try {
-            const response = await api.get(`/recipies/${recipe.pk}/orders`);
-            if (response.status === 200) {
-                setOrders(response.data);
-            } else {
-                console.log(response);
-            }
-        } catch (error) {
-            console.log('Error fetching recipes:', error);
-        }
-    };
-
-	useEffect(() => {
-			getData();
-		}, []);
 
     return (
         <div>
@@ -97,7 +89,7 @@ const ShowRecipeDetails = ({
                             <div className={styles.detailBox}>
                                 <h3>Szczegóły przepisu</h3>
                                 <p>Nazwa przepisu: {recipe.name}</p>
-                                <p>Całkowity czas: {recipe.full_time}</p>
+                                <p>Całkowity czas: {recipe.full_time} dni</p>
                                 <p>
                                     Całkowita objętość: {recipe.full_volume} L
                                 </p>
@@ -106,7 +98,7 @@ const ShowRecipeDetails = ({
 
                         <div className={styles.stages_orders_titles}>
                             <h3>Etapy przepisu</h3>
-                            {/* <h3>Powiązane zlecenia</h3> */}
+                            <h3>Powiązane zlecenia</h3>
                         </div>
                         <div className={styles.stages_orders}>
                             <div className={styles.stages}>
@@ -117,8 +109,8 @@ const ShowRecipeDetails = ({
                                             className={styles.detailBox}>
                                             <h4>Etap {index + 1}</h4>
                                             <p>Nazwa etapu: {step.name}</p>
-                                            <p>Typ urządzenia: {step.device}</p>
-                                            <p>Czas: {step.time}</p>
+                                            <p>Typ urządzenia: {deviceTypes[step.device_type]}</p>
+                                            <p>Czas: {step.time} dni</p>
                                             <p>Opis: {step.description}</p>
                                             {step.ingredients &&
                                                 step.ingredients.length > 0 && (
@@ -161,17 +153,17 @@ const ShowRecipeDetails = ({
                                 )}
                             </div>
 
-                            {/* <div className={styles.orders}>
+                            <div className={styles.orders}>
                                 {orders && orders.length > 0 ? (
                                     orders.map((order, index) => (
                                         <div
                                             key={index}
                                             className={styles.detailBox}>
                                             <h4>Zlecenie #{order.id}</h4>
-                                            <p>
+                                            {/* <p>
                                                 Zleceniobiorca:{' '}
-                                                {order.contract_brewery_name}
-                                            </p>
+                                                {order.commercial_brewery.name}
+                                            </p> */}
                                             <p>
                                                 Utworzone dnia:{' '}
                                                 {new Date(
@@ -207,7 +199,7 @@ const ShowRecipeDetails = ({
                                 ) : (
                                     <p>Brak powiązanych zleceń</p>
                                 )}
-                            </div> */}
+                            </div>
                         </div>
 
                         <div className={styles.buttonGroup}>

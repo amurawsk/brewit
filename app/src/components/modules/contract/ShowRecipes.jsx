@@ -67,7 +67,7 @@ const ShowRecipes = ({ recipes, openPanel }) => {
                             całkowity czas:
                             <span className={styles.recipeDescriptionValue}>
                                 {' '}
-                                {recipe.full_time}
+                                {recipe.full_time} dni
                             </span>
                         </span>
                         <span className={styles.recipeDescription}>

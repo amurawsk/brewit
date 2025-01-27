@@ -107,7 +107,7 @@ function AddEditStep({ recipe_id, step, setStep, handleCancel }) {
             </div>
             <div>
                 <label className={styles.addEquipmentLabel} htmlFor="time">
-                    <b>Czas: </b>
+                    <b>Czas (dni): </b>
                 </label>
                 <input
                     className={styles.addEquipmentInput}

@@ -84,7 +84,7 @@ function AddEditIngredient({ stage_id, ingredient, setIngredient, handleCancel }
             </div>
             <div>
                 <label className={styles.addEquipmentLabel} htmlFor="amount">
-                    <b>Ilość: </b>
+                    <b>Ilość (razem z jednostką): </b>
                 </label>
                 <input
                     className={styles.addEquipmentInput}
