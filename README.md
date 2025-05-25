@@ -1,4 +1,7 @@
 # BrewIT
+## Full documentation
+Full description of the application's functionality is available in [docs/readme.md](docs/readme.md) (in polish).
+
 ## Setup
 Prerequisities: Docker and Docker Compose must be installed.
 
